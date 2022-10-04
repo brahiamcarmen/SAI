@@ -1,0 +1,132 @@
+{% extends 'usuarios/base_usuario.html' %}
+{% load static %}
+{% block styles %}
+{% endblock %}
+{%block title %} <title>Lista de novedades</title> {%endblock%}
+{% block content %}
+<div id="content-wrapper">
+
+	<div class="page-header">
+        <div class="row">
+            <!-- Page header, center on small screens -->
+            <h1 class="col-xs-12 col-sm-4 text-center text-left-sm">
+                &nbsp;&nbsp;<b>Lista de Novedades</b>
+            </h1>
+            <div class="col-xs-12 col-sm-8">
+                <div class="row">
+                    <hr class="visible-xs no-grid-gutter-h">
+                    <!-- "Create project" button, width=auto on desktops -->
+                    <div class="pull-right col-xs-12 col-sm-auto">
+						
+                    </div>
+                    <!-- Margin -->
+                    <div class="visible-xs clearfix form-group-margin"></div>
+                    <!-- Search field -->
+                </div>
+            </div>
+        </div>
+    </div> <!-- / .page-header -->
+<div class="row">
+			<div class="col-sm-12">
+
+<!-- 11. $BOOTSTRAP_TAB_DROP =======================================================================
+
+				Stacked pills
+-->
+				<!-- Javascript -->
+				<script>
+					init.push(function () {
+						$('ul.bs-tabdrop-example').tabdrop();
+					});
+				</script>
+				<!-- / Javascript -->
+
+				<div class="panel">
+					<div class="panel-heading">
+						<span class="panel-title">Estos registros se generan al registrar o modificar los datos de un propietario o una vivienda</span>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-sm-12">
+
+								<!-- Pills -->
+								<ul class="nav nav-pills bs-tabdrop-example">
+									<li class="active"><a href="#bs-tabdrop-pill1" data-toggle="tab">Propietarios</a></li>
+									<li><a href="#bs-tabdrop-pill2" data-toggle="tab">Viviendas</a></li>
+									<li><a href="#bs-tabdrop-pill3" data-toggle="tab">Sistema</a></li>
+								</ul>
+								<div class="tab-content">
+									<div class="tab-pane active" id="bs-tabdrop-pill1">
+										<table class="table">
+											<thead>
+												<tr>
+													<th>Id</th>
+													<th>Tipo novedad</th>
+													<th>Descripcion</th>
+													<th>Propietario</th>
+													<th>Usuario creador</th>
+													<th>Acueducto</th>
+													<th>fecha creacion</th>
+												</tr>
+											</thead>
+											<tbody>
+												{% for novedades in novedades %}
+												<tr>
+													<td>{{ novedades.IdNovedad}}</td>
+													<td>{{ novedades.TipoNovedad}}</td>
+													<td>{{ novedades.Descripcion}}</td>
+													<td>{{ novedades.IdPropietario}}</td>
+													<td>{{ novedades.usuid}}</td>
+													<td>{{ novedades.IdAcueducto}}</td>
+													<td>{{ novedades.Fecha}}</td>
+												</tr>
+												{% endfor %}
+											</tbody>
+										</table>
+									</div>
+									<div class="tab-pane" id="bs-tabdrop-pill2">
+										<table class="table">
+											<thead>
+												<tr>
+													<th>Id Novedad</th>
+													<th>Tipo novedad</th>
+													<th>Descripcion</th>
+													<th>Usuario creador</th>
+													<th>Direccion</th>
+													<th>Acueducto</th>
+													<th>fecha creacion</th>
+												</tr>
+											</thead>
+											<tbody>
+												{% for novedadesv in novedadesv %}
+												<tr>
+													<td>{{ novedadesv.IdNovedad}}</td>
+													<td>{{ novedadesv.TipoNovedad}}</td>
+													<td>{{ novedadesv.Descripcion}}</td>
+													<td>{{ novedadesv.usuid}}</td>
+													<td>{{ novedadesv.IdVivienda}}</td>
+													<td>{{ novedadesv.IdAcueducto}}</td>
+													<td>{{ novedadesv.Fecha}}</td>
+												</tr>
+												{% endfor %}
+											</tbody>
+										</table>
+									</div>
+									<div class="tab-pane" id="bs-tabdrop-pill3">
+										<p>Howdy, I'm in Section 3.</p>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+<!-- /11. $BOOTSTRAP_TAB_DROP -->
+
+			</div>
+		</div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+{% endblock %}

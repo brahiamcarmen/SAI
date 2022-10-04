@@ -1,0 +1,27 @@
+{% extends 'usuarios/base_usuario2.html' %}
+{% load static %}
+{% block styles %}
+{% endblock %}
+{%block title %} <title>Modulo - MP</title> {%endblock%}
+{% block content %}
+{% include 'usuarios/alerts.html' %}
+
+<div class="row">
+    <div class="col-sm-6">
+        <h1 class="h3 text-gray-800">Mapa de redes de distribución</h1>
+    </div>
+     <div class="col-sm-6">
+        <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" onclick="window.location='{% url 'usuarios:inicio' %}'">Volver</button>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+            <iframe src="https://www.google.com/maps/d/embed?mid=1VyxstOKM9XN3nVVel1iK60V63wWiGMAp" width="100%" height="500"></iframe>
+    </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+
+{% endblock %}

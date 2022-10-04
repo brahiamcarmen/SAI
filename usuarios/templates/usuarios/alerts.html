@@ -1,0 +1,39 @@
+{%  load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'stylesheets/sweetalert.css' %}">
+<script src="{% static 'javascripts/jquery.js' %}"></script>
+<script src="{% static 'javascripts/sweetalert.min.js' %}"></script>
+
+<div id="alerts">
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                <script>
+                    $(document).ready(function ()
+                    {
+                        swal(
+                        {
+                            type: "error",
+                            title: "ERROR",
+                            text: "{{ message }}",
+                            showConfirmButton: true
+                        });
+                    })
+                </script>
+
+            {% else %}
+                <script>
+                    $(document).ready(function ()
+                    {
+                        swal(
+                        {
+                            type: "success",
+                            title: "INFO",
+                            text: "{{ message }}",
+                            showConfirmButton: true
+                        });
+                    })
+                </script>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+</div>

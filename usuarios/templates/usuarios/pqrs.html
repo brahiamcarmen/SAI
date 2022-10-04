@@ -1,0 +1,153 @@
+{% extends 'usuarios/base_usuario.html' %}
+{% load static %}
+{% block styles %}
+{% endblock %}
+
+{% block content %}
+<!-- CONTENIDO -->
+	{% include 'usuarios/alerts.html' %}
+<div id="content-wrapper">
+	<div class="page-header">
+		<div class="row">
+			<div class="col-sm-3">
+				<div class="stat-panel">
+					<div class="stat-cell bg-primary valign-middle">
+						<i class="fa fa-dollar bg-icon"></i>
+						<span class="text-xlg"><span class="text-lg text-slim">$ </span><strong>{{ sumapresu }}</strong></span><br>
+						<span class="text-bg">Presupuesto actual</span><br>
+						<span class="text-sm"><a href="#">Ver mas</a></span>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="stat-panel">
+					<div class="stat-cell bg-warning valign-middle">
+						<i class="fa fa-dollar bg-icon"></i>
+						<span class="text-xlg"><span class="text-lg text-slim">$ </span><strong>{{ gastos }}</strong></span><br>
+						<span class="text-bg">Egresos</span><br>
+						<span class="text-sm"><a href="#">Ver mas</a></span>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="stat-panel">
+					<div class="text-center">
+						<h4 class="padding-sm"><i class="fa fa-signal text-primary"></i>&nbsp;&nbsp;Estadisticas</h4>
+					</div>
+					
+					<div class="stat-row">
+
+						<div class="stat-counters bordered no-border-t text-center">
+											<!-- Small padding, without horizontal padding -->
+							<div class="stat-cell col-xs-4 padding-sm no-padding-hr">
+												<!-- Big text -->
+								<span class="text-bg"><strong>{{ contadorp }}</strong></span><br>
+												<!-- Extra small text -->
+								<span class="text-xs text-muted">Pendientes</span>
+							</div>
+											<!-- Small padding, without horizontal padding -->
+							<div class="stat-cell col-xs-4 padding-sm no-padding-hr">
+												<!-- Big text -->
+								<span class="text-bg"><strong>{{ contadora }}</strong></span><br>
+												<!-- Extra small text -->
+								<span class="text-xs text-muted">Aprobadas</span>
+							</div>
+											<!-- Small padding, without horizontal padding -->
+							<div class="stat-cell col-xs-4 padding-sm no-padding-hr">
+												<!-- Big text -->
+								<span class="text-bg"><strong>{{ contadoranu }}</strong></span><br>
+												<!-- Extra small text -->
+								<span class="text-xs text-muted">Anuladas</span>
+							</div>
+						</div> <!-- /.stat-counters -->
+					</div> <!-- /.stat-row -->
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="row">
+					<button type="submit" data-toggle="modal" data-target="#gestorordenes" id="loading-example-btn3" data-loading-text="Descargando..." class="btn btn-primary btn-sm" style="width: 100%">Aprobar/Anular</button>
+				</div>
+				<br>
+				<div class="row">
+					<button onclick="window.location='{% url 'usuarios:generargasto' %}'" data-loading-text="Descargando..." class="btn btn-primary btn-sm" style="width: 100%">Generar solicitud</button>
+				</div>
+				<br>
+				<div class="row">
+					<button onclick="window.location='{% url 'usuarios:ingresoexterno' %}'" data-loading-text="Descargando..." class="btn btn-primary btn-sm" style="width: 100%">Asignacion externa</button>
+				</div>
+				<br>
+				{% for option in solicitudesgastos %}
+					<div class="row">
+						<button onclick="window.location='{% url 'usuarios:listadogastos' %}'" data-loading-text="Descargando..." class="btn btn-primary btn-sm" style="width: 100%">Lista de solicitudes</button>
+					</div>
+					<br>
+				{% empty %}
+					<br>
+				{% endfor %}
+			</div>
+		</div>
+		<div class="row">
+					<ul id="uidemo-tabs-default-demo" class="nav nav-tabs">
+							<li class="active">
+								<a href="#uidemo-tabs-default-demo-home" data-toggle="tab">Listado de solicitudes pendientes <span class="label label-success">{{ contadorpen }}</span></a>
+							</li>
+						</ul>
+
+						<div class="tab-content tab-content-bordered">
+							<div class="tab-pane fade active in" id="uidemo-tabs-default-demo-home">
+								<div class="panel">
+									{% for option in solicitudesgastos %}
+									<div style="overflow-y: auto">
+											<table class="table">
+												<thead>
+													<tr>
+														<th>Numero Orden</th>
+														<th>Usuario</th>
+														<th>Tipo Solicitud</th>
+														<th>Valor</th>
+														<th>Estado</th>
+														<th>Fecha</th>
+														<th>Area Responsable</th>
+														<th>Soporte</th>
+													</tr>
+												</thead>
+												<tbody>
+													{% for facturas in solicitudesgastos %}
+														<tr class="odd gradeX">
+															<td>{{ facturas.IdSoGa }}</td>
+															<td>{{ facturas.IdUsuario }}</td>
+														    <td>{{ facturas.TipoSolicitud }}</td>
+														    <td>{{ facturas.Valor }}</td>
+														    <td>
+														    	{% if facturas.Estado == "Pendiente"  %}
+														    	<div class="label label-warning">Pendiente </div>
+														    	{% elif facturas.Estado == "Aprobada" %}
+														    	<div class="label label-success">Aprobada</div>
+														    	{% else %}
+														    	<div class="label label-danger">Anulada</div>
+														    	{% endif %}
+														    </td>
+														    <td>{{ facturas.Fecha }}</td>
+														    <td>{{ facturas.AreaResponsable }}</td>
+														    <td><a href="{{ facturas.Soporte.url }}">{{ facturas.Soporte }}</a><td>
+														</tr>
+													{% endfor %}
+												</tbody>
+											</table>
+									</div>
+									{% empty %}
+									    	<button style="width: 100%" onclick="window.location='{% url 'usuarios:listadogastos' %}'" class="btn btn-primary">Lista de solicitudes</button>
+									{% endfor %}
+								</div>
+							</div> <!-- / .tab-pane -->
+						</div> <!-- / .tab-content -->
+
+
+							</div>
+	</div>
+	<div id="main-menu-bg"></div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+{% endblock %}

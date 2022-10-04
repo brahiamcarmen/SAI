@@ -1,0 +1,110 @@
+{% extends 'usuarios/base_usuario2.html' %}
+{% load static %}
+{% block styles %}
+{% endblock %}
+{%block title %} <title>Modulo - CC</title> {%endblock%}
+{% load humanize %}
+{% block content %}
+{% include 'usuarios/alerts.html' %}
+<!-- Titulo -->
+<div class="row">
+    <div class="col-sm-6">
+        <h1 class="h3 text-gray-800">Cuentas de cobro</h1>
+    </div>
+     <div class="col-sm-6">
+        <form method="post" role="form" enctype="multipart/form-data" onsubmit="return valida(this)">
+            {% csrf_token %}
+                <button type="submit" class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;">Generar cobro</button>
+        </form>
+        <button type="submit" onclick="window.location='{% url 'usuarios:cobrorecargo' %}'" class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;">Generar recargos</button>
+    </div>
+</div>
+
+
+<div class="row" style="margin-top: 1rem;">
+    <div class="col-sm-7">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card shadow text-center">
+                    <div class="card-header">
+                        <b class="text-success">Estados de cuenta</b>
+                    </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <b class="text-primary">Operativos</b><br>
+                                    {{operativos}}
+                                </div>
+                                <div class="col-sm-3">
+                                    <b class="text-primary">Mantenimiento</b><br>
+                                    {{mantenimiento}}
+                                </div>
+                                <div class="col-sm-3">
+                                    <b class="text-primary">Suspendidos</b><br>
+                                    {{suspendidos}}
+                                </div>
+                                <div class="col-sm-3">
+                                    <b class="text-primary">Retirados</b><br>
+                                    {{retirados}}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-12 text-success"><b>Valores por estado</b></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <b class="text-primary">Operativos</b><br>
+                                        ${{contoperativos|intcomma}}
+                                </div>
+                                <div class="col-sm-3">
+                                    <b class="text-primary">Mantenimiento</b><br>
+                                        ${{contmantenimiento|intcomma}}
+                                </div>
+                                <div class="col-sm-3">
+                                    <b class="text-primary">Suspendidos</b><br>
+                                        ${{contsuspendidos|intcomma}}
+                                </div>
+                                <div class="col-sm-3">
+                                    <b class="text-primary">Retirados</b><br>
+                                        ${{contretirados|intcomma}}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-12 text-success"><b>Totales</b></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <b class="text-primary">Estados cuenta</b><br>
+                                        {{ totalcuentascobro }}
+                                </div>
+                                <div class="col-sm-6">
+                                    <b class="text-primary">Valor total</b><br>
+                                        ${{totalvalores|intcomma}}
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                <br>
+            </div>
+        </div>
+        <div class="row">
+           
+        </div>
+    </div>
+        <div class="col-sm-5 text-center">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Instrucciones</h6>
+                </div>
+                <div class="card-body">
+                    Este módulo es el encargado de realizar los cobros a las cuentas registradas con estado "SIN PAGAR”; para su correcto funcionamiento, todas las facturas sin cancelar deben pasar al estado "VENCIDA", función que puede verificar en el módulo "MODIFICAR ESTADO". luego de verificar lo anterior, de clic en el botón "Generar cobro" y espere hasta que aparezca la alerta confirmando el registro de los cobros
+                </div>
+            </div>
+        </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+{% endblock %}

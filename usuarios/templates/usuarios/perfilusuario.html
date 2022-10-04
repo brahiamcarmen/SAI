@@ -1,0 +1,169 @@
+{% extends 'usuarios/base_usuario2.html' %}
+{% load static %}
+{% block styles %}
+{% endblock %}
+{%block title %} <title>Modulo - PU</title> {%endblock%}
+{% block content %}
+{% include 'usuarios/alerts.html' %}
+<div class="row">
+     <div class="col-sm-6">
+    </div>
+     <div class="col-sm-6">
+         <button onclick="window.location='{% url 'usuarios:paneladmin' %}'" class="btn btn-primary btn-sm ml-auto float-right">Volver</button>
+    </div>
+</div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="row">
+                                <img src="{{ foto.url }}" alt="Foto perfil" class="img-thumbnail">
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 text-center" style="margin: 0.5rem;">
+                                    <h5>
+                                        {{ usuario }}
+                                    </h5>
+                                    <span class="badge badge-pill badge-primary">{{departamento}}</span>
+                                </div>
+                                <div class="col-sm-12" style="margin: 0.1rem;">
+                                    <div class="row text-center">
+                                      <div class="col-12">
+                                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                           <a class="nav-link active" id="v-pills-home-tab" href="{% url 'usuarios:cambiarcontrasena' cedula %}" role="tab" aria-controls="v-pills-home" aria-selected=" true">Cambiar contraseña</a>
+                                           <a class="nav-link" id="v-pills-home-tab" href="{% url 'usuarios:desacusuario' cedula %}" role="tab" aria-controls="v-pills-home" aria-selected=" true">Modificar acceso al sistema</a>
+                                           <a class="nav-link" id="v-pills-home-tab" href="{% url 'usuarios:asignarpermisos' cedula %}" role="tab" aria-controls="v-pills-home" aria-selected=" true">Asignar permisos</a>
+                                           <a class="nav-link" id="v-pills-home-tab" href="{% url 'usuarios:eliminarpermisos' cedula %}" role="tab" aria-controls="v-pills-home" aria-selected=" true">Eliminar permisos</a>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+                        </div>
+                        <div class="col-sm-9">
+                            <nav>
+                              <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                <a class="nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Informacion del usuario</a>
+                                <!-- <a class="nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Soporte</a> -->
+                              </div>
+                            </nav>
+                            <div class="tab-content" id="nav-tabContent">
+                              <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card shadow mb-4 text-center" style="margin-top:1rem;">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Información personal</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row text-center">
+                                            <div class="col-sm">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <b>Nombres</b>
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        {{ nombres }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <b>Apellidos</b>
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                       {{ apellidos }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <b>Celular</b>
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        {{ celular }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row text-center" style="margin-top: 1rem;">
+                                            <div class="col-sm">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <b>Correo electronico</b>
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        {{ email }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <b>Cargo</b>
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        {{ cargo }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-8">
+                                        <div class="card shadow mb-4 text-center">
+                                            <div class="card-header py-3">
+                                                <h6 class="m-0 font-weight-bold text-primary">Información adicional</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row text-center" style="margin-top: 1rem;">
+                                                    <div class="col-sm">
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                <b>Fecha creación</b>
+                                                            </div>
+                                                            <div class="col-sm-12">
+                                                                {{ fechac }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm">
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                <b>Fecha ultimo ingreso</b>
+                                                            </div>
+                                                            <div class="col-sm-12">
+                                                               {{ ultimo }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>   
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="card shadow mb-4 text-center">
+                                            <div class="card-header py-3">
+                                                <h6 class="m-0 font-weight-bold text-primary">Archivos</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                         <button class="btn"><i class="fas fa-download"></i> Ficha tecnica</button>
+                                                    </div>
+                                                </div>
+                                               
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">Quintero</div>
+                            </div>
+                        </div>
+                    </div>
+{% endblock %}
+{% block scripts %}
+
+{% endblock %}

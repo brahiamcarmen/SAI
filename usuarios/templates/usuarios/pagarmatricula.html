@@ -1,0 +1,93 @@
+
+{% extends 'usuarios/base_usuario.html' %}
+{% load static %}
+{% block styles %}
+{% load humanize %}
+{% endblock %}
+{%block title %} <title>Pagar matricula</title> {%endblock%}
+{% block content %}
+{% include 'usuarios/alerts.html' %}
+<div id="content-wrapper">
+		<div class="page-header ">
+			<div class="row">
+				<div class="col-sm-12 text-center">
+					<h1 class="text-left-sm"><i class="fa fa-file-text page-header-icon"></i>&nbsp;&nbsp;Refinanciar matricula</h1>
+				</div>
+				<!-- Page header, center on small screens -->
+				
+			</div>
+
+		</div> <!-- / .page-header -->
+		<div class="row">
+			<div class="col-sm-2">
+				
+			</div>
+			<div class="col-sm-8 text-center">
+				<div style="width: 100%">
+
+				<form method="post" enctype="multipart/form-data">
+					{% csrf_token %}
+					<table class="table">
+										<thead>
+											<tr>
+												<th>Referencia</th>
+												<th>Descripcion</th>
+												<th>Estado</th>
+												<th>Valor matricula</th>
+												<th>Cuotas</th>
+												<th>Cuotas pendientes</th>
+												<th>Valor pendiente</th>
+												<th>Cuota mensual</th>
+											</tr>
+										</thead>
+										<tbody>
+											{% for estados in matriculas %}
+												<tr class="odd gradeX">
+													<td>{{ estados.IdCobroM }}</td>
+												    <td>{{ estados.Descripcion }}</td>
+												    <td>{{ estados.Estado }}</td>
+												    <td>{{ estados.IdValor }}</td>
+												    <td>{{ estados.CantCuotas }}</td>
+												    <td>{{ estados.CuotasPendientes }}</td>
+												    <td>{{ estados.ValorPendiente }}</td>
+												    <td>{{ estados.Cuota }}</td>
+												</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+									<div class="form-group no-margin-hr">
+										<label class="control-label">Refinanciar</label>
+										<select name="pagomatricula"class="form-control form-group-margin">
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+										</select>
+								    </div>
+					<div style="padding-top: 2rem">
+						<button type="submit" class="btn btn-primary" style="width: 100%">Modificar criterios de pago</button>
+					</div>
+				</form>
+				</div>
+				<div style="padding-top: 2rem">
+					<button onclick="window.location=''" class="btn btn-primary" style="width: 100%">Cancelar</button>
+				</div>
+				<br>
+				 <div class="alert">
+					<button type="button" class="close" data-dismiss="alert">×</button>
+											<strong>Alerta!</strong> Si el predio tiene facturas con estado emitido debe anularla y generarla nuevamente para evidenciar los cambios
+				</div>
+				
+			</div>
+			<div class="col-sm-2">
+				
+			</div>
+		</div>
+
+</div>
+
+{% endblock %}
+{% block scripts %}
+{% endblock %}

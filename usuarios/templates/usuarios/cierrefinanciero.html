@@ -1,0 +1,286 @@
+{% extends 'usuarios/base_usuario2.html' %}
+{% load static %}
+{% block styles %}
+{% endblock %}
+{%block title %} <title>Modulo - CP</title> {%endblock%}
+{% load humanize %}
+{% block content %}
+{% include 'usuarios/alerts.html' %}
+<!-- Titulo -->
+<div class="row">
+    <div class="col-sm-6">
+        <h1 class="h3 text-gray-800">Modulo de cierres periodicos</h1>
+    </div>
+     <div class="col-sm-6">
+        <button class="btn btn-primary btn-sm ml-auto float-right" data-toggle="modal" data-target="#cierre" style="margin-right: 0.5rem;" data-toggle="modal" data-target="#estadisticas">Registrar cierre</button>
+        <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" onclick="window.location='{% url 'usuarios:listacierres' %}'">Periodos registrados</button>
+
+    </div>
+</div>
+<div class="row" style="margin-top: 1rem;">
+    <div class="col-sm-12">
+        <div class="row">
+             <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-bottom-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                    Ingresos (Año en curso)</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">${{ingresos|intcomma}}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-file-invoice-dollar fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-bottom-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                    Egresos (Año en curso)</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">${{gastos|intcomma}}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-shopping-cart fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-bottom-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Saldo (Año en curso)</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">${{saldo|intcomma}}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-hand-holding-usd fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-bottom-info shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">% de recaudo anual
+                                            </div>
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col-auto">
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{porcentaje}}%</div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="progress progress-sm mr-2">
+                                                        <div class="progress-bar bg-info" role="progressbar"
+                                                            style="width: {{porcentaje}}%" aria-valuenow="{{porcentaje}}" aria-valuemin="0"
+                                                            aria-valuemax="100"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+            </div>
+                
+
+        </div>
+        <div class="row">
+            <div class="col-sm-9 text-center">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Lista anual de cierres</h6>
+                        </div>
+                        <div class="card-body" style=" height: 13rem;overflow: auto;">
+                            <table class="table text-xs">
+                                <thead>
+                                    <tr>
+                                        <th>Identificador de cierre</th>
+                                        <th>Ingresos</th>
+                                        <th>Egresos</th>
+                                        <th>Saldo</th>
+                                        <th>Periodo</th>
+                                        <th>Año</th>
+                                        <th>Fecha de cierre</th>
+                                        <th>Usuario</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for cierre in cierres %}
+                                        <tr class="odd gradeX">
+                                            <td>{{ cierre.IdCierre }}</td>
+                                            <td>{{ cierre.Ingresos|intcomma }}</td>
+                                            <td>{{ cierre.Gastos|intcomma }}</td>
+                                            <td>{{ cierre.Presupuesto|intcomma }}</td>
+                                            <td>{{ cierre.Ciclo }}</td>
+                                            <td>{{ cierre.Ano }}</td>
+                                            <td>{{ cierre.Fecha }}</td>
+                                            <td>{{ cierre.NoRecaudo }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                 <div class="col-sm-3 text-center">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Opciones adicionales</h6>
+                        </div>
+                        <div class="card border-bottom-primary shadow h-100 py-2">
+                            <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                             % de perdidas</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ perdidas }}%</div>
+                                        </div>
+                                    </div>
+                            </div>
+                            <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Valor de perdidas</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">${{ cont|intcomma }}</div>
+                                        </div>
+                                        
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>        
+    </div>
+</div>
+                <div id="cierre" class="modal fade" tabindex="-1" role="dialog" style="display: none;">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                
+                                <h4 class="modal-title">Cierre periodico</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form method="post" class="panel form-horizontal">
+                                    {% csrf_token %}
+                                    <div class="card shadow mb-4">
+                                        <div class="card-header py-3 text-center">
+                                            <h6 class="m-0 font-weight-bold text-primary">Autenticacion de usuario</h6>
+                                        </div>
+                                        <div class="card-body">
+                                             <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group no-margin-hr">
+                                                    <label class="control-label">Usuario</label>
+                                                    <input type="text" name="username" class="form-control">
+                                                </div>
+                                            </div><!-- col-sm-6 -->
+                                            <div class="col-sm-6">
+                                                <div class="form-group no-margin-hr">
+                                                    <label class="control-label">Contraseña</label>
+                                                    <input type="password" name="password" class="form-control">
+                                                </div>
+                                            </div><!-- col-sm-6 -->
+                                        </div>
+                                        </div>
+                                    </div>
+                                    <div class="card shadow mb-4">
+                                        <div class="card-header py-3 text-center">
+                                            <h6 class="m-0 font-weight-bold text-primary">Informacion del cierre</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                            <div class="col-sm-4">
+                                                <div class="form-group no-margin-hr">
+                                                    <label class="control-label">Ingresos ultimo periodo</label>
+                                                    <input type="text" name="ingresos" class="form-control">
+                                                </div>
+                                            </div><!-- col-sm-6 -->
+                                            <div class="col-sm-4">
+                                                <div class="form-group no-margin-hr">
+                                                    <label class="control-label">Egresos ultimo periodo</label>
+                                                    <input type="text" name="egresos" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group no-margin-hr">
+                                                    <label class="control-label">Fecha</label>
+                                                    <input type="text" disabled="" class="form-control">
+                                                </div>
+                                            </div><!-- col-sm-6 -->
+                                        </div><!-- row -->
+                                        
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <div class="form-group no-margin-hr">
+                                                    <label class="control-label">Saldo actual</label>
+                                                    <input type="number" name="presupuesto" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group no-margin-hr">
+                                                    <label class="control-label">Periodo</label>
+                                                    <select name="periodo" class="form-control form-group-margin">
+                                                        <option>Enero</option>
+                                                        <option>Febrero</option>
+                                                        <option>Marzo</option>
+                                                        <option>Abril</option>
+                                                        <option>Mayo</option>
+                                                        <option>Junio</option>
+                                                        <option>Julio</option>
+                                                        <option>Agosto</option>
+                                                        <option>Septiembre</option>
+                                                        <option>Octubre</option>
+                                                        <option>Noviembre</option>
+                                                        <option>Diciembre</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group no-margin-hr">
+                                                    <label class="control-label">Año</label>
+                                                    <select name="ano" class="form-control form-group-margin">
+                                                        <option>2021</option>
+                                                        <option>2022</option>
+                                                        <option>2023</option>
+                                                        <option>2024</option>
+                                                        <option>2025</option>
+                                                        <option>2026</option>
+                                                        <option>2027</option>
+                                                        <option>2028</option>
+                                                        <option>2029</option>
+                                                        <option>2030</option>
+                                                    </select>
+                                                </div>
+                                            </div><!-- col-sm-6 -->
+                                            <!-- col-sm-6 -->
+                                        </div><!-- row -->
+                                    </div>
+                                       
+                                    </div>
+                                        
+                                    <div class="panel-footer text-center">
+                                        <button style="width: 40%;" class="btn btn-primary">Registrar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div> <!-- / .modal-content -->
+                    </div> <!-- / .modal-dialog -->
+                </div>
+{% endblock %}
+{% block scripts %}
+
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends 'usuarios/base_usuario.html' %}
+{% load static %}
+{% block styles %}
+{% endblock %}
+{%block title %} <title>Lista ordenes de trabajo</title> {%endblock%}
+{% block content %}
+<!-- CONTENIDO -->
+	{% include 'usuarios/alerts.html' %}
+<div id="content-wrapper">
+	<div class="page-header">
+		<h1><b>Listado de ordenes</b></h1>
+		<div class="pull-right col-xs-12 col-sm-auto">
+	    	<button onclick="window.location='{% url 'usuarios:suspenciones' %}'" class="btn btn-primary">Volver</button>
+	    </div>
+	</div>
+			<div class="row">
+					<ul id="uidemo-tabs-default-demo" class="nav nav-tabs">
+							<li class="active">
+								<a href="#uidemo-tabs-default-demo-home" data-toggle="tab">Ordenes de suspencion<span class="label label-success">{{ contador }}</span></a>
+							</li>
+							<li class="">
+								<a href="#uidemo-tabs-default-demo-profile" data-toggle="tab">Ordenes de reconexion<span class="badge badge-primary">{{ contadorasig }}</span></a>
+							</li>
+						</ul>
+
+						<div class="tab-content tab-content-bordered">
+							<div class="tab-pane fade active in" id="uidemo-tabs-default-demo-home">
+								<div class="panel">
+									<div style="height: 35em; overflow-y: scroll;">
+											<table class="table">
+												<thead>
+													<tr>
+														<th>Numero Orden</th>
+														<th>Deuda</th>
+														<th>Fecha expedicion</th>
+														<th>Fecha ejecucion</th>
+														<th>Generado</th>
+														<th>Estado</th>
+														<th>Usuario encargado</th>
+														<th>Referencia</th>
+													</tr>
+												</thead>
+												<tbody>
+													{% for ord in ordsus %}
+														<tr class="odd gradeX">
+															<td>{{ ord.IdOrden }}</td>
+															<td>{{ ord.Deuda }}</td>
+														    <td>{{ ord.FechaExpe }}</td>
+														    <td>{{ ord.FechaEjecucion }}</td>
+														    <td>{{ ord.Generado }}</td>
+														    <td>{{ ord.Estado }}</td>
+														    <td>{{ ord.UsuarioEjecuta }}</td>
+														    <td>{{ ord.IdEstadoCuenta }}</td>
+														</tr>
+													{% endfor %}
+												</tbody>
+											</table>
+									</div>
+								</div>
+							</div> <!-- / .tab-pane -->
+							<div class="tab-pane fade" id="uidemo-tabs-default-demo-profile">
+								<div class="panel">
+									<div style="height: 35em; overflow-y: scroll;">
+										<div class="panel-body">
+											<table class="table">
+												<thead>
+													<tr>
+														<th>Numero Orden</th>
+														<th>Deuda</th>
+														<th>Fecha expedicion</th>
+														<th>Fecha ejecucion</th>
+														<th>Generado</th>
+														<th>Estado</th>
+														<th>Usuario encargado</th>
+														<th>Referencia</th>
+													</tr>
+												</thead>
+												<tbody>
+													{% for ord in ordrec %}
+														<tr class="odd gradeX">
+															<td>{{ ord.IdOrden }}</td>
+															<td>{{ ord.Deuda }}</td>
+														    <td>{{ ord.FechaExpe }}</td>
+														    <td>{{ ord.FechaEjecucion }}</td>
+														    <td>{{ ord.Generado }}</td>
+														    <td>{{ ord.Estado }}</td>
+														    <td>{{ ord.UsuarioEjecuta }}</td>
+														    <td>{{ ord.IdEstadoCuenta }}</td>
+														</tr>
+													{% endfor %}
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div> <!-- / .tab-pane -->
+							<div class="tab-pane fade" id="uidemo-tabs-default-demo-dropdown1">
+								<p>None</p>
+							</div> <!-- / .tab-pane -->
+						</div> <!-- / .tab-content -->
+
+
+							</div>
+	
+</div>
+
+{% endblock %}
+{% block scripts %}
+{% endblock %}

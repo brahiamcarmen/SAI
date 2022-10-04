@@ -1,0 +1,161 @@
+{% extends 'usuarios/base_usuario2.html' %}
+{% load static %}
+{% block styles %}
+<link href="{% static 'stylesheets/diseno.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+{%block title %} <title>Modulo - I</title> {%endblock%}
+{% block content %}
+{% include 'usuarios/alerts.html' %}
+<div class="row">
+    <div class="col-sm-8">
+        <div class="row">
+          <div class="col-sm-12">
+                <div class="card shadow mb-4 text-center">
+                        <div class="card-header py-3">
+                             <h6 class="m-0 font-weight-bold text-primary">Bienvenidos al {{nombreproyectol}} - {{nombreproyecto}}</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 100%;" src="{% static 'images/logop.png' %}" alt="">
+                                </div>
+                                <div class="col-sm-9">
+                                    <b>Usuario de empresa</b>
+                                    <p>
+                                        {% for acueductos in acueductos %}
+                                                {{ acueductos.Nombre }}
+                                        {% endfor %} 
+                                    </p>
+                                     <a target="_blank" rel="nofollow" href="https://undraw.co/">Perfil de empresa &rarr;</a>
+                                </div>
+                            </div>
+                            
+                        </div>
+                     </div>
+              </div>
+              <div class="col-sm-12">
+                  <div class="card shadow mb-4 text-center">
+                        <div class="card-header py-3">
+                             <h6 class="m-0 font-weight-bold text-primary">Informacion de conexión</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <b>Nombre de equipo</b>
+                                    <p>
+                                        {{nombreequipo}}
+                                    </p>
+                                </div>
+                                <div class="col-sm-4">
+                                    <b>Dirección ip</b>
+                                    <p>
+                                        {{ip}}
+                                    </p>
+                                </div>
+                                 <div class="col-sm-4">
+                                    <b>Ubicación del equipo</b>
+                                    <p>
+                                        Corregimiento de caimalito, Pereira, Rda.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <b>Ubicación del servidor</b>
+                                    <p>
+                                        No contectado
+                                        <!--350 Lincoln Road, Miami Beach, Florida, USA-->
+                                    </p>
+                                </div>
+                                 <div class="col-sm-4">
+                                    <b>Conexión a internet</b>
+                                    <p>
+                                        Exitosa
+                                    </p>  
+                                </div>
+                                <div class="col-sm-4">
+                                    <b>Tipo usuario</b>
+                                    <p>
+                                        SuperUsuario
+                                    </p>  
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+              </div>  
+        </div>
+    </div>
+    <div class="col-sm-4 text-center">
+        <div class="row">
+            <div class="col-sm-12">
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#factura" role="tab" aria-controls="pills-home" aria-selected="true">Facturación</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">SyR</a>
+                  </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="factura" role="tabpanel" aria-labelledby="pills-home-tab">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Modulo de pago - aportes</h6>
+                            </div>
+                            <div class="card-body">
+                                <form action="{% url 'usuarios:verfactura' %}" method="get" class="form-inline">
+                                    {% csrf_token %}
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                        <video style="width: 100%;" src="" id="video" autoplay="true"></video>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <label class="sr-only" for="exampleInputEmail2">Numero factura</label>
+                                            <input style="width: 100%" type="text" name="factura" class="form-control" id="exampleInputEmail2" placeholder="Ingrese numero factura">
+                                        </div>
+                                        <button style="margin-top: 1rem; width: 100%;" type="submit" class="btn btn-primary">Pagar</button>
+                                    </div>     
+                            
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Modulo de pago - RyS</h6>
+                            </div>
+                            <div class="card-body">
+                                <form action="{% url 'usuarios:pagarrys' %}" method="get" class="form-inline">
+                                    {% csrf_token %}
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <label class="sr-only" for="exampleInputEmail2">Numero de orden</label>
+                                            <input style="width: 100%" type="text" name="orden" class="form-control" id="exampleInputEmail2" placeholder="Ingrese numero de orden">
+                                        </div>
+                                        <button style="margin-top: 1rem; width: 100%;" type="submit" class="btn btn-primary">Pagar</button>
+                                    </div>     
+                            
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div> 
+</div>
+<div class="row">
+    <div class="col-sm-12">
+           <div class="col-sm-12">
+                
+            </div> 
+    </div>
+</div>
+
+
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'javascripts/video.js' %}"></script>
+{% endblock %}

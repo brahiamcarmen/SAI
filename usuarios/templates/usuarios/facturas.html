@@ -1,0 +1,124 @@
+{% extends 'usuarios/base_usuario2.html' %}
+{% load static %}
+{% block styles %}
+{% endblock %}
+{%block title %} <title>Modulo - FV</title> {%endblock%}
+{% block content %}
+{% include 'usuarios/alerts.html' %}
+<!-- Titulo -->
+<div class="row">
+     <div class="col-sm-6">
+        <h1 class="h3 text-gray-800">Modulo de Facturas vencidas</h1>
+    </div>
+     <div class="col-sm-6">
+        <form method="post" role="form" enctype="multipart/form-data" onsubmit="return valida(this)">
+            {% csrf_token %}
+                <button type="submit" class="btn btn-primary btn-sm ml-auto float-right">Cambiar estado</button>
+        </form>
+    </div>
+    
+</div>
+
+<div class="row" style="margin-top: 1rem;">
+    <div class="col-sm-6">
+        <div class="row">
+            <div class="col-xl-6 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                 Facturas emitidas</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ facturasemi }}</div>
+                            </div>
+                            <div class="col-auto">
+                                    <i class="fas fa-file-invoice-dollar fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6 col-md-6 mb-4">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                    Facturas Vencidas</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ facturasven }}</div>
+                            </div>
+                            <div class="col-auto">
+                                    <i class="fas fa-file-invoice fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <img style="width: 40%" alt="" src="{% static 'images/alerta.png' %}">
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="col-xl-12 col-lg-5">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 text-center">
+                    <h6 class="m-0 font-weight-bold text-primary">Estadisticas</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="chart-pie pt-4">
+                        <canvas id="myPieChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript">
+         // Set new default font family and font color to mimic Bootstrap's default styling
+        Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+        Chart.defaults.global.defaultFontColor = '#858796';
+
+        // Pie Chart Example
+        var ctx = document.getElementById("myPieChart");
+        var myPieChart = new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: ["Emitidas", "Vencidas"],
+            datasets: [{
+              data: [{{facturasemi}}, {{facturasven}}],
+              backgroundColor: ['#4e73df', '#36b9cc'],
+              hoverBackgroundColor: ['#2e59d9','#2c9faf'],
+              hoverBorderColor: "rgba(234, 236, 244, 1)",
+            }],
+          },
+          options: {
+            maintainAspectRatio: false,
+            tooltips: {
+              backgroundColor: "rgb(255,255,255)",
+              bodyFontColor: "#858796",
+              borderColor: '#dddfeb',
+              borderWidth: 1,
+              xPadding: 15,
+              yPadding: 15,
+              displayColors: false,
+              caretPadding: 10,
+            },
+            legend: {
+              display: false
+            },
+            cutoutPercentage: 80,
+          },
+        });
+    </script>
+    <script src="{% static 'v3/js/demo/chart-area-demo.js' %}"></script>
+    <script src="{% static 'v3/js/demo/chart-bar-demo.js' %}"></script>
+    <script src="{% static 'v3/vendor/chart.js/Chart.min.js' %}"></script>
+{% endblock %}

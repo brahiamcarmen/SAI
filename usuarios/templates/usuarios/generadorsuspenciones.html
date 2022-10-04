@@ -1,0 +1,128 @@
+{% extends 'usuarios/base_usuario2.html' %}
+{% load static %}
+{% block styles %}
+{% endblock %}
+{%block title %} <title>Modulo - SU</title> {%endblock%}
+{% load humanize %}
+{% block content %}
+{% include 'usuarios/alerts.html' %}
+<div class="row">
+    <div class="col-sm-6">
+        <h1 class="h3 text-gray-800">Ordenes de suspención</h1>
+    </div>
+    <div class="col-sm-6">
+        <form method="post" role="form" enctype="multipart/form-data" onsubmit="return valida(this)">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary btn-sm" style="float: right; margin: 0.1rem;">Generar ordenes</button>
+        </form>
+        <button class="btn btn-primary btn-sm" style="float: right; margin-right: 1rem; margin: 0.1rem;" onclick="window.location='{% url 'usuarios:anularsuspenciones' %}'">Anular ordenes</button>
+    </div>
+</div>
+<div class="row">
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                 Pentienes</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ pendientes }}</div>
+                            </div>
+                            <div class="col-auto">
+                                    <i class="fas fa-file-invoice fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Anuladas</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ anuladas }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-receipt fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                         <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                Ejecutadas</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ ejecutadas }}</div>
+                            </div>
+                            <div class="col-auto">
+                                            <i class="fas fa-file-alt fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4 text-center">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <a href="{% url 'usuarios:reportesuspenciones' %}" class="btn btn-primary btn-icon-split">
+                                    <span class="icon text-white-50">
+                                        <i class="fas fa-download"></i>
+                                    </span>
+                                    <span class="text">Descargar OT</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                           <th>Numero Orden</th>
+                            <th>Fecha expedicion</th>
+                            <th>Fecha ejecucion</th>
+                            <th>Estado</th>
+                            <th>Referencia</th>
+                            <th>Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ord in ordsus %}
+                            <tr class="odd gradeX">
+                                <td>{{ ord.IdOrden }}</td>
+                                <td>{{ ord.FechaExpe }}</td>
+                                <td>{{ ord.FechaEjecucion }}</td>
+                                <td>{{ ord.Estado }}</td>
+                                <td>{{ ord.IdEstadoCuenta }}</td>
+                                <td>
+                                    <a href="{% url 'usuarios:verordensus' ord.IdOrden %}" class="btn"><span class="fa fa-check"></a>
+                                                                 
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+
+{% endblock %}

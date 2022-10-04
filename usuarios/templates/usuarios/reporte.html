@@ -1,0 +1,230 @@
+{% extends 'usuarios/base_usuario2.html' %}
+{% load static %}
+{% block styles %}
+{% endblock %}
+{%block title %} <title>Modulo - R</title> {%endblock%}
+{% load humanize %}
+{% block content %}
+{% include 'usuarios/alerts.html' %}
+<!-- Titulo -->
+<div class="row">
+    <div class="col-sm-6">
+        <h1 class="h3 text-gray-800">Reportes</h1>
+    </div>
+     <div class="col-sm-6">
+     	<div class="row">
+     		<div class="col-sm-12">
+     			
+     		</div>
+     	</div>
+    
+    </div>
+</div>
+<div class="row" style="margin-top: 0.3rem;">
+    <div class="col-sm-7">
+    	<div class="row">
+    		<div class="col-sm-12">
+	    		<div class="card shadow text-center">
+	                    <div class="card-header">
+	                        <b class="text-success">Estadisticas</b>
+	                    </div>
+	                        <div class="card-body">
+	                        	<div class="row">
+	                                <div class="col-sm-3">
+	                                    <b class="text-primary">Paso Nivel</b><br>
+	                                    {{ s1 }}
+	                                </div>
+	                                <div class="col-sm-3">
+	                                    <b class="text-primary">Caimalito Centro</b><br>
+	                                    {{ s3 }}
+	                                </div>
+	                                <div class="col-sm-3">
+	                                    <b class="text-primary">Barrio Nuevo</b><br>
+	                                    {{ s4 }}
+	                                </div>
+	                                <div class="col-sm-3">
+	                                    <b class="text-primary">Veinte de Julio</b><br>
+	                                    {{ s5 }}
+	                                </div>
+	                            </div>
+	                            <hr>
+	                            <div class="row">
+	                                <div class="col-sm-3">
+	                                    <b class="text-primary">Titulares</b><br>
+	                                    {{ totalpropietarios }}
+	                                </div>
+	                                <div class="col-sm-3">
+	                                    <b class="text-primary">Predios</b><br>
+	                                    {{ totalviviendas }}
+	                                </div>
+	                                <div class="col-sm-3">
+	                                    <b class="text-primary">Residenciales</b><br>
+	                                    {{ t1 }}
+	                                </div>
+	                                <div class="col-sm-3">
+	                                    <b class="text-primary">Usuarios</b><br>
+	                                    {{ personas }}
+	                                </div>
+	                            </div>
+	                            <hr>
+	                            <div class="row">
+                                <div class="col-sm-3">
+                                    <b class="text-primary">Operativos</b><br>
+                                    {{e1}}
+                                </div>
+                                <div class="col-sm-3">
+                                    <b class="text-primary">Mantenimiento</b><br>
+                                    {{ e4 }}
+                                </div>
+                                <div class="col-sm-3">
+                                    <b class="text-primary">Suspendidos</b><br>
+                                    {{ e2 }}
+                                </div>
+                                <div class="col-sm-3">
+                                    <b class="text-primary">Retirados</b><br>
+                                    {{ e3 }}
+                                </div>
+                            </div>
+	                        </div>
+	                </div>
+             </div>
+    	</div>
+    	<br>
+    	<div class="row">
+            <div class="col-sm-12 text-center">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-success">General</h6>
+                    </div>
+                    <div class="card-body">
+                    	<div class="row" style="margin-top:-0.5rem;">
+                    		<div class="col-sm-12">
+                    			<button class="btn btn-sm btn-outline-primary" style="margin-top:0.5rem;" onclick="window.location='{% url 'usuarios:reportepdf' %}'">Titulares</button>
+                    			<button class="btn btn-sm btn-outline-primary" style="margin-top:0.5rem;" onclick="window.location='{% url 'usuarios:reportepdfv' %}'">Predios</button>
+                    			<button class="btn btn-sm btn-outline-primary" style="margin-top:0.5rem;" onclick="window.location='{% url 'usuarios:medidores' %}'">Medidores</button>
+                    			<button class="btn btn-sm btn-outline-primary" style="margin-top:0.5rem;" onclick="window.location='{% url 'usuarios:certificacion' %}'">Certificaciones</button>
+                    			<button class="btn btn-sm btn-outline-primary" style="margin-top:0.5rem;" onclick="window.location='{% url 'usuarios:reportecompleto' %}'">Informe completo</button>
+                    		</div>
+                    	</div>
+                    	<div class="row" style="margin-top:0.5rem;">
+                    		<div class="col-sm-12">
+                    			
+                    		</div>
+                    	</div>
+                      
+                    </div>
+                </div>
+            </div>
+    	</div>
+        <div class="row">
+            <div class="col-sm-12 text-center" style="margin-top:-0.5rem;">
+            	<div class="row">
+            		<div class="col-sm-12">
+            			<div class="card shadow mb-4">
+		                    <div class="card-header py-3">
+		                        <h6 class="m-0 font-weight-bold text-success">Finanzas</h6>
+		                    </div>
+		                    <div class="card-body">
+		                    	<div class="row" style="margin-top:-0.5rem;">
+		                    		<div class="col-sm-12">
+		                    			<button class="btn btn-sm btn-outline-primary" style="margin-top:0.5rem;" onclick="window.location='{% url 'usuarios:reporteestadoscuenta' %}'">Estados cuenta</button>
+		                    			<button class="btn btn-sm btn-outline-primary" style="margin-top:0.5rem;" onclick="window.location='{% url 'usuarios:reportecierre' %}'">Cierres periodicos</button>
+		                    			<button class="btn btn-sm btn-outline-primary" style="margin-top:0.5rem;" onclick="window.location='{% url 'usuarios:reportegastos' %}'">Gastos</button>
+		                    			<button class="btn btn-sm btn-outline-primary" style="margin-top:0.5rem;" onclick="window.location='{% url 'usuarios:reportepagos' %}'">Pagos</button>
+		                    			<button class="btn btn-sm btn-outline-primary" style="margin-top:0.5rem;" onclick="window.location='{% url 'usuarios:reportecobromatricula' %}'">Matriculas</button>
+		                    		</div>
+		                    	</div>
+		                      
+		                    </div>
+		                </div>
+            		</div>
+            	</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-5 text-center">
+ 				<div class="col-sm-12">
+ 					<div class="row">
+ 						<div class="col-sm-12">
+ 							<div class="card shadow mb-4">
+			                    <div class="card-header py-3">
+			                        <h6 class="m-0 font-weight-bold text-success">Otros reportes</h6>
+			                    </div>
+			                    <div class="card-body">
+			                    	<div class="row">
+			                    		<div class="col-sm-6">
+			                    			<p>Tipo de servicio</p>
+			                    			<form action="{% url 'usuarios:reporteinfo' %}" method="get">
+												<select name="infoinstal" class="form-control form-group-margin">
+													<option>Residencial</option>
+													<option>Comercial</option>
+													<option>Industrial</option>
+												</select>
+												<button type="submit" class="btn btn-sm btn-primary" style="width: 100%; margin-top: 0.3rem;">Descargar</button>
+											</form>
+			                    		</div>
+			                    		<div class="col-sm-6">
+			                    			 <p>Estado del servicio</p>
+			                    			<form action="{% url 'usuarios:reporteestados' %}" method="get">
+												<select name="estado" class="form-control form-group-margin">
+													<option>Operativo</option>
+													<option>Suspendido</option>
+													<option>Retirado</option>
+													<option>Mantenimiento</option>
+												</select>
+												<button type="submit" class="btn btn-sm btn-primary" style="width: 100%; margin-top: 0.3rem;">Descargar</button>
+											</form>
+			                    		</div>
+			                    	</div>
+			                    	<div class="row" style="margin-top: 0.5rem;">
+			                    		<div class="col-sm-12">
+			                    			<form action="{% url 'usuarios:reportesvarios' %}" method="get">
+												<select name="sector" class="form-control form-group-margin">
+													<option>Pasonivel Viejo</option>
+													<option>Caimalito Centro</option>
+													<option>Pasonivel Destapada</option>
+													<option>Barrio Nuevo</option>
+													<option>20 de julio</option>
+												</select>
+												<button type="submit" class="btn btn-sm btn-primary" style="width: 100%; margin-top: 0.3rem;">Descargar</button>
+											</form>
+			                    		</div>
+			                    	</div>
+			                    	<hr>
+			                    	<div class="row">
+			                    		<div class="col-sm-12">
+			                    			<p>Cierres financieros por año</p>
+				                    			<form action="{% url 'usuarios:reportecierresano' %}" method="get" class="form-inline">
+													{% csrf_token %}
+													<input type="text" style="width:100%" name="ano" class="form-control form-group-margin" placeholder="Ingrese el año para generar reporte">
+
+													<br>
+													<button style="margin-top: 0.3rem; width: 100%" type="submit" class="btn btn-sm btn-primary">Descargar</button>
+												</form>
+			                    		</div>
+			                    	</div>
+			                    	<hr>
+			                    	<div class="row">
+			                    		<div class="col-sm-12">
+			                    			<p>Pagos por rango de fecha</p>
+												<form action="{% url 'usuarios:reportepagosfechas' %}" method="get" class="form-inline">
+													{% csrf_token %}
+													<input style="width:100%" type="text" name="fechainicial" class="form-control" placeholder="Desde - mes/dia/año">										
+													<input style=" margin-top: 0.5rem; width:100%" type="text" name="fechafinal" class="form-control" placeholder="Hasta - mes/dia/año">
+																										
+													<br>
+													<button style="margin-top: 0.5rem; width: 100%" type="submit" class="btn btn-sm btn-primary">Descargar</button>
+												</form>
+			                    		</div>
+			                    	</div>
+			                    </div>
+		                	</div>
+ 						</div>
+ 					</div>
+            	</div>  	
+    </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+{% endblock %}

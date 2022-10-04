@@ -1,0 +1,71 @@
+{% extends 'usuarios/base_usuario2.html' %}
+{% load static %}
+{% block styles %}
+
+{% endblock %}
+{%block title %} <title>Modulo - AGU</title> {%endblock%}
+{% block content %}
+{% include 'usuarios/alerts.html' %}
+<div class="page-header text-center">
+    <h2><b>Modulo de creacion de usuarios</b></h2>
+</div> 
+                    
+<div class="row" style="margin-top: 0.5rem;n">
+    <div class="col-sm-2">
+        
+    </div>
+    <div class="col-sm-8">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <div class="col-sm-12">
+                {% for field in form %}
+                    <div class="form-group no-padding-t no-border-t panel-padding-h">
+                        {{ field.errors }}
+                        <label for="jq-validation-url" class="col-sm-12 control-label">
+                            <strong>{{ field.label }}</strong>
+                        </label>
+                        <div class="col-sm-12">
+                            {{ field }}
+                        </div>
+                    </div>
+                {% endfor %}  
+                {% for field in form2 %}
+                        <div class="form-group no-padding-t no-border-t panel-padding-h">
+                            {{ field.errors }}
+                            <label for="jq-validation-url" class="col-sm-12 control-label">
+                                <strong>{{ field.label }}</strong>
+                            </label>
+                            <div class="col-sm-12">
+                                {{ field }}
+                            </div>
+                        </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-primary " style="width: 100%">Crear</button>
+            </div>                                        
+            <hr>
+        </form>
+        
+    </div>
+     <div class="col-sm-2">
+        
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-sm-2">
+        
+    </div>
+     <div class="col-sm-8">
+        <button onclick="window.location='{% url 'usuarios:paneladmin' %}'" class="btn btn-primary " style="width: 100%">Cancelar</button>
+    </div>
+     <div class="col-sm-2">
+        
+    </div>
+    
+</div>                            
+
+{% endblock %}
+{% block scripts %}
+
+{% endblock %}

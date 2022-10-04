@@ -1,0 +1,62 @@
+{% extends 'usuarios/base_usuario2.html' %}
+{% load static %}
+{% block styles %}
+{% endblock %}
+{%block title %} <title>Modulo - LOG</title> {%endblock%}
+{% load humanize %}
+{% block content %}
+{% include 'usuarios/alerts.html' %}
+<!-- Titulo -->
+<div class="row">
+    <div class="col-sm-6">
+        <h1 class="h3 text-gray-800">Listado de solicitudes de gastos</h1>
+    </div>
+    <div class="col-sm-6">
+        <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" onclick="window.location='{% url 'usuarios:controlpresupuestal' %}'">Volver</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+         <div class="card shadow">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Numero Orden</th>
+                                <th>Usuario</th>
+                                <th>Tipo Solicitud</th>
+                                <th>Valor</th>
+                                <th>Estado</th>
+                                <th>Fecha</th>
+                                <th>Area Responsable</th>
+                                <th>Numero factura</th>
+                                <th>Descripcion</th>
+                            </tr>
+                        </thead>
+                        <tbody class="">
+                            {% for facturas in solicitudesgastos %}
+                                <tr class="odd gradeX text-xl">
+                                    <td>{{ facturas.IdSoGa }}</td>
+                                    <td>{{ facturas.IdUsuario }}</td>
+                                    <td>{{ facturas.TipoSolicitud }}</td>
+                                    <td>{{ facturas.Valor|intcomma}}</td>
+                                    <td>{{ facturas.Estado }}</td>
+                                    <td>{{ facturas.Fecha }}</td>
+                                    <td>{{ facturas.AreaResponsable }}</td>
+                                    <td>{{ facturas.NumeroFactura }}</td>
+                                    <td>{{ facturas.Descripcion }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>               
+
+    </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+{% endblock %}

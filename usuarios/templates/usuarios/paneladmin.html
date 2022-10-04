@@ -1,0 +1,435 @@
+{% extends 'usuarios/base_usuario2.html' %}
+{% load static %}
+{% block styles %}
+{% endblock %}
+{%block title %} <title>Modulo - PA</title> {%endblock%}
+{% block content %}
+{% load humanize %}
+{% include 'usuarios/alerts.html' %}
+<div class="row">
+    <div class="col-sm-12">
+        <nav>
+          <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <a class="nav-link active" id="nav-home-tab" data-toggle="tab" href="#Inicio" role="tab" aria-controls="nav-home" aria-selected="true">Inicio</a>
+            <a class="nav-link" id="nav-profile-tab" data-toggle="tab" href="#usuarios" role="tab" aria-controls="nav-profile" aria-selected="false">Usuarios del sistema</a>
+            <a class="nav-link" id="nav-profile-tab" data-toggle="tab" href="#tarifas" role="tab" aria-controls="nav-profile" aria-selected="false">Tarifas</a>
+            <a class="nav-link" id="nav-contact-tab" data-toggle="tab" href="#matriculas" role="tab" aria-controls="nav-contact" aria-selected="false">Costos de matricula</a>
+            <a class="nav-link" id="nav-contact-tab" data-toggle="tab" href="#interés" role="tab" aria-controls="nav-contact" aria-selected="false">Tasa de interés</a>
+            <a class="nav-link" id="nav-contact-tab" data-toggle="tab" href="#poblacion" role="tab" aria-controls="nav-contact" aria-selected="false">Tipos de poblacion</a>
+          </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <!-- panel de inicio -->
+          <div class="tab-pane fade show active" id="Inicio" role="tabpanel" aria-labelledby="nav-home-tab">
+                <div class="row" style="margin-top: 0.5rem;">
+                    <div class="col-sm-4">
+                        <div class="row">
+                             <img src="{{ logo.url }}" class="img-thumbnail" alt="...">
+                        </div>
+                        <div class="row">
+                                <div class="col-sm-12 text-center" style="margin: 0.5rem;">
+                                    <h5>
+                                        {{razonsocial}}
+                                    </h5>
+                                </div>
+                                <div class="col-sm-12" style="margin: 0.5rem;">
+                                    <div class="row text-center">
+                                      <div class="col-12">
+                                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                            <a class="nav-link active" href="{% url 'usuarios:modificarempresa' %}" >Modificar información</a>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="card shadow mb-4 text-center" style="margin-top:1rem;">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Información de la empresa</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row text-center">
+                                            <div class="col-sm">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <b>NIT</b>
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        {{ nit }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <b>Razon social</b>
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                       {{ razonsocial }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row text-center" style="margin-top: 1rem;">
+                                            <div class="col-sm">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <b>Correo electronico</b>
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        {{ email }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <b>Dirección</b>
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        {{ direccion }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row text-center" style="margin-top: 1rem;">
+                                            <div class="col-sm">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <b>Representante legal</b>
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        {{ legal }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <b>Telefono</b>
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        {{ telefono }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row text-center" style="margin-top: 1rem;">
+                                            <div class="col-sm">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <b>Estado actual</b>
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        {{ estado }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <b>Tarifa</b>
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        {{ tarifa|intcomma }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                    </div>
+                </div>
+          </div>
+          <!-- panel de usuarios -->
+          <div class="tab-pane fade" id="usuarios" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <div class="row" style="margin-top:0.5rem;">
+                    <div class="col-sm-6">
+                        <h1 class="h3 text-gray-800">Listado de usuarios del sistema</h1>
+                    </div>
+                     <div class="col-sm-6">
+                        <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" onclick="window.location='{% url 'usuarios:agregarusuarios' %}'">Agregar usuario</button>
+                    </div>
+                </div>
+            <div class="row text-center" style="margin-top: 0.5rem">
+                {% for usuario in usuarios %}
+                <div class="col-sm-3" style="margin-bottom: 0.5rem;">
+                    <div class="card">
+                      <img src="{{ usuario.fotoUsuario.url }}" class="card-img-top" alt="...">
+                      <div class="card-body" style="margin-top: -1rem;">
+                        <h5 class="card-title">{{ usuario.usuid.first_name }} {{ usuario.usuid.last_name }}</h5>
+                        {% if usuario.usuid.is_active is True %}
+                            <span class="badge badge-pill badge-success">Activo</span>
+                        {% else %}
+                            <span class="badge badge-pill badge-warning">Inactivo</span>
+                        {% endif %}
+                        <span class="badge badge-pill badge-primary">{{usuario.TipoUsuario}}</span>
+                        <p class="card-text">
+                        </p>
+                        <a href="{% url 'usuarios:perfilusuario' usuario.IdUsuario %}" class="btn btn-primary" style="width: 100%;">Ver perfil</a>
+                      </div>
+                    </div>
+                </div>
+                {%endfor%}
+            </div>
+          </div>
+          <div class="tab-pane fade" id="tarifas" role="tabpanel" aria-labelledby="nav-contact-tab">
+            <div class="row" style="margin-top:0.5rem;">
+                <div class="col-sm-6">
+                    <h1 class="h3 text-gray-800">Listado de tarifas registradas</h1>
+                </div>
+                 <div class="col-sm-6">
+                    <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" onclick="window.location='{% url 'usuarios:registrotarifa' %}'">Agregar tarifa</button>
+                </div>
+            </div>
+            <div>
+                <div class="col-sm-12" style="margin-top:0.5rem;">
+                    <div class="row">    
+                        {% for tarifa in tarifas %}
+                        <div class="col-sm-6">
+                            <div class="card text-center">
+                                <div class="card-header">
+                                    <b class="text-primary">Identificador de tarifa: </b>{{ tarifa.IdTarifa }}
+                                    {% if tarifa.Ano == ano %}
+                                        <span class="badge badge-pill badge-success">Activa</span>
+                                    {% else %}
+                                        <span class="badge badge-pill badge-warning">Inactiva</span>
+                                    {% endif %}
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12 text-success"><b>Tarifas fijas</b></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <b class="text-primary">Tarifa plena</b><br>
+                                            ${{ tarifa.Valor|intcomma }}
+                                        </div>
+                                        <div class="col-sm-5">
+                                            <b class="text-primary">Tarifa mantenimiento</b><br>
+                                            ${{ tarifa.Mantenimiento|intcomma }}
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <b class="text-primary">Recargo por mora</b><br>
+                                            ${{ tarifa.Recargo|intcomma }}
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <b class="text-primary">Tarifa suspensión</b><br>
+                                            ${{ tarifa.Valor|intcomma }}
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <b class="text-primary">Tarifa reconexión</b><br>
+                                            ${{ tarifa.Mantenimiento|intcomma }}
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row" style="margin-top:0.3rem">
+                                        <div class="col-sm-12 text-success"><b>Consumo m<sup>3</sup></b></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <b class="text-primary">Minimo</b><br>
+                                            {{ tarifa.consumomin }} m<sup>3</sup>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <b class="text-primary">Medio</b><br>
+                                            {{ tarifa.consumotipo1 }} m<sup>3</sup>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <b class="text-primary">Alto</b><br>
+                                            {{ tarifa.consumotipo2 }} m<sup>3</sup>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row" style="margin-top:0.3rem">
+                                        <div class="col-sm-12 text-success"><b>Costos por m<sup>3</sup></b></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <b class="text-primary">Minimo</b><br>
+                                            ${{ tarifa.Valor|intcomma }}<br>
+                                            <sup>hasta {{ tarifa.consumomin }}  m<sup>3</sup></sup>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <b class="text-primary">Medio</b><br>
+                                            {{ tarifa.Potipo1 }}%<br>
+                                            <sup>{{ tarifa.consumomin }} + 1 m<sup>3</sup> a {{ tarifa.consumotipo1 }} m<sup>3</sup></sup>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <b class="text-primary">Alto</b><br>
+                                            {{ tarifa.Potipo2 }}%<br>
+                                            <sup>mayor a {{ tarifa.consumotipo2 }} m<sup>3
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row" style="margin-top:0.3rem">
+                                        <div class="col-sm-12 text-success"><b>Vigencia</b></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <b class="text-primary">Inicio</b><br>
+                                            {{ tarifa.FechaInicial }}
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <b class="text-primary">Final</b><br>
+                                            {{ tarifa.FechaFinal }} 
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <b class="text-primary">Año</b><br>
+                                            {{ tarifa.Ano }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                         {% endfor %}
+                     </div>
+                </div>
+                <br>
+            </div>
+          </div>
+        <div class="tab-pane fade" id="matriculas" role="tabpanel" aria-labelledby="nav-contact-tab">
+            <div class="row" style="margin-top:0.5rem;">
+                <div class="col-sm-6">
+                    <h1 class="h3 text-gray-800">Listado de tarifas de matricula</h1>
+                </div>
+                 <div class="col-sm-6">
+                    <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" onclick="window.location='{% url 'usuarios:registrocostomatricula' %}'">Agregar tarifa</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12" style="margin-top:0.5rem;">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable1" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Id Valor</th>
+                                            <th>Valor</th>
+                                            <th>Fecha</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for matricula in matriculas %}
+                                    <tr>
+                                        <td>{{ matricula.IdValor }}</td>
+                                        <td>{{ matricula.Valor|intcomma }}</td>
+                                        <td>{{ matricula.Fecha }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+            <div class="tab-pane fade" id="interés" role="tabpanel" aria-labelledby="nav-contact-tab">
+                <div class="row" style="margin-top:0.5rem;">
+                    <div class="col-sm-6">
+                        <h1 class="h3 text-gray-800">Listado de tasas de interés</h1>
+                    </div>
+                     <div class="col-sm-6">
+                        <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" onclick="window.location=''">Agregar tarifa</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12" style="margin-top:0.5rem;">
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="dataTable2" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Id</th>
+                                                <th>Valor</th>
+                                                <th>Fecha</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for interes in intereses %}
+                                        <tr>
+                                            <td>{{ interes.IdValor }}</td>
+                                            <td>{{ interes.Valor|intcomma }}</td>
+                                            <td>{{ interes.Fecha }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+           </div>
+            <div class="tab-pane fade" id="poblacion" role="tabpanel" aria-labelledby="nav-contact-tab">
+                <div class="row" style="margin-top:0.5rem;">
+                    <div class="col-sm-6">
+                        <h1 class="h3 text-gray-800">Listado de tipos de población</h1>
+                    </div>
+                     <div class="col-sm-6">
+                        <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" onclick="window.location='{% url 'usuarios:registropoblacion' %}'">Agregar población</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12" style="margin-top:0.5rem;">
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="dataTable3" width="100%" cellspacing="0">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Id poblacion</th>
+                                            <th>Descripcion</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for matricula in poblacion %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{ matricula.IdPoblacion }}</td>
+                                            <td>{{ matricula.Descripcion }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+           </div>
+        </div>
+
+    </div>
+       
+</div>
+                   
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+    $(document).ready( function () {
+    $('#dataTable1').DataTable();
+} );
+</script>
+<script type="text/javascript">
+    $(document).ready( function () {
+    $('#dataTable2').DataTable();
+} );
+</script>
+<script type="text/javascript">
+    $(document).ready( function () {
+    $('#dataTable3').DataTable();
+} );
+</script>
+{% endblock %}

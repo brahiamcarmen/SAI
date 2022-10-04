@@ -1,0 +1,59 @@
+{% extends 'usuarios/base_usuario2.html' %}
+{% load static %}
+{% block styles %}
+
+{% endblock %}
+{%block title %} <title>Modulo - LS</title> {%endblock%}
+{% block content %}
+{% include 'usuarios/alerts.html' %}
+<!-- Titulo -->
+<h1 class="h3 text-gray-800">Listado de suscriptores</h1>
+                
+<!-- tabla -->
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+								<th>#</th>
+								<th>Id Propietario</th>
+								<th>Nombres</th>
+								<th>Apellidos</th>
+								<th>Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        	{% for usuarios in usuarios %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+								<td>{{ usuarios.IdPropietario }}</td>
+								<td>{{ usuarios.Nombres }}</td>
+								<td>{{ usuarios.Apellidos }}</td>
+                                <td>
+                                	<a href="{% url 'usuarios:verpropietario' usuarios.IdPropietario %}" title="Ver" class="btn btn-primary btn-circle btn-sm">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                    <a href="{% url 'usuarios:modificarpropietario' usuarios.IdPropietario %}" title="Modificar" class="btn btn-warning btn-circle btn-sm">
+                                        <i class="fa fa-pen-alt"></i>
+                                    </a>
+                                    <a href="" title="Eliminar" class="btn btn-danger btn-circle btn-sm">
+                                        <i class="fa fa-user-minus"></i>
+                                    </a>
+					            </td>
+                            </tr>
+                             {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+
+{% endblock %}

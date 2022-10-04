@@ -1,0 +1,50 @@
+{% extends 'usuarios/base_usuario2.html' %}
+{% load static %}
+{% block styles %}
+
+{% endblock %}
+{%block title %} <title>Modulo - CR</title> {%endblock%}
+{% block content %}
+{% include 'usuarios/alerts.html' %}
+<!-- Titulo -->
+<div class="row">
+    <div class="col-sm-12 text-center">
+        <h1 class="h3 text-gray-800">Cobro de recargos</h1>
+    </div>
+    
+</div>
+
+<div class="row" style="margin-top: 1rem;">
+    <div class="col-sm-4">      
+        </div>
+            <div class="col-sm-4 text-center">
+                <div style="width: 100%">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label class="control-label">Esta seguro que desea generar el cobro del recargo a los estados de cuenta vigentes?</label>
+                    </div>
+                    <div class="form-group">
+                        <p>Estados de cuenta</p>
+                        <label style="font-size: 2rem; color: green; margin: 0rem" class="control-label">{{cont}}</label>
+                    </div>
+                    <div class="row text-center">
+                        <div class="col-sm-12" style="margin-top: 1rem;">
+                            <button style="width: 75%;" type="submit" class="btn btn-primary ">Generar</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="col-sm-12" style="margin-top: 1rem;">
+                    <button style="width: 80%;" onclick="window.location='{% url 'usuarios:facturacion' %}'" class="btn btn-primary ">Cancelar</button>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                
+            </div>
+
+</div>
+
+{% endblock %}
+{% block scripts %}
+
+{% endblock %}

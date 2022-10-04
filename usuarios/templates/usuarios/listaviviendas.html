@@ -1,0 +1,65 @@
+{% extends 'usuarios/base_usuario2.html' %}
+{% load static %}
+{% block styles %}
+
+{% endblock %}
+{%block title %} <title>Predios</title> {%endblock%}
+{% block content %}
+{% include 'usuarios/alerts.html' %}
+<!-- Titulo -->
+<h1 class="h3 text-gray-800">Listado de predios</h1>
+                
+<!-- tabla -->
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+								<th>#</th>
+                                <th>Matricula</th>
+                                <th>Direccion</th>
+                                <th>No. Casa</th>
+                                <th>Piso</th>
+                                <th>Tipo intalacion</th>
+                                <th>Estado servicio</th>
+                                <th>Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        	{% for viviendas in viviendas %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ viviendas.IdVivienda }}</td>
+                                <td>{{ viviendas.Direccion }}</td>
+                                <td>{{ viviendas.NumeroCasa }}</td>
+                                <td>{{ viviendas.Piso }}</td>
+                                <td class="center">{{ viviendas.TipoInstalacion }}</td>
+                                <td>{{ viviendas.EstadoServicio }}</td>
+                                <td>
+                                	<a href="{% url 'usuarios:vervivienda' viviendas.IdVivienda %}" title="Ver" class="btn btn-primary btn-circle btn-sm">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                    <a href="{% url 'usuarios:modificarvivienda' viviendas.IdVivienda %}" title="Modificar" class="btn btn-warning btn-circle btn-sm">
+                                        <i class="fa fa-pen-alt"></i>
+                                    </a>
+                                    <a href="" title="{{ viviendas.IdPropietario }}" class="btn btn-success btn-circle btn-sm">
+                                        <i class="fa fa-user"></i>
+                                    </a>
+					            </td>
+                            </tr>
+                             {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+
+{% endblock %}

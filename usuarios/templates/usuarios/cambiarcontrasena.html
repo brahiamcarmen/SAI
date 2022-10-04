@@ -1,0 +1,86 @@
+{% extends 'usuarios/base_usuario2.html' %}
+{% load static %}
+{% block styles %}
+
+{% endblock %}
+{%block title %} <title>Modulo - CCUS</title> {%endblock%}
+{% block content %}
+{% include 'usuarios/alerts.html' %}
+<!-- Titulo -->
+<div class="row">
+     <div class="col-sm-6">
+    </div>
+     <div class="col-sm-6">
+        {% for usuario in usuario %}
+         <button onclick="window.location='{% url 'usuarios:perfilusuario' usuario.IdUsuario %}'" class="btn btn-primary btn-sm ml-auto float-right">Volver</button>
+         {% endfor %}
+    </div>
+</div>
+
+<div class="row text-center" style="margin-top: 1rem;">
+
+<div class="col-sm-12">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Cambiar contraseña</h6>
+                                </div>
+                                <div class="card-body">
+                                    Por motivos de seguridad la contraseña se los usuarios solo la pueden cambiar los administradores del sistema
+                                    <hr>
+                                    <form method="post" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Usuario</th>
+                                                                <th>Nombre de empleado</th>
+                                                                <th>Email</th>
+                                                                <th>Estado usuario</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for usuario in usuario %}
+                                                                <tr class="odd gradeX">
+                                                                    <td>{{ usuario.usuid.username }}</td>
+                                                                    <td>{{ usuario.usuid.first_name }} {{ usuario.usuid.last_name }}</td>
+                                                                    <td>{{ usuario.usuid.email }}</td>
+                                                                    <td>{% if usuario.usuid.is_active is True %}
+                                                                        <span class="badge badge-pill badge-success">Activo</span>
+                                                                        {% else %}
+                                                                        <span class="badge badge-pill badge-warning">Inactivo</span>
+                                                                        {% endif %}
+                                                                    </td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                    </table>
+                                        <div class="form-group">
+                                            <label class="control-label">Ingrese la nueva contraseña</label>
+                                            <input id="password" name="contrasena" type="password" class="form-control">
+                                            <br>
+                                            <label class="control-label">Repetir contraseña</label>
+                                            <input id="password" name="recontrasena" type="password" class="form-control">
+                                            <br>
+                                        
+                                            <button style="width: 100%" class="btn btn-primary" type="submit">Cambiar</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+    </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+  function mostrarContrasena(){
+      var tipo = document.getElementById("password");
+      if(tipo.type == "password"){
+          tipo.type = "text";
+      }else{
+          tipo.type = "password";
+      }
+  }
+</script>
+{% endblock %}

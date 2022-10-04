@@ -1,0 +1,164 @@
+{% extends 'usuarios/base_usuario2.html' %}
+{% load static %}
+{% block styles %}
+{% endblock %}
+{%block title %} <title>Modulo - VOS</title> {%endblock%}
+{% load humanize %}
+{% block content %}
+	{% include 'usuarios/alerts.html' %}
+<div class="row">
+    <div class="col-sm-8">
+        <h1 class="h3 text-gray-800">Verificacion de orden de suspención</h1>
+    </div>
+     <div class="col-sm-4">
+        <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" onclick="window.location='{% url 'usuarios:suspenciones' %}'">Volver</button>
+
+    </div>
+</div>
+<div class="row">
+	<div class="col-sm-9 text-center">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Información de la orden</h6>
+                        </div>
+                        <div class="card border-bottom-primary shadow h-100 py-2">
+                        	<div class="row">
+                        		<div class="col-sm-2">
+                        			<div class="card-body">
+	                                    <div class="row no-gutters align-items-center">
+	                                        <div class="col mr-2">
+	                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+	                                             Nu Orden</div>
+	                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ idorden  }}</div>
+	                                        </div>
+	                                    </div>
+                            		</div>
+                        		</div>
+                        		<div class="col-sm-3">
+                        			<div class="card-body">
+	                                    <div class="row no-gutters align-items-center">
+	                                        <div class="col mr-2">
+	                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+	                                            Estado de la orden</div>
+	                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ estado }}</div>
+	                                        </div>
+	                                        
+	                                    </div>
+                            		</div>
+                        		</div>
+                        		<div class="col-sm-3">
+                        			<div class="card-body">
+	                                    <div class="row no-gutters align-items-center">
+	                                        <div class="col mr-2">
+	                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+	                                            Valor sin cancelar
+										</div>
+	                                            <div class="h5 mb-0 font-weight-bold text-gray-800">${{ deuda|intcomma }}</div>
+	                                        </div>
+	                                        
+	                                    </div>
+                            		</div>
+                        		</div>
+                        		<div class="col-sm-4">
+                        			<div class="card-body">
+	                                    <div class="row no-gutters align-items-center">
+	                                        <div class="col mr-2">
+	                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+	                                           Fecha Expedición
+												</div>
+	                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ fechaexpe }}</div>
+	                                        </div>
+	                                        
+	                                    </div>
+                            		</div>
+                        		</div>
+                        	</div>
+                        	<div class="row">
+                        		<div class="col-sm-4">
+                        			<div class="card-body">
+	                                    <div class="row no-gutters align-items-center">
+	                                        <div class="col mr-2">
+	                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+	                                            Fecha maxima ejecución</div>
+	                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ fechaejecucion }}</div>
+	                                        </div>
+	                                    </div>
+                            		</div>
+                        		</div>
+                        		<div class="col-sm-4">
+                        			<div class="card-body">
+	                                    <div class="row no-gutters align-items-center">
+	                                        <div class="col mr-2">
+	                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+	                                            Operario asignado
+												</div>
+	                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ usuarioejecuta }}</div>
+	                                        </div>
+	                                        
+	                                    </div>
+                            		</div>
+                        		</div>
+                        		<div class="col-sm-4">
+                        			<div class="card-body">
+	                                    <div class="row no-gutters align-items-center">
+	                                        <div class="col mr-2">
+	                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+	                                            Referencia del predio
+												</div>
+	                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ referencia }}</div>
+	                                        </div>
+	                                        
+	                                    </div>
+                            		</div>
+                        		</div>
+                        	</div>
+                        	<div class="row">
+                        		<div class="col-sm-12">
+                        			<div class="card-body">
+	                                    <div class="row no-gutters align-items-center">
+	                                        <div class="col mr-2">
+	                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+	                                            Dirección
+												</div>
+	                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ vivienda }}</div>
+	                                        </div>
+	                                        
+	                                    </div>
+                            		</div>
+                        		</div>
+                        	</div>
+                        </div>
+                    </div>
+    </div>
+    <div class="col-sm-3 text-center">
+    	        <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Opciones</h6>
+                        </div>
+                        <div class="card border-bottom-primary shadow h-100 py-2">
+                            <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                             <form method="post" role="form" enctype="multipart/form-data">
+												{% csrf_token %}
+												<button type="submit" class="btn btn-primary">Cerrar orden</button>
+											</form>  
+                                        </div>
+                                    </div>
+                                    <div class="row no-gutters align-items-center" style="margin-top: 1rem;">
+                                        <div class="col mr-2">
+ 											<button class="btn btn-primary">
+                                        		Imprimir OT
+                                        	</button>
+                                        </div>
+                                       
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+{% endblock %}

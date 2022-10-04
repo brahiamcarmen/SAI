@@ -1,0 +1,55 @@
+{% extends 'usuarios/base_usuario2.html' %}
+{% load static %}
+{% block styles %}
+{% endblock %}
+{%block title %} <title>Modulo - MP</title> {%endblock%}
+{% block content %}
+{% include 'usuarios/alerts.html' %}
+<div class="row">
+    <div class="col-sm-8">
+        <h4 class="text-gray-800">Modificar informacion del predio</h4>
+    </div>
+     <div class="col-sm-4">
+        <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" onclick="window.location='{% url 'usuarios:vervivienda' matricula %}'">Volver</button>
+    </div>
+</div>
+		<div class="row">
+			<div class="col-sm-2">
+				
+			</div>
+			<div class="col-sm-8">
+				<div class="panel">
+					<div class="panel-body no-padding">
+						<div class="wizard no-margin" id="wizard-forms">
+							<div class="wizard-content panel no-margin no-border-hr no-border-b no-padding-hr">
+								<!-- Account page -->
+								<form method="post" enctype="multipart/form-data">
+										{% csrf_token %}
+										{{ form.non_field_errors }}
+					                    {% for field in form %}
+					                        <div class="form-group no-padding-t no-border-t panel-padding-h">
+					                            {{ field.errors }}
+					                            <label for="jq-validation-url" class="col-sm-12 control-label">
+					                                <strong>{{ field.label }}</strong>
+					                            </label>
+					                            <div class="col-sm-12">
+					                                {{ field }}
+					                            </div>
+					                        </div>
+					                    {% endfor %}
+										<div class="col-sm-12">
+											<button type="submit" class="btn btn-primary" style="width: 100%">Modificar</button>
+										</div>
+										<br>
+									</form>
+							</div> <!-- / .wizard-content -->
+						</div> <!-- / .wizard -->
+					</div>
+				</div>
+<!-- /FIN CONTENIDOS -->
+
+			</div>
+		</div>
+{% endblock %}
+{% block scripts %}
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'usuarios/base_usuario.html' %}
+{% load static %}
+{% block styles %}
+{% endblock %}
+{%block title %} <title>Eliminar archivo</title> {%endblock%}
+{% block content %}
+{% include 'usuarios/alerts.html' %}
+<div id="content-wrapper">
+		<div class="page-header ">
+			<div class="row">
+				<div class="col-sm-12 text-center">
+					<h1 class="text-left-sm"><i class="fa fa-cloud-upload page-header-icon"></i>&nbsp;&nbsp;Eliminar archivos</h1>
+				</div>
+				<!-- Page header, center on small screens -->
+				
+			</div>
+
+		</div> <!-- / .page-header -->
+		<div class="row">
+			<div class="col-sm-3">
+				
+			</div>
+			<div class="col-sm-6">
+				<div style="width: 100%">
+				<form method="post" enctype="multipart/form-data">
+					{% csrf_token %}
+							<script>
+								init.push(function () {
+									$('#dashboard-support-tickets .panel-body > div').slimScroll({ height: 50, alwaysVisible: true, color: '#888',allowPageScroll: true });
+								})
+							</script>
+							<!-- / Javascript -->
+
+							<div class="col-md-12" style="margin-top: 1rem">
+								<div class="panel panel-success widget-support-tickets" id="dashboard-support-tickets">
+									<div class="panel-heading">
+										<span class="panel-title"><i class="panel-title-icon fa fa-bullhorn"></i>Archivos almacenados en el sistema</span>
+										<div class="panel-heading-controls">
+											<div class="panel-heading-text"><a href="#">{{ contarchivos }}</a></div>
+										</div>
+									</div> <!-- / .panel-heading -->
+									<div class="panel-body tab-content-padding">
+										<!-- Panel padding, without vertical padding -->
+										<div class="panel-padding no-padding-vr">
+										{% for archivo in archivos %}
+											<div class="ticket">
+												<a href="{% url 'usuarios:eliminararchivo' archivo.IdArchivo %}"></a>
+												<a href="{{ archivo.Archivo.url}}" target="_blank" title="" class="ticket-title">{{ archivo.NombreArchivo }}<span>[{{ archivo.FechaSubida }}]</span></a>
+												<span class="ticket-info">
+													publicado por <a href="#" title="">{{ archivo.usuid }}</a>
+												</span>
+											</div>
+
+										{% endfor %}
+										</div>
+									</div> <!-- / .panel-body -->
+								</div> <!-- / .panel -->
+							</div>
+					<button type="submit" class="btn btn-primary" style="width: 100%">eliminar</button>
+				</form>
+				</div>
+				<div style="padding-top: 2rem">
+					<button onclick="window.location='{% url 'usuarios:vervivienda' matricula %}'" class="btn btn-primary" style="width: 100%">Volver</button>
+				</div>	
+			</div>
+			<div class="col-sm-3">
+				
+			</div>
+		</div>
+
+</div>
+
+{% endblock %}
+{% block scripts %}
+{% endblock %}

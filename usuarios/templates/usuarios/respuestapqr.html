@@ -1,0 +1,70 @@
+{% extends 'usuarios/base_usuario.html' %}
+{% load static %}
+{% block styles %}
+{% endblock %}
+{%block title %} <title>Respuesta PQRS</title> {%endblock%}
+{% block content %}
+<!-- CONTENIDO -->
+	{% include 'usuarios/alerts.html' %}
+<div id="content-wrapper">
+	<div class="page-header">
+		<h1><b>Registro Respuesta</b></h1>
+	</div>
+	<div class="row">
+	<form method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="col-sm-3">	
+				<label class="control-label">Confirmar numero de radicado</label>
+				<input class="form-control" name="idpqr" type="text">
+			</div>
+			<div class="col-sm-3">
+				{% for field in form %}
+					{{ field.errors }}
+					<label class="control-label">{{ field.label }}</label>
+					{{ field }}
+				{% endfor %}
+			</div>	
+			<div class="col-sm-6">	
+				<label class="control-label">Seleccionar soporte</label>
+				<input name="soporte" type="file" id="styled-finputs-example">
+			</div>		
+		</div>
+		<br>
+		<div class="row">
+			<div class="col-sm-12">
+				<label class="control-label" for="inputDefault-4">Descripcion</label>
+				<textarea name="descripcion" class="form-control" rows="4"></textarea>
+			</div>
+		</div>
+		<br>
+		
+		<div class="row">
+			<button type="submit" id="loading-example-btn" data-loading-text="Generando solicitud..." class="btn btn-primary" style="width: 100%">Registrar</button>
+		</div>
+	</form>
+	<div style="margin-top: 1rem" class="row">
+			<button onclick="window.location='{% url 'usuarios:listapqrs' %}'" class="btn btn-primary" style="width: 100%">Cancelar</button>
+		</div>
+
+</div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+	init.push(function () {
+		$('#styled-finputs-example').pixelFileInput({ placeholder: 'No file selected...' });
+	})
+</script>
+		<script>
+			init.push(function () {
+				$('#loading-example-btn').click(function () {
+					var btn = $(this);
+					btn.button('loading');
+					setTimeout(function () {
+						btn.button('reset');
+					}, 1500);
+				});
+			});
+		</script>
+{% endblock %}

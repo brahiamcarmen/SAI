@@ -1,0 +1,130 @@
+{% extends 'usuarios/base_usuario.html' %}
+{% load static %}
+{% block styles %}
+{% endblock %}
+{%block title %} <title>PQRS</title> {%endblock%}
+{% block content %}
+	{% include 'usuarios/alerts.html' %}
+	<div id="content-wrapper">
+			<div class="page-header text-center">
+				<h1><b>Pagina de verificacion de PQRS</b></h1>
+				 <div class="pull-right col-xs-12 col-sm-auto">
+	                        <button onclick="window.location='{% url 'usuarios:listapqrs'%}'" class="btn btn-primary">Volver</button>
+	                    </div>
+			</div> <!-- / .page-header -->
+
+			<div class="row">
+				<div style="margin-bottom: 1rem" class="row text-center">
+					<h4>Informacion de la solicitud</h4>
+				</div>
+				
+			
+					{% for pqr in pqr %}
+					<div class="row">
+						<div class="col-sm-3 text-center">
+							<label><b>Radicado</b></label>
+							<p >{{ pqr.IdPqrs }}</p>	
+						</div>
+
+						<div class="col-sm-2 text-center">
+							<label><b>Anonimo</b></label>
+							<p>{{ pqr.Anonimo }}</p>
+						</div>
+						<div class="col-sm-2 text-center">
+							<label><b>Tipo de solicitud</b></label>
+							<p>{{ pqr.TipoSolicitud }}</p>
+						</div>
+						<div class="col-sm-2 text-center">
+							<label><b>Estado</b></label>
+							<p>{{ pqr.Estado }}</p>
+						</div>
+						<div class="col-sm-3 text-center">
+							
+							<label><b><th>Fecha Radicado</th></b></label>
+							<p>{{ pqr.FechaRadicado }}</p>
+						</div>
+					</div>
+					<hr>
+					<div class="row">
+						<div class="col-sm-3 text-center">
+							<label><b>No. de Identidicacion o Nit</b></label>
+							<p >{{ pqr.CedulaNit }}</p>	
+						</div>
+
+						<div class="col-sm-3 text-center">
+							<label><b>Nombre completo</b></label>
+							<p>{{ pqr.NombreCompleto }}</p>
+						</div>
+						<div class="col-sm-3 text-center">
+							<label><b>Telefono/Celular</b></label>
+							<p>{{ pqr.Telefono }}</p>
+						</div>
+						<div class="col-sm-3 text-center">
+							<label><b>Correo Electronico</b></label>
+							<p>{{ pqr.Correo }}</p>
+						</div>
+					</div>
+					<hr>
+					<div class="row">
+							<div class="col-sm-3 text-center">
+								<label><b>Usuario</b></label>
+								<p >{{ pqr.usuid }}</p>	
+							</div>
+
+							<div class="col-sm-3 text-center">
+								<label><b>Soportes</b></label>
+								{% if pqr.Soporte == "" %}
+									<p>Sin soportes</p>
+								{% else %}
+									<p><a target="/" href="{{ pqr.Soporte.url }}">Descargar</a></p>
+								{%endif%}
+							</div>
+							<div class="col-sm-6 text-center" >
+								<label><b>Descripcion</b></label>
+								<p style="height: 100px; overflow-y: scroll;">{{ pqr.Descripcion }}</p>	
+							</div>	
+					</div>
+					<hr>
+					<div class="row">
+						
+					</div>
+				{% endfor %}
+			</div>
+			<div class="row">
+				<div class="row text-center">
+					<h4>Informacion de la respuesta</h4>
+				</div>
+				
+				{% for respuesta in respuestas %}
+					<div class="row">
+							<div class="col-sm-2 text-center">
+								<label><b>Identificador de respuesta</b></label>
+								<p >{{ respuesta.IdRespuesta }}</p>	
+							</div>
+
+							<div class="col-sm-2 text-center">
+								<label><b>Fecha respuesta</b></label>
+								<p>{{ respuesta.Fecha}} </p>
+							</div>
+							<div class="col-sm-2 text-center">
+								<label><b>Soportes</b></label>
+								<p><a target="/" href="{{ respuesta.Soporte.url }}">Descargar</a></p>
+							</div>
+							<div class="col-sm-6 text-center" >
+								<label><b>Descripcion</b></label>
+								<p style="height: 100px; overflow-y: scroll;">{{ respuesta.Descripcion }}</p>	
+							</div>	
+					</div>
+
+				{% empty %}
+						<button style="width: 100%" onclick="window.location='{% url 'usuarios:respuestapqr' idsolicitud %}'" class="btn btn-primary">Responder solicitud</button>
+				{% endfor %}
+
+			</div>
+			
+
+		
+				
+{% endblock %}
+{% block scripts %}
+{% endblock %}

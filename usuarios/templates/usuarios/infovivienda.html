@@ -1,0 +1,272 @@
+{% extends 'usuarios/base_usuario.html' %}
+{% load static %}
+{% block styles %}
+{% endblock %}
+{%block title %} <title>Informacion predio</title> {%endblock%}
+{% block content %}
+{% include 'usuarios/alerts.html' %}
+<div id="content-wrapper">
+
+	<div class="page-header">
+		<h1><b>Informacion detallada del predio</b></h1>
+		{% for vivienda in viviendas %}
+		<div class="pull-right col-xs-12 col-sm-auto">
+			<button onclick="window.location='{% url 'usuarios:vervivienda' vivienda.IdVivienda %}'" class="btn btn-success">Volver</button>
+        </div>
+        {% endfor %}
+	</div>
+	<div class="row">
+				<div class="panel">
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-sm-12">
+								<!-- Pills -->
+								<ul class="nav nav-pills bs-tabdrop-example">
+									<li class="active"><a href="#bs-tabdrop-pill1" data-toggle="tab">Identificacion del predio</a></li>
+									<li><a href="#bs-tabdrop-pill2" data-toggle="tab">Certificación</a></li>
+									<li><a href="#bs-tabdrop-pill3" data-toggle="tab">Medidor</a></li>
+								</ul>
+								<div class="tab-content">
+									<div class="tab-pane active" id="bs-tabdrop-pill1">
+										<p>
+										{% for vivienda in viviendas %}
+										<div class="col-sm-12">
+											<div class="row text-center">
+												<div class="col-sm-6">
+													<div style="padding-bottom: 1rem">
+														<b>Plano de instalacion</b>
+														<img style="width: 100%" src="{{ vivienda.PlanoIso.url }}">
+													</div>
+												</div>
+												<div class="col-sm-6">	
+													<div class="row">
+														<div class="col-sm-12">
+															<b><h3></h3></b>
+															<hr>
+														</div>
+
+														<div class="col-sm-12">
+															<div class="col-sm-4" style="padding-bottom: 2rem">
+															<b>Matricula</b>
+																<div>
+																	{{ vivienda.IdVivienda }}
+																</div>
+															</div>
+															<div class="col-sm-4" style="padding-bottom: 2rem">
+																<b>Estado servicio</b>
+																<div>
+																	{{ vivienda.EstadoServicio }}
+																</div>
+															</div>
+															<div class="col-sm-4" style="padding-bottom: 2rem">
+																<b>Tipo instalacion</b>
+																<div>
+																	{{ vivienda.TipoInstalacion }}
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-12">
+															<div class="col-sm-4" style="padding-bottom: 2rem">
+															<b>Sector</b>
+																<div>
+																	{{ vivienda.Direccion }}
+																</div>
+															</div>
+															<div class="col-sm-4" style="padding-bottom: 2rem">
+																<b>Numero casa</b>
+																<div>
+																	{{ vivienda.NumeroCasa }}
+																</div>
+															</div>
+															<div class="col-sm-4" style="padding-bottom: 2rem">
+																<b>Piso</b>
+																<div>
+																	{{ vivienda.Piso }}
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-12">
+															<div class="col-sm-4" style="padding-bottom: 2rem">
+															<b>Ciclo</b>
+																<div>
+																	{{ vivienda.Ciclo }}
+																</div>
+															</div>
+															<div class="col-sm-4" style="padding-bottom: 2rem">
+																<b>Estrato</b>
+																<div>
+																	{{ vivienda.Estrato }}
+																</div>
+															</div>
+															<div class="col-sm-4" style="padding-bottom: 2rem">
+																<b>Informacion instalacion</b>
+																<div>
+																	{{ vivienda.InfoInstalacion }}
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-12">
+															<div class="col-sm-4" style="padding-bottom: 2rem">
+															<b>Propietario</b>
+																<div>
+																	{{ vivienda.IdPropietario }}
+																</div>
+															</div>
+															<div class="col-sm-4" style="padding-bottom: 2rem">
+															<b>Cantidad habitantes</b>
+																<div>
+																	{{ vivienda.CantHabitantes }}
+																</div>
+															</div>
+															<div class="col-sm-4" style="padding-bottom: 2rem">
+																<b>Profundidad acometida (cm)</b>
+																<div>
+																	{{ vivienda.ProfAcometida }}
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-12">
+															<div class="col-sm-4" style="padding-bottom: 2rem">
+																<b>Nit Acueducto</b>
+																<div>
+																	{{ vivienda.IdAcueducto }}
+																</div>
+															</div>
+															<div class="col-sm-8" style="padding-bottom: 2rem">
+																<b>Razon social</b>
+																<div>
+																	{{ vivienda.IdAcueducto.Nombre}}
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										{% endfor %}
+										</p>
+									</div>
+									<div class="tab-pane" id="bs-tabdrop-pill2">
+										<p>
+											<div class="row text-center">
+												<div class="col-sm-12">
+													{% for certificacion in certificaciones %}
+														<div class="col-sm-12">
+														
+															<div class="col-sm-4" style="padding-bottom: 2rem">
+																<b>Codigo</b>
+																<div>
+																	{{ certificacion.IdCertificacion }}
+																</div>
+															</div>
+															<div class="col-sm-4" style="padding-bottom: 2rem">
+																<b>Nit</b>
+																<div>
+																	{{ certificacion.Nit }}
+																</div>
+															</div>
+															<div class="col-sm-4" style="padding-bottom: 2rem">
+																<b>Descripcion </b>
+																<div>
+																	{% if certificacion.Descripcion == "None" %}
+																		<p>Sin descripción</p>
+																	{% else %}
+																		{{ certificacion.Descripcion }}
+																	{%endif%}
+																	
+																</div>
+															</div>
+
+														</div>
+														<div class="col-sm-12">
+															<div class="col-sm-4" style="padding-bottom: 2rem">
+																<b>Razon social</b>
+																<div>
+																	{{ certificacion.NombreEmpresa}}
+																</div>
+															</div>
+															<div class="col-sm-4" style="padding-bottom: 2rem">
+																<b>Estado</b>
+																<div>
+																	{{ certificacion.Estado }}
+																</div>
+															</div>
+															<div class="col-sm-4" style="padding-bottom: 2rem">
+																<b>Cumple requisitos</b>
+																<div>
+																	{{ certificacion.Soporte}}
+																</div>
+															</div>
+														</div>
+													{% empty %}
+														<div class="col-sm-12">
+															<p>predio sin proceso de certificacion</p>
+														</div>
+													{% endfor %}
+												</div>
+											</div>
+										</p>
+									</div>
+									<div class="tab-pane" id="bs-tabdrop-pill3">
+										<p>
+										<div class="col-sm-12">
+													{% for medidor in medidores %}
+													<div class="col-sm-12">
+														<div class="col-sm-2" style="padding-bottom: 2rem">
+															<b>Codigo</b>
+															<div>
+																{{ medidor.IdMedidor }}
+															</div>
+														</div>
+														<div class="col-sm-3" style="padding-bottom: 2rem">
+															<b>Marca</b>
+															<div>
+																{{ medidor.Marca }}
+															</div>
+														</div>
+														<div class="col-sm-2" style="padding-bottom: 2rem">
+															<b>Tipo</b>
+															<div>
+																{{ medidor.Tipo }}
+															</div>
+														</div>
+														<div class="col-sm-3" style="padding-bottom: 2rem">
+															<b>Lectura inicial</b>
+															<div>
+																{{ medidor.LecturaInicial }}
+															</div>
+														</div>
+														<div class="col-sm-2" style="padding-bottom: 2rem">
+															<b>Año de fabricacion</b>
+															<div>
+																{{ medidor.AnoFabricacion }}
+															</div>
+														</div>
+													</div>
+													{% empty %}
+														<div class="col-sm-12">
+															<p>Predio sin medidor asignado</p>
+														</div>
+													{% endfor %}
+												</div>
+											</div>
+
+										</p>
+									</div>
+									
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12 text-center" style="padding-top: 1rem">
+			<p>Este documento no tiene validez como comprobande de paz y salvo</p>
+		</div>
+	</div>
+</div>
+{% endblock %}
+{% block scripts %}
+{% endblock %}

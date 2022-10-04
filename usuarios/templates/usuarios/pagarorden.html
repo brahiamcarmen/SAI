@@ -1,0 +1,200 @@
+{% extends 'usuarios/base_usuario2.html' %}
+{% load static %}
+{% block styles %}
+{% load humanize %}
+{% endblock %}
+{%block title %} <title>Orden #{{orden}}</title> {%endblock%}
+{% block content %}
+{% include 'usuarios/alerts.html' %}
+<div class="row ">
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="row text-center">
+                    <div class="col-sm-12">
+                        <div class="card mb-2">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Informacion factura</h6>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="col-sm-12">
+                                    <b>Numero de orden</b><br>
+                                    <p style="color:rgba(65,160,39); font-size: 1.3rem;n"><b># {{orden}}</b></p>
+                                </div>
+                                <div class="col-sm-12">
+                                    <b>Fecha de expedición</b><br>
+                                    <p>{{fecha}}</p>
+                                </div>
+                                <div class="col-sm-12">
+                                    <b>Estado</b><br>
+                                    <p>{{estado}}</p>
+                                </div>
+                                <div class="col-sm-12" style="margin-top: -0.9rem;">
+                                    <img src="{% static 'images/frame.png' %}" class="img-fluid" alt="...">                                
+                                </div>
+                            </div>
+                        </div>        
+                    </div>            
+                </div>
+            </div>
+            <div class="col-sm-9">
+                <div class="row text-center">
+                    <div class="col-sm-9">
+                        <div class="card mb-2">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Informacion del predio</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <b>Matricula</b><br>
+                                        <p>{{matricula}}</p>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <b>Sector</b><br>
+                                        <p style="font-size:0.8rem">{{ sector }}</p>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <b>Casa</b><br>
+                                        <p>{{casa}}</p>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <b>Piso</b><br>
+                                        <p>{{piso}}</p>
+                                </div> 
+                                </div>
+
+                            </div>
+                        </div>        
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="card mb-2">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Operación</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <p style="color:rgba(65,160,39); font-size: 1.0rem;n"><b>{{ciclo}}</b></p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>        
+                    </div>              
+                </div>
+                <div class="row text-center">
+                    <div class="col-sm-12">
+                         <div class="card mb-2">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Conceptos de pago</h6>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-borderless table-sm">
+                                  <thead class="thead-light table-bordered">
+                                    <tr>
+                                      <th  class="text-left" scope="col">Descripcion</th>
+                                      <th scope="col">Valor</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {%for orden in ordenes %}
+                                    <tr>
+                                      <td  class="text-left">
+                                        {{ orden.TipoOrden }}
+                                         <div style="font-size: 0.8rem;">Referencia de pago: <b>{{orden.IdEstadoCuenta}}</b></div>
+                                      </td>
+                                      <td>${{orden.Valor|intcomma}}</td>
+                                    </tr>
+                                    {%endfor%}
+                                  </tbody>
+                                </table>
+                                <div class="">
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            
+                                        </div>
+                                        <div class="col-sm-4">
+                                            Total a pagar: <p style="color:rgba(65,160,39); font-size: 1.5rem;n"><b>${{total|intcomma}}</b></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>               
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <button class="btn btn-primary" onclick="window.location='{% url 'usuarios:inicio' %}'" style="width:100%; margin-top: 0.2rem;">Cancelar</button>
+            </div>
+            <div class="col-sm-6">
+                {% if verificacion == True %}
+                <p></p>
+                {%else%}
+                <button data-toggle="modal" data-target="#transaccion" class="btn btn-primary" style="width:100%; margin-top: 0.2rem;">Pagar</button>
+                {%endif%}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal de transaccion-->
+<div class="modal fade" id="transaccion" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h5 class="modal-title" id="exampleModalLabel">Modulo de transacción</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+            <div class="row text-center">
+                <div class="col-sm-12">
+                    <form method="post" enctype="multipart/form-data" oninput="resultado.value=parseInt(valor2.value)-parseInt(valor1.value)">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group no-margin-hr">
+                                <label class="control-label">Numero de orden</label>
+                                    <p style="color:rgba(65,160,39); font-size: 1.3rem;n">{{orden}}</p>
+                                <input type ="hidden" name="orden" value="{{orden}}" class="form-control">
+                            </div>
+                             <div class="form-group no-margin-hr">
+                                <label class="control-label">Total Facturado</label>
+                                    <p style="font-size: 1.3rem">${{total|intcomma}}</p>
+                            </div> 
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group no-margin-hr">
+                                <label class="control-label">Total a pagar</label>
+                                <input type="number" name="valorp" id="valor1" value="0" class="form-control">
+                            </div>
+                            <div  class="form-group no-margin-hr">
+                                <label class="control-label">Efectivo</label>
+                                <input type="number"name="efectivo" id="valor2" value="0" class="form-control">
+                            </div>
+                            <div  class="form-group no-margin-hr">
+                                <label class="control-label">Cambio</label><br>
+                                <output name="resultado" for="valor1 valor2">$</output>         
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button class="btn btn-primary" style="width:60%" type="submit">Confirmar transacción</button>
+                        </div>  
+                    </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+{% endblock %}
+{% block scripts %}
+{% endblock %}

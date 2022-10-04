@@ -1,0 +1,89 @@
+{% extends 'usuarios/base_usuario.html' %}
+{% load static %}
+{% block styles %}
+{% endblock %}
+{%block title %} <title>Asignar permisos usuarios</title> {%endblock%}
+{% block content %}
+	{% include 'usuarios/alerts.html' %}
+	<div id="content-wrapper">
+
+			<div class="page-header">
+				<h1><b>Modulo de asignacion de permisos</b></h1>
+			</div> <!-- / .page-header -->
+
+
+			<div class="row">
+				<div class="col-sm-2">
+				
+				</div>
+				<div class="col-sm-8">
+					<style type="text/css">
+						#wizard-credit-card .tooltip {
+							left: auto !important;
+							right: 36px !important;
+							width: 200px !important;}
+					</style>
+
+					<div class="panel">
+						<div class="panel-body no-padding">
+
+							<div class="wizard no-margin" id="wizard-forms">
+
+								<!-- Steps -->
+								<div class="wizard-wrapper no-border">
+									<ul class="wizard-steps">
+										<li data-target="#wizard-profile"> <!-- ! Remove space between elements by dropping close angle -->
+											<span class="wizard-step-number">1</span>
+											<span class="wizard-step-caption">
+												Permisos de acceso al sistema
+												<span class="wizard-step-description">Recuerde estar autorizado para realizar los cambios</span>
+											</span>
+										</li>
+									</ul> <!-- / .wizard-steps -->
+								</div> <!-- / .wizard-wrapper -->
+								<!-- / Steps -->
+
+							<!-- Pages -->
+							<div class="wizard-content panel no-margin no-border-hr no-border-b no-padding-hr">
+
+									<!-- Account page -->
+
+									<!-- Profile page -->
+									<form method="post" enctype="multipart/form-data">
+										{% csrf_token %}
+										{{ form.non_field_errors }}
+					                    {% for field in form %}
+					                        <div class="form-group no-padding-t no-border-t panel-padding-h">
+					                            {{ field.errors }}
+					                            <label for="jq-validation-url" class="col-sm-3 control-label">
+					                                <strong>{{ field.label }}</strong>
+					                            </label>
+					                            <div class="col-sm-9">
+					                                {{ field }}
+					                            </div>
+					                        </div>
+					                    {% endfor %}
+										<hr>
+										
+										<div class="col-sm-12">
+											<button type="submit" class="btn btn-primary " style="width: 100%">Modificar</button>
+										</div>
+									</form> <!-- / .wizard-pane -->
+									<div class="col-sm-12">
+										<br>
+											<button onclick="window.location='{% url 'usuarios:perfil' %}'" class="btn btn-primary " style="width: 100%">Cancelar</button>
+									</div>
+
+								</div> <!-- / .wizard-content -->
+								<!-- / Pages -->
+
+							</div> <!-- / .wizard -->
+						</div>
+					</div>
+	<!-- /FIN CONTENIDOS -->
+
+				</div>
+			</div>
+{% endblock %}
+{% block scripts %}
+{% endblock %}

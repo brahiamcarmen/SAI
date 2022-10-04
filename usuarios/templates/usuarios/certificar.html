@@ -1,0 +1,133 @@
+{% extends 'usuarios/base_usuario2.html' %}
+{% load static %}
+{% block styles %}
+{% endblock %}
+{%block title %} <title>Modulo de certificación</title> {%endblock%}
+{% block content %}
+	{% include 'usuarios/alerts.html' %}
+<div class="row">
+    <div class="col-sm-8">
+        <h4 class="text-gray-800">Modulo de certificación</h4>
+    </div>
+     <div class="col-sm-4">
+        <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" onclick="window.location='{% url 'usuarios:vervivienda' matricula %}'">Volver</button>
+    </div>
+</div>
+<div class="row text-center">
+	<div class="col-sm-6">
+		<div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Información de la orden</h6>
+            </div>
+            <div class="card-body">
+               <div class="row text-center">
+                    <div class="col-sm">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <b>Codigo</b>
+                            </div>
+                            <div class="col-sm-12">
+                               {{ idcertificacion }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <b>Nit</b>
+                            </div>
+                            <div class="col-sm-12">
+                               {{ nit }}
+                            </div>
+                        </div>
+                    </div>
+                     <div class="col-sm">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <b>Estado</b>
+                            </div>
+                            <div class="col-sm-12">
+                               {{ estado }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <b>Soporte</b>
+                            </div>
+                            <div class="col-sm-12">
+                               {{ soporte }}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row text-center" style="margin-top: 0.5rem;">
+                	<div class="col-sm">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <b>Empresa certificadora</b>
+                            </div>
+                            <div class="col-sm-12">
+                               {{ empresa }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row text-center" style="margin-top: 0.5rem;">
+                	<div class="col-sm">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <b>Descripción</b>
+                            </div>
+                            <div class="col-sm-12">
+                               {{ descripcion }}
+                            </div>
+                        </div>
+                    </div>
+                </div>                             
+            </div>
+        </div>
+	</div>
+	<div class="col-sm-6">
+				<div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Opciones</h6>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                	<div class="col-sm-12">
+						<form method="post" enctype="multipart/form-data">
+							{% csrf_token %}	
+							{{ form.non_field_errors }}
+							{% for field in form %}
+							<div class="form-group no-padding-t no-border-t text-center panel-padding-h">
+							{{ field.errors }}
+									    	<label for="jq-validation-url" class="col-sm-12 control-label">
+									            <strong>{{ field.label }}</strong>
+									    	</label>
+									    	<div class="col-sm-12">
+									            {{ field }}
+									    	</div>
+							</div>
+								{% endfor %}	
+							<hr>
+							<div class="row">
+								<div class="col-sm-12">
+										<button style="width: 100%"  type="submit" class="btn btn-primary ">Certificar</button>
+								</div>
+							</div>
+						</form>
+					</div>
+               </div>            
+            </div>
+        </div>
+	</div>
+</div>
+
+
+			
+{% endblock %}
+{% block scripts %}
+{% endblock %}

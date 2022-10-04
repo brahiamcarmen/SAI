@@ -1,0 +1,85 @@
+{% extends 'usuarios/base_usuario.html' %}
+{% load static %}
+{% block styles %}
+{% endblock %}
+{%block title %} <title>Lista de medidores</title> {%endblock%}
+{% block content %}
+{% include 'usuarios/alerts.html' %}
+<div id="content-wrapper">
+
+		<div class="page-header">
+	        <div class="row">
+	            <!-- Page header, center on small screens -->
+	            <h1 class="col-xs-12 col-sm-4 text-center text-left-sm">
+	                &nbsp;&nbsp;<b>Listado de Medidores</b>
+	            </h1>
+	            <div class="col-xs-12 col-sm-8">
+	                <div class="row">
+	                    <hr class="visible-xs no-grid-gutter-h">
+	                    <!-- "Create project" button, width=auto on desktops -->
+	                    <!-- Margin -->
+	                    <div class="visible-xs clearfix form-group-margin"></div>
+	                    <!-- Search field -->
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+
+		<div class="row">
+			<div class="col-sm-12">
+				<script>
+					init.push(function () {
+						$('#jq-datatables-example').dataTable();
+						$('#jq-datatables-example_wrapper .table-caption').text('');
+						$('#jq-datatables-example_wrapper .dataTables_filter input').attr('placeholder', 'Buscar...');
+					});
+				</script>
+
+				<div class="panel">
+						<div class="table-primary">
+							<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="jq-datatables-example">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>Id Medidor</th>
+										<th>Marca</th>
+										<th>Tipo</th>
+										<th>Lectura Inicial</th>
+										<th>Año fabricacion</th>
+										<th>Predio</th>
+									</tr>
+								</thead>
+								<tbody>
+										{% for medidor in medidores %}
+											<tr class="odd gradeX">
+												<td>{{ forloop.counter }}</td>
+												<td>{{ medidor.IdMedidor }}</td>
+												<td>{{ medidor.Marca }}</td>
+												<td>{{ medidor.Tipo }}</td>
+												<td>{{ medidor.LecturaInicial }}</td>
+												<td>{{ medidor.AnoFabricacion }}</td>
+												<td>{{ medidor.IdVivienda }}</td>
+												<td>
+					                                <div class="btn-group" >
+					                                    <a href="{% url 'usuarios:verpropietario' usuarios.IdPropietario %}" class="btn btn-primary"><span class="fa fa-eye"></a>
+					                                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+					                                        <i class="fa fa-caret-down"></i>
+					                                    </button>
+					                                    <ul class="dropdown-menu" style="z-index: 100 !important;">
+					                                        <li><a href="{% url 'usuarios:modificarpropietario' usuarios.IdPropietario %}">Modificar</a></li>
+					                                    </ul>
+					                                </div>&nbsp;
+					                            </td>
+											</tr>
+										{% endfor %}
+								</tbody>
+							</table>
+						</div>
+				</div>
+			</div>
+		</div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+{% endblock %}

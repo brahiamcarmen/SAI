@@ -1,0 +1,72 @@
+{% extends 'usuarios/base_usuario.html' %}
+{% load static %}
+{% block styles %}
+{% endblock %}
+{%block title %} <title>PQRS</title> {%endblock%}
+{% block content %}
+	{% include 'usuarios/alerts.html' %}
+	<div id="content-wrapper">
+
+			<div class="page-header text-center">
+				<h1><b>Pagina de verificacion de solitud</b></h1>
+			</div> <!-- / .page-header -->
+			<div class="row">
+								<div class="col-sm-3" >
+									<h4><b>Informacion de usuario</b></h4>
+									<table class="table">
+										<thead>
+											<tr>
+												<th>Email corporativo</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>{{ user.email }}</td>
+											</tr>
+										</tbody>
+										<thead>
+											<tr>
+												<th>Cargo del usuario</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>{{ cargo }}</td>
+											</tr>
+										</tbody>
+										<thead>
+											<tr>
+												<th>Fecha creacion</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>{{ fechac }}</td>
+											</tr>
+										</tbody>
+										<thead>
+											<tr>
+												<th>Fecha ultimo ingreso</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>{{ ultimo }}</td>
+											</tr>
+										</tbody>
+									</table>
+
+								</div>
+								<div class="col-sm-9">
+									<div class="text-center">
+										<h4><b>Organigrama institucional</b></h4>
+									</div>
+									
+
+									<div class="container">
+										<img style="width: 50%" alt="" src="{% static 'images/Organigrama.png' %}">
+									</div>
+								</div>
+{% endblock %}
+{% block scripts %}
+{% endblock %}

@@ -1,0 +1,273 @@
+{% extends 'usuarios/base_usuario2.html' %}
+{% load static %}
+{% block styles %}
+{% endblock %}
+{%block title %} <title>Modulo - CIE</title> {%endblock%}
+{% load humanize %}
+{% block content %}
+{% include 'usuarios/alerts.html' %}
+<!-- Titulo -->
+<div class="row">
+    <div class="col-sm-6">
+        <h3 class="h3 text-gray-800">Control de ingresos y egresos</h3>
+    </div>
+     <div class="col-sm-6">
+        <button class="btn btn-primary btn-sm ml-auto float-right" data-toggle="modal" data-target="#porcentajes">%</button>
+        <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" onclick="window.location='{% url 'usuarios:listadogastos' %}'">Listado de ordenes</button>
+        <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" onclick="window.location='{% url 'usuarios:generargasto' %}'">Generar orden</button>
+        <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" data-toggle="modal" data-target="#gestorordenes">Aprobar/Anular</button>
+        <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" data-toggle="modal" data-target="#estadisticas">Estadisticas</button>
+        
+
+        
+    </div>
+</div>
+<div class="row" style="margin-top: 1rem;">
+    <div class="col-sm-12">
+        <div class="row">
+             <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-bottom-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                    Ingresos (Ultimo mes)</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">${{ingresomensual|intcomma}}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-file-invoice-dollar fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-bottom-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                    Egresos (Ultimo mes)</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">${{gastosmensuales|intcomma}}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-shopping-cart fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-bottom-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Aportes (Ultimo mes)</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">${{presupuesto|intcomma}}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-hand-holding-usd fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-bottom-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">SyR (Ultimo mes)</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">${{rys|intcomma}}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>           
+    </div>
+</div>
+<div class="row" >
+            <div class="col-sm-12">
+            <div class="card shadow mb-4 text-center">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Ordenes pendientes</h6>
+                </div>
+                <div class="card-body">
+                        <div class="stat-row">
+                            <table class="table table-sm text-xs">
+                                    <thead>
+                                    <tr>
+                                        <th>Numero Orden</th>
+                                        <th>Usuario</th>
+                                        <th>Tipo Solicitud</th>
+                                        <th>Valor</th>
+                                        <th>Estado</th>
+                                        <th>Fecha</th>
+                                        <th>Area Responsable</th>
+                                        <th>Numero Factura</th>
+                                        <th>Descripcion</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for facturas in solicitudesgastos %}
+                                            <tr class="odd gradeX">
+                                                <td>{{ facturas.IdSoGa }}</td>
+                                                <td>{{ facturas.IdUsuario }}</td>
+                                                <td>{{ facturas.TipoSolicitud }}</td>
+                                                <td>{{ facturas.Valor|intcomma }}</td>
+                                                <td>{{ facturas.Estado }}</td>
+                                                <td>{{ facturas.Fecha }}</td>
+                                                <td>{{ facturas.AreaResponsable }}</td>
+                                                <td>{{ facturas.NumeroFactura }}</td>
+                                                <td>{{ facturas.Descripcion }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                            </table>
+                        </div>
+                </div>
+            </div>
+            </div>
+</div>
+            <div id="gestorordenes" class="modal fade text-center" tabindex="-1" role="dialog" style="display: none;">
+                <div class="modal-dialog modal-sm text-center">
+                        <div class="modal-content">
+                            <div class="modal-header align-items-center">
+                                <h4 class="modal-title">Gestor de ordenes</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <form action="{% url 'usuarios:cambio' %}" method="get">
+                                        {% csrf_token %}
+                                            <div class="col-sm-12">
+                                                <div class="form-group no-margin-hr">
+                                                    <label class="control-label">Numero de orden</label>
+                                                    <input type="text" name="IdSolicitud" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 col-md-12">
+                                                <button type="submit" class="btn btn-primary" style="width: 100%">Buscar</button>
+                                            </div>
+                                        </form>
+                                        
+                                    </div>
+
+                                </div>
+
+                                <br>
+                            </div>
+                        </div> <!-- / .modal-content -->
+                    </div> <!-- / .modal-dialog -->
+                </div>
+
+            <div id="estadisticas" class="modal fade text-center" tabindex="-1" role="dialog" style="display: none;">
+                <div class="modal-dialog modal-lg text-center">
+                        <div class="modal-content">
+                            <div class="modal-header ">
+                                <h4 class="modal-title">Estadisticas</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card shadow mb-4 text-center">
+                                            <div class="card-header py-3">
+                                                <h6 class="m-0 font-weight-bold text-primary">Estado de ordenes</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-sm-4">
+                                                        <span class="text-bg"><strong>{{ contadorp }}</strong></span><br>
+                                                        <span class="text-xs text-muted">Pendientes</span>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <span class="text-bg"><strong>{{ contadora }}</strong></span><br>
+                                                        <span class="text-xs text-muted">Aprobadas</span>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                       <span class="text-bg"><strong>{{ contadoranu }}</strong></span><br>
+                                                        <span class="text-xs text-muted">Anuladas</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card shadow mb-4 text-center">
+                                            <div class="card-header py-3">
+                                                <h6 class="m-0 font-weight-bold text-primary">Total ingresos y egresos</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-sm-4">
+                                                        <span class="text-bg"><strong>${{pago|intcomma}}</strong></span><br>
+                                                        <span class="text-xs text-muted">Ingresos a la fecha</span>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <span class="text-bg"><strong>${{gastos|intcomma}}</strong></span><br>
+                                                        <span class="text-xs text-muted">Egresos a la fecha</span>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                       <span class="text-bg"><strong>${{presupuesto|intcomma}}</strong></span><br>
+                                                        <span class="text-xs text-muted">Presupuesto actual</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <br>
+                            </div>
+                        </div> <!-- / .modal-content -->
+                    </div> <!-- / .modal-dialog -->
+                </div>
+<div class="modal fade" id="porcentajes" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+            <div class="col-xl-12 col-md-6 mb-4">
+                <div class="card border-bottom-info shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Porcentaje de recaudo
+                                            </div>
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col-auto">
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{porcentaje}}%</div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="progress progress-sm mr-2">
+                                                        <div class="progress-bar bg-info" role="progressbar"
+                                                            style="width: {{porcentaje}}%" aria-valuenow="{{porcentaje}}" aria-valuemin="0"
+                                                            aria-valuemax="100"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                    </div>
+                </div>
+           </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+  
+{% endblock %}
