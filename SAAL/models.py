@@ -638,3 +638,11 @@ class Proveedores(models.Model):
 
     def __str__(self):
         return "%s" % (self.Nit)
+
+class NovedadesSistema(models.Model):
+    IdNovedad = models.AutoField(primary_key=True)
+    Descripcion = models.CharField(max_length=150, null=False)
+    Fecha = models.DateTimeField(auto_now=True)
+    usuid = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    def __str__(self):
+        return "%s" % (self.IdNovedad)

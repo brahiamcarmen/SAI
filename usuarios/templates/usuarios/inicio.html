@@ -6,83 +6,67 @@
 {%block title %} <title>Modulo - I</title> {%endblock%}
 {% block content %}
 {% include 'usuarios/alerts.html' %}
-<div class="row">
+<div class="row" >
     <div class="col-sm-8">
         <div class="row">
-          <div class="col-sm-12">
+          <div class="col-sm-6">
                 <div class="card shadow mb-4 text-center">
-                        <div class="card-header py-3">
-                             <h6 class="m-0 font-weight-bold text-primary">Bienvenidos al {{nombreproyectol}} - {{nombreproyecto}}</h6>
+                        <div class="card-header py-2">
+                             <h6 class="m-0 font-weight-bold text-primary">{{nombreproyectol}} - {{nombreproyecto}}</h6>
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-sm-3">
-                                    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 100%;" src="{% static 'images/logop.png' %}" alt="">
-                                </div>
-                                <div class="col-sm-9">
-                                    <b>Usuario de empresa</b>
+                                <div class="col-sm-12">
+                                    <b>Usuario de grupo empresarial</b>
                                     <p>
-                                        {% for acueductos in acueductos %}
-                                                {{ acueductos.Nombre }}
-                                        {% endfor %} 
+                                        {{ acueducto }}
                                     </p>
-                                     <a target="_blank" rel="nofollow" href="https://undraw.co/">Perfil de empresa &rarr;</a>
                                 </div>
                             </div>
                             
                         </div>
                      </div>
               </div>
-              <div class="col-sm-12">
-                  <div class="card shadow mb-4 text-center">
-                        <div class="card-header py-3">
-                             <h6 class="m-0 font-weight-bold text-primary">Informacion de conexión</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <b>Nombre de equipo</b>
-                                    <p>
-                                        {{nombreequipo}}
-                                    </p>
-                                </div>
-                                <div class="col-sm-4">
-                                    <b>Dirección ip</b>
-                                    <p>
-                                        {{ip}}
-                                    </p>
-                                </div>
-                                 <div class="col-sm-4">
-                                    <b>Ubicación del equipo</b>
-                                    <p>
-                                        Corregimiento de caimalito, Pereira, Rda.
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <b>Ubicación del servidor</b>
-                                    <p>
-                                        No contectado
-                                        <!--350 Lincoln Road, Miami Beach, Florida, USA-->
-                                    </p>
-                                </div>
-                                 <div class="col-sm-4">
-                                    <b>Conexión a internet</b>
-                                    <p>
-                                        Exitosa
-                                    </p>  
-                                </div>
-                                <div class="col-sm-4">
-                                    <b>Tipo usuario</b>
-                                    <p>
-                                        SuperUsuario
-                                    </p>  
-                                </div>
-                            </div>
-                        </div>
-                     </div>
-              </div>  
+                <div class="col-sm-6">
+                    <div class="text-center">
+                        <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 17rem;" src="{% static 'V3/img/logo.png' %}" alt="...">
+                    </div>
+                </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card shadow mb-4 text-center">
+                    <div class="card-header py-2">
+                         <h6 class="m-0 font-weight-bold text-primary">Novedades del sistema</h6>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-borderless table-sm">
+                            <thead>
+                                <tr>
+                                  <th scope="col">#</th>
+                                  <th scope="col">Descripción</th>
+                                  <th scope="col">usuario</th>
+                                  <th scope="col">Fecha</th>
+                                </tr>
+                           </thead>
+                          <tbody>
+                            <tr>
+                              <th>1</th>
+                              <td>Mark</td>
+                              <td>Otto</td>
+                              <td>@mdo</td>
+                            </tr>
+                            <tr>
+                              <th>1</th>
+                              <td>Mark</td>
+                              <td>Otto</td>
+                              <td>@mdo</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="col-sm-4 text-center">
@@ -99,7 +83,7 @@
                 <div class="tab-content" id="pills-tabContent">
                     <div class="tab-pane fade show active" id="factura" role="tabpanel" aria-labelledby="pills-home-tab">
                         <div class="card shadow mb-4">
-                            <div class="card-header py-3">
+                            <div class="card-header py-2">
                                 <h6 class="m-0 font-weight-bold text-primary">Modulo de pago - aportes</h6>
                             </div>
                             <div class="card-body">

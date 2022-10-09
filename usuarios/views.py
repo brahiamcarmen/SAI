@@ -100,11 +100,8 @@ class Inicio(LoginRequiredMixin, View):
     login_url = '/'
     template_name = 'usuarios/inicio.html'
     form_class = AcueductoForm
-
     def get(self, request):
         try:
-            nombreequipo = socket.gethostname()
-            ip = socket.gethostbyname(nombreequipo)
             version = open('static/serial/Version.txt', 'r')
             versionp = version.read()
             version2 = open('static/serial/NombreProyecto.txt', 'r')
@@ -114,7 +111,7 @@ class Inicio(LoginRequiredMixin, View):
             datos = Usuario.objects.get(usuid=request.user.pk)
             dr = datos.IdAcueducto
             acueducto = Acueducto.objects.get(IdAcueducto=dr.pk)
-            acueductos = Acueducto.objects.all()
+            nombreacueducto = acueducto.Nombre
             listapqrs = Pqrs.objects.filter(Estado='Pendiente')
             contqrs = Pqrs.objects.filter(Estado='Pendiente').count()
             contsoli = SolicitudGastos.objects.filter(Estado=ESTADO1).count()
@@ -128,7 +125,7 @@ class Inicio(LoginRequiredMixin, View):
                             {
                             'nombreproyecto':nombreproyecto,
                             'nombreproyectol': nombreproyectol,
-                            'acueductos': acueductos,
+                            'acueducto': nombreacueducto,
                             'form': form,
                             'notificaciones': contadorpen,
                             'totalpropietarios': totalpropietarios,
@@ -136,8 +133,6 @@ class Inicio(LoginRequiredMixin, View):
                             'versionp': versionp,
                             'listapqrs': listapqrs,
                             'totalnoti': totalnoti,
-                            'nombreequipo': nombreequipo,
-                            'ip': ip,
                             })
         except Usuario.DoesNotExist:
             return render(request, "pages-404.html")
