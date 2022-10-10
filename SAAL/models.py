@@ -433,9 +433,22 @@ class AsignacionExterna(models.Model):
         verbose_name = "Presupuesto externo"
 
 DOC_CHOICES13 = (
-    ('AC', _(u"Acceso - (AC)")),
-    ('AccessVFac', _(u"Acceso - Modulo ver factura (AccessVFac)")),
-    ('AccessPanel', _(u"Acceso - Panel de administracion (AccessPanel)"))
+    ('AccessPanel', _(u"Acceso - panel de administracion")),
+    ('AVLV', _(u"Acceso - Ver listado viviendas")),
+    ('AVF', _(u"Acceso - Ver factura")),
+    ('AB', _(u"Acceso - Buscador")),
+    ('ALS', _(u"Acceso - Listado de suscriptores")),
+    ('ALP', _(u"Acceso - Listado de predios")),
+    ('AR', _(u"Acceso - Reportes")),
+    ('ACC', _(u"Acceso - Cuentas de cobro")),
+    ('GCA', _(u"Generar - Cobro de aportes")),
+    ('AIS', _(u"Agregar - Informacion suscriptor")),
+    ('AIP', _(u"Agregar - Informacion predio")),
+    ('AMFV', _(u"Acceso - Modulo de facturas vencidas")),
+    ('AGF', _(u"Acceso - Generador de facturas")),
+    ('GF', _(u"Generar - Facturas")),
+    ('AF', _(u"Acceso - Anular facturas")),
+    ('AC', _(u"Acceso - Consumos")),
 )
 class Permisos(models.Model):
     IdPermiso = models.AutoField(primary_key=True)
@@ -643,6 +656,5 @@ class NovedadesSistema(models.Model):
     IdNovedad = models.AutoField(primary_key=True)
     Descripcion = models.CharField(max_length=150, null=False)
     Fecha = models.DateTimeField(auto_now=True)
-    usuid = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     def __str__(self):
         return "%s" % (self.IdNovedad)

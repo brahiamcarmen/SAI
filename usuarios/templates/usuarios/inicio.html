@@ -9,15 +9,20 @@
 <div class="row" >
     <div class="col-sm-8">
         <div class="row">
+            <div class="col-sm-6">
+                <div class="text-center">
+                    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 17rem;" src="{% static 'V3/img/logo.png' %}" alt="...">
+                </div>
+            </div>
           <div class="col-sm-6">
                 <div class="card shadow mb-4 text-center">
                         <div class="card-header py-2">
-                             <h6 class="m-0 font-weight-bold text-primary">{{nombreproyectol}} - {{nombreproyecto}}</h6>
+                             <h6 class="m-0 font-weight-bold text-primary">Usuario de grupo empresarial - {{nombreproyecto}}</h6>
                         </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <b>Usuario de grupo empresarial</b>
+                                    <b>{{tipousuario}}</b>
                                     <p>
                                         {{ acueducto }}
                                     </p>
@@ -27,11 +32,7 @@
                         </div>
                      </div>
               </div>
-                <div class="col-sm-6">
-                    <div class="text-center">
-                        <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 17rem;" src="{% static 'V3/img/logo.png' %}" alt="...">
-                    </div>
-                </div>
+
         </div>
         <div class="row">
             <div class="col-sm-12">
@@ -40,28 +41,22 @@
                          <h6 class="m-0 font-weight-bold text-primary">Novedades del sistema</h6>
                     </div>
                     <div class="card-body">
-                        <table class="table table-borderless table-sm">
+                        <table class="table table-borderless table-sm" style="font-size: 0.8rem;">
                             <thead>
                                 <tr>
                                   <th scope="col">#</th>
                                   <th scope="col">Descripción</th>
-                                  <th scope="col">usuario</th>
                                   <th scope="col">Fecha</th>
                                 </tr>
                            </thead>
                           <tbody>
+                            {% for novedad in novedades %}
                             <tr>
-                              <th>1</th>
-                              <td>Mark</td>
-                              <td>Otto</td>
-                              <td>@mdo</td>
+                              <th>{{novedad.IdNovedad}}</th>
+                              <th>{{novedad.Descripcion}}</th>
+                              <th>{{novedad.Fecha}}</th>
                             </tr>
-                            <tr>
-                              <th>1</th>
-                              <td>Mark</td>
-                              <td>Otto</td>
-                              <td>@mdo</td>
-                            </tr>
+                            {%endfor%}
                           </tbody>
                         </table>
                     </div>

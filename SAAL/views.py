@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.views.generic.base import View
 from django.contrib import auth
 from django.contrib import messages
-from SAAL.models import Usuario
+from SAAL.models import Usuario, NovedadesSistema
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import render
@@ -28,6 +28,9 @@ class Login(View):
             auth.login(request, usuario)
             listuser = Usuario.objects.filter(usuid=usuario.pk)
             if len(listuser) > 0:
+                descripcion = 'Inicio de sesion - ' + str(username1)
+                novedad = NovedadesSistema(Descripcion=descripcion)
+                novedad.save()
                 return HttpResponseRedirect(reverse('usuarios:inicio'))
 
             else:

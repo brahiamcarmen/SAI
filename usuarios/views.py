@@ -6,7 +6,7 @@ from django.conf import settings
 from django.views.generic.base import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from SAAL.models import Usuario, Tarifa, CobroOrdenes,PagoOrdenes,Certificaciones, Cierres, Acueducto, ConfirCerti, ValorMatricula, OrdenesSuspencion, OrdenesReconexion, Poblacion, Factura, Ciclo, EstadoCuenta,NovedadVivienda
-from SAAL.models import Vivienda, SolicitudGastos, ArchivosAcueducto, Propietario, Medidores, Pqrs, RespuestasPqrs,NovedadesGenerales, CobroMatricula, Permisos, Pagos, Archivos, AsignacionExterna
+from SAAL.models import Vivienda, SolicitudGastos, ArchivosAcueducto, Propietario, NovedadesSistema,Medidores, Pqrs, RespuestasPqrs,NovedadesGenerales, CobroMatricula, Permisos, Pagos, Archivos, AsignacionExterna
 from SAAL.forms import RegistroUsuario, RegistroUsuario2, RegistroVivienda,AcueductoAForm,PermisosForm, CertificarForm, CobroMatriculaForm, CostoMForm, RespuestPqrForm, RegistroPropietario, TarifasForm , ModificaPropietario
 from SAAL.forms import CambioFormEstado,AcueductoForm, GastosForm, MedidoresForm, PoblacionForm, ModificaVivienda
 from django.contrib import messages
@@ -108,8 +108,10 @@ class Inicio(LoginRequiredMixin, View):
             nombreproyecto = version2.read()
             version3 = open('static/serial/NombreProyectoL.txt', 'r')
             nombreproyectol = version3.read()
+
             datos = Usuario.objects.get(usuid=request.user.pk)
             dr = datos.IdAcueducto
+            tipousuario = datos.TipoUsuario
             acueducto = Acueducto.objects.get(IdAcueducto=dr.pk)
             nombreacueducto = acueducto.Nombre
             listapqrs = Pqrs.objects.filter(Estado='Pendiente')
@@ -118,48 +120,26 @@ class Inicio(LoginRequiredMixin, View):
             totalnoti = contqrs + contsoli
             form = self.form_class(instance=acueducto)
             contadorpen = SolicitudGastos.objects.filter(Estado=ESTADO1)
-            totalpropietarios = Propietario.objects.count()
-            totalviviendas = Vivienda.objects.count()
+            novedades = NovedadesSistema.objects.all().order_by("-IdNovedad")[:5]
             return render(request,
                           self.template_name,
                             {
+                            'tipousuario': tipousuario,
                             'nombreproyecto':nombreproyecto,
                             'nombreproyectol': nombreproyectol,
                             'acueducto': nombreacueducto,
-                            'form': form,
                             'notificaciones': contadorpen,
-                            'totalpropietarios': totalpropietarios,
-                            'totalviviendas': totalviviendas,
                             'versionp': versionp,
                             'listapqrs': listapqrs,
                             'totalnoti': totalnoti,
+                            'novedades': novedades
                             })
-        except Usuario.DoesNotExist:
-            return render(request, "pages-404.html")
-
-    def post(self, request):
-        try:
-            datos = Usuario.objects.get(usuid=request.user.pk)
-            dr = datos.IdAcueducto
-            acueducto = Acueducto.objects.get(IdAcueducto=dr.pk)
-            form = self.form_class(request.POST, instance=acueducto)
-
-            if form.is_valid():
-                form.save()
-                messages.add_message(request, messages.INFO, 'el estado se cambio correctamente')
-                return HttpResponseRedirect(reverse('usuarios:inicio'))
-
-            else:
-                messages.add_message(request, messages.ERROR, 'No se puedo modificar el estado')
-                return HttpResponseRedirect(reverse('usuarios:inicio'))
-
-        except Usuario.DoesNotExist:
+        except Acueducto.DoesNotExist:
             return render(request, "pages-404.html")
 
 class ListaViviendas(LoginRequiredMixin, View):
     login_url = '/'
     template_name = 'usuarios/listaviviendas.html'
-
     def get(self, request):
         try:
             listapqrs = Pqrs.objects.filter(Estado='Pendiente')
@@ -171,8 +151,8 @@ class ListaViviendas(LoginRequiredMixin, View):
             dr = datos.IdAcueducto
             acueducto = Acueducto.objects.get(IdAcueducto=dr.pk)
             listaviviendas = Vivienda.objects.filter(IdAcueducto=acueducto.pk)
-            tipousuario = Permisos.objects.filter(usuid=datos, TipoPermiso='NOACLP').exists()
-            if tipousuario is False:
+            tipousuario = Permisos.objects.filter(usuid=datos, TipoPermiso='ALP').exists()
+            if tipousuario is True:
                 return render(request, self.template_name,
                               {
                                   'viviendas': listaviviendas,
@@ -183,7 +163,6 @@ class ListaViviendas(LoginRequiredMixin, View):
             else:
                 messages.add_message(request, messages.ERROR,'Su usuario no tiene los permiso de acceso a esta seccion')
                 return HttpResponseRedirect(reverse('usuarios:inicio'))
-
         except Acueducto.DoesNotExist:
             return render(request, "pages-404.html")
 
@@ -203,8 +182,8 @@ class ListaPropietarios(LoginRequiredMixin, View):
             dr = datos.IdAcueducto
             listavivienda = Vivienda.objects.filter(IdAcueducto=dr.pk)
             usuarios = Propietario.objects.all()
-            tipousuario = Permisos.objects.filter(usuid=datos, TipoPermiso='NOACLT').exists()
-            if tipousuario is False:
+            tipousuario = Permisos.objects.filter(usuid=datos, TipoPermiso='ALS').exists()
+            if tipousuario is True:
                 return render(request, self.template_name,
                             {
                                 'usuarios': usuarios,
@@ -214,7 +193,7 @@ class ListaPropietarios(LoginRequiredMixin, View):
                                 'totalnoti': totalnoti
                             })
             else:
-                messages.add_message(request, messages.ERROR,'Su usuario no tiene los permiso de acceso a esta seccion')
+                messages.add_message(request, messages.ERROR,'Su usuario no tiene los permisos de acceso a esta seccion')
                 return HttpResponseRedirect(reverse('usuarios:inicio'))
 
         except Propietario.DoesNotExist:
@@ -237,8 +216,8 @@ class AgregarVivienda(LoginRequiredMixin, View):
             contadorpen = SolicitudGastos.objects.filter(Estado=ESTADO1)
 
             usuario = Usuario.objects.get(usuid=request.user.pk)
-            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='NOACRP').exists()
-            if tipousuario is False:
+            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AIP').exists()
+            if tipousuario is True:
                 return render(request, self.template_name,
                               {
                                   'form': form,
@@ -249,8 +228,8 @@ class AgregarVivienda(LoginRequiredMixin, View):
 
                               })
             else:
-                messages.add_message(request, messages.ERROR,'Su usuario no tiene los permiso de acceso a esta seccion')
-                return HttpResponseRedirect(reverse('usuarios:listaviviendas'))
+                messages.add_message(request, messages.ERROR,'Su usuario no tiene los permisos de acceso a esta seccion')
+                return HttpResponseRedirect(reverse('usuarios:inicio'))
 
         except Usuario.DoesNotExist:
             return render(request, "pages-404.html")
@@ -319,8 +298,8 @@ class AgregarPropietario(LoginRequiredMixin, View):
 
             form = self.form_class()
             usuario = Usuario.objects.get(usuid=request.user.pk)
-            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='NOACRT').exists()
-            if tipousuario is False:
+            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AIS').exists()
+            if tipousuario is True:
                 return render(request, self.template_name,
                               {
                                   'form': form,
@@ -329,8 +308,8 @@ class AgregarPropietario(LoginRequiredMixin, View):
                                   'totalnoti': totalnoti
                               })
             else:
-                messages.add_message(request, messages.ERROR,'Su usuario no tiene los permiso de acceso a esta seccion')
-                return HttpResponseRedirect(reverse('usuarios:listapropietarios'))
+                messages.add_message(request, messages.ERROR,'Su usuario no tiene los permisos de acceso a esta seccion')
+                return HttpResponseRedirect(reverse('usuarios:inicio'))
 
         except usuario.DoesNotExist:
             return render(request, "pages-404.html")
@@ -596,8 +575,8 @@ class Facturacion(LoginRequiredMixin, View):
 
            usuario = Usuario.objects.get(usuid=request.user.pk)
            totalcuentas = EstadoCuenta.objects.all().count()
-           tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='NOACFA').exists()
-           if tipousuario is False:
+           tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='ACC').exists()
+           if tipousuario is True:
                return render(request, self.template_name,
                              {
                                  'operativos': int(operativos), 'mantenimiento': int(mantenimiento), 'retirados': int(retirados),'suspendidos': int(suspendidos),
@@ -615,6 +594,7 @@ class Facturacion(LoginRequiredMixin, View):
 
    def post(self, request):
         try:
+            usuario = Usuario.objects.get(usuid=request.user.pk)
             #Fechas
             ye = datetime.now()
             ano = ye.year
@@ -631,28 +611,33 @@ class Facturacion(LoginRequiredMixin, View):
             operativos = EstadoCuenta.objects.filter(Estado='Operativo')
             mantenimientos = EstadoCuenta.objects.filter(Estado='Mantenimiento')
             estados = EstadoCuenta.objects.all()
-            if facturas >=1:
-                messages.add_message(request, messages.ERROR, 'No se puede generar cobros, hay facturacion con estado *emitida*', ano)
-                return HttpResponseRedirect(reverse('usuarios:facturacion'))
+            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='ACC').exists()
+            if tipousuario is True:
+                if facturas >=1:
+                    messages.add_message(request, messages.ERROR, 'No se puede generar cobros, hay facturacion con estado *emitida*', ano)
+                    return HttpResponseRedirect(reverse('usuarios:facturacion'))
+
+                else:
+                    cont = 0
+                    for k in estados:
+                        if k.Estado == 'Operativo':
+                            estadoscu = EstadoCuenta.objects.get(IdEstadoCuenta=k.pk)
+                            estadoscu.Valor += int(tarifaoperativos)
+                            estadoscu.save()
+                            cont +=1
+                        elif k.Estado == 'Mantenimiento':
+                            estadoscu = EstadoCuenta.objects.get(IdEstadoCuenta=k.pk)
+                            estadoscu.Valor += int(tarifamantenimiento)
+                            estadoscu.save()
+                            cont += 1
+                        else:
+                            pass
+                    messages.add_message(request, messages.SUCCESS, 'Se generaron ',cont,' cobros')
+                    return HttpResponseRedirect(reverse('usuarios:facturacion'))
 
             else:
-                cont = 0
-                for k in estados:
-                    if k.Estado == 'Operativo':
-                        estadoscu = EstadoCuenta.objects.get(IdEstadoCuenta=k.pk)
-                        estadoscu.Valor += int(tarifaoperativos)
-                        estadoscu.save()
-                        cont +=1
-                    elif k.Estado == 'Mantenimiento':
-                        estadoscu = EstadoCuenta.objects.get(IdEstadoCuenta=k.pk)
-                        estadoscu.Valor += int(tarifamantenimiento)
-                        estadoscu.save()
-                        cont += 1
-                    else:
-                        pass
-
-                messages.add_message(request, messages.SUCCESS, 'Se generaron ',cont,' cobros')
-                return HttpResponseRedirect(reverse('usuarios:facturacion'))
+               messages.add_message(request, messages.ERROR,'Su usuario no tiene los permiso de acceso a esta seccion')
+               return HttpResponseRedirect(reverse('usuarios:inicio'))
 
         except Acueducto.DoesNotExist:
             return render(request, "pages-404.html")
@@ -729,8 +714,8 @@ class Reporte(LoginRequiredMixin, View):
            totalnoti = contqrs + contsoli
            contadorpen = SolicitudGastos.objects.filter(Estado=ESTADO1)
 
-           tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='NOACRE').exists()
-           if tipousuario is False:
+           tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AR').exists()
+           if tipousuario is True:
                return render(request, self.template_name,{
                    'totalpropietarios': propietarios,
                    'totalviviendas': viviendas,
@@ -745,7 +730,7 @@ class Reporte(LoginRequiredMixin, View):
                    'valor': valor,'valorcuentas':valorcuentas, 'valor2':valor2, 'totalvc': totalv,'suscriptores': viviendasopera, 'disponible': disponible
                })
            else:
-               messages.add_message(request, messages.ERROR, 'Su usuario no tiene los permiso de acceso a esta seccion')
+               messages.add_message(request, messages.ERROR, 'Su usuario no tiene los permisos de acceso a esta seccion')
                return HttpResponseRedirect(reverse('usuarios:inicio'))
 
        except Usuario.DoesNotExist:
@@ -1179,8 +1164,8 @@ class Busquedas(LoginRequiredMixin, View):
             totalnoti = contqrs + contsoli
             contadorpen = SolicitudGastos.objects.filter(Estado=ESTADO1)
 
-            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='NOACBU').exists()
-            if tipousuario is False:
+            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AB').exists()
+            if tipousuario is True:
                 return render(request, self.template_name,{
                     'notificaciones': contadorpen,
                     'listapqrs': listapqrs,
@@ -1224,11 +1209,24 @@ class Busquedas(LoginRequiredMixin, View):
                     messages.add_message(request, messages.ERROR, 'Informacion del predio no encontrada')
                     return HttpResponseRedirect(reverse('usuarios:busquedas'))
 
+            elif tipo == "Referencia" and identificacion is not None:
+                estadocuenta = EstadoCuenta.objects.filter(IdEstadoCuenta=identificacion).exists()
+                if estadocuenta is True:
+                    estadocuentas = EstadoCuenta.objects.get(IdEstadoCuenta=identificacion)
+                    IdVivienda = estadocuentas.IdVivienda.pk
+                    ver = self.predio()
+                    ejecutar = ver.get(request, IdVivienda)
+                    return ejecutar
+
+                else:
+                    messages.add_message(request, messages.ERROR, 'Informacion del predio no encontrada')
+                    return HttpResponseRedirect(reverse('usuarios:busquedas'))
+
             else:
                 messages.add_message(request, messages.WARNING, 'Informacion incompleta')
                 return HttpResponseRedirect(reverse('usuarios:busquedas'))
 
-        except usuario.DoesNotExist:
+        except Usuario.DoesNotExist:
             return render(request, "pages-404.html")
 
 class Certificacion(LoginRequiredMixin, View):
@@ -2052,7 +2050,7 @@ class VerFactura(LoginRequiredMixin, View):
             ciclo = factura.IdCiclo
             estadofactura = factura.Estado
             usuario = Usuario.objects.get(usuid=request.user.pk)
-            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AccessVFac').exists()
+            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AVF').exists()
             if tipousuario is True:
                 return render(request, self.template_name,{
                     'cobromatricula': cobromatricula,
@@ -2347,8 +2345,8 @@ class Facturas(LoginRequiredMixin, View):
            facturasemi = Factura.objects.filter(Estado=FE).count()
            facturasven = Factura.objects.filter(Estado=FV).count()
            usuario = Usuario.objects.get(usuid=request.user.pk)
-           tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='NOACFA').exists()
-           if tipousuario is False:
+           tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AMFV').exists()
+           if tipousuario is True:
                return render(request, self.template_name,
                              {
                                  'facturasemi': facturasemi,
@@ -2358,7 +2356,7 @@ class Facturas(LoginRequiredMixin, View):
                                  'totalnoti': totalnoti
                              })
            else:
-               messages.add_message(request, messages.ERROR, 'Su usuario no tiene los permiso de acceso a esta seccion')
+               messages.add_message(request, messages.ERROR, 'Su usuario no tiene los permisos de acceso a esta seccion')
                return HttpResponseRedirect(reverse('usuarios:inicio'))
 
        except Usuario.DoesNotExist:
@@ -2406,8 +2404,8 @@ class GeneradorFacturas(LoginRequiredMixin, View):
                valor = int(i.Total)
                suma +=valor
 
-           tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='NOACFA').exists()
-           if tipousuario is False:
+           tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AGF').exists()
+           if tipousuario is True:
                return render(request, self.template_name,
                              {   'totalemitidas': facturasemitidas2,
                                  'facturasven': facturasven,
@@ -2420,7 +2418,7 @@ class GeneradorFacturas(LoginRequiredMixin, View):
                                  'totalnoti': totalnoti
                              })
            else:
-               messages.add_message(request, messages.ERROR, 'Su usuario no tiene los permiso de acceso a esta seccion')
+               messages.add_message(request, messages.ERROR, 'Su usuario no tiene los permisos de acceso a esta seccion')
                return HttpResponseRedirect(reverse('usuarios:inicio'))
 
        except Usuario.DoesNotExist:
@@ -2429,6 +2427,7 @@ class GeneradorFacturas(LoginRequiredMixin, View):
    def post(self, request):
        try:
            #consulta de existencias
+           usuario = Usuario.objects.get(usuid=request.user.pk)
            estadoscuenta = EstadoCuenta.objects.filter(Estado='Operativo').count()
            facturas = Factura.objects.filter(Estado=FE).count()
            #fechas
@@ -2438,82 +2437,87 @@ class GeneradorFacturas(LoginRequiredMixin, View):
            mes = ciclos.Nombre
            fechalimite = fechaexp + timedelta(days=DIASFACTURACION)
            estadosoperativos = EstadoCuenta.objects.filter(Estado='Operativo')|EstadoCuenta.objects.filter(Estado='Mantenimiento')|EstadoCuenta.objects.filter(Estado='Suspendido')
-           if facturas >=1:
-               messages.add_message(request, messages.ERROR, 'No se puede generar facturas verifique nuevamente')
-               return HttpResponseRedirect(reverse('usuarios:generadorfacturas'))
-
-           else:
-               if estadoscuenta >=1:
-                   for i in estadosoperativos:
-                       estadoc = EstadoCuenta.objects.get(IdEstadoCuenta=i.pk)
-                       consumo = estadoc.Valor
-                       idestadocuenta = estadoc.IdEstadoCuenta
-
-                       #consulta orden suspencion
-                       cobrosuspencion2 = CobroOrdenes.objects.filter(IdEstadoCuenta=idestadocuenta, Estado=ESTADO1,TipoOrden='Cobro por suspencion')
-                       pos1 = 0
-                       for i in cobrosuspencion2:
-                           valor = i.Valor
-                           pos1 += int(valor)
-
-                       #consulta orden rexonecion
-                       cobroreconexiones2 = CobroOrdenes.objects.filter(IdEstadoCuenta=idestadocuenta, Estado=ESTADO1,TipoOrden='Cobro por reconexión')
-                       pos2 = 0
-                       for i in cobroreconexiones2:
-                           valor = i.Valor
-                           pos2 += int(valor)
-
-                       #consulta matricula
-                       idvivienda = estadoc.IdVivienda
-                       conceptoma = CobroMatricula.objects.get(IdVivienda=idvivienda.pk)
-                       pendientematricula = conceptoma.IdValor.Valor
-                       cuotaspendiente = conceptoma.CuotasPendientes
-                       verificacion = CobroMatricula.objects.filter(IdVivienda=idvivienda, Estado='Pendiente')
-                       cuotamatricula = 0
-                       for i in verificacion:
-                           valor = i.Cuota
-                           cuotamatricula += int(valor)
-
-                       #consulta vivienda
-                       vivienda = Vivienda.objects.get(IdVivienda=idvivienda.pk)
-                       propietario = str(vivienda.IdPropietario.Nombres +' '+ vivienda.IdPropietario.Apellidos)
-                       estrato = vivienda.Estrato
-                       direccion = vivienda.Direccion
-                       casa = vivienda.NumeroCasa
-                       piso = vivienda.Piso
-                       conectado = vivienda.Ciclo
-                       estadoservicio = vivienda.EstadoServicio
-                       tiposervicio = vivienda.TipoInstalacion
-                       #consulta facturas vencidas
-                       consumo1 = estadoc.Valor
-                       vencidas = -1
-                       for i in range(1, consumo1, TARIFA):
-                           if i != consumo:
-                               vencidas += 1
-
-                       #ultimo pago
-                       autorizacion = 1
-                       if autorizacion >= 1:
-                           final = int(consumo) + int(pos1) + int(pos2) + int(cuotamatricula)
-                           factura = Factura(Matricula=idvivienda,Estado=EF,
-                                             referencia=idestadocuenta,nombretitular=propietario, ciclo=conectado,periodofacturado=mes,Estrato=estrato,direccion=direccion,casa=casa,
-                                             piso=piso,estadoservicio=estadoservicio,tiposerivio=tiposervicio, aporteporconsumo=consumo,conceptomatricula=cuotamatricula,
-                                             cuotasmatricula=cuotaspendiente, reconexion=pos2,suspencion=pos1, facturasvencidas=vencidas,
-                                             FechaExpe=fechaexp, FechaLimite=fechalimite, Total=final,
-                                             IdCiclo=ciclos,
-                                             IdEstadoCuenta=estadoc, TotalConsumo=consumo, OtrosCobros=0)
-                           factura.save()
-                       else:
-                           factura = Factura(Estado=EF, FechaExpe=fechaexp, FechaLimite=fechalimite, Total=consumo,
-                                             IdCiclo=ciclos,
-                                             IdEstadoCuenta=estadoc,TotalConsumo=consumo, OtrosCobros=0)
-                           factura.save()
-
-                   messages.add_message(request, messages.INFO, 'Se generaron las facturas correspondientes')
+           tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='GF').exists()
+           if tipousuario is True:
+               if facturas >=1:
+                   messages.add_message(request, messages.ERROR, 'No se puede generar facturas verifique nuevamente')
                    return HttpResponseRedirect(reverse('usuarios:generadorfacturas'))
+
                else:
-                   messages.add_message(request, messages.ERROR, 'No hay estados de cuenta disponibles para generar facturacion')
-                   return HttpResponseRedirect(reverse('usuarios:generadorfacturas'))
+                   if estadoscuenta >=1:
+                       for i in estadosoperativos:
+                           estadoc = EstadoCuenta.objects.get(IdEstadoCuenta=i.pk)
+                           consumo = estadoc.Valor
+                           idestadocuenta = estadoc.IdEstadoCuenta
+
+                           #consulta orden suspencion
+                           cobrosuspencion2 = CobroOrdenes.objects.filter(IdEstadoCuenta=idestadocuenta, Estado=ESTADO1,TipoOrden='Cobro por suspencion')
+                           pos1 = 0
+                           for i in cobrosuspencion2:
+                               valor = i.Valor
+                               pos1 += int(valor)
+
+                           #consulta orden rexonecion
+                           cobroreconexiones2 = CobroOrdenes.objects.filter(IdEstadoCuenta=idestadocuenta, Estado=ESTADO1,TipoOrden='Cobro por reconexión')
+                           pos2 = 0
+                           for i in cobroreconexiones2:
+                               valor = i.Valor
+                               pos2 += int(valor)
+
+                           #consulta matricula
+                           idvivienda = estadoc.IdVivienda
+                           conceptoma = CobroMatricula.objects.get(IdVivienda=idvivienda.pk)
+                           pendientematricula = conceptoma.IdValor.Valor
+                           cuotaspendiente = conceptoma.CuotasPendientes
+                           verificacion = CobroMatricula.objects.filter(IdVivienda=idvivienda, Estado='Pendiente')
+                           cuotamatricula = 0
+                           for i in verificacion:
+                               valor = i.Cuota
+                               cuotamatricula += int(valor)
+
+                           #consulta vivienda
+                           vivienda = Vivienda.objects.get(IdVivienda=idvivienda.pk)
+                           propietario = str(vivienda.IdPropietario.Nombres +' '+ vivienda.IdPropietario.Apellidos)
+                           estrato = vivienda.Estrato
+                           direccion = vivienda.Direccion
+                           casa = vivienda.NumeroCasa
+                           piso = vivienda.Piso
+                           conectado = vivienda.Ciclo
+                           estadoservicio = vivienda.EstadoServicio
+                           tiposervicio = vivienda.TipoInstalacion
+                           #consulta facturas vencidas
+                           consumo1 = estadoc.Valor
+                           vencidas = -1
+                           for i in range(1, consumo1, TARIFA):
+                               if i != consumo:
+                                   vencidas += 1
+
+                           #ultimo pago
+                           autorizacion = 1
+                           if autorizacion >= 1:
+                               final = int(consumo) + int(pos1) + int(pos2) + int(cuotamatricula)
+                               factura = Factura(Matricula=idvivienda,Estado=EF,
+                                                 referencia=idestadocuenta,nombretitular=propietario, ciclo=conectado,periodofacturado=mes,Estrato=estrato,direccion=direccion,casa=casa,
+                                                 piso=piso,estadoservicio=estadoservicio,tiposerivio=tiposervicio, aporteporconsumo=consumo,conceptomatricula=cuotamatricula,
+                                                 cuotasmatricula=cuotaspendiente, reconexion=pos2,suspencion=pos1, facturasvencidas=vencidas,
+                                                 FechaExpe=fechaexp, FechaLimite=fechalimite, Total=final,
+                                                 IdCiclo=ciclos,
+                                                 IdEstadoCuenta=estadoc, TotalConsumo=consumo, OtrosCobros=0)
+                               factura.save()
+                           else:
+                               factura = Factura(Estado=EF, FechaExpe=fechaexp, FechaLimite=fechalimite, Total=consumo,
+                                                 IdCiclo=ciclos,
+                                                 IdEstadoCuenta=estadoc,TotalConsumo=consumo, OtrosCobros=0)
+                               factura.save()
+
+                       messages.add_message(request, messages.INFO, 'Se generaron las facturas correspondientes')
+                       return HttpResponseRedirect(reverse('usuarios:generadorfacturas'))
+                   else:
+                       messages.add_message(request, messages.ERROR, 'No hay estados de cuenta disponibles para generar facturacion')
+                       return HttpResponseRedirect(reverse('usuarios:generadorfacturas'))
+           else:
+               messages.add_message(request, messages.ERROR, 'Su usuario no tiene los permisos de acceso a esta seccion')
+               return HttpResponseRedirect(reverse('usuarios:inicio'))
 
        except Usuario.DoesNotExist:
            return render(request, "pages-404.html")
@@ -2788,17 +2792,23 @@ class AnularFactura(LoginRequiredMixin, View):
 
     def get(self, request):
         try:
+            usuario = Usuario.objects.get(usuid=request.user.pk)
             listapqrs = Pqrs.objects.filter(Estado='Pendiente')
             contqrs = Pqrs.objects.filter(Estado='Pendiente').count()
             contsoli = SolicitudGastos.objects.filter(Estado=ESTADO1).count()
             totalnoti = contqrs + contsoli
             contadorpen = SolicitudGastos.objects.filter(Estado=ESTADO1)
+            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AF').exists()
+            if tipousuario is True:
+                return render(request, self.template_name,{
+                    'notificaciones': contadorpen,
+                    'listapqrs': listapqrs,
+                    'totalnoti': totalnoti
+                })
+            else:
+                messages.add_message(request, messages.ERROR,'Su usuario no tiene los permisos de acceso a esta seccion')
+                return HttpResponseRedirect(reverse('usuarios:inicio'))
 
-            return render(request, self.template_name,{
-                'notificaciones': contadorpen,
-                'listapqrs': listapqrs,
-                'totalnoti': totalnoti
-            })
         except Factura.DoesNotExist:
             return render(request, "pages-404.html")
 
@@ -4610,7 +4620,7 @@ class Consumos(LoginRequiredMixin, View):
         try:
             usuario = Usuario.objects.get(usuid=request.user.pk)
             idacueducto = usuario.IdAcueducto
-            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AccessPanel').exists()
+            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AC').exists()
             acueducto = Acueducto.objects.get(IdAcueducto=idacueducto)
             # consultas de tarifas
             tarifa = acueducto.IdTarifa.Valor
@@ -4643,7 +4653,7 @@ class Consumos(LoginRequiredMixin, View):
                 })
 
             else:
-                messages.add_message(request, messages.ERROR,'Su usuario no tiene acceso a este modulo')
+                messages.add_message(request, messages.ERROR,'Su usuario tiene permisos de acceso a este modulo')
                 return HttpResponseRedirect(reverse('usuarios:inicio'))
 
         except Usuario.DoesNotExist:
