@@ -4,8 +4,7 @@ from django.conf.urls import include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from SAAL.views import Login
-from SAAL.views import Logout
+from SAAL.views import Login, Logout
 
 urlpatterns = [
     url('admin/', admin.site.urls),

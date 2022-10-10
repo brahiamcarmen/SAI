@@ -1447,8 +1447,8 @@ class ControlPresupuestal(LoginRequiredMixin, View):
                 valor = i.ValorPago
                 pago0 += int(valor)
 
-            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='NOAC').exists()
-            if tipousuario is False:
+            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='ACP').exists()
+            if tipousuario is True:
                 return render(request, self.template_name, {
                     'porcentaje': int(pago0 / totalpormes * 100),
                     'form': form,
@@ -2203,14 +2203,14 @@ class ListaPqrs(LoginRequiredMixin, View):
             contreclamo = Pqrs.objects.filter(TipoSolicitud='Reclamo').count()
             contfelicitacion = Pqrs.objects.filter(TipoSolicitud='Felicitacion').count()
             usuario = Usuario.objects.get(usuid=request.user.pk)
-            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='NOACP').exists()
+            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='APQRS').exists()
             drilistapqrs = Pqrs.objects.filter(Estado='Pendiente')
             contqrs = Pqrs.objects.filter(Estado='Pendiente').count()
             contsoli = SolicitudGastos.objects.filter(Estado=ESTADO1).count()
             totalnoti = contqrs + contsoli
             contadorpen = SolicitudGastos.objects.filter(Estado=ESTADO1)
 
-            if tipousuario is False:
+            if tipousuario is True:
                 return render(request, self.template_name,{
                     'lista': lista,
                     'contp': contpeticion,
@@ -2541,9 +2541,9 @@ class Suspenciones(LoginRequiredMixin,View):
             totalnoti = contqrs + contsoli
             contadorpen = SolicitudGastos.objects.filter(Estado=ESTADO1)
 
-            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='NOACSR').exists()
+            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='ASR').exists()
 
-            if tipousuario is False:
+            if tipousuario is True:
                 return render(request, self.template_name,{
                     'anuladas': cantanuladas,
                     'pendientes': cantpendientes,
@@ -2599,14 +2599,14 @@ class Reconexiones(LoginRequiredMixin,View):
             ordenesreconexion = OrdenesReconexion.objects.filter(Estado=SP)
             contreeje = OrdenesReconexion.objects.filter(Estado=SJ).count()
             contrepen = OrdenesReconexion.objects.filter(Estado=SP).count()
-            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='NOACSR').exists()
+            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='ASR').exists()
             drilistapqrs = Pqrs.objects.filter(Estado='Pendiente')
             contqrs = Pqrs.objects.filter(Estado='Pendiente').count()
             contsoli = SolicitudGastos.objects.filter(Estado=ESTADO1).count()
             totalnoti = contqrs + contsoli
             contadorpen = SolicitudGastos.objects.filter(Estado=ESTADO1)
 
-            if tipousuario is False:
+            if tipousuario is True:
                 return render(request, self.template_name,{
                     'ordrec': ordenesreconexion,
                     'rependientes': contrepen,
@@ -2617,7 +2617,7 @@ class Reconexiones(LoginRequiredMixin,View):
 
                 })
             else:
-                messages.add_message(request, messages.ERROR,'Su usuario no tiene los permiso de acceso a esta seccion')
+                messages.add_message(request, messages.ERROR,'Su usuario no tiene los permisos de acceso a esta seccion')
                 return HttpResponseRedirect(reverse('usuarios:inicio'))
 
         except Usuario.DoesNotExist:
@@ -4271,8 +4271,8 @@ class CierreFinanciero(LoginRequiredMixin, View):
 
             porcenperdidas = sumestado / anual * 100
 
-            tipousuario = Permisos.objects.filter(usuid=usuario2, TipoPermiso='SUPERADMIN').exists()
-            if tipousuario is False:
+            tipousuario = Permisos.objects.filter(usuid=usuario2, TipoPermiso='ACF').exists()
+            if tipousuario is True:
                 return render(request, self.template_name,{
                     'cierres': periodos,
                     'ingresos': ingresos,
