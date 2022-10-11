@@ -8,7 +8,7 @@ from usuarios.views import Reportepdfpropi, IngresoExterno,ReporteGastos, Listas
 from usuarios.views import ReportePredios,CierreFinanciero, ReportesVarios, ReporteSuspendido, ReportesEstado, ReportesCiclo, ReportesInfoinstal
 from usuarios.views import CambiosMasivos,Facturas, GenerarGasto,ListaCierre, InfoVivienda, GeneradorFacturas,DesactivarUsuarios, AnularFactura, DescargarFactura, DescargaMasivaFacturas
 from usuarios.views import VisualizarVivienda, BuscarSolicitud, Reconexiones, Perfil,ModificarAcueducto, ListaPqrs, RegistroPqr, VerPqr, ListadoPqrs, RespuestaPqrs, PanelAdmin
-from usuarios.views import ReporteCierre,AnularSuspenciones,BancoArchivos, RegistroMedidor, ReporteCobroMatricula,AsignarPermisos,RegistroPoblacion,CambiarContraUsuario, GenerarNovedadDescuento, ListasOrdenes, GeneradorFacturasIndividual
+from usuarios.views import ReporteCierre,AnularSuspenciones,BancoArchivos, RegistroMedidor, ReporteCobroMatricula,AsignarPermisos,RegistroPoblacion,CambiarContraUsuario, ListasOrdenes, GeneradorFacturasIndividual
 
 urlpatterns = [
     url(r'^inicio/', Inicio.as_view(), name='inicio'),
@@ -58,7 +58,6 @@ urlpatterns = [
     url(r'^suspenciones/', Suspenciones.as_view(), name='suspenciones'),
     url(r'^anularfactura/', AnularFactura.as_view(), name='anularfactura'),
     url(r'^respuestapqr/(?P<idsolicitud>\w+)', RespuestaPqrs.as_view(), name='respuestapqr'),
-    url(r'^generarnovedad/(?P<IdVivienda>\w+)', GenerarNovedadDescuento.as_view(), name='generarnovedad'),
     url(r'^listasordenes/', ListasOrdenes.as_view(), name='listasordenes'),
     url(r'^verordensus/(?P<IdOrden>\w+)', VerOrdenSuspencion.as_view(), name='verordensus'),
     url(r'^verordenre/(?P<IdOrden>\w+)', VerOrdenReconexion.as_view(), name='verordenre'),
