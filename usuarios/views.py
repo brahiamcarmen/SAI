@@ -25,12 +25,8 @@ from django.template.loader import get_template
 from django.core.mail import EmailMultiAlternatives
 from usuarios.ConectorPlugin import *
 
-#correos
-from_addr = 'sistemas.acueducto.caimalito@gmail.com'
-to = 'sistemas.acueducto.caimalito@gmail.com'
 # Reemplaza estos valores con tus credenciales de Google Mail
 username = 'sistemas.acueducto.caimalito@gmail.com'
-password = 'Dir/sistemas2021'
 #Tiempos de facturacion
 DIASFACTURACION = 10
 DIASPARASUSPENCION = 15
@@ -2029,47 +2025,46 @@ class VerFactura(LoginRequiredMixin, View):
     imptiquet = ImprimirTiquet
     def get(self, request):
         try:
-            numerofactura = request.GET.get("factura", "")
-            facturasv = Factura.objects.filter(IdFactura=numerofactura, Estado=FV).exists()
-            facturasp = Factura.objects.filter(IdFactura=numerofactura, Estado=FP).exists()
-            facturasa = Factura.objects.filter(IdFactura=numerofactura, Estado=FA).exists()
-            factura = Factura.objects.get(IdFactura=numerofactura)
-            idestado =factura.IdEstadoCuenta
-            estadoscuenta = EstadoCuenta.objects.get(IdEstadoCuenta=idestado.pk)
-            pagos= EstadoCuenta.objects.filter(IdEstadoCuenta=idestado.pk)
-            idvivienda = estadoscuenta.IdVivienda
-            cobromatricula = CobroMatricula.objects.filter(IdVivienda=idvivienda, Estado=ESTCOBRO)
-            vivienda = Vivienda.objects.get(IdVivienda=idvivienda.pk)
-            matricula = vivienda.IdVivienda
-            sector = vivienda.Direccion
-            casa = vivienda.NumeroCasa
-            piso = vivienda.Piso
-            fe = factura.FechaExpe
-            fl = factura.FechaLimite
-            total = factura.Total
-            ciclo = factura.IdCiclo
-            estadofactura = factura.Estado
+            numerofactura = request.GET.get("factura")
             usuario = Usuario.objects.get(usuid=request.user.pk)
             tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AVF').exists()
             if tipousuario is True:
-                return render(request, self.template_name,{
-                    'cobromatricula': cobromatricula,
-                    'estadoscuenta': total,
-                    'factura': numerofactura,
-                    'fe': fe,
-                    'fl': fl,
-                    'total': total,
-                    'estadofactura': estadofactura,
-                    'matricula': matricula,
-                    'casa': casa,
-                    'sector': sector,
-                    'piso': piso,
-                    'pagos':pagos,
-                    'facturasv': facturasv,
-                    'facturasp': facturasp,
-                    'facturasa': facturasa,
-                    'ciclo': ciclo
-                })
+                consulta = Factura.objects.filter(IdFactura=numerofactura).exists()
+                if consulta is True:
+                    factura = Factura.objects.get(IdFactura=numerofactura)
+                    idestado = factura.IdEstadoCuenta
+                    estadoscuenta = EstadoCuenta.objects.get(IdEstadoCuenta=idestado.pk)
+                    pagos = EstadoCuenta.objects.filter(IdEstadoCuenta=idestado.pk)
+                    idvivienda = estadoscuenta.IdVivienda
+                    cobromatricula = CobroMatricula.objects.filter(IdVivienda=idvivienda, Estado=ESTCOBRO)
+                    vivienda = Vivienda.objects.get(IdVivienda=idvivienda.pk)
+                    matricula = vivienda.IdVivienda
+                    sector = vivienda.Direccion
+                    casa = vivienda.NumeroCasa
+                    piso = vivienda.Piso
+                    fe = factura.FechaExpe
+                    fl = factura.FechaLimite
+                    total = factura.Total
+                    ciclo = factura.IdCiclo
+                    estadofactura = factura.Estado
+                    return render(request, self.template_name,{
+                        'cobromatricula': cobromatricula,
+                        'estadoscuenta': total,
+                        'factura': numerofactura,
+                        'fe': fe,
+                        'fl': fl,
+                        'total': total,
+                        'estadofactura': estadofactura,
+                        'matricula': matricula,
+                        'casa': casa,
+                        'sector': sector,
+                        'piso': piso,
+                        'pagos':pagos,
+                        'ciclo': ciclo
+                    })
+                else:
+                    messages.add_message(request, messages.ERROR, 'El numero de factura ingresado no existe')
+                    return HttpResponseRedirect(reverse('usuarios:inicio'))
             else:
                 messages.add_message(request, messages.ERROR,'Su usuario no tiene los permiso de acceso a esta seccion')
                 return HttpResponseRedirect(reverse('usuarios:inicio'))

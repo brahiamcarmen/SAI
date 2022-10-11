@@ -15,9 +15,11 @@ class Login(View):
     def get(self, request):
         nombre = open('static/serial/NombreProyecto.txt', 'r')
         proyectov = nombre.read()
+        nombre2 = open('static/serial/NombreProyectoL.txt', 'r')
+        proyecton = nombre2.read()
         version = open('static/serial/Version.txt', 'r')
         versionp = version.read()
-        return render(request, 'index.html', {'proyecto': proyectov,
+        return render(request, 'index.html', {'proyecto': proyectov,'nombre2':proyecton,
                                               'version': versionp})
     def post(self, request):
         username1 = request.POST.get("username", "")
