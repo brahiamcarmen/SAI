@@ -23,7 +23,7 @@ import qrcode
 from openpyxl.drawing.image import Image
 from django.template.loader import get_template
 from django.core.mail import EmailMultiAlternatives
-from usuarios.ConectorPlugin import *
+from usuarios.ConectorPython import *
 
 # Reemplaza estos valores con tus credenciales de Google Mail
 username = 'sistemas.acueducto.caimalito@gmail.com'
@@ -104,7 +104,6 @@ class Inicio(LoginRequiredMixin, View):
             nombreproyecto = version2.read()
             version3 = open('static/serial/NombreProyectoL.txt', 'r')
             nombreproyectol = version3.read()
-
             datos = Usuario.objects.get(usuid=request.user.pk)
             dr = datos.IdAcueducto
             tipousuario = datos.TipoUsuario
@@ -1957,64 +1956,9 @@ class ImprimirTiquet(LoginRequiredMixin):
 
     def get(self, request, idpago, valorpagar, periododepago, referencia1):
         try:
-            now = datetime.now()
-            dia = now.day
-            mes = now.month
-            anio = now.year
-            hora = now.hour
-            minutos = now.minute
-            segundos = now.second
-            horacompleta = "{}:{}:{}".format(hora, minutos, segundos)
-            fecha = "{}/{}/{}".format(dia, mes, anio)
-            usuario = Usuario.objects.get(usuid=request.user.pk)
-            c = Conector()
-            c.establecerJustificacion(AlineacionCentro)
-            c.establecerTamanioFuente(1, 1)
-            c.establecerEnfatizado(1)
-            c.textoConAcentos("AUECAAC ESP\n")
-            c.textoConAcentos("NIT 900.017.239\n")
-            c.feed(1)
-            c.textoConAcentos("COMPROBANTE DE PAGO\n")
-            c.feed(1)
-            c.establecerEnfatizado(0)
-            c.establecerJustificacion(AlineacionCentro)
-            c.texto("Fecha: ")
-            c.texto(fecha)
-            c.texto("\n")
-            c.texto("Hora: ")
-            c.texto(horacompleta)
-            c.texto("\n")
-            c.texto("Descripcion pago: ")
-            c.texto("Aportes\n")
-            c.feed(1)
-            c.texto("Referencia:\n")
-            c.texto(referencia1)
-            c.texto("\n")
-            c.texto("Periodo de pago:\n")
-            c.texto(periododepago)
-            c.texto("\n")
-            c.texto("Número de transacción:\n")
-            c.texto(idpago)
-            c.texto("\n")
-            c.texto("Estado de pago:\n")
-            c.texto("********EXITOSO*********\n")
-            c.feed(1)
-            c.texto("Valor total:\n")
-            c.texto("$ ")
-            c.texto(valorpagar)
-            c.texto("\n")
-            c.feed(2)
-            c.establecerJustificacion(AlineacionCentro)
-            c.cortar()
-            c.abrirCajon()
-            # Recuerda cambiar por el nombre de tu impresora
-            respuesta = c.imprimirEn("termica3")
-            if respuesta == True:
-                messages.add_message(request, messages.INFO,'El pago registro correctamente, REFERENCIA DE PAGO NO: ' + str(idpago))
-                return HttpResponseRedirect(reverse('usuarios:inicio'))
-            else:
-                messages.add_message(request, messages.INFO,'el pago registro correctamente pero no se pudo imprimir soporte, REFERENCIA DE PAGO NO: ' + str(idpago))
-                return HttpResponseRedirect(reverse('usuarios:inicio'))
+            impresoras = ConectorV3.obtenerImpresoras()
+            print("Las impresoras son:")
+            print(impresoras)
 
         except Usuario.DoesNotExist:
             return render(request, "pages-404.html")
@@ -4589,62 +4533,48 @@ class Consumos(LoginRequiredMixin, View):
 
 class ImprimirSoporteP(LoginRequiredMixin, View):
     login_url = '/'
-    predio = VisualizarVivienda
     def get(self, request, IdPago):
         try:
-            pago = Pagos.objects.get(IdPago=IdPago)
-            fecha = pago.FechaPago
-            valorpago = pago.ValorPago
-            referencia1 = pago.IdVivienda
-            factura1 = pago.IdFactura
-            factura = Factura.objects.get(IdFactura=factura1.pk)
-            periododepago = factura.IdCiclo
-            c = Conector()
-            c.establecerJustificacion(AlineacionCentro)
-            c.establecerTamanioFuente(1, 1)
-            c.establecerEnfatizado(1)
-            c.textoConAcentos("AUECAAC ESP\n")
-            c.textoConAcentos("NIT 900.017.239\n")
-            c.feed(1)
-            c.textoConAcentos("COMPROBANTE DE PAGO\n")
-            c.feed(1)
-            c.establecerEnfatizado(0)
-            c.establecerJustificacion(AlineacionCentro)
-            c.texto("Fecha: ")
-            c.texto(fecha)
-            c.texto("\n")
-            c.texto("Punto de recaudo: ")
-            c.texto("OfiPrin\n")
-            c.feed(1)
-            c.texto("Referencia:\n")
-            c.texto(referencia1)
-            c.texto("\n")
-            c.texto("Periodo de pago:\n")
-            c.texto(periododepago)
-            c.texto("\n")
-            c.texto("Número de transacción:\n")
-            c.texto(IdPago)
-            c.texto("\n")
-            c.texto("Estado de pago:\n")
-            c.texto("********EXITOSO*********\n")
-            c.feed(1)
-            c.texto("Valor total:\n")
-            c.texto("$ ")
-            c.texto(valorpago)
-            c.texto("\n")
-            c.feed(1)
-            c.establecerJustificacion(AlineacionCentro)
-            c.cortar()
-            c.abrirCajon()
-            # Recuerda cambiar por el nombre de tu impresora
-            respuesta = c.imprimirEn("termica3")
+            pago = Pagos.objects.filter(IdPago=IdPago).exists()
+            impresoras = ConectorV3.obtenerImpresoras()
+            nombreImpresora = "termica3"  # Nota: esta impresora debe existir y estar compartida como se indica en https://parzibyte.me/blog/2017/12/11/instalar-impresora-termica-generica/
+
+            conector = ConectorV3()
+            conector.Iniciar()
+            conector.DeshabilitarElModoDeCaracteresChinos()
+            conector.EstablecerAlineacion(ALINEACION_CENTRO)
+            conector.TextoSegunPaginaDeCodigos(2, "cp850", "¡AUECAAC ESP!\n")
+            conector.EscribirTexto("NIT 900.017.239-2\n")
+            conector.EstablecerEnfatizado(True)
+            conector.EscribirTexto("COMPROBANTE DE PAGO\n")
+            conector.EstablecerEnfatizado(False)
+            conector.Feed(1)
+            conector.EscribirTexto("Fecha:")
+            conector.EscribirTexto("20/10/2022\n")
+            conector.EscribirTexto("Hora:")
+            conector.EscribirTexto("23:05\n")
+            conector.Feed(1)
+            conector.EscribirTexto("Referencia:\n")
+            conector.EscribirTexto("PNV002 - Sector no 3\n")
+            conector.EscribirTexto("Ultimo periodo pagado:\n")
+            conector.EscribirTexto("Septiembre\n")
+            conector.EscribirTexto("Numero de transaccion:\n")
+            conector.EscribirTexto("8500\n")
+            conector.Feed(1)
+            conector.EscribirTexto("Aportes:")
+            conector.EscribirTexto("$8.000\n")
+            conector.EscribirTexto("_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n")
+            conector.EscribirTexto("TOTAL A PAGAR: $8.000\n")
+            conector.EscribirTexto("_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n")
+            conector.EstablecerAlineacion(ALINEACION_CENTRO)
+            conector.Corte(1)
+            conector.Pulso(48, 60, 120)
+            respuesta = conector.imprimirEn(nombreImpresora)
             if respuesta == True:
-                IdVivienda = pago.IdVivienda
-                ver = self.predio()
-                ejecutar = ver.get(request, IdVivienda)
-                return ejecutar
+                messages.add_message(request, messages.INFO, 'impreso correctamente')
+                return HttpResponseRedirect(reverse('usuarios:inicio'))
             else:
-                messages.add_message(request, messages.INFO,'No se pudo imprimri correctamente el soporte')
+                messages.add_message(request, messages.ERROR, respuesta)
                 return HttpResponseRedirect(reverse('usuarios:inicio'))
 
         except Usuario.DoesNotExist:
@@ -4838,46 +4768,7 @@ class ImprimirSoRyS(LoginRequiredMixin, View):
             fecha = orden.FechaPago
             valorpago = orden.Valor
             referencia1 = orden.IdVivienda
-
-            c = Conector()
-            c.establecerJustificacion(AlineacionCentro)
-            c.establecerTamanioFuente(1, 1)
-            c.establecerEnfatizado(1)
-            c.textoConAcentos("AUECAAC ESP\n")
-            c.textoConAcentos("NIT 900.017.239\n")
-            c.feed(1)
-            c.textoConAcentos("COMPROBANTE DE PAGO\n")
-            c.feed(1)
-            c.establecerEnfatizado(0)
-            c.establecerJustificacion(AlineacionCentro)
-            c.texto("Fecha: ")
-            c.texto(fecha)
-            c.texto("\n")
-            c.texto("Punto de recaudo: ")
-            c.texto("OfiPrin\n")
-            c.feed(1)
-            c.texto("Referencia:\n")
-            c.texto(referencia1)
-            c.texto("\n")
-            c.texto("Orden de pago:\n")
-            c.texto(tipoorden)
-            c.texto("\n")
-            c.texto("Número de transacción:\n")
-            c.texto(IdOrden)
-            c.texto("\n")
-            c.texto("Estado de pago:\n")
-            c.texto("********EXITOSO*********\n")
-            c.feed(1)
-            c.texto("Valor total:\n")
-            c.texto("$ ")
-            c.texto(valorpago)
-            c.texto("\n")
-            c.feed(1)
-            c.establecerJustificacion(AlineacionCentro)
-            c.cortar()
-            c.abrirCajon()
-            # Recuerda cambiar por el nombre de tu impresora
-            respuesta = c.imprimirEn("acueductocaimalito")
+            respuesta = True
             if respuesta == True:
                 messages.add_message(request, messages.INFO, 'El pago registro correctamente')
                 return HttpResponseRedirect(reverse('usuarios:inicio'))

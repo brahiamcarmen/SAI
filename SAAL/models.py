@@ -128,10 +128,6 @@ DOC_CHOICES6= (
     ('3', _(u"Ciclo Barrio nuevo")),
     ('4', _(u"Ciclo caimalito via principal")),
     ('5', _(u"Ciclo 20 julio")),
-    ('6', _(u"Ciclo la loma")),
-    ('7', _(u"Ciclo caimalito 2 via principal")),
-    ('8', _(u"Ciclo via nacional")),
-    ('9', _(u"Conexion planta de tratamiento")),
 )
 
 DOC_CHOICES7= (
