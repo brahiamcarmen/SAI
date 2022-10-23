@@ -131,32 +131,7 @@ class Inicio(LoginRequiredMixin, View):
                             })
         except Acueducto.DoesNotExist:
             return render(request, "pages-404.html")
-    def post(self, request):
-        try:
-            facturas = Factura.objects.filter(Estado='Emitida')
-            cont = 0
-            for i in facturas:
-                idfactura = i.IdFactura
-                consul = Pagos.objects.filter(IdFactura=idfactura).exists()
-                if consul is True:
-                    pago = Pagos.objects.get(IdFactura=idfactura)
-                    idvivienda = pago.IdVivienda.pk
-                    estadocuenta = EstadoCuenta.objects.get(IdVivienda=idvivienda)
-                    factura = Factura.objects.get(IdFactura=idfactura)
-                    factura.IdEstadoCuenta = str(estadocuenta.pk)
-                    factura.save()
-                    cont +=1
 
-            if cont >=1:
-                messages.add_message(request, messages.INFO,cont)
-                return HttpResponseRedirect(reverse('usuarios:inicio'))
-
-            else:
-                messages.add_message(request, messages.ERROR, 'Error')
-                return HttpResponseRedirect(reverse('usuarios:inicio'))
-
-        except Pagos.DoesNotExist:
-            return render(request, "pages-404.html")
 class ListaViviendas(LoginRequiredMixin, View):
     login_url = '/'
     template_name = 'usuarios/listaviviendas.html'
@@ -4560,10 +4535,21 @@ class ImprimirSoporteP(LoginRequiredMixin, View):
     login_url = '/'
     def get(self, request, IdPago):
         try:
-            pago = Pagos.objects.filter(IdPago=IdPago).exists()
-            impresoras = ConectorV3.obtenerImpresoras()
-            nombreImpresora = "termica3"  # Nota: esta impresora debe existir y estar compartida como se indica en https://parzibyte.me/blog/2017/12/11/instalar-impresora-termica-generica/
-
+            #pago
+            usuario = Usuario.objects.get(usuid=request.user.pk)
+            telefono = str(usuario.IdAcueducto.Telefono)
+            pago = Pagos.objects.get(IdPago=IdPago)
+            idfactura = pago.IdFactura
+            idpago = str(pago.IdPago)
+            fecha1 = pago.FechaPago
+            fecha = str(fecha1.year) +'-'+ str(fecha1.month) +'-'+ str(fecha1.day) +' '+ str(fecha1.hour)+':'+ str(fecha1.minute)
+            #factura
+            factura = Factura.objects.get(IdFactura=idfactura.pk)
+            idfac = str(factura.IdFactura)
+            periodo = factura.IdCiclo.Nombre
+            referencia = str(factura.referencia)
+            #Impresora
+            nombreImpresora = "termica3"
             conector = ConectorV3()
             conector.Iniciar()
             conector.DeshabilitarElModoDeCaracteresChinos()
@@ -4574,23 +4560,36 @@ class ImprimirSoporteP(LoginRequiredMixin, View):
             conector.EscribirTexto("COMPROBANTE DE PAGO\n")
             conector.EstablecerEnfatizado(False)
             conector.Feed(1)
-            conector.EscribirTexto("Fecha:")
-            conector.EscribirTexto("20/10/2022\n")
-            conector.EscribirTexto("Hora:")
-            conector.EscribirTexto("23:05\n")
+            conector.EstablecerAlineacion(ALINEACION_IZQUIERDA)
+            conector.EscribirTexto("Numero de transaccion: ")
+            conector.EscribirTexto(idpago+"\n")
+            conector.EscribirTexto("Numero de factura: ")
+            conector.EscribirTexto(idfac + "\n")
+            conector.EscribirTexto("Fecha de pago: ")
+            conector.EscribirTexto(fecha+"\n")
+            conector.EscribirTexto("Punto de pago: Oficina principal\n")
+            conector.EscribirTexto("Whatsapp: "+ telefono +"\n")
+            conector.EscribirTexto("Periodo de pago: " + periodo +"\n")
+            conector.EscribirTexto("Referencia: \n")
+            conector.EscribirTexto(referencia + "\n")
             conector.Feed(1)
-            conector.EscribirTexto("Referencia:\n")
-            conector.EscribirTexto("PNV002 - Sector no 3\n")
-            conector.EscribirTexto("Ultimo periodo pagado:\n")
-            conector.EscribirTexto("Septiembre\n")
-            conector.EscribirTexto("Numero de transaccion:\n")
-            conector.EscribirTexto("8500\n")
-            conector.Feed(1)
-            conector.EscribirTexto("Aportes:")
+            conector.EscribirTexto("Estado de cuenta antes de este pago:")
             conector.EscribirTexto("$8.000\n")
+            conector.EscribirTexto("Resta: ")
+            conector.EscribirTexto("$8.000\n")
+            conector.EstablecerAlineacion(ALINEACION_CENTRO)
             conector.EscribirTexto("_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n")
-            conector.EscribirTexto("TOTAL A PAGAR: $8.000\n")
+            conector.EstablecerEnfatizado(True)
+            conector.EscribirTexto("Valor pagado: ")
+            conector.EstablecerEnfatizado(False)
+            conector.EscribirTexto("$ 8.000\n")
             conector.EscribirTexto("_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n")
+            conector.EstablecerEnfatizado(True)
+            conector.EscribirTexto("Para cualquier acto de reclamacion, debera presentar este soporte de pago\n")
+            conector.EstablecerEnfatizado(False)
+            conector.Feed(1)
+            conector.EscribirTexto("_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n")
+            conector.Feed(1)
             conector.EstablecerAlineacion(ALINEACION_CENTRO)
             conector.Corte(1)
             conector.Pulso(48, 60, 120)
@@ -4601,7 +4600,6 @@ class ImprimirSoporteP(LoginRequiredMixin, View):
             else:
                 messages.add_message(request, messages.ERROR, respuesta)
                 return HttpResponseRedirect(reverse('usuarios:inicio'))
-
         except Usuario.DoesNotExist:
             return render(request, "pages-404.html")
 

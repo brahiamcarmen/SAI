@@ -228,7 +228,7 @@ class Factura(models.Model):
     Estado = models.CharField(max_length=100, null=False)
     #suscriptor/predio
     referencia = models.CharField(max_length=100, null=True)
-    IdEstadoCuenta = models.CharField(max_length=100, null=True)
+    IdEstadoCuenta = models.ForeignKey(EstadoCuenta, on_delete=models.CASCADE)
     nombretitular = models.CharField(max_length=100, null=True)
     ciclo = models.CharField(max_length=100, null=True)
     Estrato = models.CharField(max_length=100, null=True)
@@ -511,6 +511,7 @@ class Pagos(models.Model):
     ValorPago = models.CharField(max_length=10, null=False)
     Efectivo = models.CharField(max_length=10, null=False)
     Devuelta = models.CharField(max_length=10, null=False)
+    resta = models.CharField(max_length=10, null=True)
     IdUsuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     IdVivienda = models.ForeignKey(Vivienda, on_delete=models.CASCADE)
 
