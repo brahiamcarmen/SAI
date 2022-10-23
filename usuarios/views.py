@@ -131,7 +131,32 @@ class Inicio(LoginRequiredMixin, View):
                             })
         except Acueducto.DoesNotExist:
             return render(request, "pages-404.html")
+    def post(self, request):
+        try:
+            facturas = Factura.objects.filter(Estado='Emitida')
+            cont = 0
+            for i in facturas:
+                idfactura = i.IdFactura
+                consul = Pagos.objects.filter(IdFactura=idfactura).exists()
+                if consul is True:
+                    pago = Pagos.objects.get(IdFactura=idfactura)
+                    idvivienda = pago.IdVivienda.pk
+                    estadocuenta = EstadoCuenta.objects.get(IdVivienda=idvivienda)
+                    factura = Factura.objects.get(IdFactura=idfactura)
+                    factura.IdEstadoCuenta = str(estadocuenta.pk)
+                    factura.save()
+                    cont +=1
 
+            if cont >=1:
+                messages.add_message(request, messages.INFO,cont)
+                return HttpResponseRedirect(reverse('usuarios:inicio'))
+
+            else:
+                messages.add_message(request, messages.ERROR, 'Error')
+                return HttpResponseRedirect(reverse('usuarios:inicio'))
+
+        except Pagos.DoesNotExist:
+            return render(request, "pages-404.html")
 class ListaViviendas(LoginRequiredMixin, View):
     login_url = '/'
     template_name = 'usuarios/listaviviendas.html'
