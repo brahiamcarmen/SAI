@@ -227,38 +227,21 @@ class Factura(models.Model):
     Matricula = models.CharField(max_length=100, null=True)
     Estado = models.CharField(max_length=100, null=False)
     #suscriptor/predio
-    referencia = models.CharField(max_length=100, null=True)
     IdEstadoCuenta = models.ForeignKey(EstadoCuenta, on_delete=models.CASCADE)
-    nombretitular = models.CharField(max_length=100, null=True)
-    ciclo = models.CharField(max_length=100, null=True)
-    Estrato = models.CharField(max_length=100, null=True)
-    direccion = models.CharField(max_length=100, null=True)
-    casa = models.CharField(max_length=10, null=True)
-    piso = models.CharField(max_length=10, null=True)
     direccionentrega = models.CharField(max_length=100, null=True)
-    estadoservicio = models.CharField(max_length=100, null=True)
-    tiposerivio = models.CharField(max_length=50, null=True)
     periodofacturado = models.CharField(max_length=50, null=True)
 
     #concepto de acueducto
     aporteporconsumo = models.CharField(max_length=100, null=True)
-    conceptomatricula = models.CharField(max_length=100, null=True)
-    cuotasmatricula = models.CharField(max_length=100, null=True)
+    cuotamatricula = models.CharField(max_length=100, null=True)
     reconexion = models.CharField(max_length=100, null=True)
     suspencion = models.CharField(max_length=100, null=True)
     TotalConsumo = models.CharField(max_length=100, null=True)
 
-    #ultimo pago
-    referencias = models.CharField(max_length=100, null=True)
-    fecha = models.DateTimeField(null=True)
-    valor = models.CharField(max_length=100, null=True)
-
     #facturas vencidad
     facturasvencidas = models.CharField(max_length=100, null=True)
-
-    FechaExpe = models.DateTimeField(auto_now=True)
+    FechaExpe = models.DateTimeField(auto_now_add=True)
     FechaLimite = models.DateTimeField(null=True)
-    Fechasuspencion = models.DateTimeField(null=True)
     IdCiclo = models.ForeignKey(Ciclo, on_delete=models.CASCADE)
 
     OtrosCobros = models.CharField(max_length=100, null=False)

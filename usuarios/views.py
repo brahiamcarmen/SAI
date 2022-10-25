@@ -1963,119 +1963,6 @@ class ImprimirTiquet(LoginRequiredMixin):
         except Usuario.DoesNotExist:
             return render(request, "pages-404.html")
 
-class VerFactura(LoginRequiredMixin, View):
-    login_url = '/'
-    template_name = 'usuarios/verfactura.html'
-    imptiquet = ImprimirTiquet
-    def get(self, request):
-        try:
-            numerofactura = request.GET.get("factura")
-            usuario = Usuario.objects.get(usuid=request.user.pk)
-            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AVF').exists()
-            if tipousuario is True:
-                consulta = Factura.objects.filter(IdFactura=numerofactura).exists()
-                if consulta is True:
-                    factura = Factura.objects.get(IdFactura=numerofactura)
-                    idestado = factura.IdEstadoCuenta
-                    estadoscuenta = EstadoCuenta.objects.get(IdEstadoCuenta=idestado.pk)
-                    pagos = EstadoCuenta.objects.filter(IdEstadoCuenta=idestado.pk)
-                    idvivienda = estadoscuenta.IdVivienda
-                    cobromatricula = CobroMatricula.objects.filter(IdVivienda=idvivienda, Estado=ESTCOBRO)
-                    vivienda = Vivienda.objects.get(IdVivienda=idvivienda.pk)
-                    matricula = vivienda.IdVivienda
-                    sector = vivienda.Direccion
-                    casa = vivienda.NumeroCasa
-                    piso = vivienda.Piso
-                    fe = factura.FechaExpe
-                    fl = factura.FechaLimite
-                    total = factura.Total
-                    ciclo = factura.IdCiclo
-                    estadofactura = factura.Estado
-                    return render(request, self.template_name,{
-                        'cobromatricula': cobromatricula,
-                        'estadoscuenta': total,
-                        'factura': numerofactura,
-                        'fe': fe,
-                        'fl': fl,
-                        'total': total,
-                        'estadofactura': estadofactura,
-                        'matricula': matricula,
-                        'casa': casa,
-                        'sector': sector,
-                        'piso': piso,
-                        'pagos':pagos,
-                        'ciclo': ciclo
-                    })
-                else:
-                    messages.add_message(request, messages.ERROR, 'El numero de factura ingresado no existe')
-                    return HttpResponseRedirect(reverse('usuarios:inicio'))
-            else:
-                messages.add_message(request, messages.ERROR,'Su usuario no tiene los permiso de acceso a esta seccion')
-                return HttpResponseRedirect(reverse('usuarios:inicio'))
-
-        except Factura.DoesNotExist:
-            return render(request, "pages-404.html")
-
-    def post(self, request):
-        try:
-            usuario = Usuario.objects.get(usuid=request.user.pk)
-            numerofactura = request.POST.get("factura", "")
-            valorpagar = request.POST.get("valorp", "")
-            efectivo = request.POST.get("efectivo", "")
-            factura = Factura.objects.get(IdFactura=numerofactura)
-            idestado = factura.IdEstadoCuenta
-            estado = EstadoCuenta.objects.get(IdEstadoCuenta=idestado.pk)
-            idvivienda = estado.IdVivienda
-            descripcion = 'Consumo'
-            format = "%Y"
-            s = (datetime.today())
-            ano = s.strftime(format)
-            resta = int(estado.Valor) - int(valorpagar)
-            devuelta = int(efectivo) - int(valorpagar)
-            s = (datetime.today())
-            l = s + timedelta(days=2)
-            fecha = l
-            if int(valorpagar) >= 2000:
-                pago = Pagos(IdFactura=factura, Ano=ano, ValorPago=valorpagar,Descripcion=descripcion, Efectivo=efectivo, Devuelta=devuelta,
-                                 IdUsuario=usuario, IdVivienda=idvivienda)
-                pago.save()
-                idpago = pago.IdPago
-                estadoscu = EstadoCuenta.objects.get(IdEstadoCuenta=idestado.pk)
-                estadoscu.Valor = resta
-                estadoscu.save()
-                cambiofactura = Factura.objects.get(IdFactura=numerofactura)
-                cambiofactura.Estado = FP
-                cambiofactura.save()
-                periododepago = cambiofactura.IdCiclo
-                referencia1 = estado.IdVivienda
-                #tiquet2 = self.imptiquet()
-                #ejecutar = tiquet2.get(request, idpago, valorpagar, periododepago, referencia1)
-                verifisus = OrdenesSuspencion.objects.filter(IdEstadoCuenta=estadoscu, Estado=SP).count()
-                if verifisus >= 1:
-                    suspencion = OrdenesSuspencion.objects.get(IdEstadoCuenta=estadoscu, Estado=SP)
-                    suspencion.Estado = SA
-                    suspencion.FechaEjecucion = s
-                    suspencion.UsuarioEjecuta = 'Sistema'
-                    suspencion.save()
-
-                else:
-                    estadoscuenta = EstadoCuenta.objects.filter(IdEstadoCuenta=idestado.pk, Estado=E2).exists()
-                    valor = 'abono'
-                    if estadoscuenta is True:
-                        orden = OrdenesReconexion(Deuda=valor, FechaEjecucion=fecha, Generado='auto', Estado=SP,
-                                                      UsuarioEjecuta='Font', IdEstadoCuenta=estadoscu)
-                        orden.save()
-
-                messages.add_message(request, messages.INFO, 'Se registro el pago correctamente')
-                return HttpResponseRedirect(reverse('usuarios:inicio'))
-
-            else:
-                messages.add_message(request, messages.INFO, 'el valor a pagar debe ser superior a $7000')
-                return HttpResponseRedirect(reverse('usuarios:inicio'))
-
-        except Factura.DoesNotExist:
-            return render(request, "pages-404.html")
-
 class RegistroPqr(LoginRequiredMixin, View):
     login_url = '/'
     template_name = 'usuarios/registropqrs.html'
@@ -4543,11 +4430,14 @@ class ImprimirSoporteP(LoginRequiredMixin, View):
             idpago = str(pago.IdPago)
             fecha1 = pago.FechaPago
             fecha = str(fecha1.year) +'-'+ str(fecha1.month) +'-'+ str(fecha1.day) +' '+ str(fecha1.hour)+':'+ str(fecha1.minute)
+            valorpago = str(pago.ValorPago)
+            resta = str(pago.resta)
             #factura
             factura = Factura.objects.get(IdFactura=idfactura.pk)
             idfac = str(factura.IdFactura)
             periodo = factura.IdCiclo.Nombre
-            referencia = str(factura.referencia)
+            referencia = str(factura.Matricula)
+            totalfactura = str(factura.Total)
             #Impresora
             nombreImpresora = "termica3"
             conector = ConectorV3()
@@ -4573,16 +4463,17 @@ class ImprimirSoporteP(LoginRequiredMixin, View):
             conector.EscribirTexto("Referencia: \n")
             conector.EscribirTexto(referencia + "\n")
             conector.Feed(1)
-            conector.EscribirTexto("Estado de cuenta antes de este pago:")
-            conector.EscribirTexto("$8.000\n")
+            conector.EscribirTexto("Estado de cuenta antes de este \n")
+            conector.EscribirTexto("pago: ")
+            conector.EscribirTexto("$ "+totalfactura+"\n")
             conector.EscribirTexto("Resta: ")
-            conector.EscribirTexto("$8.000\n")
+            conector.EscribirTexto("$ "+ resta+ "\n")
             conector.EstablecerAlineacion(ALINEACION_CENTRO)
             conector.EscribirTexto("_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n")
             conector.EstablecerEnfatizado(True)
             conector.EscribirTexto("Valor pagado: ")
             conector.EstablecerEnfatizado(False)
-            conector.EscribirTexto("$ 8.000\n")
+            conector.EscribirTexto("$ "+ valorpago+ "\n")
             conector.EscribirTexto("_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n")
             conector.EstablecerEnfatizado(True)
             conector.EscribirTexto("Para cualquier acto de reclamacion, debera presentar este soporte de pago\n")
@@ -4902,4 +4793,114 @@ class CobroRecargo(LoginRequiredMixin, View):
             return HttpResponseRedirect(reverse('usuarios:facturacion'))
 
         except Usuario.DoesNotExist:
+            return render(request, "pages-404.html")
+
+class VerFactura(LoginRequiredMixin, View):
+    login_url = '/'
+    template_name = 'usuarios/verfactura.html'
+    imptiquet = ImprimirSoporteP
+    def get(self, request):
+        try:
+            numerofactura = request.GET.get("factura")
+            usuario = Usuario.objects.get(usuid=request.user.pk)
+            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AVF').exists()
+            if tipousuario is True:
+                consulta = Factura.objects.filter(IdFactura=numerofactura).exists()
+                if consulta is True:
+                    factura = Factura.objects.get(IdFactura=numerofactura)
+                    idestado = factura.IdEstadoCuenta
+                    estadoscuenta = EstadoCuenta.objects.get(IdEstadoCuenta=idestado.pk)
+                    pagos = EstadoCuenta.objects.filter(IdEstadoCuenta=idestado.pk)
+                    idvivienda = estadoscuenta.IdVivienda
+                    cobromatricula = CobroMatricula.objects.filter(IdVivienda=idvivienda, Estado=ESTCOBRO)
+                    vivienda = Vivienda.objects.get(IdVivienda=idvivienda.pk)
+                    matricula = vivienda.IdVivienda
+                    sector = vivienda.Direccion
+                    casa = vivienda.NumeroCasa
+                    piso = vivienda.Piso
+                    fe = factura.FechaExpe
+                    fl = factura.FechaLimite
+                    total = factura.Total
+                    ciclo = factura.IdCiclo
+                    estadofactura = factura.Estado
+                    return render(request, self.template_name,{
+                        'cobromatricula': cobromatricula,
+                        'estadoscuenta': total,
+                        'factura': numerofactura,
+                        'fe': fe,
+                        'fl': fl,
+                        'total': total,
+                        'estadofactura': estadofactura,
+                        'matricula': matricula,
+                        'casa': casa,
+                        'sector': sector,
+                        'piso': piso,
+                        'pagos':pagos,
+                        'ciclo': ciclo
+                    })
+                else:
+                    messages.add_message(request, messages.ERROR, 'El numero de factura ingresado no existe')
+                    return HttpResponseRedirect(reverse('usuarios:inicio'))
+            else:
+                messages.add_message(request, messages.ERROR,'Su usuario no tiene los permiso de acceso a esta seccion')
+                return HttpResponseRedirect(reverse('usuarios:inicio'))
+
+        except Factura.DoesNotExist:
+            return render(request, "pages-404.html")
+
+    def post(self, request):
+        try:
+            usuario = Usuario.objects.get(usuid=request.user.pk)
+            numerofactura = request.POST.get("factura", "")
+            valorpagar = request.POST.get("valorp", "")
+            efectivo = request.POST.get("efectivo", "")
+            factura = Factura.objects.get(IdFactura=numerofactura)
+            idestado = factura.IdEstadoCuenta
+            estado = EstadoCuenta.objects.get(IdEstadoCuenta=idestado.pk)
+            idvivienda = estado.IdVivienda
+            descripcion = 'Consumo'
+            format = "%Y"
+            s = (datetime.today())
+            ano = s.strftime(format)
+            resta = int(estado.Valor) - int(valorpagar)
+            devuelta = int(efectivo) - int(valorpagar)
+            s = (datetime.today())
+            l = s + timedelta(days=2)
+            fecha = l
+            if int(valorpagar) >= 2000:
+                pago = Pagos(IdFactura=factura, Ano=ano, ValorPago=valorpagar,Descripcion=descripcion, Efectivo=efectivo, Devuelta=devuelta,
+                                 IdUsuario=usuario, IdVivienda=idvivienda, resta=resta)
+                pago.save()
+                idpago = pago.IdPago
+                estadoscu = EstadoCuenta.objects.get(IdEstadoCuenta=idestado.pk)
+                estadoscu.Valor = resta
+                estadoscu.save()
+                cambiofactura = Factura.objects.get(IdFactura=numerofactura)
+                cambiofactura.Estado = FP
+                cambiofactura.save()
+                periododepago = cambiofactura.IdCiclo
+                referencia1 = estado.IdVivienda
+                verifisus = OrdenesSuspencion.objects.filter(IdEstadoCuenta=estadoscu, Estado=SP).count()
+                if verifisus >= 1:
+                    suspencion = OrdenesSuspencion.objects.get(IdEstadoCuenta=estadoscu, Estado=SP)
+                    suspencion.Estado = SA
+                    suspencion.FechaEjecucion = s
+                    suspencion.UsuarioEjecuta = 'Sistema'
+                    suspencion.save()
+
+                else:
+                    estadoscuenta = EstadoCuenta.objects.filter(IdEstadoCuenta=idestado.pk, Estado=E2).exists()
+                    valor = 'abono'
+                    if estadoscuenta is True:
+                        orden = OrdenesReconexion(Deuda=valor, FechaEjecucion=fecha, Generado='auto', Estado=SP,
+                                                      UsuarioEjecuta='Font', IdEstadoCuenta=estadoscu)
+                        orden.save()
+                tiquet2 = self.imptiquet()
+                ejecutar = tiquet2.get(request, idpago)
+                return ejecutar
+            else:
+                messages.add_message(request, messages.INFO, 'el valor a pagar debe ser superior a $7000')
+                return HttpResponseRedirect(reverse('usuarios:inicio'))
+
+        except Factura.DoesNotExist:
             return render(request, "pages-404.html")
