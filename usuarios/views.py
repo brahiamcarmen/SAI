@@ -2255,7 +2255,7 @@ class GeneradorFacturas(LoginRequiredMixin, View):
            #consulta de existencias
            usuario = Usuario.objects.get(usuid=request.user.pk)
            estadoscuenta = EstadoCuenta.objects.filter(Estado='Operativo').count()
-           facturas = Factura.objects.filter(Estado=FE).count()
+           facturas = Factura.objects.filter(Estado=FE).exists()
            #fechas
            fechaexp = (datetime.today())
            ciclo = fechaexp.month
@@ -2265,82 +2265,55 @@ class GeneradorFacturas(LoginRequiredMixin, View):
            estadosoperativos = EstadoCuenta.objects.filter(Estado='Operativo')|EstadoCuenta.objects.filter(Estado='Mantenimiento')|EstadoCuenta.objects.filter(Estado='Suspendido')
            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='GF').exists()
            if tipousuario is True:
-               if facturas >=1:
-                   messages.add_message(request, messages.ERROR, 'No se puede generar facturas verifique nuevamente')
+               if facturas is False:
+                   contador = 0
+                   for i in estadosoperativos:
+                       # consultaestadocuenta
+                       estadoc = EstadoCuenta.objects.get(IdEstadoCuenta=i.pk)
+                       consumo = estadoc.Valor
+                       idestadocuenta = estadoc.IdEstadoCuenta
+                       # consulta cobro suspencion
+                       ordensuspencion = CobroOrdenes.objects.filter(IdEstadoCuenta=idestadocuenta, Estado='Pendiente',TipoOrden='Cobro por suspencion')
+                       valorsuspencion = 0
+                       for i in ordensuspencion:
+                           valor = i.Valor
+                           valorsuspencion += int(valor)
+                       # consulta cobro rexonecion
+                       cobroreconexion = CobroOrdenes.objects.filter(IdEstadoCuenta=idestadocuenta, Estado=ESTADO1, TipoOrden='Cobro por reconexión')
+                       valorreconexion = 0
+                       for i in cobroreconexion:
+                           valor = i.Valor
+                           valorreconexion += int(valor)
+                       #consulta cuota matricula
+                       idvivienda = estadoc.IdVivienda
+                       verificacion = CobroMatricula.objects.filter(IdVivienda=idvivienda, Estado='Pendiente')
+                       cuotamatricula = 0
+                       for i in verificacion:
+                           valor = i.Cuota
+                           cuotamatricula += int(valor)
+
+                       # consulta facturas vencidas
+                       consumo1 = estadoc.Valor
+                       vencidas = -1
+                       for i in range(1, consumo1, TARIFA):
+                           if i != consumo:
+                               vencidas += 1
+
+                       #total valor factura
+                       totalfactura = int(cuotamatricula) + int(valorreconexion) + int(valorsuspencion) + int(consumo)
+                       factura = Factura(Matricula=idvivienda,Estado='Emitida',IdEstadoCuenta=estadoc,periodofacturado=mes,aporteporconsumo=consumo,
+                                         cuotamatricula=cuotamatricula,reconexion=valorreconexion,suspencion=valorsuspencion, TotalConsumo=consumo,
+                                         facturasvencidas=vencidas,FechaExpe=fechaexp,FechaLimite=fechalimite, IdCiclo=ciclo,Total=totalfactura)
+                       factura.save()
+                       contador +=1
+
+                   messages.add_message(request, messages.INFO, 'Se generaron'+ str(contador) + 'facturas')
                    return HttpResponseRedirect(reverse('usuarios:generadorfacturas'))
 
                else:
-                   if estadoscuenta >=1:
-                       for i in estadosoperativos:
-                           estadoc = EstadoCuenta.objects.get(IdEstadoCuenta=i.pk)
-                           consumo = estadoc.Valor
-                           idestadocuenta = estadoc.IdEstadoCuenta
+                   messages.add_message(request, messages.ERROR, 'No se puede generar facturas verifique nuevamente')
+                   return HttpResponseRedirect(reverse('usuarios:generadorfacturas'))
 
-                           #consulta orden suspencion
-                           cobrosuspencion2 = CobroOrdenes.objects.filter(IdEstadoCuenta=idestadocuenta, Estado=ESTADO1,TipoOrden='Cobro por suspencion')
-                           pos1 = 0
-                           for i in cobrosuspencion2:
-                               valor = i.Valor
-                               pos1 += int(valor)
-
-                           #consulta orden rexonecion
-                           cobroreconexiones2 = CobroOrdenes.objects.filter(IdEstadoCuenta=idestadocuenta, Estado=ESTADO1,TipoOrden='Cobro por reconexión')
-                           pos2 = 0
-                           for i in cobroreconexiones2:
-                               valor = i.Valor
-                               pos2 += int(valor)
-
-                           #consulta matricula
-                           idvivienda = estadoc.IdVivienda
-                           conceptoma = CobroMatricula.objects.get(IdVivienda=idvivienda.pk)
-                           pendientematricula = conceptoma.IdValor.Valor
-                           cuotaspendiente = conceptoma.CuotasPendientes
-                           verificacion = CobroMatricula.objects.filter(IdVivienda=idvivienda, Estado='Pendiente')
-                           cuotamatricula = 0
-                           for i in verificacion:
-                               valor = i.Cuota
-                               cuotamatricula += int(valor)
-
-                           #consulta vivienda
-                           vivienda = Vivienda.objects.get(IdVivienda=idvivienda.pk)
-                           propietario = str(vivienda.IdPropietario.Nombres +' '+ vivienda.IdPropietario.Apellidos)
-                           estrato = vivienda.Estrato
-                           direccion = vivienda.Direccion
-                           casa = vivienda.NumeroCasa
-                           piso = vivienda.Piso
-                           conectado = vivienda.Ciclo
-                           estadoservicio = vivienda.EstadoServicio
-                           tiposervicio = vivienda.TipoInstalacion
-                           #consulta facturas vencidas
-                           consumo1 = estadoc.Valor
-                           vencidas = -1
-                           for i in range(1, consumo1, TARIFA):
-                               if i != consumo:
-                                   vencidas += 1
-
-                           #ultimo pago
-                           autorizacion = 1
-                           if autorizacion >= 1:
-                               final = int(consumo) + int(pos1) + int(pos2) + int(cuotamatricula)
-                               factura = Factura(Matricula=idvivienda,Estado=EF,
-                                                 referencia=idestadocuenta,nombretitular=propietario, ciclo=conectado,periodofacturado=mes,Estrato=estrato,direccion=direccion,casa=casa,
-                                                 piso=piso,estadoservicio=estadoservicio,tiposerivio=tiposervicio, aporteporconsumo=consumo,conceptomatricula=cuotamatricula,
-                                                 cuotasmatricula=cuotaspendiente, reconexion=pos2,suspencion=pos1, facturasvencidas=vencidas,
-                                                 FechaExpe=fechaexp, FechaLimite=fechalimite, Total=final,
-                                                 IdCiclo=ciclos,
-                                                 IdEstadoCuenta=estadoc, TotalConsumo=consumo, OtrosCobros=0)
-                               factura.save()
-                           else:
-                               factura = Factura(Estado=EF, FechaExpe=fechaexp, FechaLimite=fechalimite, Total=consumo,
-                                                 IdCiclo=ciclos,
-                                                 IdEstadoCuenta=estadoc,TotalConsumo=consumo, OtrosCobros=0)
-                               factura.save()
-
-                       messages.add_message(request, messages.INFO, 'Se generaron las facturas correspondientes')
-                       return HttpResponseRedirect(reverse('usuarios:generadorfacturas'))
-                   else:
-                       messages.add_message(request, messages.ERROR, 'No hay estados de cuenta disponibles para generar facturacion')
-                       return HttpResponseRedirect(reverse('usuarios:generadorfacturas'))
            else:
                messages.add_message(request, messages.ERROR, 'Su usuario no tiene los permisos de acceso a esta seccion')
                return HttpResponseRedirect(reverse('usuarios:inicio'))
@@ -2593,34 +2566,26 @@ class DescargarFactura(LoginRequiredMixin, View):
     login_url = '/'
     def get(self, request,IdFactura,*args, **kwargs):
         try:
-            #identificador de factura
+            #datos factura
             factura = Factura.objects.get(IdFactura=IdFactura)
+            noaporte = factura.IdFactura
+            estado = factura.Estado
             idestadocuenta = factura.IdEstadoCuenta
-            idciclo = factura.IdCiclo
-            estadofac = factura.Estado
-            valortotal = factura.Total
-            total = valortotal
-            fechaexpe = factura.FechaExpe
-            fechalimite = factura.FechaLimite
-            #identificador del ciclo
-            ciclo = Ciclo.objects.get(IdCiclo=idciclo.pk)
-            nombreciclo = ciclo.Nombre
-            #identificador del estado de cuenta
+            periodofacturado = factura.periodofacturado
+            aporteporconsumo = factura.aporteporconsumo
+            cuotamatricula = factura.cuotamatricula
+            reconexion = factura.reconexion
+            suspencion = factura.suspencion
+            facturasvencidas = factura.facturasvencidas
+            FechaExpe = factura.FechaExpe
+            FechaLimite = factura.FechaLimite
+            IdCiclo = factura.IdCiclo
+            OtrosCobros = factura.OtrosCobros
+            Total = factura.Total
+            # datos estado cuenta
             estadocuenta = EstadoCuenta.objects.get(IdEstadoCuenta=idestadocuenta.pk)
-            referencia = estadocuenta.IdEstadoCuenta
             matricula = estadocuenta.IdVivienda
-            descripcion = estadocuenta.Descripcion
-            aporte = estadocuenta.Valor
-            valor = estadocuenta.Valor
-            consultarpago = Pagos.objects.filter(IdVivienda=matricula).exists()
-
-            valor1 = estadocuenta.Valor - 500
-            cont = -1
-            for i in range(1, valor1, TARIFA):
-                if i != valor1:
-                    cont += 1
-
-            #identificador de vivienda
+            # identificador de vivienda
             vivienda = Vivienda.objects.get(IdVivienda=matricula.pk)
             idmatricula = vivienda.IdVivienda
             idtitular = vivienda.IdPropietario
@@ -2629,153 +2594,53 @@ class DescargarFactura(LoginRequiredMixin, View):
             piso = vivienda.Piso
             estrato = vivienda.Estrato
             tipoinstalacion = vivienda.TipoInstalacion
+            tipodepredio = vivienda.InfoInstalacion
             estadoservicio = vivienda.EstadoServicio
             ciclo = vivienda.Ciclo
-            #cobromatricula
-            cobromatricula = CobroMatricula.objects.filter(IdVivienda=idmatricula, Estado=ESTCOBRO).exists()
-
-            #identificador de propietario
+            # identificador de propietario
             titular = Propietario.objects.get(IdPropietario=idtitular.pk)
             nombretitular = titular.Nombres
             apellidotitular = titular.Apellidos
             nombrecompleto = nombretitular + ' ' + apellidotitular
-            numerofactura = factura.IdFactura
-            #suspencion
-            suspencion = OrdenesSuspencion.objects.filter(IdEstadoCuenta=referencia, Estado=SP).exists()
+            # suspencion
+            suspencion = OrdenesSuspencion.objects.filter(IdEstadoCuenta=idestadocuenta, Estado=SP).exists()
             #codigoqr
             qr = qrcode.QRCode(
-                version=1,
+                version=4,
                 error_correction=qrcode.constants.ERROR_CORRECT_L,
-                box_size=11,
+                box_size=6,
                 border=0,
             )
-            qr.add_data(numerofactura)
+            qr.add_data(noaporte)
             qr.make(fit=True)
-
             imga = qr.make_image(fill_color="black", back_color="white")
             imga.save('static/ModeloFactura/output.png')
             #libro excel
             wb = openpyxl.load_workbook('static/ModeloFactura/001-044-78055.xlsx')
             ws = wb.active
             img = openpyxl.drawing.image.Image('static/ModeloFactura/output.png')
-            ws.add_image(img, 'AN10')
+            ws.add_image(img, 'Y2')
             if suspencion is True:
                 imagen = openpyxl.drawing.image.Image('static/ModeloFactura/corte2.png')
                 ws.add_image(imagen, 'B25')
-
             else:
                 pass
-
-            #factura matricula estado
-            ws['AW4'] = numerofactura
+            # factura matricula estado
+            ws['AW4'] = noaporte
             ws['AW6'] = idmatricula
-            ws['AW8'] = estadofac
-            #suscriptor
-            ws['A15'] = referencia
-            ws['L15'] = nombrecompleto
-            ws['A18'] = sector
-            ws['O18'] = casa
-            ws['T18'] = piso
+            ws['AW8'] = estado
+            # suscriptor
+            ws['A15'] = str(idestadocuenta)
+            ws['I15'] = nombrecompleto
+            ws['S17'] = sector
+            ws['AG17'] = casa
+            ws['AL17'] = piso
             ws['AG15'] = estrato
-            ws['AB13'] = tipoinstalacion
-            ws['R13'] = estadoservicio
-            ws['AA15'] = ciclo
-            #Periodo facturado
-            ws['AM25'] = nombreciclo
-            #Conceptos acueducto
-            ws['A23'] = descripcion
-            ws['K23'] = valor
-            ws['AC23'] = valor
-
-            #fechas de procedimiento
-            ws['AI56'] = fechaexpe
-            if suspencion is True:
-                ws['AI58'] = 'Inmediato'
-                suspencion2 = OrdenesSuspencion.objects.get(IdEstadoCuenta=referencia, Estado=SP)
-                fechasus = suspencion2.FechaEjecucion
-                ws['AI60'] = fechasus
-            else:
-                ws['AI58'] = fechalimite
-
-            if cont <0:
-                ws['W55'] = 0
-            else:
-                ws['W55'] = cont
-            #Concepto de matricula
-            if cobromatricula is True:
-                cobromatri = CobroMatricula.objects.get(IdVivienda=idmatricula)
-                descripcionmatri = cobromatri.Descripcion
-                cuotaspendientes = cobromatri.CuotasPendientes
-                saldopendiente = cobromatri.ValorPendiente
-                cuota = cobromatri.Cuota
-                ws['A24'] = descripcionmatri
-                ws['T24'] = str(cuotaspendientes)
-                ws['K24'] = int(saldopendiente)
-                ws['AC24'] = int(cuota)
-
-            if consultarpago is True:
-                filtropagos = Pagos.objects.filter(IdVivienda=matricula).order_by("-IdPago")[:1]
-                consultarp = Pagos.objects.get(IdPago=filtropagos)
-                ws['AM39'] = consultarp.IdPago
-                ws['AR39'] = consultarp.FechaPago
-                ws['AY39'] = int(consultarp.ValorPago)
-            else:
-                mensaje = "No Registra"
-                ws['AM39'] = mensaje
-                ws['AR39'] = mensaje
-                ws['AY39'] = mensaje
-
-            # cobro suspencion
-            cobrosuspencion = CobroOrdenes.objects.filter(IdEstadoCuenta=idestadocuenta, Estado=ESTADO1,TipoOrden='Cobro por suspencion').exists()
-            if cobrosuspencion is True:
-                cobrosus = CobroOrdenes.objects.filter(IdEstadoCuenta=idestadocuenta, Estado=ESTADO1, TipoOrden='Cobro por suspencion').order_by("-IdOrden")[:1]
-                cobrosusp = CobroOrdenes.objects.get(IdOrden=cobrosus)
-                descripcions = cobrosusp.TipoOrden
-                valor = cobrosusp.Valor
-                ws['A25'] = descripcions
-                ws['K25'] = int(valor)
-                ws['T25'] = 0
-                ws['AC25'] = int(valor)
-
-            # cobro reconexion
-            cobroreconexion = CobroOrdenes.objects.filter(IdEstadoCuenta=idestadocuenta, Estado=ESTADO1,TipoOrden='Cobro por reconexión').exists()
-            if cobroreconexion is True:
-                cobrore = CobroOrdenes.objects.filter(IdEstadoCuenta=idestadocuenta, Estado=ESTADO1, TipoOrden='Cobro por reconexión').order_by("-IdOrden")[:1]
-                cobrorep = CobroOrdenes.objects.get(IdOrden=cobrore)
-                descripcions = cobrorep.TipoOrden
-                valor = cobrorep.Valor
-                ws['A26'] = descripcions
-                ws['K26'] = int(valor)
-                ws['T26'] = 0
-                ws['AC26'] = int(valor)
-
-            cobrosuspencion2 = CobroOrdenes.objects.filter(IdEstadoCuenta=idestadocuenta, Estado=ESTADO1,TipoOrden='Cobro por suspencion')
-            pos1 = 0
-            for i in cobrosuspencion2:
-                valor = i.Valor
-                pos1 += int(valor)
-
-            cobroreconexiones2 = CobroOrdenes.objects.filter(IdEstadoCuenta=idestadocuenta, Estado=ESTADO1, TipoOrden='Cobro por reconexión')
-            pos2 = 0
-            for i in cobroreconexiones2:
-                valor = i.Valor
-                pos2 += int(valor)
-
-            cobromatricula2 = CobroMatricula.objects.filter(IdVivienda=idmatricula, Estado=ESTCOBRO)
-            matri = 0
-            for i in cobromatricula2:
-                valor = i.Cuota
-                matri += int(valor)
-
-            supremo = int(aporte) + int(pos1) + int(pos2) + int(matri)
-
-            #total a pagar condional 0
-            if int(supremo) <=0:
-                ws['AU62'] = 0
-            else:
-                ws['AU62'] = int(supremo)
-
-            ws['AC29'] = int(supremo)
+            ws['AT15'] = tipoinstalacion
+            ws['AS13'] = estadoservicio
+            ws['AB15'] = ciclo
+            # Periodo facturado
+            ws['AM20'] = periodofacturado
             ws.title = IdFactura
             archivo_predios = "Factura " + str(IdFactura) + ".xlsx"
             response = HttpResponse(content_type="application/ms-excel")
@@ -2786,7 +2651,6 @@ class DescargarFactura(LoginRequiredMixin, View):
 
         except Factura.DoesNotExist:
             return render(request, "pages-404.html")
-
 class VerOrdenReconexion(LoginRequiredMixin, View):
     login_url = '/'
     template_name = 'usuarios/verordenreconexion.html'
