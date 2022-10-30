@@ -28,7 +28,7 @@ from usuarios.ConectorPython import *
 # Reemplaza estos valores con tus credenciales de Google Mail
 username = 'sistemas.acueducto.caimalito@gmail.com'
 #Tiempos de facturacion
-DIASFACTURACION = 10
+DIASFACTURACION = 8
 DIASPARASUSPENCION = 15
 #permisos
 CT = 'AC'
@@ -2293,7 +2293,7 @@ class GeneradorFacturas(LoginRequiredMixin, View):
                            cuotamatricula += int(valor)
 
                        # consulta facturas vencidas
-                       consumo1 = estadoc.Valor
+                       consumo1 = estadoc.Valor - 500
                        vencidas = -1
                        for i in range(1, consumo1, TARIFA):
                            if i != consumo:
@@ -2303,7 +2303,7 @@ class GeneradorFacturas(LoginRequiredMixin, View):
                        totalfactura = int(cuotamatricula) + int(valorreconexion) + int(valorsuspencion) + int(consumo)
                        factura = Factura(Matricula=idvivienda,Estado='Emitida',IdEstadoCuenta=estadoc,periodofacturado=mes,aporteporconsumo=consumo,
                                          cuotamatricula=cuotamatricula,reconexion=valorreconexion,suspencion=valorsuspencion, TotalConsumo=consumo,
-                                         facturasvencidas=vencidas,FechaExpe=fechaexp,FechaLimite=fechalimite, IdCiclo=ciclo,Total=totalfactura)
+                                         facturasvencidas=vencidas,FechaExpe=fechaexp,FechaLimite=fechalimite, IdCiclo=ciclos,Total=totalfactura)
                        factura.save()
                        contador +=1
 
@@ -2597,13 +2597,12 @@ class DescargarFactura(LoginRequiredMixin, View):
             tipodepredio = vivienda.InfoInstalacion
             estadoservicio = vivienda.EstadoServicio
             ciclo = vivienda.Ciclo
+            diametro = vivienda.Diametro
             # identificador de propietario
             titular = Propietario.objects.get(IdPropietario=idtitular.pk)
             nombretitular = titular.Nombres
             apellidotitular = titular.Apellidos
             nombrecompleto = nombretitular + ' ' + apellidotitular
-            # suspencion
-            suspencion = OrdenesSuspencion.objects.filter(IdEstadoCuenta=idestadocuenta, Estado=SP).exists()
             #codigoqr
             qr = qrcode.QRCode(
                 version=4,
@@ -2620,9 +2619,9 @@ class DescargarFactura(LoginRequiredMixin, View):
             ws = wb.active
             img = openpyxl.drawing.image.Image('static/ModeloFactura/output.png')
             ws.add_image(img, 'Y2')
-            if suspencion is True:
+            if int(aporteporconsumo) >=9000:
                 imagen = openpyxl.drawing.image.Image('static/ModeloFactura/corte2.png')
-                ws.add_image(imagen, 'B25')
+                ws.add_image(imagen, 'B23')
             else:
                 pass
             # factura matricula estado
@@ -2635,12 +2634,79 @@ class DescargarFactura(LoginRequiredMixin, View):
             ws['S17'] = sector
             ws['AG17'] = casa
             ws['AL17'] = piso
+            ws['L17'] = diametro
+            ws['A17'] = 'No aplica'
             ws['AG15'] = estrato
             ws['AT15'] = tipoinstalacion
+            ws['AL15'] = tipodepredio
             ws['AS13'] = estadoservicio
             ws['AB15'] = ciclo
             # Periodo facturado
             ws['AM20'] = periodofacturado
+            #ultimo pago
+            consultarpago = Pagos.objects.filter(IdVivienda=matricula).exists()
+            if consultarpago is True:
+                filtropagos = Pagos.objects.filter(IdVivienda=matricula).order_by("-IdPago")[:1]
+                consultarp = Pagos.objects.get(IdPago=filtropagos)
+                ws['AM25'] = consultarp.IdPago
+                ws['AR25'] = consultarp.FechaPago
+                ws['AY25'] = int(consultarp.ValorPago)
+            else:
+                mensaje = "No Registra"
+                ws['AM25'] = mensaje
+                ws['AR25'] = mensaje
+                ws['AR25'] = mensaje
+
+            # Periodo facturado
+            if int(aporteporconsumo) > 0:
+                ws['A21'] = 'Aportes'
+                ws['N21'] = int(aporteporconsumo)
+                ws['W21'] = facturasvencidas
+                ws['AC21'] = int(aporteporconsumo)
+
+            if int(suspencion) > 0:
+                ws['A22'] = 'Orden de suspensión'
+                ws['N22'] = suspencion
+                ws['W22'] = ''
+                ws['AC22'] = suspencion
+
+            if int(reconexion) > 0:
+                ws['A23'] = 'Orden de reconexón'
+                ws['N23'] = reconexion
+                ws['W23'] = ''
+                ws['AC23'] = reconexion
+
+            if int(cuotamatricula) > 0:
+                cobromatri = CobroMatricula.objects.get(IdVivienda=matricula)
+                saldo = cobromatri.ValorPendiente
+                cuotasp = cobromatri.CuotasPendientes
+                ws['A24'] = 'Derecho de conexión'
+                ws['N24'] = int(saldo)
+                ws['W24'] = cuotasp
+                ws['AC24'] = int(cuotamatricula)
+
+            #total concepto de acueducto
+            ws['AC27'] = int(Total)
+            # facturas vencidas
+            ws['W54'] = facturasvencidas
+
+            # fechas de procedimiento
+            ws['AI55'] = FechaExpe
+            ws['AI57'] = FechaLimite
+
+            if int(aporteporconsumo) >=9000:
+                fechalimite = FechaLimite + timedelta(days=8)
+                ws['AI57'] = 'Inmediato'
+                ws['AI59'] = fechalimite
+            else:
+                ws['AI57'] = FechaLimite
+
+            #total a pagar condional 0
+            if int(Total) <=0:
+                ws['AU61'] = 0
+            else:
+                ws['AU61'] = int(Total)
+
             ws.title = IdFactura
             archivo_predios = "Factura " + str(IdFactura) + ".xlsx"
             response = HttpResponse(content_type="application/ms-excel")

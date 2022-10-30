@@ -23,10 +23,11 @@ class RegistroVivienda(forms.ModelForm):
             'IdAcueducto': _(u''),
             'usuid': _(u''),
             'MatriculaAnt': _(u'Digite la matricula anterior'),
-            'InfoInstalacion': _(u'Seleccione estado de la red interna'),
+            'InfoInstalacion': _(u'Seleccione tipo de predio'),
             'ProfAcometida': _(u'Profundidad acometida'),
             'CantHabitantes': _(u'Cantidad de habitantes'),
             'FichaCastral': _(u'Ficha catastral'),
+            'Diametro': _(u'Seleccione el diametro de tuberia'),
         }
         widgets = {
             'IdAcueducto': forms.HiddenInput(),

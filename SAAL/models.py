@@ -131,9 +131,12 @@ DOC_CHOICES6= (
 )
 
 DOC_CHOICES7= (
-    ('Instalacion Empotrada', _(u"Instalacion Empotrada")),
-    ('Instalacion a la vista', _(u"Instalacion a la vista")),
-    ('Instalacion Mixta', _(u"Instalacion Mixta"))
+    ('Unifamiliar', _(u"Unifamiliar")),
+    ('Multifamiliar', _(u"Multifamiliar")),
+    ('Bifamiliar', _(u"Bifamiliar")),
+    ('Comercial', _(u"Bifamiliar")),
+    ('Residencial especial', _(u"Residencial especial")),
+    ('Agricola', _(u"Agricola"))
 )
 
 DOC_CHOICES8 = (
@@ -171,6 +174,7 @@ class Vivienda(models.Model):
     ProfAcometida = models.CharField(max_length=4, null=False)
     CantHabitantes = models.CharField(max_length=2, null=False)
     FichaCastral = models.CharField(max_length=26,null=True)
+    Diametro = models.CharField(max_length=5, null=True)
 
     def __str__(self):
         return "%s %s %s" % (self.IdVivienda, self.Direccion, self.NumeroCasa)
