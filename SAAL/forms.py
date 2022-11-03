@@ -3,7 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from SAAL.models import Vivienda, SolicitudGastos, Certificaciones, Medidores, Poblacion
 from SAAL.models import Propietario, CobroMatricula, ValorMatricula, Pqrs, Usuario
-from SAAL.models import Acueducto, Tarifa, Permisos
+from SAAL.models import Acueducto, Tarifa, Permisos, Pqrs
 
 
 class RegistroVivienda(forms.ModelForm):
@@ -438,6 +438,34 @@ class CambioFormEstado(forms.ModelForm):
         super(CambioFormEstado, self).__init__(*args, **kwargs)
         if vivienda is not None:
             self.fields['IdAcueducto'].widget = forms.HiddenInput()
+
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+class FormRegistroPqrs(forms.ModelForm):
+    class Meta:
+        model = Pqrs
+        fields = "__all__"
+        labels ={
+            'Nombre': _(u'Nombre completo'),
+            'Telefono': _(u'Telefono o Celular'),
+            'Email': _(u'Correo electronico'),
+            'Direccion':_(u'Direccion'),
+            'TipoSolicitud': _(u'Tipo de solicitud'),
+            'Clasificacion': _(u'Clasificacion'),
+            'Descripcion':_(u'Descripcion de la solicitud'),
+            'usuid': _(u''),
+            'Estado': _(u''),
+        }
+        widgets = {
+            'usuid':forms.HiddenInput(),
+            'Estado': forms.HiddenInput(),
+        }
+
+    def __init__(self, propietario=None, *args, **kwargs):
+        super(FormRegistroPqrs, self).__init__(*args, **kwargs)
+        if propietario is not None:
+            self.fields[''].widget = forms.HiddenInput()
 
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})

@@ -92,16 +92,38 @@
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    {%for pago in pagos %}
-                                    <tr>
-                                      <td  class="text-left">
-                                        {{ pago.Descripcion }}
-                                        <div style="font-size: 0.8rem;">Fecha de actualizacion: <b>{{pago.FechaActualizacion}}</b></div>
-                                         <div style="font-size: 0.8rem;">Referencia de pago: <b>{{pago.IdEstadoCuenta}}</b></div>
-                                      </td>
-                                      <td>${{pago.Valor|intcomma}}</td>
-                                    </tr>
-                                    {%endfor%}
+                                    {% if aportes > 0 %}
+                                       <tr>
+                                          <td class="text-left">
+                                            Aportes por administracion
+                                          </td>
+                                          <td>${{aportes|intcomma}}</td>
+                                        </tr>
+                                    {% endif %}
+                                    {% if cuotam > 0 %}
+                                       <tr>
+                                          <td class="text-left">
+                                            Derecho de conexión
+                                          </td>
+                                          <td>${{cuotam|intcomma}}</td>
+                                        </tr>
+                                    {% endif %}
+                                    {% if suspencion > 0 %}
+                                       <tr>
+                                          <td class="text-left">
+                                            Orden de suspencion
+                                          </td>
+                                          <td>${{suspencion|intcomma}}</td>
+                                        </tr>
+                                    {% endif %}
+                                    {% if reconexion > 0 %}
+                                       <tr>
+                                          <td class="text-left">
+                                            Orden de reconexion
+                                          </td>
+                                          <td>${{cuotam|intcomma}}</td>
+                                        </tr>
+                                    {% endif %}
                                   </tbody>
                                 </table>
                                 <div class="">

@@ -1,97 +1,53 @@
 {% extends 'usuarios/base_usuario2.html' %}
 {% load static %}
 {% block styles %}
+
 {% endblock %}
-{%block title %} <title>Registro PQRS</title> {%endblock%}
+{%block title %} <title>Registro de PQRS</title> {%endblock%}
 {% block content %}
-<!-- CONTENIDO -->
-	{% include 'usuarios/alerts.html' %}
-<div id="content-wrapper">
-	<div class="page-header">
-		<h1><b>Registro de PQRS</b></h1>
-	</div>
-	<div class="row">
-	<form method="post" enctype="multipart/form-data">
-			{% csrf_token %}
-			<div class="col-sm-6">
-				<label class="control-label">Numero de identificación</label>
-					<input style="margin-bottom: 1rem" name="identificacion" type="text" class="form-control">
-				<label class="control-label">Nombre completo</label>
-					<input style="margin-bottom: 1rem" name="nombrecompleto" type="text" class="form-control">
-				<label class="control-label">Telefono o Celular</label>
-					<input style="margin-bottom: 1rem" name="celular" type="text" class="form-control">
-				<label class="control-label">Correo electronico</label>
-					<input style="margin-bottom: 1rem" name="email" type="email" class="form-control">	
-			</div>
-			<div class="col-sm-6">
-				<div class="row">
-					<div class="col-sm-12">
-						<label class="control-label">Dirección de correspondencia</label>
-					<input style="margin-bottom: 1rem" name="direccion" type="text" class="form-control">
-					</div>				
-					<div class="col-sm-12">
-						<label class="control-label">Tipo de solicitud</label>
-						<select name="tiposolicitud" class="form-control form-group-margin">
-							<option>Solicitud</option>
-							<option>Queja</option>
-							<option>Reclamo</option>
-							<option>Felicitacion</option>
-							<option>Peticion</option>
-						</select>	
-					</div>
-					<div class="col-sm-12">
-						<label class="control-label">Anonimo</label>
-						<select name="anonimo" class="form-control form-group-margin">
-							<option>Si</option>
-							<option>No</option>
-						</select>	
-					</div>	
-					<div class="col-sm-12">
-						<script>
-							init.push(function () {
-								$('#styled-finputs-example').pixelFileInput({ placeholder: 'No file selected...' });
-							})
-						</script>
-							<label class="control-label">Seleccionar soporte</label>
-						<input style="margin-bottom: 1rem" name="soporte" type="file" id="styled-finputs-example">	
-					</div>
-						 
-					
-				</div>
-			</div>
-			
-		</div>
-		<br>
-		<div class="row">
-			<div class="col-sm-12">
-				<label class="control-label" for="inputDefault-4">Descripcion</label>
-				<textarea name="descripcion" class="form-control" rows="4"></textarea>
-			</div>
-		</div>
-		<br>
-		<script>
-			init.push(function () {
-				$('#loading-example-btn').click(function () {
-					var btn = $(this);
-					btn.button('loading');
-					setTimeout(function () {
-						btn.button('reset');
-					}, 1500);
-				});
-			});
-		</script>
-		<div class="row">
-			<button type="submit" id="loading-example-btn" data-loading-text="Radicando solicitud..." class="btn btn-primary" style="width: 100%">Registrar</button>
-		</div>
-	</form>
-	<br>
-	<div class="row">
-		<button onclick="window.location='{% url 'usuarios:listapqrs' %}'" id="loading-example-btn" data-loading-text="Descargando..." class="btn btn-primary" style="width: 100%">Cancelar</button>
-	</div>
-	</div>
-	<div id="main-menu-bg">
-		
-	</div>
+{% include 'usuarios/alerts.html' %}
+<!-- Titulo -->
+<div class="row">
+    <div class="col-sm-12">
+        <h1 class="h3 text-gray-800">Registro de peticiones, quejas, reclamos y sugerencias</h1>
+    </div>
+</div>
+
+<div class="row" style="margin-top: 1rem;">
+            <div class="col-sm-3">
+
+            </div>
+            <div class="col-sm-8">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form.non_field_errors }}
+                        {% for field in form %}
+                            <div class="form-group no-padding-t no-border-t panel-padding-h">
+                                {{ field.errors }}
+                                <label for="" class="col-sm-8 control-label">
+                                    <strong>{{ field.label }}</strong>
+                                </label>
+                                <div class="col-sm-8">
+                                    {{ field }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <div class="row text-center" >
+                            <div class="col-sm-4" style="margin-top: 1rem;">
+                                <button style="width: 80%;" type="submit" class="btn btn-primary ">Registrar</button>
+                            </div>
+                        <br>
+                            <div class="col-sm-4" style="margin-top: 1rem;">
+                                <button style="width: 80%;" onclick="window.location='{% url 'usuarios:listapqrs' %}'" class="btn btn-primary ">Cancelar</button>
+                            </div>
+                        </div>
+                        
+                    </form>             
+            </div>
+            <div class="col-sm-1">
+                
+            </div>
+
 </div>
 
 {% endblock %}

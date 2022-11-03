@@ -770,7 +770,7 @@
                             {% if factura.IdFactura == pago.IdFactura.pk %}
                             <div class="col-sm-6">
                                 <b class="text-primary"># Pago</b><br>
-                                {{ pago.IdPago }}
+                                <a href="{% url 'usuarios:imprimirpago' pago.IdPago %}">{{ pago.IdPago }}</a>
                             </div>
                             <div class="col-sm-6">
                                 <b class="text-primary">Valor</b><br>

@@ -234,20 +234,17 @@ class Factura(models.Model):
     IdEstadoCuenta = models.ForeignKey(EstadoCuenta, on_delete=models.CASCADE)
     direccionentrega = models.CharField(max_length=100, null=True)
     periodofacturado = models.CharField(max_length=50, null=True)
-
     #concepto de acueducto
     aporteporconsumo = models.CharField(max_length=100, null=True)
     cuotamatricula = models.CharField(max_length=100, null=True)
     reconexion = models.CharField(max_length=100, null=True)
     suspencion = models.CharField(max_length=100, null=True)
     TotalConsumo = models.CharField(max_length=100, null=True)
-
     #facturas vencidad
     facturasvencidas = models.CharField(max_length=100, null=True)
     FechaExpe = models.DateTimeField(auto_now_add=True)
     FechaLimite = models.DateTimeField(null=True)
     IdCiclo = models.ForeignKey(Ciclo, on_delete=models.CASCADE)
-
     OtrosCobros = models.CharField(max_length=100, null=False)
     #total a pagar
     Total = models.CharField(max_length=100, null=False)
@@ -450,24 +447,31 @@ class Permisos(models.Model):
         verbose_name = "Permiso"
 
 DOC_CHOICES14 = (
-    ('Cerrada', _(u"Cerrada")),
+    ('Peticion', _(u"Peticion")),
+    ('Queja', _(u"Queja")),
+    ('Reclamo', _(u"Reclamo")),
+    ('Sugerencia', _(u"Sugerencia")),
 )
-
+DOC_CHOICES15 = (
+    ('Atencion de daño - Externo', _(u"Atencion de daño - Externo")),
+    ('Atencion de daño - Interno', _(u"Atencion de daño - Interno")),
+    ('Facturacion', _(u"Facturacion")),
+    ('Administracion', _(u"Administracion")),
+    ('Multas', _(u"Multas")),
+    ('Tesoreria', _(u"Tesoreria")),
+)
 class Pqrs(models.Model):
     IdPqrs = models.AutoField(primary_key=True)
-    Descripcion = models.CharField(max_length=5000, null=True)
+    Nombre = models.CharField(max_length=10, null=True)
     FechaRadicado = models.DateTimeField(auto_now_add=True, null=False)
-    Soporte = models.FileField(upload_to='pqrs/',null=True)
-    CedulaNit = models.CharField(max_length=15, null=True)
-    NombreCompleto = models.CharField(max_length=100, null=True)
     Telefono = models.CharField(max_length=10, null=True)
-    Correo = models.EmailField(null=True, max_length=60)
+    Correo = models.EmailField(max_length=60,null=True)
     Direccion = models.CharField(max_length=200, null=True)
-    TipoSolicitud = models.CharField(max_length=50, null=True)
-    Estado = models.CharField(max_length=40, null=False, choices=DOC_CHOICES14)
+    TipoSolicitud = models.CharField(max_length=50, null=True, choices=DOC_CHOICES14)
+    Clasificacion = models.CharField(max_length=50, null=True, choices=DOC_CHOICES15)
+    Descripcion = models.TextField(max_length=5000, null=True)
     usuid = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    Anonimo = models.CharField(max_length=3, null=False)
-
+    Estado = models.CharField(max_length=40, null=False)
     def __str__(self):
         return "%s %s" % (self.IdPqrs, self.TipoSolicitud)
 

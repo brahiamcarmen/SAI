@@ -7,7 +7,7 @@ from django.views.generic.base import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from SAAL.models import Usuario, Tarifa, CobroOrdenes,PagoOrdenes,Certificaciones, Cierres, Acueducto, ConfirCerti, ValorMatricula, OrdenesSuspencion, OrdenesReconexion, Poblacion, Factura, Ciclo, EstadoCuenta,NovedadVivienda
 from SAAL.models import Vivienda, SolicitudGastos, ArchivosAcueducto, Propietario, NovedadesSistema,Medidores, Pqrs, RespuestasPqrs,NovedadesGenerales, CobroMatricula, Permisos, Pagos, Archivos, AsignacionExterna
-from SAAL.forms import RegistroUsuario, RegistroUsuario2, RegistroVivienda,AcueductoAForm,PermisosForm, CertificarForm, CobroMatriculaForm, CostoMForm, RespuestPqrForm, RegistroPropietario, TarifasForm , ModificaPropietario
+from SAAL.forms import FormRegistroPqrs,RegistroUsuario, RegistroUsuario2, RegistroVivienda,AcueductoAForm,PermisosForm, CertificarForm, CobroMatriculaForm, CostoMForm, RespuestPqrForm, RegistroPropietario, TarifasForm , ModificaPropietario
 from SAAL.forms import CambioFormEstado,AcueductoForm, GastosForm, MedidoresForm, PoblacionForm, ModificaVivienda
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -1966,19 +1966,20 @@ class ImprimirTiquet(LoginRequiredMixin):
 class RegistroPqr(LoginRequiredMixin, View):
     login_url = '/'
     template_name = 'usuarios/registropqrs.html'
+    form_class = FormRegistroPqrs
 
     def get(self, request):
         try:
             usuario = Usuario.objects.get(usuid=request.user.pk)
             tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='NOACFA').exists()
             if tipousuario is False:
-                return render(request, self.template_name)
+                form = self.form_class()
+                return render(request, self.template_name, {'form': form})
             else:
                 messages.add_message(request, messages.ERROR,'Su usuario no tiene los permiso de acceso a esta seccion')
                 return HttpResponseRedirect(reverse('usuarios:inicio'))
 
-
-        except Vivienda.DoesNotExist:
+        except Usuario.DoesNotExist:
             return render(request, "pages-404.html")
 
     def post(self, request):
@@ -2023,6 +2024,7 @@ class ListaPqrs(LoginRequiredMixin, View):
             lista = Pqrs.objects.filter(Estado='Pendiente')
             contcerrada = Pqrs.objects.filter(Estado='Cerrada').count()
             contpendiente = Pqrs.objects.filter(Estado='Pendiente').count()
+            #tipo de solicitud
             contpeticion = Pqrs.objects.filter(TipoSolicitud='Peticion').count()
             contquejas = Pqrs.objects.filter(TipoSolicitud='Queja').count()
             contsolicitud = Pqrs.objects.filter(TipoSolicitud='Solicitud').count()
@@ -2842,6 +2844,7 @@ class GeneradorFacturasIndividual(LoginRequiredMixin, View):
                    factura.save()
                    messages.add_message(request, messages.INFO, 'La factura se creo correctamente')
                    return HttpResponseRedirect(reverse('usuarios:inicio'))
+
                else:
                     factura = Factura(Estado=EF, FechaExpe=fechaexp,FechaLimite=fechalimite,
                                      Total=total,IdCiclo=ciclos,IdEstadoCuenta=estadoc, TotalConsumo=total, OtrosCobros=0)
@@ -4733,6 +4736,9 @@ class VerFactura(LoginRequiredMixin, View):
         try:
             numerofactura = request.GET.get("factura")
             usuario = Usuario.objects.get(usuid=request.user.pk)
+            anulada = Factura.objects.filter(IdFactura=numerofactura, Estado=FA).exists()
+            paga = Factura.objects.filter(IdFactura=numerofactura, Estado=FP).exists()
+            vencida = Factura.objects.filter(IdFactura=numerofactura, Estado=FV).exists()
             tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AVF').exists()
             if tipousuario is True:
                 consulta = Factura.objects.filter(IdFactura=numerofactura).exists()
@@ -4753,7 +4759,18 @@ class VerFactura(LoginRequiredMixin, View):
                     total = factura.Total
                     ciclo = factura.IdCiclo
                     estadofactura = factura.Estado
+                    aporteporconsumo = factura.aporteporconsumo
+                    cuotamatricula = factura.cuotamatricula
+                    reconexion = factura.reconexion
+                    suspencion2 = factura.suspencion
+                    cuenta = factura.IdEstadoCuenta
+
                     return render(request, self.template_name,{
+                        'aportes': int(aporteporconsumo),
+                        'cuenta': cuenta,
+                        'cuotam': int(cuotamatricula),
+                        'reconexion': int(reconexion),
+                        'suspencion': int(suspencion2),
                         'cobromatricula': cobromatricula,
                         'estadoscuenta': total,
                         'factura': numerofactura,
@@ -4766,7 +4783,7 @@ class VerFactura(LoginRequiredMixin, View):
                         'sector': sector,
                         'piso': piso,
                         'pagos':pagos,
-                        'ciclo': ciclo
+                        'ciclo': ciclo,
                     })
                 else:
                     messages.add_message(request, messages.ERROR, 'El numero de factura ingresado no existe')
