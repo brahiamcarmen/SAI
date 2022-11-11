@@ -4784,6 +4784,9 @@ class VerFactura(LoginRequiredMixin, View):
                         'piso': piso,
                         'pagos':pagos,
                         'ciclo': ciclo,
+                        'anulada':anulada,
+                        'paga': paga,
+                        'vencida': vencida,
                     })
                 else:
                     messages.add_message(request, messages.ERROR, 'El numero de factura ingresado no existe')
@@ -4842,6 +4845,9 @@ class VerFactura(LoginRequiredMixin, View):
                         orden = OrdenesReconexion(Deuda=valor, FechaEjecucion=fecha, Generado='auto', Estado=SP,
                                                       UsuarioEjecuta='Font', IdEstadoCuenta=estadoscu)
                         orden.save()
+                descripcion = 'Se registra pago: ' + str(idpago) +' Factura: ' + str(numerofactura) + ' Matricula: ' + str(idvivienda) + ' Valor: $' + str(valorpagar)
+                novedad = NovedadesSistema(Descripcion=descripcion)
+                novedad.save()
                 tiquet2 = self.imptiquet()
                 ejecutar = tiquet2.get(request, idpago)
                 return ejecutar
