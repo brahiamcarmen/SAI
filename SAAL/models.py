@@ -96,7 +96,7 @@ class Propietario(models.Model):
     IdPoblacion = models.ForeignKey(Poblacion, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%s %s %s" % (self.IdPropietario, self.Nombres, self.Apellidos)
+        return "%s %s" % (self.Nombres, self.Apellidos)
 
     class Meta:
         verbose_name_plural = "Lista de Propietarios"
