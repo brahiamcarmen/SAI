@@ -28,7 +28,7 @@ from usuarios.ConectorPython import *
 # Reemplaza estos valores con tus credenciales de Google Mail
 username = 'sistemas.acueducto.caimalito@gmail.com'
 #Tiempos de facturacion
-DIASFACTURACION = 8
+DIASFACTURACION = 10
 DIASPARASUSPENCION = 15
 #permisos
 CT = 'AC'
