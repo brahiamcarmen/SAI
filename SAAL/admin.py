@@ -5,7 +5,6 @@ from SAAL.models import Usuario, ValorMatricula
 from SAAL.models import Acueducto
 from SAAL.models import Propietario
 from SAAL.models import Vivienda
-from SAAL.models import NovedadPropietario
 from SAAL.models import NovedadVivienda
 from SAAL.models import Ciclo
 from SAAL.models import Factura
@@ -20,7 +19,6 @@ admin.site.register(Usuario)
 admin.site.register(Acueducto)
 admin.site.register(Propietario)
 admin.site.register(Vivienda)
-admin.site.register(NovedadPropietario)
 admin.site.register(NovedadVivienda)
 admin.site.register(Ciclo)
 admin.site.register(Factura)

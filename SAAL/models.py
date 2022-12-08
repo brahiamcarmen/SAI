@@ -184,22 +184,6 @@ class Vivienda(models.Model):
         verbose_name_plural = "Lista de Viviendas"
         verbose_name = "Lista de Viviendas"
 
-class NovedadPropietario(models.Model):
-    IdNovedad = models.AutoField(primary_key=True)
-    TipoNovedad = models.CharField(max_length=100, null=False)
-    Descripcion = models.CharField(max_length=5000, null=False)
-    IdPropietario = models.ForeignKey(Propietario, on_delete=models.CASCADE)
-    usuid= models.ForeignKey(User, on_delete=models.CASCADE)
-    IdAcueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
-    Fecha = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return "%s" % (self.TipoNovedad)
-
-    class Meta:
-        verbose_name_plural = "Lista de Novedades propietarios"
-        verbose_name = "Lista de Novedades"
-
 class Ciclo(models.Model):
     IdCiclo = models.CharField(max_length=5, primary_key=True)
     Nombre = models.CharField(max_length=10)
@@ -627,23 +611,6 @@ class PagoOrdenes(models.Model):
     class Meta:
         verbose_name_plural = "PagoOrdenes"
         verbose_name = "Pago orden"
-
-DOC_CHOICES15 = (
-    ('Proveedor de productos', _(u"Proveedor de productos")),
-    ('Proveedor de servicios', _(u"Proveedor de servicios")),
-    ('Proveedor de recursos', _(u"Proveedor de recursos"))
-)
-class Proveedores(models.Model):
-    Nit = models.CharField(max_length=30, null=False)
-    Razonsocial = models.CharField(max_length=100, null=False)
-    Fecha = models.DateTimeField(auto_now=True)
-    Telefono = models.CharField(max_length=100, null=False)
-    Correo = models.CharField(max_length=100, null=False)
-    Direccion = models.CharField(max_length=100, null=False)
-    Tipoproveedor = models.CharField(max_length=100, null=False)
-
-    def __str__(self):
-        return "%s" % (self.Nit)
 
 class NovedadesSistema(models.Model):
     IdNovedad = models.AutoField(primary_key=True)
