@@ -240,22 +240,6 @@ class Factura(models.Model):
         verbose_name_plural = "Lista de facturas"
         verbose_name = "Generar factura"
 
-class Archivos(models.Model):
-    IdArchivo = models.AutoField(primary_key=True)
-    NombreArchivo = models.CharField(max_length=100, null=True)
-    IdVivienda = models.ForeignKey(Vivienda, on_delete=models.CASCADE)
-    Archivo = models.FileField(upload_to='documentosusuarios/', null=True)
-    Carpeta = models.CharField(max_length=100, null=True)
-    FechaSubida = models.DateTimeField(auto_now=True)
-    usuid = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return "%s" % (self.Archivo)
-
-    class Meta:
-        verbose_name_plural = "Archivos"
-        verbose_name = "Archivo"
-
 class ArchivosAcueducto(models.Model):
     IdArchivo = models.AutoField(primary_key=True)
     NombreArchivo = models.CharField(max_length=100, null=True)
@@ -381,21 +365,6 @@ class SolicitudGastos(models.Model):
     class Meta:
         verbose_name_plural = "solicitudes de gastos"
         verbose_name = "Solicitud de gasto"
-
-class AsignacionExterna(models.Model):
-    IdAsigExt = models.AutoField(primary_key=True)
-    Valor = models.CharField(max_length=10, null=False)
-    Descripcion = models.CharField(max_length=300, null=False)
-    Fecha = models.DateTimeField(auto_now=True, null=False)
-    Soporte = models.FileField(upload_to='AsignacionExterna/', null=False)
-    usuid = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return "%s %s" % (self.IdAsigExt, self.Valor)
-
-    class Meta:
-        verbose_name_plural = "Asignacion de presupuesto externo"
-        verbose_name = "Presupuesto externo"
 
 DOC_CHOICES13 = (
     ('AccessPanel', _(u"Acceso - panel de administracion - AccessPanel")),
