@@ -2,13 +2,13 @@ from django.conf.urls import url
 from usuarios.views import Inicio, Busquedas, Lmedidores, CobroRecargo,ControlPresupuestal, VerFactura, PagarMatricula, V3, Consumos, ImprimirSoporteP, PagarRyS
 from usuarios.views import ListaViviendas, ListaPropietarios, Certificar, ReportePdfPagos, ReportePagoFechas, ReporteCierresAno, PazSalvo, CertificadoGral
 from usuarios.views import AgregarVivienda, AgregarPropietario,PerfilUsuario, Certificacion, ReporteCompleto, ReporteSuspenciones, ReporteReconexion
-from usuarios.views import ModificarPropietario, ModificarVivienda,EliminarPermisos, ReporteCiclo, SubirArchivos, EliminarArchivos, Mapa, EliminarPoblacion
+from usuarios.views import ModificarPropietario, ModificarVivienda,EliminarPermisos, ReporteCiclo, Mapa, EliminarPoblacion
 from usuarios.views import VisualizarPropietario,CambioEstado, Facturacion,AgregarUsuarios, Reporte, RegistroCostoM, RegistroTarifa, ReporteEstadoCuenta
-from usuarios.views import Reportepdfpropi, IngresoExterno,ReporteGastos, ListasGastos, Suspenciones, VerOrdenSuspencion, VerOrdenReconexion, CambioTitular
+from usuarios.views import Reportepdfpropi,ReporteGastos, ListasGastos, Suspenciones, VerOrdenSuspencion, VerOrdenReconexion, CambioTitular
 from usuarios.views import ReportePredios,CierreFinanciero, ReportesVarios, ReporteSuspendido, ReportesEstado, ReportesCiclo, ReportesInfoinstal
 from usuarios.views import CambiosMasivos,Facturas, GenerarGasto,ListaCierre, InfoVivienda, GeneradorFacturas,DesactivarUsuarios, AnularFactura, DescargarFactura, DescargaMasivaFacturas
 from usuarios.views import VisualizarVivienda, BuscarSolicitud, Reconexiones, Perfil,ModificarAcueducto, ListaPqrs, RegistroPqr, VerPqr, ListadoPqrs, RespuestaPqrs, PanelAdmin
-from usuarios.views import ReporteCierre,AnularSuspenciones,BancoArchivos, RegistroMedidor, ReporteCobroMatricula,AsignarPermisos,RegistroPoblacion,CambiarContraUsuario, ListasOrdenes, GeneradorFacturasIndividual
+from usuarios.views import ReporteCierre,AnularSuspenciones, RegistroMedidor, ReporteCobroMatricula,AsignarPermisos,RegistroPoblacion,CambiarContraUsuario, ListasOrdenes, GeneradorFacturasIndividual
 
 urlpatterns = [
     url(r'^inicio/', Inicio.as_view(), name='inicio'),
@@ -25,7 +25,6 @@ urlpatterns = [
     url(r'^reportepdf/', Reportepdfpropi.as_view(), name='reportepdf'),
     url(r'^reportepdfv/', ReportePredios.as_view(), name='reportepdfv'),
     url(r'^reportecompleto/', ReporteCompleto.as_view(), name='reportecompleto'),
-    url(r'^banco/', BancoArchivos.as_view(), name='banco'),
     url(r'^vervivienda/(?P<IdVivienda>\w+)', VisualizarVivienda.as_view(), name='vervivienda'),
     url(r'^reportesuspendido/', ReporteSuspendido.as_view(), name='reportesuspendido'),
     url(r'^reportesvarios/', ReportesVarios.as_view(), name='reportesvarios'),
@@ -39,7 +38,6 @@ urlpatterns = [
     url(r'^reporteciclos/', ReporteCiclo.as_view(), name='reporteciclos'),
     url(r'^controlpresupuestal/', ControlPresupuestal.as_view(), name='controlpresupuestal'),
     url(r'^generargasto/', GenerarGasto.as_view(), name='generargasto'),
-    url(r'^ingresoexterno/', IngresoExterno.as_view(), name='ingresoexterno'),
     url(r'^cambio/', BuscarSolicitud.as_view(), name='cambio'),
     url(r'^listadogastos/', ListasGastos.as_view(), name='listadogastos'),
     url(r'^infovivienda/(?P<IdVivienda>\w+)', InfoVivienda.as_view(), name='infovivienda'),
@@ -64,8 +62,6 @@ urlpatterns = [
     url(r'^descargarfactura/(?P<IdFactura>\w+)', DescargarFactura.as_view(), name='descargarfactura'),
     url(r'^facturaindividual/(?P<IdVivienda>\w+)', GeneradorFacturasIndividual.as_view(), name='facturaindividual'),
     url(r'^facturamasiva/', DescargaMasivaFacturas.as_view(), name='facturamasiva'),
-    url(r'^subirarchivo/(?P<IdVivienda>\w+)', SubirArchivos.as_view(), name='subirarchivo'),
-    url(r'^eliminararchivo/(?P<IdArchivo>\w+)', EliminarArchivos.as_view(), name='eliminararchivo'),
     url(r'^reportepagosfechas/', ReportePagoFechas.as_view(), name='reportepagosfechas'),
     url(r'^reportesuspenciones', ReporteSuspenciones.as_view(), name='reportesuspenciones'),
     url(r'^reportereconexiones', ReporteReconexion.as_view(), name='reportereconexiones'),

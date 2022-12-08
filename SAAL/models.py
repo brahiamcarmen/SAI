@@ -240,21 +240,6 @@ class Factura(models.Model):
         verbose_name_plural = "Lista de facturas"
         verbose_name = "Generar factura"
 
-class ArchivosAcueducto(models.Model):
-    IdArchivo = models.AutoField(primary_key=True)
-    NombreArchivo = models.CharField(max_length=100, null=True)
-    IdAcueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
-    Carpeta = models.CharField(max_length=100, null=True)
-    Archivo = models.FileField(upload_to='archivos/', null=True)
-    FechaSubida = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return "%s" % (self.Archivo)
-
-    class Meta:
-        verbose_name_plural = "Archivos"
-        verbose_name = "Archivo"
-
 DOC_CHOICES10 = (
     ('No certificada', _(u"No certificada")),
     ('Certificada', _(u"Certificada"))

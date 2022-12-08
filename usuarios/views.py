@@ -6,7 +6,7 @@ from django.conf import settings
 from django.views.generic.base import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from SAAL.models import Usuario, Tarifa, CobroOrdenes,PagoOrdenes,Certificaciones, Cierres, Acueducto, ConfirCerti, ValorMatricula, OrdenesSuspencion, OrdenesReconexion, Poblacion, Factura, Ciclo, EstadoCuenta,NovedadVivienda
-from SAAL.models import Vivienda, SolicitudGastos, ArchivosAcueducto, Propietario, NovedadesSistema,Medidores, Pqrs, RespuestasPqrs,NovedadesGenerales, CobroMatricula, Permisos, Pagos
+from SAAL.models import Vivienda, SolicitudGastos, Propietario, NovedadesSistema,Medidores, Pqrs, RespuestasPqrs,NovedadesGenerales, CobroMatricula, Permisos, Pagos
 from SAAL.forms import FormRegistroPqrs,RegistroUsuario, RegistroUsuario2, RegistroVivienda,AcueductoAForm,PermisosForm, CertificarForm, CobroMatriculaForm, CostoMForm, RespuestPqrForm, RegistroPropietario, TarifasForm , ModificaPropietario
 from SAAL.forms import CambioFormEstado,AcueductoForm, GastosForm, MedidoresForm, PoblacionForm, ModificaVivienda
 from django.contrib import messages
@@ -481,8 +481,6 @@ class VisualizarVivienda(LoginRequiredMixin, View):
             novedades = NovedadVivienda.objects.filter(IdVivienda=IdVivienda)
             reconexion = OrdenesReconexion.objects.filter(IdEstadoCuenta=idestado)
             suspenciones = OrdenesSuspencion.objects.filter(IdEstadoCuenta=idestado)
-            archivos = Archivos.objects.filter(IdVivienda=IdVivienda)
-            contadorarchivos = Archivos.objects.filter(IdVivienda=IdVivienda).count()
             ordenessuspencion = CobroOrdenes.objects.filter(IdEstadoCuenta=idestado,Estado=ESTADO1,TipoOrden='Cobro por suspencion')
             ordenesreconexion = CobroOrdenes.objects.filter(IdEstadoCuenta=idestado, Estado=ESTADO1,TipoOrden='Cobro por reconexión')
             validarcobro = CobroMatricula.objects.filter(IdVivienda=IdVivienda, Estado=ESTCOBRO)
@@ -512,7 +510,7 @@ class VisualizarVivienda(LoginRequiredMixin, View):
             print(lista)
 
             return render(request, self.template_name,{
-                'lista':lista,'facturas': facturas,'cobromatricula': cobromatricula,'archivos': archivos,'contarchivos': contadorarchivos,'suspenciones': suspenciones,
+                'lista':lista,'facturas': facturas,'cobromatricula': cobromatricula,'suspenciones': suspenciones,
                 'reconexion': reconexion,'facturasemi': facturasemi,'medidores':medidores,'matriculas': matriculas,'certificaciones': certificaciones,
                 'direccion': vivienda.Direccion,'casa' : vivienda.NumeroCasa,'piso': vivienda.Piso,'matricula': vivienda.IdVivienda,'tipo': vivienda.TipoInstalacion,
                 'estrato': vivienda.Estrato,'estado': vivienda.EstadoServicio,'propietario': vivienda.IdPropietario,'fichacatastral': vivienda.FichaCastral,
@@ -819,38 +817,6 @@ class ReportePredios(LoginRequiredMixin, View):
         response['Content-Disposition'] = content
         wb.save(response)
         return response
-
-class BancoArchivos(LoginRequiredMixin, View):
-    login_url = '/'
-    template_name = 'usuarios/banco.html'
-
-    def get(self, request):
-        try:
-            elementos = os.listdir("media/Archivos/")
-            archivos= ArchivosAcueducto.objects.all()
-
-            return render(request, self.template_name,{
-                'elementos': archivos
-            })
-
-        except Vivienda.DoesNotExist:
-            return render(request, "pages-404.html")
-
-    def post(self, request):
-        idpropietario = request.POST.get("idpropietario")
-        nombrearchivo = request.POST.get("nombre")
-        archivo = request.FILES.get("file")
-        propi = Propietario.objects.get(IdPropietario=idpropietario)
-        propietario = Propietario.objects.filter(IdPropietario=idpropietario).exists()
-        if propietario is True:
-            archivo = Archivos(IdPropietario=propi, NombreArchivo=nombrearchivo, Archivo=archivo)
-            archivo.save()
-            messages.add_message(request, messages.INFO, 'El archivo se subio correspondientes')
-            return HttpResponseRedirect(reverse('usuarios:banco'))
-
-        else:
-            messages.add_message(request, messages.ERROR, 'El archivo No se subio correspondientes')
-            return HttpResponseRedirect(reverse('usuarios:banco'))
 
 class ReporteSuspendido(LoginRequiredMixin, View):
     login_url = '/'
@@ -1381,17 +1347,13 @@ class ControlPresupuestal(LoginRequiredMixin, View):
             contsoli = SolicitudGastos.objects.filter(Estado=ESTADO1).count()
             totalnoti = contqrs + contsoli
             contadorpen1 = SolicitudGastos.objects.filter(Estado=ESTADO1)
-
             usuario = Usuario.objects.get(usuid=request.user.pk)
             solicitudesgastos = SolicitudGastos.objects.filter(Estado=ESTADO1)
-            asignacionextera = AsignacionExterna.objects.all()
             form = self.form_class()
             contador = SolicitudGastos.objects.all().count()
             contadorpen = SolicitudGastos.objects.filter(Estado=ESTADO1).count()
             contadorapro = SolicitudGastos.objects.filter(Estado=ESTADO2).count()
             contadoranu = SolicitudGastos.objects.filter(Estado=ESTADO3).count()
-            contadorasig = AsignacionExterna.objects.all().count()
-            sumaasigexter = AsignacionExterna.objects.all()
             aprobado = SolicitudGastos.objects.filter(Estado=ESTADO2)
             pagos = Pagos.objects.all()
             viviendasope = Vivienda.objects.filter(EstadoServicio=E1).count()
@@ -1405,16 +1367,12 @@ class ControlPresupuestal(LoginRequiredMixin, View):
                 valor = i.ValorPago
                 pago += int(valor)
 
-            suma1 = 0
-            for i in sumaasigexter:
-                suma1 += int(i.Valor)
-
             suma2 = 0
             for i in aprobado:
                 valor = int(i.Valor)
                 suma2 += valor
 
-            totalingresos = pago + suma1
+            totalingresos = pago
             gastos = int(suma2)
             presupuesto = totalingresos - gastos
             #mensualidades:
@@ -1448,12 +1406,10 @@ class ControlPresupuestal(LoginRequiredMixin, View):
                     'porcentaje': int(pago0 / totalpormes * 100),
                     'form': form,
                     'solicitudesgastos': solicitudesgastos,
-                    'asignacionexterna': asignacionextera,
                     'contador': contador,
                     'contadorp': contadorpen,
                     'contadora': contadorapro,
                     'contadoranu': contadoranu,
-                    'contadorasig': contadorasig,
                     'gastos': gastos,
                     'pago': int(totalingresos),
                     'presupuesto': presupuesto,
@@ -1518,37 +1474,6 @@ class GenerarGasto(LoginRequiredMixin, View):
                 return HttpResponseRedirect(reverse('usuarios:generargasto'))
 
         except Usuario.DoesNotExist:
-            return render(request, "pages-404.html")
-
-class IngresoExterno(LoginRequiredMixin, View):
-    login_url = '/'
-    template_name = 'usuarios/ingresoexterno.html'
-
-    def get(self, request):
-        try:
-            return render(request, self.template_name)
-
-        except LoginRequiredMixin.DoesNotExist:
-            return render(request, "pages-404.html")
-
-    def post(self, request):
-        try:
-            valor = request.POST.get("valor", "")
-            descripcion = request.POST.get("descripcion", "")
-            soporte = request.FILES.get("soporte", "")
-            usuario = Usuario.objects.get(usuid=request.user.pk)
-
-            if valor and descripcion is not None:
-                externos = AsignacionExterna(Valor=valor, Descripcion=descripcion, Soporte=soporte, usuid=usuario)
-                externos.save()
-                messages.add_message(request, messages.INFO, 'Asignacion exitosa')
-                return HttpResponseRedirect(reverse('usuarios:controlpresupuestal'))
-
-            else:
-                messages.add_message(request, messages.WARNING, 'Informacion incompleta')
-                return HttpResponseRedirect(reverse('usuarios:ingresoexterno'))
-
-        except LoginRequiredMixin.DoesNotExist:
             return render(request, "pages-404.html")
 
 class BuscarSolicitud(LoginRequiredMixin, View):
@@ -1618,17 +1543,13 @@ class ListasGastos(LoginRequiredMixin, View):
             contadorpen = SolicitudGastos.objects.filter(Estado=ESTADO1)
 
             solicitudesgastos = SolicitudGastos.objects.all()
-            asignacionextera = AsignacionExterna.objects.all()
             cierre = Cierres.objects.all()
             contador = SolicitudGastos.objects.all().count()
-            contadorasig = AsignacionExterna.objects.all().count()
             contcierre = Cierres.objects.all().count()
 
             return render(request, self.template_name, {
                 'solicitudesgastos': solicitudesgastos,
-                'asignacionexterna': asignacionextera,
                 'contador': contador,
-                'contadorasig': contadorasig,
                 'cierres': cierre,
                 'contcierre': contcierre,
                 'notificaciones': contadorpen,
@@ -2867,76 +2788,6 @@ class DescargaMasivaFacturas(LoginRequiredMixin, View):
             })
 
         except Usuario.DoesNotExist:
-            return render(request, "pages-404.html")
-
-class SubirArchivos(LoginRequiredMixin, View):
-    login_url = '/'
-    template_name = 'usuarios/subirarchivo.html'
-    vervivienda = VisualizarVivienda
-
-    def get(self, request, IdVivienda):
-        try:
-            vivienda = Vivienda.objects.get(IdVivienda=IdVivienda)
-            matricula = vivienda.IdVivienda
-            return render(request, self.template_name,{
-                'matricula': matricula
-            })
-        except Usuario.DoesNotExist:
-            return render(request, "pages-404.html")
-
-    def post(self, request, IdVivienda):
-        try:
-            usuario = Usuario.objects.get(usuid=request.user.pk)
-            vivienda = Vivienda.objects.get(IdVivienda=IdVivienda)
-            idvivienda= vivienda.IdVivienda
-            archivo = request.FILES.get("archivo")
-            base = os.path.basename(str(archivo))
-            print(base)
-            if archivo is not None:
-                subir = Archivos(NombreArchivo=base,usuid=usuario, IdVivienda=vivienda, Archivo=archivo, Carpeta=str(idvivienda))
-                subir.save()
-                ver = self.vervivienda()
-                ejercutar = ver.get(request, idvivienda)
-                return ejercutar
-
-            else:
-                messages.add_message(request, messages.ERROR, 'Error al subir el archivo, compruebe nuevamente')
-                return HttpResponseRedirect(reverse('usuarios:inicio'))
-
-        except Usuario.DoesNotExist:
-            return render(request, "pages-404.html")
-
-class EliminarArchivos(LoginRequiredMixin, View):
-    login_url = '/'
-    vervivienda = VisualizarVivienda
-    template_name = 'usuarios/eliminararchivos.html'
-
-    def get(self, request, IdArchivo):
-        try:
-            archivo = Archivos.objects.filter(IdArchivo=IdArchivo)
-            none = Archivos.objects.get(IdArchivo=IdArchivo)
-            matricula = none.IdVivienda
-            return render(request, self.template_name,{
-                'matricula': matricula,
-                'archivos': archivo
-            })
-        except Usuario.DoesNotExist:
-            return render(request, "pages-404.html")
-
-    def post(self, request, IdArchivo):
-        try:
-            usuario = Usuario.objects.get(usuid=request.user.pk)
-            if usuario is not None:
-                archivo = Archivos.objects.get(IdArchivo=IdArchivo)
-                archivo.delete()
-                messages.add_message(request, messages.INFO, 'El archivo se elimino correctamente')
-                return HttpResponseRedirect(reverse('usuarios:inicio'))
-
-            else:
-                messages.add_message(request, messages.ERROR, 'Error al subir el archivo, compruebe nuevamente')
-                return HttpResponseRedirect(reverse('usuarios:inicio'))
-
-        except Vivienda.DoesNotExist:
             return render(request, "pages-404.html")
 
 class ReportePdfPagos(LoginRequiredMixin, View):
