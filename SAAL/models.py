@@ -12,19 +12,17 @@ DOC_CHOICES = (
 
 class Tarifa(models.Model):
     IdTarifa =models.CharField(primary_key=True,max_length=4, null=False)
-    Valor = models.CharField(max_length=15, null=False)
-    Mantenimiento = models.CharField(max_length=15, null=False)
-    Recargo = models.CharField(max_length=15, null=False)
+    Valor = models.CharField(max_length=5, null=False)
+    Mantenimiento = models.CharField(max_length=5, null=False)
+    Recargo = models.CharField(max_length=5, null=False)
+    TarifaReconexion = models.CharField(max_length=5, null=True)
+    TarifaSuspencion = models.CharField(max_length=5, null=True)
+    bifamiliar = models.CharField(max_length=5, null=True)
+    especial = models.CharField(max_length=5, null=True)
+    multifamiliar = models.CharField(max_length=5, null=True)
     FechaInicial = models.DateTimeField(null=False)
     FechaFinal = models.DateTimeField(null=False)
     Ano = models.CharField(max_length=4, null=True)
-    consumomin = models.IntegerField(null=True)
-    consumotipo1 = models.IntegerField(null=True)
-    consumotipo2 = models.IntegerField(null=True)
-    Potipo1 = models.FloatField(max_length=5, null=True)
-    Potipo2 = models.FloatField(max_length=5, null=True)
-    TarifaReconexion = models.CharField(max_length=4, null=True)
-    TarifaSuspencion = models.CharField(max_length=4, null=True)
 
     def __str__(self):
         return "%s" % (self.IdTarifa)

@@ -268,11 +268,6 @@ class TarifasForm(forms.ModelForm):
             'FechaInicial',
             'FechaFinal',
             'Ano',
-            'consumomin',
-            'consumotipo1',
-            'consumotipo2',
-            'Potipo1',
-            'Potipo2',
             'TarifaReconexion',
             'TarifaSuspencion',
         ]
@@ -284,11 +279,6 @@ class TarifasForm(forms.ModelForm):
             'FechaInicial': _(u'Ingrese la fecha inicial'),
             'FechaFinal': _(u'Ingrese la fecha de caducidad'),
             'Ano': _(u'Ingrese el año'),
-            'cosumomin': _(u'Ingrese el consumo minimo'),
-            'consumotipo1': _(u'Ingrese el consumo medio'),
-            'consumotipo2': _(u'Ingrese el consumo maximo'),
-            'Potipo1': _(u'Porcentaje minimo'),
-            'Potipo2': _(u'Porcentaje medio'),
             'TarifaReconexion': _(u'Ingrese tarifa de reconexion'),
             'TarifaSuspencion': _(u'Ingrese tarifa de Suspencion'),
 
