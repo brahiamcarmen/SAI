@@ -265,22 +265,22 @@ class TarifasForm(forms.ModelForm):
             'Valor',
             'Mantenimiento',
             'Recargo',
-            'FechaInicial',
-            'FechaFinal',
             'Ano',
             'TarifaReconexion',
             'TarifaSuspencion',
         ]
         labels = {
-            'IdTarifa': _(u'Ingrese identificador de la tarifa'),
-            'Valor': _(u'Ingrese el valor'),
-            'Mantenimiento': _(u'Ingrese tarifa de mantenimiento'),
-            'Recargo': _(u'Ingrese el valor por mora'),
-            'FechaInicial': _(u'Ingrese la fecha inicial'),
-            'FechaFinal': _(u'Ingrese la fecha de caducidad'),
-            'Ano': _(u'Ingrese el año'),
-            'TarifaReconexion': _(u'Ingrese tarifa de reconexion'),
-            'TarifaSuspencion': _(u'Ingrese tarifa de Suspencion'),
+            'IdTarifa': _(u'Identificador de la tarifa'),
+            'Valor': _(u'Aporte unifamiliar'),
+            'Mantenimiento': _(u'Aporte de mantenimiento'),
+            'Recargo': _(u'Aporte por mora'),
+            'TarifaReconexion': _(u'Aporte por reconexion'),
+            'TarifaSuspencion': _(u'Aporte por Suspencion'),
+            'bifamiliar': _(u'Aporte bifamiliar'),
+            'mulfamiliar': _(u'Aporte multifamiliar'),
+            'Especial': _(u'Aporte especial'),
+            'Ano': _(u'Año de vigencia'),
+
 
 
         }

@@ -20,8 +20,7 @@ class Tarifa(models.Model):
     bifamiliar = models.CharField(max_length=5, null=True)
     especial = models.CharField(max_length=5, null=True)
     multifamiliar = models.CharField(max_length=5, null=True)
-    FechaInicial = models.DateTimeField(null=False)
-    FechaFinal = models.DateTimeField(null=False)
+    FechaInicial = models.DateTimeField(auto_now=True)
     Ano = models.CharField(max_length=4, null=True)
 
     def __str__(self):
