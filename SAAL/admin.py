@@ -1,6 +1,4 @@
 from django.contrib import admin
-
-from django.contrib import admin
 from SAAL.models import Usuario, ValorMatricula
 from SAAL.models import Acueducto
 from SAAL.models import Propietario

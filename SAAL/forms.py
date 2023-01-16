@@ -2,7 +2,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from SAAL.models import Vivienda, SolicitudGastos, Certificaciones, Medidores, Poblacion
-from SAAL.models import Propietario, CobroMatricula, ValorMatricula, Pqrs, Usuario
+from SAAL.models import Propietario, CobroMatricula, ValorMatricula, Usuario
 from SAAL.models import Acueducto, Tarifa, Permisos, Pqrs
 
 
@@ -10,7 +10,7 @@ class RegistroVivienda(forms.ModelForm):
     class Meta:
         model = Vivienda
         fields = "__all__"
-        labels ={
+        labels = {
             'IdVivienda': _(u'Numero de matricula'),
             'Direccion': _(u'Direccion Completa'),
             'NumeroCasa': _(u'Numero de la casa'),
@@ -43,11 +43,12 @@ class RegistroVivienda(forms.ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
 
+
 class ModificaVivienda(forms.ModelForm):
     class Meta:
         model = Vivienda
         fields = "__all__"
-        labels ={
+        labels = {
             'IdVivienda': _(u''),
             'Direccion': _(u'Direccion Completa'),
             'NumeroCasa': _(u'Numero de la casa'),
@@ -57,7 +58,7 @@ class ModificaVivienda(forms.ModelForm):
             'IdPropietario': _(u''),
             'IdAcueducto': _(u''),
             'usuid': _(u''),
-            'FichaCastral':_(u'Ficha catastral'),
+            'FichaCastral': _(u'Ficha catastral'),
         }
         widgets = {
             'IdVivienda': forms.HiddenInput(),
@@ -74,18 +75,19 @@ class ModificaVivienda(forms.ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
 
+
 class RegistroPropietario(forms.ModelForm):
     class Meta:
         model = Propietario
         fields = "__all__"
-        labels ={
+        labels = {
             'IdPropietario': _(u'Numero de Identificacion'),
             'Nombres': _(u'Nombres'),
             'Apellidos': _(u'Apellidos'),
             'NoTelefono': _('Telefono o Celular'),
             'Email': _(u'Correo electronico'),
-            'Direccion':_(u'Direccion'),
-            'IdPoblacion':_(u'Tipo de población'),
+            'Direccion': _(u'Direccion'),
+            'IdPoblacion': _(u'Tipo de población'),
         }
 
     def __init__(self, propietario=None, *args, **kwargs):
@@ -96,11 +98,12 @@ class RegistroPropietario(forms.ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
 
+
 class ModificaPropietario(forms.ModelForm):
     class Meta:
         model = Propietario
         fields = "__all__"
-        labels ={
+        labels = {
             'IdPropietario': _(u''),
             'Nombres': _(u'Nombres'),
             'Apellidos': _(u'Apellidos'),
@@ -119,6 +122,7 @@ class ModificaPropietario(forms.ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
 
+
 class AcueductoForm(forms.ModelForm):
     class Meta:
         model = Acueducto
@@ -136,6 +140,7 @@ class AcueductoForm(forms.ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
 
+
 class GastosForm(forms.ModelForm):
     class Meta:
         model = SolicitudGastos
@@ -146,12 +151,13 @@ class GastosForm(forms.ModelForm):
             'Estado': _(u'Modificar el estado de orden')
         }
 
-    def __init__(self, gasto=None,*args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super(GastosForm, self).__init__(*args, **kwargs)
         self.fields['Estado'].required = True
 
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
+
 
 class MedidoresForm(forms.ModelForm):
     class Meta:
@@ -169,12 +175,13 @@ class MedidoresForm(forms.ModelForm):
             'IdVivienda': forms.HiddenInput(),
         }
 
-    def __init__(self, gasto=None, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super(MedidoresForm, self).__init__(*args, **kwargs)
         self.fields['IdMedidor'].required = True
 
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
+
 
 class CertificarForm(forms.ModelForm):
     class Meta:
@@ -189,9 +196,9 @@ class CertificarForm(forms.ModelForm):
             'Estado': _(u'Modificar estado'),
             'Descripcion': _(u'Descripcion'),
             'Soporte': _(u'Cumple los requisitos minimos de certificacion'),
-            'IdVivienda':_(u''),
+            'IdVivienda': _(u''),
         }
-        widgets ={
+        widgets = {
             'IdVivienda': forms.HiddenInput()
         }
 
@@ -201,6 +208,7 @@ class CertificarForm(forms.ModelForm):
 
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
+
 
 class CobroMatriculaForm(forms.ModelForm):
     class Meta:
@@ -221,6 +229,7 @@ class CobroMatriculaForm(forms.ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
 
+
 class PoblacionForm(forms.ModelForm):
     class Meta:
         model = Poblacion
@@ -240,6 +249,7 @@ class PoblacionForm(forms.ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
 
+
 class CostoMForm(forms.ModelForm):
     class Meta:
         model = ValorMatricula
@@ -256,6 +266,7 @@ class CostoMForm(forms.ModelForm):
 
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
+
 
 class TarifasForm(forms.ModelForm):
     class Meta:
@@ -292,6 +303,7 @@ class TarifasForm(forms.ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
 
+
 class RespuestPqrForm(forms.ModelForm):
     class Meta:
         model = Pqrs
@@ -308,6 +320,7 @@ class RespuestPqrForm(forms.ModelForm):
 
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
+
 
 class AcueductoAForm(forms.ModelForm):
     class Meta:
@@ -326,12 +339,13 @@ class AcueductoAForm(forms.ModelForm):
             'IdAcueducto': forms.HiddenInput(),
         }
 
-    def __init__(self, gasto=None, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super(AcueductoAForm, self).__init__(*args, **kwargs)
         self.fields['IdAcueducto'].required = True
 
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
+
 
 class PermisosForm(forms.ModelForm):
     class Meta:
@@ -355,10 +369,11 @@ class PermisosForm(forms.ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
 
+
 class RegistroUsuario(forms.ModelForm):
     class Meta:
         model = User
-        fields =[
+        fields = [
             'username',
             'password',
             'first_name',
@@ -370,7 +385,7 @@ class RegistroUsuario(forms.ModelForm):
             'password': _(u'Contraseña'),
             'first_name': _(u'Nombres'),
             'last_name': _(u'Apellidos'),
-            'email':_(u'Correo electrónico')
+            'email': _(u'Correo electrónico')
         }
         widgets = {
             'password': forms.PasswordInput(),
@@ -386,22 +401,23 @@ class RegistroUsuario(forms.ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
 
+
 class RegistroUsuario2(forms.ModelForm):
     class Meta:
         model = Usuario
-        fields =  "__all__"
+        fields = "__all__"
         labels = {
             'IdUsuario': _(u''),
             'fotoUsuario': _(u'Foto de usuario'),
-            'TipoUsuario':_(u'Tipo de usuario'),
+            'TipoUsuario': _(u'Tipo de usuario'),
             'FechaCreacion': _(u''),
             'celular': _(u'Numero de celular'),
             'usuid': _(u''),
             'IdAcueducto': _(u'Seleccionar empresa')
         }
         widgets = {
-            'usuid':forms.HiddenInput(),
-            'FechaCreacion':forms.HiddenInput()
+            'usuid': forms.HiddenInput(),
+            'FechaCreacion': forms.HiddenInput()
         }
 
     def __init__(self, *args, **kwargs):
@@ -410,13 +426,14 @@ class RegistroUsuario2(forms.ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
 
+
 class CambioFormEstado(forms.ModelForm):
     class Meta:
         model = Vivienda
         fields = [
             'EstadoServicio'
         ]
-        labels ={
+        labels = {
             'EstadoServicio': _(u'Seleccione el estado del servicio'),
         }
 
@@ -428,23 +445,24 @@ class CambioFormEstado(forms.ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
 
+
 class FormRegistroPqrs(forms.ModelForm):
     class Meta:
         model = Pqrs
         fields = "__all__"
-        labels ={
+        labels = {
             'Nombre': _(u'Nombre completo'),
             'Telefono': _(u'Telefono o Celular'),
             'Email': _(u'Correo electronico'),
-            'Direccion':_(u'Direccion'),
+            'Direccion': _(u'Direccion'),
             'TipoSolicitud': _(u'Tipo de solicitud'),
             'Clasificacion': _(u'Clasificacion'),
-            'Descripcion':_(u'Descripcion de la solicitud'),
+            'Descripcion': _(u'Descripcion de la solicitud'),
             'usuid': _(u''),
             'Estado': _(u''),
         }
         widgets = {
-            'usuid':forms.HiddenInput(),
+            'usuid': forms.HiddenInput(),
             'Estado': forms.HiddenInput(),
         }
 
