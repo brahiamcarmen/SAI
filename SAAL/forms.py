@@ -49,22 +49,20 @@ class ModificaVivienda(forms.ModelForm):
         model = Vivienda
         fields = "__all__"
         labels = {
-            'IdVivienda': _(u''),
+            'IdVivienda': _(u'Numero de matricula'),
             'Direccion': _(u'Direccion Completa'),
             'NumeroCasa': _(u'Numero de la casa'),
-            'TipoInstalacion': _('seleccione tipo de instalacion'),
+            'Piso': _(u'Piso'),
+            'Ciclo': _('Seleccione ciclo'),
+            'TipoInstalacion': _('Seleccione tipo de instalacion'),
             'EstadoServicio': _(u'Seleccione estado del servicio'),
             'Estrato': _(u'Seleccione el estrato'),
-            'IdPropietario': _(u''),
-            'IdAcueducto': _(u''),
-            'usuid': _(u''),
+            'MatriculaAnt': _(u'Digite la matricula anterior'),
+            'InfoInstalacion': _(u'Seleccione tipo de predio'),
+            'ProfAcometida': _(u'Profundidad acometida'),
+            'CantHabitantes': _(u'Cantidad de habitantes'),
             'FichaCastral': _(u'Ficha catastral'),
-        }
-        widgets = {
-            'IdVivienda': forms.HiddenInput(),
-            'IdAcueducto': forms.HiddenInput(),
-            'usuid': forms.HiddenInput(),
-            'IdPropietario': forms.HiddenInput()
+            'Diametro': _(u'Seleccione el diametro de tuberia'),
         }
 
     def __init__(self, vivienda=None, *args, **kwargs):
