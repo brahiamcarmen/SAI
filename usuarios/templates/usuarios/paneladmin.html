@@ -178,17 +178,17 @@
           <div class="tab-pane fade" id="tarifas" role="tabpanel" aria-labelledby="nav-contact-tab">
             <div class="row" style="margin-top:0.5rem;">
                 <div class="col-sm-6">
-                    <h1 class="h3 text-gray-800">Listado de tarifas registradas</h1>
+
                 </div>
                  <div class="col-sm-6">
                     <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" onclick="window.location='{% url 'usuarios:registrotarifa' %}'">Agregar tarifa</button>
                 </div>
             </div>
-            <div>
+            <div class="row">
                 <div class="col-sm-12" style="margin-top:0.5rem;">
                     <div class="row">    
                         {% for tarifa in tarifas %}
-                        <div class="col-sm-6">
+                        <div class="col-sm-12" style="margin-top:0.5rem;">
                             <div class="card text-center">
                                 <div class="card-header">
                                     <b class="text-primary">Identificador de tarifa: </b>{{ tarifa.IdTarifa }}
@@ -200,70 +200,43 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="col-sm-12 text-success"><b>Tarifas fijas</b></div>
+                                        <div class="col-sm-12 text-success"><b>Aportes fijos</b></div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-3">
-                                            <b class="text-primary">Tarifa plena</b><br>
+                                            <b class="text-primary">Aporte unifamiliar</b><br>
                                             ${{ tarifa.Valor|intcomma }}
                                         </div>
-                                        <div class="col-sm-5">
-                                            <b class="text-primary">Tarifa mantenimiento</b><br>
+                                        <div class="col-sm-3">
+                                            <b class="text-primary">Aporte mantenimiento</b><br>
                                             ${{ tarifa.Mantenimiento|intcomma }}
                                         </div>
-                                        <div class="col-sm-4">
-                                            <b class="text-primary">Recargo por mora</b><br>
+                                        <div class="col-sm-3">
+                                            <b class="text-primary">Aporte por mora</b><br>
                                             ${{ tarifa.Recargo|intcomma }}
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <b class="text-primary">Aporte especial</b><br>
+                                            ${{ tarifa.especial|intcomma }}
                                         </div>
                                     </div>
                                     <br>
                                     <div class="row">
-                                        <div class="col-sm-6">
-                                            <b class="text-primary">Tarifa suspensión</b><br>
-                                            ${{ tarifa.Valor|intcomma }}
+                                        <div class="col-sm-3">
+                                            <b class="text-primary">Aporte por suspensión</b><br>
+                                            ${{ tarifa.TarifaSuspencion|intcomma }}
                                         </div>
-                                        <div class="col-sm-6">
-                                            <b class="text-primary">Tarifa reconexión</b><br>
-                                            ${{ tarifa.Mantenimiento|intcomma }}
+                                        <div class="col-sm-3">
+                                            <b class="text-primary">Aporte por reconexión</b><br>
+                                            ${{ tarifa.TarifaReconexion|intcomma }}
                                         </div>
-                                    </div>
-                                    <hr>
-                                    <div class="row" style="margin-top:0.3rem">
-                                        <div class="col-sm-12 text-success"><b>Consumo m<sup>3</sup></b></div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-4">
-                                            <b class="text-primary">Minimo</b><br>
-                                            {{ tarifa.consumomin }} m<sup>3</sup>
+                                        <div class="col-sm-3">
+                                            <b class="text-primary">Aporte bifamiliar</b><br>
+                                            ${{ tarifa.bifamiliar|intcomma }}
                                         </div>
-                                        <div class="col-sm-4">
-                                            <b class="text-primary">Medio</b><br>
-                                            {{ tarifa.consumotipo1 }} m<sup>3</sup>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <b class="text-primary">Alto</b><br>
-                                            {{ tarifa.consumotipo2 }} m<sup>3</sup>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    <div class="row" style="margin-top:0.3rem">
-                                        <div class="col-sm-12 text-success"><b>Costos por m<sup>3</sup></b></div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-4">
-                                            <b class="text-primary">Minimo</b><br>
-                                            ${{ tarifa.Valor|intcomma }}<br>
-                                            <sup>hasta {{ tarifa.consumomin }}  m<sup>3</sup></sup>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <b class="text-primary">Medio</b><br>
-                                            {{ tarifa.Potipo1 }}%<br>
-                                            <sup>{{ tarifa.consumomin }} + 1 m<sup>3</sup> a {{ tarifa.consumotipo1 }} m<sup>3</sup></sup>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <b class="text-primary">Alto</b><br>
-                                            {{ tarifa.Potipo2 }}%<br>
-                                            <sup>mayor a {{ tarifa.consumotipo2 }} m<sup>3
+                                        <div class="col-sm-3">
+                                            <b class="text-primary">Aporte multifamiliar * P</b><br>
+                                            ${{ tarifa.multifamiliar|intcomma }}
                                         </div>
                                     </div>
                                     <hr>
@@ -272,17 +245,11 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-6">
-                                            <b class="text-primary">Inicio</b><br>
+                                            <b class="text-primary">Fecha de registro</b>
                                             {{ tarifa.FechaInicial }}
                                         </div>
                                         <div class="col-sm-6">
-                                            <b class="text-primary">Final</b><br>
-                                            {{ tarifa.FechaFinal }} 
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <b class="text-primary">Año</b><br>
+                                            <b class="text-primary">Vigencia</b>
                                             {{ tarifa.Ano }}
                                         </div>
                                     </div>
@@ -292,7 +259,6 @@
                          {% endfor %}
                      </div>
                 </div>
-                <br>
             </div>
           </div>
         <div class="tab-pane fade" id="matriculas" role="tabpanel" aria-labelledby="nav-contact-tab">

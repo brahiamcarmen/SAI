@@ -129,9 +129,8 @@ DOC_CHOICES6= (
 
 DOC_CHOICES7= (
     ('Unifamiliar', _(u"Unifamiliar")),
-    ('Unifamiliar', _(u"Unifamiliar")),
-    ('Multifamiliar', _(u"Multifamiliar")),
     ('Bifamiliar', _(u"Bifamiliar")),
+    ('Multifamiliar', _(u"Multifamiliar")),
     ('Comercial', _(u"Comercial")),
     ('Especial', _(u"Especial")),
     ('Agricola', _(u"Agricola"))

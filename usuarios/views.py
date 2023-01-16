@@ -244,15 +244,9 @@ class AgregarVivienda(LoginRequiredMixin, View):
             infoinstalacion = request.POST.get("InfoInstalacion")
             profacometida = request.POST.get("ProfAcometida")
             canthabitantes = request.POST.get("CantHabitantes")
-            idvalor = request.POST.get("IdValor")
-            cantcuotas = request.POST.get("CantCuotas")
             fichacatastral = request.POST.get("FichaCastral")
             datos = Usuario.objects.get(usuid=request.user.pk)
             dr = datos.IdAcueducto
-            tipousuario = datos.TipoUsuario
-            valormatricula = ValorMatricula.objects.get(IdValor=idvalor)
-            costo = valormatricula.Valor
-            cuota = int(costo) / int(cantcuotas)
             acueducto = Acueducto.objects.get(IdAcueducto=dr.pk)
             propietario = Propietario.objects.get(IdPropietario=idpropietario)
             validarvi = Vivienda.objects.filter(IdVivienda=idvivienda).exists()
@@ -266,13 +260,11 @@ class AgregarVivienda(LoginRequiredMixin, View):
                                     IdPropietario=propietario,MatriculaAnt=matricula, InfoInstalacion=infoinstalacion,
                                     ProfAcometida=profacometida,CantHabitantes=canthabitantes,IdAcueducto=acueducto,FichaCastral=fichacatastral, usuid=datos.usuid)
                 vivienda.save()
-                cobromatricula = CobroMatricula(Descripcion=DESCOBRO,Cuota=int(cuota), IdVivienda=vivienda, Estado=ESTCOBRO, IdValor=valormatricula, CantCuotas=cantcuotas, CuotasPendientes=cantcuotas, ValorPendiente=costo)
-                cobromatricula.save()
                 certificacion = Certificaciones(Nit=acueducto,NombreEmpresa=acueducto.Nombre, Estado=ESTADOCERTI, IdVivienda=vivienda)
                 certificacion.save()
                 estadocuenta = EstadoCuenta(Valor=0,IdVivienda=vivienda,Estado=Estadocue,Descripcion=COBROCONSUMO)
                 estadocuenta.save()
-                messages.add_message(request, messages.INFO, 'la vivienda se registro correctamente')
+                messages.add_message(request, messages.INFO, 'El predio se registro correctamente')
                 return HttpResponseRedirect(reverse('usuarios:listaviviendas'))
 
         except User.DoesNotExist:
@@ -1842,32 +1834,16 @@ class RegistroTarifa(LoginRequiredMixin, View):
             return render(request, "pages-404.html")
 
     def post(self, request):
+        form = self.form_class(request.POST)
         try:
-            idtarifa = request.POST.get("IdTarifa")
-            valor = request.POST.get("Valor")
-            fechainicial = request.POST.get("FechaInicial")
-            fechafinal= request.POST.get("FechaFinal")
-            ano = request.POST.get("Ano")
-
-            tarifas = Tarifa.objects.filter(IdTarifa=idtarifa).exists
-
-            if tarifas is not None:
-                tarifa = Tarifa(IdTarifa=idtarifa, Valor=valor, FechaInicial=fechainicial, FechaFinal=fechafinal, Ano=ano)
-                tarifa.save()
-                datos = Usuario.objects.get(usuid=request.user.pk)
-                tipousuario = datos.TipoUsuario
-                idpo = idtarifa
-                descripcion = valor
-                informacion = 'Identificador: ' + str(idpo) + '  Valor: ' + descripcion + 'Año:' + ano
-                asunto = "se registra nuevo valor para el cobro de matricula"
-                enviocorre = EnvioCorreo()
-                confirmar = enviocorre.get(asunto, informacion, tipousuario)
-                messages.add_message(request, messages.INFO, 'la tarifa se registro correctamente')
-                return HttpResponseRedirect(reverse('usuarios:perfil', confirmar))
+            if form.is_valid():
+                form.save()
+                messages.add_message(request, messages.INFO, 'La informacion se guardo correctamente')
+                return HttpResponseRedirect(reverse('usuarios:paneladmin'))
 
             else:
                 messages.add_message(request, messages.ERROR, 'Ya existe una tarifa con esa informacion')
-                return HttpResponseRedirect(reverse('usuarios:perfil'))
+                return HttpResponseRedirect(reverse('usuarios:paneladmin'))
 
         except Usuario.DoesNotExist:
             return render(request, "pages-404.html")

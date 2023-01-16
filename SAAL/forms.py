@@ -20,14 +20,14 @@ class RegistroVivienda(forms.ModelForm):
             'EstadoServicio': _(u'Seleccione estado del servicio'),
             'Estrato': _(u'Seleccione el estrato'),
             'IdPropietario': _(u'Seleccione el propietario'),
-            'IdAcueducto': _(u''),
-            'usuid': _(u''),
             'MatriculaAnt': _(u'Digite la matricula anterior'),
             'InfoInstalacion': _(u'Seleccione tipo de predio'),
             'ProfAcometida': _(u'Profundidad acometida'),
             'CantHabitantes': _(u'Cantidad de habitantes'),
             'FichaCastral': _(u'Ficha catastral'),
             'Diametro': _(u'Seleccione el diametro de tuberia'),
+            'IdAcueducto': _(u''),
+            'usuid': _(u''),
         }
         widgets = {
             'IdAcueducto': forms.HiddenInput(),
@@ -265,9 +265,12 @@ class TarifasForm(forms.ModelForm):
             'Valor',
             'Mantenimiento',
             'Recargo',
-            'Ano',
             'TarifaReconexion',
             'TarifaSuspencion',
+            'bifamiliar',
+            'multifamiliar',
+            'especial',
+            'Ano',
         ]
         labels = {
             'IdTarifa': _(u'Identificador de la tarifa'),
@@ -277,16 +280,9 @@ class TarifasForm(forms.ModelForm):
             'TarifaReconexion': _(u'Aporte por reconexion'),
             'TarifaSuspencion': _(u'Aporte por Suspencion'),
             'bifamiliar': _(u'Aporte bifamiliar'),
-            'mulfamiliar': _(u'Aporte multifamiliar'),
-            'Especial': _(u'Aporte especial'),
+            'multifamiliar': _(u'Aporte multifamiliar'),
+            'especial': _(u'Aporte especial'),
             'Ano': _(u'Año de vigencia'),
-
-
-
-        }
-
-        widgets = {
-            'FechaInicial': forms.DateInput()
         }
 
     def __init__(self, *args, **kwargs):
