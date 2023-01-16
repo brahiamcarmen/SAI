@@ -1,14 +1,22 @@
 from django.conf.urls import url
-from usuarios.views import Inicio, Busquedas, Lmedidores, CobroRecargo,ControlPresupuestal, VerFactura, PagarMatricula, V3, Consumos, ImprimirSoporteP, PagarRyS
-from usuarios.views import ListaViviendas, ListaPropietarios, Certificar, ReportePdfPagos, ReportePagoFechas, ReporteCierresAno, PazSalvo, CertificadoGral
-from usuarios.views import AgregarVivienda, AgregarPropietario,PerfilUsuario, Certificacion, ReporteCompleto, ReporteSuspenciones, ReporteReconexion
-from usuarios.views import ModificarPropietario, ModificarVivienda,EliminarPermisos, ReporteCiclo, Mapa, EliminarPoblacion
-from usuarios.views import VisualizarPropietario,CambioEstado, Facturacion,AgregarUsuarios, Reporte, RegistroCostoM, RegistroTarifa, ReporteEstadoCuenta
-from usuarios.views import Reportepdfpropi,ReporteGastos, ListasGastos, Suspenciones, VerOrdenSuspencion, VerOrdenReconexion, CambioTitular
-from usuarios.views import ReportePredios,CierreFinanciero, ReportesVarios, ReporteSuspendido, ReportesEstado, ReportesCiclo, ReportesInfoinstal
-from usuarios.views import CambiosMasivos,Facturas, GenerarGasto,ListaCierre, InfoVivienda, GeneradorFacturas,DesactivarUsuarios, AnularFactura, DescargarFactura, DescargaMasivaFacturas
-from usuarios.views import VisualizarVivienda, BuscarSolicitud, Reconexiones, Perfil,ModificarAcueducto, ListaPqrs, RegistroPqr, VerPqr, ListadoPqrs, RespuestaPqrs, PanelAdmin
-from usuarios.views import ReporteCierre,AnularSuspenciones, RegistroMedidor, ReporteCobroMatricula,AsignarPermisos,RegistroPoblacion,CambiarContraUsuario, ListasOrdenes, GeneradorFacturasIndividual
+from usuarios.views import Inicio, Busquedas, Lmedidores, CobroRecargo, ControlPresupuestal, VerFactura, PagarMatricula
+from usuarios.views import V3, Consumos, ImprimirSoporteP, PagarRyS
+from usuarios.views import ListaViviendas, ListaPropietarios, Certificar, ReportePdfPagos, ReportePagoFechas
+from usuarios.views import ReporteCierresAno, PazSalvo, CertificadoGral
+from usuarios.views import AgregarVivienda, AgregarPropietario, PerfilUsuario, Certificacion, ReporteCompleto
+from usuarios.views import ReporteSuspenciones, ReporteReconexion, ModificarPropietario, ModificarVivienda
+from usuarios.views import EliminarPermisos, ReporteCiclo, Mapa, EliminarPoblacion
+from usuarios.views import VisualizarPropietario, CambioEstado, Facturacion, AgregarUsuarios, Reporte, RegistroCostoM
+from usuarios.views import RegistroTarifa, ReporteEstadoCuenta, Reportepdfpropi, ReporteGastos, ListasGastos
+from usuarios.views import Suspenciones, VerOrdenSuspencion, VerOrdenReconexion, CambioTitular
+from usuarios.views import ReportePredios, CierreFinanciero, ReportesVarios, ReporteSuspendido, ReportesEstado
+from usuarios.views import ReportesCiclo, ReportesInfoinstal, CambiosMasivos, Facturas, GenerarGasto
+from usuarios.views import ListaCierre, InfoVivienda, GeneradorFacturas, DesactivarUsuarios, AnularFactura
+from usuarios.views import DescargarFactura, DescargaMasivaFacturas, VisualizarVivienda, BuscarSolicitud
+from usuarios.views import Reconexiones, Perfil, ModificarAcueducto, ListaPqrs, RegistroPqr, VerPqr, ListadoPqrs
+from usuarios.views import RespuestaPqrs, PanelAdmin, ReporteCierre, AnularSuspenciones
+from usuarios.views import RegistroMedidor, ReporteCobroMatricula, AsignarPermisos
+from usuarios.views import RegistroPoblacion, CambiarContraUsuario, ListasOrdenes, GeneradorFacturasIndividual
 
 urlpatterns = [
     url(r'^inicio/', Inicio.as_view(), name='inicio'),
