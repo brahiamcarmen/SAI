@@ -1,4 +1,4 @@
-{% extends 'usuarios/base_usuario2.html' %}
+{% extends 'usuarios/base_usuario3.html' %}
 {% load static %}
 {% block styles %}
 {% endblock %}
@@ -7,120 +7,189 @@
 {% block content %}
 {% include 'usuarios/alerts.html' %}
 <!-- Titulo -->
-<div class="row">
-    <div class="col-sm-6">
-        <h1 class="h3 text-gray-800">Generador masivo de facturas</h1>
-    </div>
-     <div class="col-sm-6">
-        <button class="btn btn-primary btn-sm ml-auto float-right" data-toggle="modal" data-target="#alerta">Generar facturas</button>
-    </div>
-</div>
-<div class="row">
-    <div class="col-sm-7">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card shadow text-center">
-                    <div class="card-header">
-                        <b class="text-success">Facturas gestionadas</b>
-                    </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <b class="text-primary">Generadas</b><br>
-                                    {{ facturasemi|intcomma }}
-                                </div>
-                                <div class="col-sm-3">
-                                    <b class="text-primary">Vencidas</b><br>
-                                    {{ facturasven|intcomma }}
-                                </div>
-                                <div class="col-sm-3">
-                                    <b class="text-primary">Anuladas</b><br>
-                                    {{ facturasanu|intcomma }}
-                                </div>
-                                <div class="col-sm-3">
-                                    <b class="text-primary">Pagadas</b><br>
-                                    {{ facturaspg|intcomma }}
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-12 text-success"><b>Totales</b></div>
-                            </div>
-                            <div class="row">
-                                 <div class="col-sm-6">
-                                    <b class="text-primary">Emitidas</b><br>
-                                        {{ totalemitidas }}
-                                </div>
-                                <div class="col-sm-6">
-                                    <b class="text-primary">Valor facturas emitidas</b><br>
-                                        ${{ suma|intcomma }}
-                                </div>
-                            </div>
+      <div class="page-wrapper">
+        <div class="container-fluid">
+          <!-- Page title -->
+          <div class="page-header d-print-none">
+            <div class="row align-items-center">
+              <div class="col">
+                <!-- Page pre-title -->
+                <div class="page-pretitle">
+                  Modulo
+                </div>
+                <h2 class="page-title">
+                  Generador masivo facturas
+                </h2>
+              </div>
+                <div class="col-auto">
+                    <a class="btn btn-primary" href="{% url 'usuarios:facturamasiva' %}">Descargar facturas</a>
+                </div>
+             <div class="col-auto ms-auto d-print-none">
+                <div class="btn-list">
+                    <a href="" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#modal-danger"> Generar facturas
+                    </a>
+                </div>
+              </div>
+              <div class="col-auto">
+                    <form class="table-search-form row gx-1 align-items-center">
+                        <div class="col-auto">
+                            <input type="text" id="search" name="searchorders" class="form-control search-orders" placeholder="Buscar">
                         </div>
-                </div>
-                <br>
-            </div>
-        </div>
-         <div class="row text-center">
-            <div class="col-sm-12"> 
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Opciones adicionales</h6>
-                    </div>
-                    <div class="card-body">
-                        <a href="{% url 'usuarios:facturamasiva' %}" class="btn btn-primary btn-icon-split">
-                            <span class="icon text-white-50">
-                                <i class="fas fa-download"></i>
-                            </span>
-                            <span class="text">Descargar facturas</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>       
-    </div>
-    <div class="col-sm-5 text-center">
+                    </form>
+               </div>
 
+               
+            </div>
+          </div>
+        </div>
+    </div>
+<br>
+<div class="page-body">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-12 text-center">
-                <div class="card shadow mb-2">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Instrucciones</h6>
+            <div class="col-lg-6 col-xl-3">
+                <div class="row">
+                    <div class="col-sm-6 col-lg-6">
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center">
+                              <div class="subheader">Generadas</div>
+                            </div>
+                            <div class="h1 mb-3">{{ facturasemi|intcomma }}</div>
+                          </div>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        Este módulo es el encargado de generar las facturas una vez se haya realizado el cobro en el modulo "CUENTAS DE COBRO"; para su correcto funcionamiento de este modulo, debe dar clic en el boton "Generar facturas" y una vez aparezca la alerta debe dar clic en el boton "Generar" para confirmar la acción y espere hasta que aparezca la alerta confirmando exitosamente la generacion de las facturas.
+                    <div class="col-sm-6 col-lg-6">
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center">
+                              <div class="subheader">Vencidas</div>
+                            </div>
+                            <div class="h1 mb-3">{{ facturasven|intcomma }}</div>
+                          </div>
+                        </div>
                     </div>
                 </div>
-            </div>            
+                <div class="row" style="margin-top:1rem">
+                    <div class="col-sm-6 col-lg-6">
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center">
+                              <div class="subheader">Anuladas</div>
+                            </div>
+                            <div class="h1 mb-3">{{ facturasanu|intcomma }}</div>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-6">
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center">
+                              <div class="subheader">Pagadas</div>
+                            </div>
+                            <div class="h1 mb-3">{{ facturaspg|intcomma }}</div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:1rem">
+                    <div class="col-sm-5 col-lg-5">
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center">
+                              <div class="subheader">Vigentes</div>
+                            </div>
+                            <div class="h1 mb-3">{{ totalemitidas|intcomma }}</div>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-7 col-lg-7">
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center">
+                              <div class="subheader">Valor</div>
+                            </div>
+                            <div class="h1 mb-3">${{ suma|intcomma }}</div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9 col-xl-9">
+                <div class="card">
+                  <div class="card-body">
+                        <h3 class="card-title">Listado de facturas</h3>
+                    <div class="table-responsive" style="height:15rem">
+                    <table class="table card-table table-vcenter text-nowrap datatable" id="datatable" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>No factura</th>
+                                <th>Matricula</th>
+                                <th>Estado</th>
+                                <th>Fecha expedicion</th>
+                                <th>Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ord in facturas %}
+                            <tr>
+                                <td>{{ ord.IdFactura }}</td>
+                                <td>{{ ord.Matricula }}</td>
+                                <td>{{ ord.Estado }}</td>
+                                <td>{{ ord.FechaExpe }}</td>
+                                <td><span class="dropdown">
+                                  <button class="btn dropdown-toggle align-text-top" data-bs-boundary="viewport" data-bs-toggle="dropdown">Opciones</button>
+                                  <div class="dropdown-menu dropdown-menu-end">
+                                    <a class="dropdown-item" href="">
+                                      Ver
+                                    </a>
+                                  </div>
+                                </span>
+                                </td>
+                            </tr>
+                             {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                  </div>
+                </div>
+            </div>
         </div>
-       
     </div>
 </div>
-<div class="modal fade" id="alerta" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Alerta</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        Esta seguro que desea generar la facturación de forma masiva?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-       <form method="post" role="form" enctype="multipart/form-data" onsubmit="return valida(this)">
-            {% csrf_token %}
-            <button style="width: 100%" type="submit" class="btn btn-primary">Generar</button>
-        </form>
+    <div class="modal modal-blur fade" id="modal-danger" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="modal-status bg-danger"></div>
+          <div class="modal-body text-center py-4">
+            <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 9v2m0 4v.01" /><path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75" /></svg>
+            <h3>Estas seguro?</h3>
+            <div class="text-muted">¿Realmente quieres generar masivamente la facturación? Lo que hagas no se puede deshacer.</div>
+          </div>
+          <div class="modal-footer">
+            <div class="w-100">
+              <div class="row">
+                <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
+                    Cancelar
+                  </a></div>
+                <div class="col">
+                    <form method="post" role="form" enctype="multipart/form-data" onsubmit="return valida(this)">
+                    {% csrf_token %}
+                    <button style="width: 100%" type="submit" class="btn btn-danger">Generar</button>
+                </form>
+                  </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
+
 
 
 {% endblock %}
 {% block scripts %}
-
 {% endblock %}

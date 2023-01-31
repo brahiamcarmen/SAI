@@ -1,4 +1,4 @@
-{% extends 'usuarios/base_usuario2.html' %}
+{% extends 'usuarios/base_usuario3.html' %}
 {% load static %}
 {% block styles %}
 {% load humanize %}
@@ -6,31 +6,33 @@
 {%block title %} <title>Factura #{{factura}}</title> {%endblock%}
 {% block content %}
 {% include 'usuarios/alerts.html' %}
-<div class="row ">
-    <div class="col-sm-6">
+
+
+<div class="page-body">
+    <div class="container-fluid">
         <div class="row">
-                <div class="col-sm-12">
-                <div class="row text-center">
+            <div class="col-sm-6">
+                <div class="row">
                     <div class="col-sm-12">
-                        <div class="card mb-1">
-                            <div class="card-header py-2">
-                                <h6 class="m-0 font-weight-bold text-primary">Informacion del predio</h6>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class=" md-0 card-title">Informacion del predio</h3>
                             </div>
                             <div class="card-body">
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <b>Matricula</b><br>
-                                        <p style="color:rgba(38, 35, 197 ); font-size: 1.3rem;n"><b><a href="{% url 'usuarios:vervivienda' matricula %}"> {{matricula}}</a></b></p>
+                                <div class="row text-center">
+                                    <div class="col-4 col-sm-3">
+                                        <b class="text-primary">Matricula</b><br>
+                                        <p style="color:rgba(38, 35, 197 ); font-size: 1rem;n"><b><a href="{% url 'usuarios:vervivienda' matricula %}"> {{matricula}}</a></b></p>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-4 col-sm-3">
                                         <b>Sector</b><br>
                                         <p>{{ sector }}</p>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-4 col-sm-3">
                                         <b>Casa</b><br>
                                         <p>{{casa}}</p>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-4 col-sm-3">
                                         <b>Piso</b><br>
                                         <p><b>{{piso}}</b></p>
                                     </div>
@@ -38,53 +40,48 @@
                             </div>
                         </div>
                     </div>
-                    </div> 
-            </div>
-            </div>
-            <div class="row">
-            <div class="col-sm-12">
-                <div class="row text-center">
+                </div>
+                <br>
+                <div class="row">
                     <div class="col-sm-12">
-                        <div class="card mb-1">
-                            <div class="card-header py-2">
-                                <h6 class="m-0 font-weight-bold text-primary">Informacion factura</h6>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class=" md-0 card-title">Informacion factura</h3>
                             </div>
                             <div class="card-body">
-                                <div class="row">
-                                   <div class="col-sm-4">
+                                <div class="row text-center">
+                                    <div class="col-4 col-sm-4">
                                         <b>Numero de factura</b><br>
-                                        <p style="color:rgba(65,160,39); font-size: 1.3rem;n"><b> {{factura}}</b></p>
+                                        <p style="color:rgba(65,160,39); font-size: 1rem;n"><b> {{factura}}</b></p>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-4 col-sm-4">
                                         <b>Ciclo facturado</b><br>
                                         <p style="color:rgba(65,160,39); font-size: 1.0rem;n"><b>{{ciclo}}</b></p>
-                                        
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-4 col-sm-4">
                                         <b>Estado</b><br>
                                         <p>{{estadofactura}}</p>
                                     </div>
                                 </div>
-                                <div class="col-sm-12">
-                                    <b>Fecha de expedición</b><br>
-                                    <p>{{fe}}</p>
+                                <div class="row text-center">
+                                    <div class="col-12 col-sm-12">
+                                        <b>Fecha de expedición</b><br>
+                                        <p>{{fe}}</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>        
-                    </div>            
+                        </div>
+                    </div>
                 </div>
             </div>
-            </div>
-</div>
             <div class="col-sm-6">
-                <div class="row text-center">
-                    <div class="col-sm-12">
-                         <div class="card mb-2">
-                            <div class="card-header py-2">
-                                <h6 class="m-0 font-weight-bold text-primary">Conceptos de cobro</h6>
-                            </div>
-                            <div class="card-body">
-                                <table class="table table-borderless table-sm">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class=" md-0 card-title">Conceptos de cobro</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <table class="table table-borderless table-sm">
                                   <thead class="thead-light table-bordered">
                                     <tr>
                                       <th  class="text-left" scope="col">Descripcion</th>
@@ -126,6 +123,10 @@
                                     {% endif %}
                                   </tbody>
                                 </table>
+                        </div>
+                    </div>
+                    <div class="card mb-2">
+                            <div class="card-body">
                                 <div class="">
                                     <div class="row">
                                         <div class="col-sm-8">
@@ -137,78 +138,84 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>               
-                    </div>
+                        </div>  
                 </div>
             </div>
-
-</div>
+        </div>
         <div class="row">
             <div class="col-sm-6">
-                <button class="btn btn-primary" onclick="window.location='{% url 'usuarios:inicio' %}'" style="width:100%; margin-top: 0.2rem;">Cancelar</button>
+                     <a href="{% url 'usuarios:inicio' %}" style="width:100%; margin-top: 0.2rem;" class="btn btn-primary">Cancelar
+                    </a>
             </div>
             <div class="col-sm-6">
-                {% if anulada or paga or vencida == True %}
-                <p></p>
-                {%else%}
-                <button data-toggle="modal" data-target="#transaccion" class="btn btn-primary" style="width:100%; margin-top: 0.2rem;">Pagar</button>
-                {%endif%}
+                    {% if anulada or paga or vencida == True %}
+                    <p></p>
+                    {%else%}
+                    <a href="#" style="width:100%; margin-top: 0.2rem;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-simple">Pagar
+                    </a>
+                    {%endif%}
             </div>
-        </div>
-<!-- modal de transaccion-->
-<div class="modal fade" id="transaccion" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modulo de transacción</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        </div>
-        <div class="modal-body">
-            <div class="row text-center">
-                <div class="col-sm-12">
-                    <form method="post" enctype="multipart/form-data" oninput="resultado.value=parseInt(valor2.value)-parseInt(valor1.value)">
+        </div>        
+    </div>
+
+    <div class="modal modal-blur fade" id="modal-simple" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Modulo de transacción</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+                <form method="post" enctype="multipart/form-data" oninput="resultado.value=parseInt(valor2.value)-parseInt(valor1.value)">
                     {% csrf_token %}
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group no-margin-hr">
-                                <label class="control-label">Numero factura</label>
-                                    <p style="color:rgba(65,160,39); font-size: 1.3rem;n">{{factura}}</p>
-                                <input type ="hidden" name="factura" value="{{factura}}" class="form-control">
+                    <div class="row text-center">
+                        <div class="col-12 col-sm-6">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Numero factura</label>
+                                            <p style="color:rgba(65,160,39); font-size: 1.3rem;n">{{factura}}</p>
+                                        <input type ="hidden" name="factura" value="{{factura}}" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Total Facturado</label>
+                                        <p style="font-size: 1.3rem">${{total|intcomma}}</p>
+                                    </div> 
+                                </div>
                             </div>
-                             <div class="form-group no-margin-hr">
-                                <label class="control-label">Total Facturado</label>
-                                    <p style="font-size: 1.3rem">${{total|intcomma}}</p>
-                            </div> 
+                             
                         </div>
                         <div class="col-sm-6">
-                            <div class="form-group no-margin-hr">
-                                <label class="control-label">Total a pagar</label>
+                            <div class="row">
+                                <label class="form-label">Total a pagar</label>
                                 <input type="number" name="valorp" id="valor1" value="0" class="form-control">
                             </div>
-                            <div  class="form-group no-margin-hr">
-                                <label class="control-label">Efectivo</label>
+                            <br>
+                            <div class="row">
+                                <label class="form-label">Efectivo</label>
                                 <input type="number"name="efectivo" id="valor2" value="0" class="form-control">
                             </div>
-                            <div  class="form-group no-margin-hr">
-                                <label class="control-label">Cambio</label><br>
-                                <output name="resultado" for="valor1 valor2">$</output>         
+                            <br>
+                            <div  class="row">
+                                <label class="form-label">Cambio</label><br>
+                                <output style="color:rgba(227, 24, 24); font-size: 1.3rem;" name="resultado" for="valor1 valor2">$</output>         
                             </div>
                         </div>
                     </div>
+                    <br>
                     <div class="row">
                         <div class="col-sm-12">
-                            <button class="btn btn-primary" style="width:60%" type="submit">Confirmar transacción</button>
+                            <button class="btn btn-primary" style="width:100%" type="submit">Confirmar transacción</button>
                         </div>  
                     </div>
                     </form>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
+      </div>
     </div>
-  </div>
+</div>
 
 {% endblock %}
 {% block scripts %}

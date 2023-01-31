@@ -138,9 +138,7 @@ DOC_CHOICES7 = (
     ('Unifamiliar', _(u"Unifamiliar")),
     ('Bifamiliar', _(u"Bifamiliar")),
     ('Multifamiliar', _(u"Multifamiliar")),
-    ('Comercial', _(u"Comercial")),
     ('Especial', _(u"Especial")),
-    ('Agricola', _(u"Agricola"))
 )
 
 DOC_CHOICES8 = (
@@ -149,11 +147,7 @@ DOC_CHOICES8 = (
     ('Caimalito Centro', _(u"Sector caimalito centro")),
     ('Barrio Nuevo', _(u"Sector barrio nuevo")),
     ('20 de julio', _(u"Sector 20 de julio")),
-    ('Pasonivel la loma', _(u"Sector pasonivel la loma")),
     ('Hacienda', _(u"Hacienda")),
-    ('Via nacional', _(u"Sector Via nacional")),
-    ('Caimalito centro dos', _(u"Sector caimalito centro dos")),
-    ('Destapada', _(u"Sector destapada")),
 )
 
 DOC_CHOICES9 = (
@@ -415,7 +409,7 @@ DOC_CHOICES14 = (
     ('Peticion', _(u"Peticion")),
     ('Queja', _(u"Queja")),
     ('Reclamo', _(u"Reclamo")),
-    ('Sugerencia', _(u"Sugerencia")),
+    ('Solicitud', _(u"Solicitud")),
 )
 DOC_CHOICES15 = (
     ('Atencion de daño - Externo', _(u"Atencion de daño - Externo")),
@@ -429,14 +423,14 @@ DOC_CHOICES15 = (
 
 class Pqrs(models.Model):
     IdPqrs = models.AutoField(primary_key=True)
-    Nombre = models.CharField(max_length=10, null=True)
+    Nombre = models.CharField(max_length=100, null=True)
     FechaRadicado = models.DateTimeField(auto_now_add=True, null=False)
     Telefono = models.CharField(max_length=10, null=True)
     Correo = models.EmailField(max_length=60, null=True)
     Direccion = models.CharField(max_length=200, null=True)
     TipoSolicitud = models.CharField(max_length=50, null=True, choices=DOC_CHOICES14)
     Clasificacion = models.CharField(max_length=50, null=True, choices=DOC_CHOICES15)
-    Descripcion = models.TextField(max_length=5000, null=True)
+    Descripcion = models.TextField(max_length=10000, null=True)
     usuid = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     Estado = models.CharField(max_length=40, null=False)
 

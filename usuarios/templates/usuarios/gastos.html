@@ -1,4 +1,4 @@
-{% extends 'usuarios/base_usuario2.html' %}
+{% extends 'usuarios/base_usuario3.html' %}
 {% load static %}
 {% block styles %}
 {% endblock %}
@@ -7,132 +7,243 @@
 {% block content %}
 {% include 'usuarios/alerts.html' %}
 <!-- Titulo -->
-<div class="row">
-    <div class="col-sm-6">
-        <h3 class="h3 text-gray-800">Control de ingresos y egresos</h3>
-    </div>
-     <div class="col-sm-6">
-        <button class="btn btn-primary btn-sm ml-auto float-right" data-toggle="modal" data-target="#porcentajes">%</button>
-        <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" onclick="window.location='{% url 'usuarios:listadogastos' %}'">Listado de ordenes</button>
-        <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" onclick="window.location='{% url 'usuarios:generargasto' %}'">Generar orden</button>
-        <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" data-toggle="modal" data-target="#gestorordenes">Aprobar/Anular</button>
-        <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" data-toggle="modal" data-target="#estadisticas">Estadisticas</button>
-        
+      <div class="page-wrapper">
+        <div class="container-fluid">
+          <!-- Page title -->
+          <div class="page-header d-print-none">
+            <div class="row align-items-center">
+              <div class="col">
+                <!-- Page pre-title -->
+                <div class="page-pretitle">
+                  Modulo
+                </div>
+                <h2 class="page-title">
+                  Cuentas de cobro
+                </h2>
+              </div>
+                <div class="col-auto">
+                   
+                </div>
+             <div class="col-auto ms-auto d-print-none">
+                <div class="btn-list">
+                    <div class="col-auto">
+                        <a href="{% url 'usuarios:cobrorecargo' %}" class="btn btn-primary btn-sm w-100">Generar recargos</a>
+                    </div>
+                    <div class="col-auto">
+                        <a href="{% url 'usuarios:listadogastos' %}" class="btn btn-primary btn-sm w-100">
+                                      Listado de ordenes</a>
+                    </div>
+                    <div class="col-auto">
+                        <a href="{% url 'usuarios:generargasto' %}" class="btn btn-primary btn-sm w-100">Generar orden
+                        </a>
 
-        
+                    </div>
+                    <div class="col-auto">
+                        <a href="" class="btn btn-primary btn-sm w-100">Aprobar/Anular </a>
+                    </div>
+                    <div class="col-auto">
+                        <a href="" class="btn btn-primary btn-sm w-100">
+                                      Estadisticas
+                        </a>
+                    </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
     </div>
-</div>
-<div class="row" style="margin-top: 1rem;">
-    <div class="col-sm-12">
-        <div class="row">
-             <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-bottom-primary shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                    Ingresos (Ultimo mes)</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">${{ingresomensual|intcomma}}</div>
+<div class="page-body">
+          <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-9 col-lg-9">
+                    <div class="row row-deck row-cards">
+                      <div class="col-sm-6 col-lg-3">
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center">
+                              <div class="subheader">Ingresos</div>
+                              <div class="ms-auto lh-1">
+                                <div class="dropdown">
+                                  <a class="text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">U. mes</a>
+                                </div>
+                              </div>
                             </div>
-                            <div class="col-auto">
-                                <i class="fas fa-file-invoice-dollar fa-2x text-gray-300"></i>
+                            <div class="h1 mb-3">${{ingresomensual|intcomma}}</div>
+                            <div class="d-flex mb-2">
+                              <div>Progreso</div>
+                              <div class="ms-auto">
+                                <span class="text-green d-inline-flex align-items-center lh-1">
+                                  0% <!-- Download SVG icon from http://tabler-icons.io/i/trending-up -->
+                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon ms-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="3 17 9 11 13 15 21 7" /><polyline points="14 7 21 7 21 14" /></svg>
+                                </span>
+                              </div>
+                            </div>
+                            <div class="progress progress-sm">
+                              <div class="progress-bar bg-blue" style="width: 0%" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                                <span class="visually-hidden">75% Complete</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-6 col-lg-3">
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center">
+                              <div class="subheader">Egresos</div>
+                              <div class="ms-auto lh-1">
+                                <div class="dropdown">
+                                  <a class="text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">U. mes</a>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="h1 mb-3">${{gastosmensuales|intcomma}}</div>
+                            <div class="d-flex mb-2">
+                              <div>Progreso</div>
+                              <div class="ms-auto">
+                                <span class="text-green d-inline-flex align-items-center lh-1">
+                                  0% <!-- Download SVG icon from http://tabler-icons.io/i/trending-up -->
+                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon ms-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="3 17 9 11 13 15 21 7" /><polyline points="14 7 21 7 21 14" /></svg>
+                                </span>
+                              </div>
+                            </div>
+                            <div class="progress progress-sm">
+                              <div class="progress-bar bg-blue" style="width: 0%" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                                <span class="visually-hidden">75% Complete</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-6 col-lg-3">
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center">
+                              <div class="subheader">Saldo</div>
+                              <div class="ms-auto lh-1">
+                                <div class="dropdown">
+                                  <a class="text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Disponible</a>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="h1 mb-3">${{presupuesto|intcomma}}</div>
+                            <div class="d-flex mb-2">
+                              <div>Progreso</div>
+                              <div class="ms-auto">
+                                <span class="text-green d-inline-flex align-items-center lh-1">
+                                  0% <!-- Download SVG icon from http://tabler-icons.io/i/trending-up -->
+                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon ms-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="3 17 9 11 13 15 21 7" /><polyline points="14 7 21 7 21 14" /></svg>
+                                </span>
+                              </div>
+                            </div>
+                            <div class="progress progress-sm">
+                              <div class="progress-bar bg-blue" style="width: 0%" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                                <span class="visually-hidden">75% Complete</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                        <div class="col-sm-3 col-lg-3">
+                            <div class="card">
+                              <div class="card-body p-2 text-center">
+                                <div class="text-end text-green">
+                                  <span class="text-orange d-inline-flex align-items-center lh-1">
+                                    0% <!-- Download SVG icon from http://tabler-icons.io/i/trending-up -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon ms-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="3 17 9 11 13 15 21 7" /><polyline points="14 7 21 7 21 14" /></svg>
+                                  </span>
+                                </div>
+                                <div class="h1 m-0">0</div>
+                                <div class="text-muted mb-3">Reclamaciones por facturación</div>
+                              </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-bottom-warning shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                    Egresos (Ultimo mes)</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">${{gastosmensuales|intcomma}}</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-shopping-cart fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-bottom-success shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Aportes (Ultimo mes)</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">${{presupuesto|intcomma}}</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-hand-holding-usd fa-2x text-gray-300"></i>
+                <div class="col-xl-3 col-lg-3">
+                    <div class="card">
+                       <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h3 class="card-title">Opciones disponibles</h3>                     
+                                 <div class="row">
+                                    <div class="col-6">
+                                        
+                                    </div>
+                                    <div class="col-6">
+                                        
+                                    </div>
+                                 </div>
+                                 <div class="row" style="margin-top:1rem">
+                                    <div class="col-6">
+                                        
+                                    </div>
+                                    <div class="col-6">
+                                        
+                                    </div>
+                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                       </div>
+                    </div>      
+               </div>
             </div>
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-bottom-success shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">SyR (Ultimo mes)</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">${{rys|intcomma}}</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                            </div>
+            <br>
+            <div class="row">
+                <div class="col-xl-8">
+                    <div class="card shadow mb-4 text-center">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Ordenes pendientes</h6>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>           
-    </div>
-</div>
-<div class="row" >
-            <div class="col-sm-12">
-            <div class="card shadow mb-4 text-center">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Ordenes pendientes</h6>
-                </div>
-                <div class="card-body">
-                        <div class="stat-row">
-                            <table class="table table-sm text-xs">
-                                    <thead>
-                                    <tr>
-                                        <th>Numero Orden</th>
-                                        <th>Usuario</th>
-                                        <th>Tipo Solicitud</th>
-                                        <th>Valor</th>
-                                        <th>Estado</th>
-                                        <th>Fecha</th>
-                                        <th>Area Responsable</th>
-                                        <th>Numero Factura</th>
-                                        <th>Descripcion</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for facturas in solicitudesgastos %}
-                                            <tr class="odd gradeX">
-                                                <td>{{ facturas.IdSoGa }}</td>
-                                                <td>{{ facturas.IdUsuario }}</td>
-                                                <td>{{ facturas.TipoSolicitud }}</td>
-                                                <td>{{ facturas.Valor|intcomma }}</td>
-                                                <td>{{ facturas.Estado }}</td>
-                                                <td>{{ facturas.Fecha }}</td>
-                                                <td>{{ facturas.AreaResponsable }}</td>
-                                                <td>{{ facturas.NumeroFactura }}</td>
-                                                <td>{{ facturas.Descripcion }}</td>
+                        <div class="card-body">
+                                <div class="table-responsive" style="height:15rem">
+                    <table class="table card-table table-vcenter text-nowrap datatable" id="datatable" cellspacing="0">
+                                            <thead>
+                                            <tr>
+                                                <th>Numero Orden</th>
+                                                <th>Tipo Solicitud</th>
+                                                <th>Valor</th>
+                                                <th>Estado</th>
+                                                <th>Fecha</th>
+                                                <th>Opciones</th>
                                             </tr>
-                                        {% endfor %}
-                                    </tbody>
-                            </table>
+                                            </thead>
+                                            <tbody>
+                                                {% for facturas in solicitudesgastos %}
+                                                    <tr class="odd gradeX">
+                                                        <td>{{ facturas.IdSoGa }}</td>
+                                                        <td>{{ facturas.TipoSolicitud }}</td>
+                                                        <td>{{ facturas.Valor|intcomma }}</td>
+                                                        <td>{{ facturas.Estado }}</td>
+                                                        <td>{{ facturas.Fecha }}</td>
+                                                        <td><a class="btn btn-danger btn-sm" href="">
+                                                              Ver</a>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                    </table>
+                                </div>
                         </div>
-                </div>
+                    </div>
+                    </div> 
+                    <div class="col-xl-4">
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="row">
+                                <h3 class="card-title">Comparacion grafica</h3>
+                                <div id="chart-demo-pie"></div>
+                            </div>
+                            
+                          </div>
+                        </div>
+                      </div>
             </div>
-            </div>
+    
+    </div>
 </div>
+
             <div id="gestorordenes" class="modal fade text-center" tabindex="-1" role="dialog" style="display: none;">
                 <div class="modal-dialog modal-sm text-center">
                         <div class="modal-content">
@@ -269,5 +380,49 @@
 
 {% endblock %}
 {% block scripts %}
-  
+<script>
+      // @formatter:off
+      document.addEventListener("DOMContentLoaded", function () {
+        window.ApexCharts && (new ApexCharts(document.getElementById('chart-demo-pie'), {
+            chart: {
+                type: "donut",
+                fontFamily: 'inherit',
+                height: 270,
+                sparkline: {
+                    enabled: true
+                },
+                animations: {
+                    enabled: false
+                },
+            },
+            fill: {
+                opacity: 1,
+            },
+            series: [{{ingresomensual}}, {{gastosmensuales}}],
+            labels: ["Ingresos", "Egresos"],
+            grid: {
+                strokeDashArray: 4,
+            },
+            colors: ["#406bc5", "#78a5dc", "#d3e1f3", "#e9ccf1"],
+            legend: {
+                show: true,
+                position: 'bottom',
+                offsetY: 12,
+                markers: {
+                    width: 10,
+                    height: 10,
+                    radius: 100,
+                },
+                itemMargin: {
+                    horizontal: 9,
+                    vertical: 9
+                },
+            },
+            tooltip: {
+                fillSeriesColor: false
+            },
+        })).render();
+      });
+      // @formatter:on
+    </script>
 {% endblock %}

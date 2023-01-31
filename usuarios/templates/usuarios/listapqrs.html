@@ -1,4 +1,4 @@
-{% extends 'usuarios/base_usuario2.html' %}
+{% extends 'usuarios/base_usuario3.html' %}
 {% load static %}
 {% block styles %}
 {% endblock %}
@@ -7,195 +7,174 @@
 {% block content %}
 {% include 'usuarios/alerts.html' %}
 <!-- Titulo -->
-<div class="row">
-    <div class="col-sm-6">
-        <h1 class="h3 text-gray-800">Modulo para el control de PQRS</h1>
-    </div>
-     <div class="col-sm-6">
-        <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" onclick="window.location='{% url 'usuarios:registropqrs' %}'">Generar PQRS</button>
-        <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" onclick="window.location='{% url 'usuarios:listadopqrs' %}'">Listado de PQRS</button>
-        <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" data-toggle="modal" data-target="#consultar">Consultas</button>        
-    </div>
-</div>
-<div class="row" style="margin-top: 1rem;">
-    <div class="col-sm-6">
-        <div class="row">
-             <div class="col-xl-6 col-md-6 mb-4">
-                <div class="card border-bottom-primary shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                    Pendientes</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{contpen}}</div>
+<div class="page-wrapper">
+    <div class="container-fluid">
+        <div class="page-header d-print-none">
+            <div class="row align-items-center">
+                <div class="col">
+                <!-- Page pre-title -->
+                    <div class="page-pretitle">
+                      Modulo
+                    </div>
+                    <h2 class="page-title">
+                      Gestion de pqrs
+                    </h2>
+                </div>
+                <div class="col-auto ms-auto d-print-none">
+                <div class="btn-list">
+                    <span class="d-none d-sm-inline">
+                        <div class="row">
+                            <div class="col-auto">
+                                <a href="{% url 'usuarios:registropqrs' %}" class="btn btn-primary w-100"> Registrar PQRS
+                                </a>
                             </div>
                             <div class="col-auto">
-                                <i class="fas fa-file-archive fa-2x text-gray-300"></i>
+                                <a href="{% url 'usuarios:listadopqrs' %}" class="btn btn-primary w-100"> Listado de PQRS
+                                </a>
                             </div>
                         </div>
-                    </div>
+                    </span>
                 </div>
-            </div>
-            <div class="col-xl-6 col-md-6 mb-4">
-                <div class="card border-bottom-warning shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                    Cerradas</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{contcerrada}}</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-archive fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 text-center">
-
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card shadow mb-4 text-center">
-                    <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Solicitudes disponibles</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="stat-row">
-                                    <table class="table table-sm text-xs">
-                                            <thead>
-                                            <tr>
-                                                <th>Radicado</th>
-                                                <th>Fecha Radicado</th>
-                                                <th>Tipo Solicitud</th>
-                                                <th>Estado</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            {% for pqr in lista %}
-                                                    <tr class="odd gradeX">
-                                                        <td>{{ pqr.IdPqrs }}</td>
-                                                        <td>{{ pqr.FechaRadicado }}</td>
-                                                        <td>{{ pqr.TipoSolicitud }}</td>
-                                                        <td>{{ pqr.Estado }}</td>
-                                                         <td>
-                                                    </tr>
-                                                {% endfor %}
-                                    </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>            
-        </div>
-    </div>
-    <div class="col-xl-6 col-lg-5">
-        <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Estadisticas</h6>
-            </div>
-                                <!-- Card Body -->
-            <div class="card-body">
-                <div class="chart-pie pt-4 pb-2">
-                    <canvas id="myPieChart"></canvas>
-                </div>
-                <div class="mt-4 text-center small">
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-primary"></i> Queja
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-success"></i> Solicitudes
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-danger"></i> Reclamos
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-warning"></i> Peticiones
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-info"></i> Felicitaciónes
-                                        </span>
-                </div>
+              </div>
             </div>
         </div>
     </div>
-
-
 </div>
-
-<div class="modal fade" id="consultar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Gestor de PQRS</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-            <form action="{% url 'usuarios:verpqr' %}" method="get">
-                {% csrf_token %}
-                <div class="col-sm-12">
-                    <div class="form-group no-margin-hr">
-                        <label class="control-label">Numero de radicado</label>
-                        <input type="text" name="idpqr" class="form-control">
+<div class="page-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6 col-xl-3">
+                <div class="row">
+                    <div class="col-sm-12 col-lg-12">
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center">
+                              <div class="subheader">Pendientes</div>
+                            </div>
+                            <div class="h1 mb-3">{{contpen}}</div>
+                          </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-12">
-                    <button type="submit" class="btn btn-primary" style="width: 100%">Buscar</button>
+                <div class="row" style="margin-top:1rem">
+                    <div class="col-sm-12 col-lg-12">
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center">
+                              <div class="subheader">Cerradas</div>
+                            </div>
+                            <div class="h1 mb-3">{{contcerrada}}</div>
+                          </div>
+                        </div>
+                    </div>
                 </div>
-            </form>
-      </div>
-      <div class="modal-footer align-items-center">
-            
-      </div>
+                <div class="row" style="margin-top:1rem">
+                    <div class="col-sm-12 col-lg-12">
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center">
+                              <div class="subheader">Total</div>
+                            </div>
+                            <div class="h1 mb-3">{{total}}</div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-6 col-xl-3">
+                <div class="card">
+                  <div class="card-body">
+                        <h3 class="card-title">Estadisticas</h3>
+                        <div id="chart-demo-pie"></div>
+                  </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-xl-6">
+                <div class="card">
+                  <div class="card-body">
+                        <h3 class="card-title">Pqrs pendientes</h3>
+                     <div class="table-responsive" style="height:15rem">
+                    <table class="table card-table table-vcenter text-nowrap datatable" id="datatable" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Radicado</th>
+                                <th>Fecha Radicado</th>
+                                <th>Tipo Solicitud</th>
+                                 <th>Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for pqr in lista %}
+                            <tr>
+                                <td>{{ pqr.IdPqrs }}</td>
+                                <td>{{ pqr.FechaRadicado }}</td>
+                                <td>{{ pqr.TipoSolicitud }}</td>
+                                <td><span class="dropdown">
+                                  <button class="btn dropdown-toggle align-text-top" data-bs-boundary="viewport" data-bs-toggle="dropdown">Opciones</button>
+                                  <div class="dropdown-menu dropdown-menu-end">
+                                    <a class="dropdown-item" href="">
+                                      Ver
+                                    </a>
+                                  </div>
+                                </span>
+                                </td>
+                            </tr>
+                             {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                  </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 {% endblock %}
 {% block scripts %}
-<script type="text/javascript">
- // Set new default font family and font color to mimic Bootstrap's default styling
-Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
-Chart.defaults.global.defaultFontColor = '#858796';
-
-// Pie Chart Example
-var ctx = document.getElementById("myPieChart");
-var myPieChart = new Chart(ctx, {
-  type: 'doughnut',
-  data: {
-    labels: ["Quejas", "Solicitudes", "Reclamos","Peticiones", "Felicitaciones"],
-    datasets: [{
-      data: [{{ contq }}, {{ conts }}, {{ contr }},{{ contp }},{{ contf }}],
-      backgroundColor: ['#4e73df', '#1cc88a', '#EB1427','#E2EB14','#089EC6'],
-      hoverBackgroundColor: ['#2e59d9', '#17a673', '#AE414A','#949839','#81D7EE'],
-      hoverBorderColor: "rgba(234, 236, 244, 1)",
-    }],
-  },
-  options: {
-    maintainAspectRatio: false,
-    tooltips: {
-      backgroundColor: "rgb(255,255,255)",
-      bodyFontColor: "#858796",
-      borderColor: '#dddfeb',
-      borderWidth: 1,
-      xPadding: 15,
-      yPadding: 15,
-      displayColors: false,
-      caretPadding: 10,
-    },
-    legend: {
-      display: false
-    },
-    cutoutPercentage: 80,
-  },
-});
-   
-
-
-
-</script>
+<script>
+      // @formatter:off
+      document.addEventListener("DOMContentLoaded", function () {
+        window.ApexCharts && (new ApexCharts(document.getElementById('chart-demo-pie'), {
+            chart: {
+                type: "donut",
+                fontFamily: 'inherit',
+                height: 270,
+                sparkline: {
+                    enabled: true
+                },
+                animations: {
+                    enabled: false
+                },
+            },
+            fill: {
+                opacity: 1,
+            },
+            series: [{{contp}}, {{contq}}, {{contr}}, {{conts}}],
+            labels: ["Peticion", "Queja", "Reclamo", "Solicitud"],
+            grid: {
+                strokeDashArray: 4,
+            },
+            colors: ["#406bc5", "#78a5dc", "#d3e1f3", "#e9ccf1"],
+            legend: {
+                show: true,
+                position: 'bottom',
+                offsetY: 12,
+                markers: {
+                    width: 10,
+                    height: 10,
+                    radius: 100,
+                },
+                itemMargin: {
+                    horizontal: 9,
+                    vertical: 9
+                },
+            },
+            tooltip: {
+                fillSeriesColor: false
+            },
+        })).render();
+      });
+      // @formatter:on
+    </script>
 {% endblock %}

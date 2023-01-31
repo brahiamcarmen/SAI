@@ -1,4 +1,4 @@
-{% extends 'usuarios/base_usuario2.html' %}
+{% extends 'usuarios/base_usuario3.html' %}
 {% load static %}
 {% block styles %}
 {% endblock %}
@@ -7,224 +7,280 @@
 {% block content %}
 {% include 'usuarios/alerts.html' %}
 <!-- Titulo -->
-<div class="row">
-    <div class="col-sm-6">
-        <h1 class="h3 text-gray-800">Reportes</h1>
-    </div>
-     <div class="col-sm-6">
-     	<div class="row">
-     		<div class="col-sm-12">
-     			
-     		</div>
-     	</div>
-    
-    </div>
-</div>
-<div class="row" style="margin-top: 0.3rem;">
-    <div class="col-sm-7">
-    	<div class="row">
-    		<div class="col-sm-12">
-	    		<div class="card shadow text-center">
-	                    <div class="card-header">
-	                        <b class="text-success">Estadisticas</b>
-	                    </div>
-	                        <div class="card-body">
-	                        	<div class="row">
-	                                <div class="col-sm-3">
-	                                    <b class="text-primary">Paso Nivel</b><br>
-	                                    {{ s1 }}
-	                                </div>
-	                                <div class="col-sm-3">
-	                                    <b class="text-primary">Caimalito Centro</b><br>
-	                                    {{ s3 }}
-	                                </div>
-	                                <div class="col-sm-3">
-	                                    <b class="text-primary">Barrio Nuevo</b><br>
-	                                    {{ s4 }}
-	                                </div>
-	                                <div class="col-sm-3">
-	                                    <b class="text-primary">Veinte de Julio</b><br>
-	                                    {{ s5 }}
-	                                </div>
-	                            </div>
-	                            <hr>
-	                            <div class="row">
-	                                <div class="col-sm-3">
-	                                    <b class="text-primary">Titulares</b><br>
-	                                    {{ totalpropietarios }}
-	                                </div>
-	                                <div class="col-sm-3">
-	                                    <b class="text-primary">Predios</b><br>
-	                                    {{ totalviviendas }}
-	                                </div>
-	                                <div class="col-sm-3">
-	                                    <b class="text-primary">Residenciales</b><br>
-	                                    {{ t1 }}
-	                                </div>
-	                                <div class="col-sm-3">
-	                                    <b class="text-primary">Usuarios</b><br>
-	                                    {{ personas }}
-	                                </div>
-	                            </div>
-	                            <hr>
-	                            <div class="row">
-                                <div class="col-sm-3">
-                                    <b class="text-primary">Operativos</b><br>
-                                    {{e1}}
-                                </div>
-                                <div class="col-sm-3">
-                                    <b class="text-primary">Mantenimiento</b><br>
-                                    {{ e4 }}
-                                </div>
-                                <div class="col-sm-3">
-                                    <b class="text-primary">Suspendidos</b><br>
-                                    {{ e2 }}
-                                </div>
-                                <div class="col-sm-3">
-                                    <b class="text-primary">Retirados</b><br>
-                                    {{ e3 }}
-                                </div>
-                            </div>
-	                        </div>
-	                </div>
-             </div>
-    	</div>
-    	<br>
-    	<div class="row">
-            <div class="col-sm-12 text-center">
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-success">General</h6>
-                    </div>
-                    <div class="card-body">
-                    	<div class="row" style="margin-top:-0.5rem;">
-                    		<div class="col-sm-12">
-                    			<button class="btn btn-sm btn-outline-primary" style="margin-top:0.5rem;" onclick="window.location='{% url 'usuarios:reportepdf' %}'">Titulares</button>
-                    			<button class="btn btn-sm btn-outline-primary" style="margin-top:0.5rem;" onclick="window.location='{% url 'usuarios:reportepdfv' %}'">Predios</button>
-                    			<button class="btn btn-sm btn-outline-primary" style="margin-top:0.5rem;" onclick="window.location='{% url 'usuarios:medidores' %}'">Medidores</button>
-                    			<button class="btn btn-sm btn-outline-primary" style="margin-top:0.5rem;" onclick="window.location='{% url 'usuarios:certificacion' %}'">Certificaciones</button>
-                    			<button class="btn btn-sm btn-outline-primary" style="margin-top:0.5rem;" onclick="window.location='{% url 'usuarios:reportecompleto' %}'">Informe completo</button>
-                    		</div>
-                    	</div>
-                    	<div class="row" style="margin-top:0.5rem;">
-                    		<div class="col-sm-12">
-                    			
-                    		</div>
-                    	</div>
-                      
-                    </div>
+      <div class="page-wrapper">
+        <div class="container-fluid">
+          <!-- Page title -->
+          <div class="page-header d-print-none">
+            <div class="row align-items-center">
+              <div class="col">
+                <!-- Page pre-title -->
+                <div class="page-pretitle">
+                  Modulo
                 </div>
+                <h2 class="page-title">
+                  Reportes
+                </h2>
+              </div>
             </div>
-    	</div>
-        <div class="row">
-            <div class="col-sm-12 text-center" style="margin-top:-0.5rem;">
-            	<div class="row">
-            		<div class="col-sm-12">
-            			<div class="card shadow mb-4">
-		                    <div class="card-header py-3">
-		                        <h6 class="m-0 font-weight-bold text-success">Finanzas</h6>
-		                    </div>
-		                    <div class="card-body">
-		                    	<div class="row" style="margin-top:-0.5rem;">
-		                    		<div class="col-sm-12">
-		                    			<button class="btn btn-sm btn-outline-primary" style="margin-top:0.5rem;" onclick="window.location='{% url 'usuarios:reporteestadoscuenta' %}'">Estados cuenta</button>
-		                    			<button class="btn btn-sm btn-outline-primary" style="margin-top:0.5rem;" onclick="window.location='{% url 'usuarios:reportecierre' %}'">Cierres periodicos</button>
-		                    			<button class="btn btn-sm btn-outline-primary" style="margin-top:0.5rem;" onclick="window.location='{% url 'usuarios:reportegastos' %}'">Gastos</button>
-		                    			<button class="btn btn-sm btn-outline-primary" style="margin-top:0.5rem;" onclick="window.location='{% url 'usuarios:reportepagos' %}'">Pagos</button>
-		                    			<button class="btn btn-sm btn-outline-primary" style="margin-top:0.5rem;" onclick="window.location='{% url 'usuarios:reportecobromatricula' %}'">Matriculas</button>
-		                    		</div>
-		                    	</div>
-		                      
-		                    </div>
-		                </div>
-            		</div>
-            	</div>
-            </div>
+          </div>
         </div>
-    </div>
-    <div class="col-sm-5 text-center">
- 				<div class="col-sm-12">
- 					<div class="row">
- 						<div class="col-sm-12">
- 							<div class="card shadow mb-4">
-			                    <div class="card-header py-3">
-			                        <h6 class="m-0 font-weight-bold text-success">Otros reportes</h6>
-			                    </div>
-			                    <div class="card-body">
-			                    	<div class="row">
-			                    		<div class="col-sm-6">
-			                    			<p>Tipo de servicio</p>
-			                    			<form action="{% url 'usuarios:reporteinfo' %}" method="get">
-												<select name="infoinstal" class="form-control form-group-margin">
-													<option>Residencial</option>
-													<option>Comercial</option>
-													<option>Industrial</option>
-												</select>
-												<button type="submit" class="btn btn-sm btn-primary" style="width: 100%; margin-top: 0.3rem;">Descargar</button>
-											</form>
-			                    		</div>
-			                    		<div class="col-sm-6">
-			                    			 <p>Estado del servicio</p>
-			                    			<form action="{% url 'usuarios:reporteestados' %}" method="get">
-												<select name="estado" class="form-control form-group-margin">
-													<option>Operativo</option>
-													<option>Suspendido</option>
-													<option>Retirado</option>
-													<option>Mantenimiento</option>
-												</select>
-												<button type="submit" class="btn btn-sm btn-primary" style="width: 100%; margin-top: 0.3rem;">Descargar</button>
-											</form>
-			                    		</div>
-			                    	</div>
-			                    	<div class="row" style="margin-top: 0.5rem;">
-			                    		<div class="col-sm-12">
-			                    			<form action="{% url 'usuarios:reportesvarios' %}" method="get">
-												<select name="sector" class="form-control form-group-margin">
-													<option>Pasonivel Viejo</option>
-													<option>Caimalito Centro</option>
-													<option>Pasonivel Destapada</option>
-													<option>Barrio Nuevo</option>
-													<option>20 de julio</option>
-												</select>
-												<button type="submit" class="btn btn-sm btn-primary" style="width: 100%; margin-top: 0.3rem;">Descargar</button>
-											</form>
-			                    		</div>
-			                    	</div>
-			                    	<hr>
-			                    	<div class="row">
-			                    		<div class="col-sm-12">
-			                    			<p>Cierres financieros por año</p>
-				                    			<form action="{% url 'usuarios:reportecierresano' %}" method="get" class="form-inline">
-													{% csrf_token %}
-													<input type="text" style="width:100%" name="ano" class="form-control form-group-margin" placeholder="Ingrese el año para generar reporte">
+        </div>
+<div class="page-body">
+    <div class="container-fluid">
+        <div class="row">
+        	   <div class="col-lg-6 col-xl-5">
+                    <div class="card">
+                       <div class="card-body">
+                       	<div class="row">
+                       		<div class="col-lg-12">
+                       			<h3 class="card-title">Reportes disponibles</h3>                  	 
+			                  	 <div class="row">
+			                  	 	<div class="col-4 col-sm-4">
+			                        	<a href="{% url 'usuarios:reporteestadoscuenta' %}" class="btn btn-primary btn-sm w-100">
+			                          Estados cuenta
+			                        	</a>
+			                      	</div>
+			                      	<div class="col-4 col-sm-4">
+			                        	<a href="{% url 'usuarios:reportecierre' %}" class="btn btn-primary btn-sm w-100">
+			                          Cierres periodicos
+			                        	</a>
+			                      	</div>
+			                      	<div class="col-4 col-sm-4">
+			                        	<a href="{% url 'usuarios:reportegastos' %}" class="btn btn-primary btn-sm w-100">
+			                          Egresos
+			                        	</a>
+			                      	</div>
+			                  	 </div>
+			                  	 <div class="row" style="margin-top:1rem">
+			                  	 	<div class="col-4 col-sm-4">
+			                        	<a href="{% url 'usuarios:reportepagos' %}" class="btn btn-primary btn-sm w-100">
+			                          Ingresos
+			                        	</a>
+			                      	</div>
+			                      	<div class="col-4 col-sm-4">
+			                        	<a href="{% url 'usuarios:reportepdf' %}" class="btn btn-primary btn-sm w-100">
+			                          Titulares
+			                        	</a>
+			                      	</div>
+			                      	<div class="col-4 col-sm-4">
+			                        	<a href="{% url 'usuarios:reportepdfv' %}" class="btn btn-primary btn-sm w-100">
+			                          Predios
+			                        	</a>
+			                      	</div>
+			                  	 </div>
+			                  	 <div class="row" style="margin-top:1rem">
+			                  	 	<div class="col-12 col-sm-12">
+			                        	<a href="{% url 'usuarios:reportecompleto' %}" class="btn btn-primary btn-sm w-100">
+			                          Informe completo
+			                        	</a>
+			                      	</div>
+			                  	 </div> 
+                       		</div>
+                       	</div>
+                       	<div class="row" style="margin-top:1rem">
+                       		<h3 class="card-title">Estadisticas</h3>
+                       		<div class="row text-center">
+	                       		<div class="col-4 col-sm-4">
+		                            <b class="text-primary">Titulares</b><br>
+		                           {{ totalpropietarios }}
+		                        </div>
+		                        <div class="col-4 col-sm-4">
+		                           	<b class="text-primary">Predios</b><br>
+		                            {{ totalviviendas }}
+		                        </div>
+		                        <div class="col-4 col-sm-4">
+		                            <b class="text-primary">Usuarios</b><br>
+		                            {{ personas }}
+		                        </div>
+                       		</div> 
+                       	</div>
+                       	<div class="row" style="margin-top:1rem">
+                       		<div class="row text-center">
+	                       		<div class="col-4 col-sm-3">
+		                            <b class="text-primary">Operativos</b><br>
+		                            {{e1}}
+		                        </div>
+		                        <div class="col-4 col-sm-3">
+		                           	<b class="text-primary">Suspendidos</b><br>
+		                            {{ e2 }}
+		                        </div>
+		                        <div class="col-4 col-sm-3">
+		                            <b class="text-primary">Mantenimiento</b><br>
+		                            {{ e4 }}
+		                        </div>
+		                        <div class="col-4 col-sm-3">
+		                            <b class="text-primary">Retirados</b><br>
+		                           {{ e3 }}
+		                        </div>
+                       		</div> 
+                       	</div>
+                       </div>
+                    </div>		
+               </div>
+              <div class="col-lg-6 col-xl-7">
+                <div class="card">
+                  <div class="card-body">
+                  	<div class="row">
+                  		<div class="col-7">
+                  			<h3 class="card-title">Comparación grafica</h3>
+                    		<div id="chart-completion-tasks"></div>
+                  		</div>
+                  		<div class="col-5">
+                  			<h3 class="card-title">Tipo de predio</h3>
+                    		<div id="chart-demo-pie"></div>
+                  		</div>
 
-													<br>
-													<button style="margin-top: 0.3rem; width: 100%" type="submit" class="btn btn-sm btn-primary">Descargar</button>
-												</form>
-			                    		</div>
-			                    	</div>
-			                    	<hr>
-			                    	<div class="row">
-			                    		<div class="col-sm-12">
-			                    			<p>Pagos por rango de fecha</p>
-												<form action="{% url 'usuarios:reportepagosfechas' %}" method="get" class="form-inline">
-													{% csrf_token %}
-													<input style="width:100%" type="text" name="fechainicial" class="form-control" placeholder="Desde - mes/dia/año">										
-													<input style=" margin-top: 0.5rem; width:100%" type="text" name="fechafinal" class="form-control" placeholder="Hasta - mes/dia/año">
-																										
-													<br>
-													<button style="margin-top: 0.5rem; width: 100%" type="submit" class="btn btn-sm btn-primary">Descargar</button>
-												</form>
-			                    		</div>
-			                    	</div>
-			                    </div>
-		                	</div>
- 						</div>
- 					</div>
-            	</div>  	
-    </div>
+                  	</div>
+                  	
+                  </div>
+                </div>
+              </div>
+   		</div>
+   		<div class="row" style="margin-top:1rem">
+                <div class="card">
+                  <div class="card-body">
+                  	<div class="row">
+                  		<div class="col-lg-3 col-xl-3">
+                  			<h3 class="card-title">Estado del servicio</h3>
+				            <form action="{% url 'usuarios:reporteestados' %}" method="get">
+								<select name="estado" class="form-control">
+									<option>Operativo</option>
+									<option>Suspendido</option>
+									<option>Retirado</option>
+									<option>Mantenimiento</option>
+								</select>
+								<button type="submit" class="btn btn-sm btn-primary" style="width: 100%; margin-top: 0.3rem;">Descargar</button>
+							</form>
+                  		</div>
+                  		<div class="col-lg-3 col-xl-3">
+                  			<h3 class="card-title">Cierres financieros por año</h3>
+				            <form action="{% url 'usuarios:reportecierresano' %}" method="get" class="form-inline">
+							{% csrf_token %}
+								<input type="text" style="width:100%" name="ano" class="form-control form-group-margin" placeholder="Ingrese el año para generar reporte">
+								<button style="margin-top: 0.3rem; width: 100%" type="submit" class="btn btn-sm btn-primary">Descargar</button>
+							</form>
+                  		</div>
+                  	</div>
+			      </div>
+                </div>
+   		</div>
+	</div>
 </div>
+<br>
 
 {% endblock %}
 {% block scripts %}
+    <script>
+      // @formatter:off
+      document.addEventListener("DOMContentLoaded", function () {
+      	window.ApexCharts && (new ApexCharts(document.getElementById('chart-completion-tasks'), {
+      		chart: {
+      			type: "bar",
+      			fontFamily: 'inherit',
+      			height: 240,
+      			parentHeightOffset: 0,
+      			toolbar: {
+      				show: false,
+      			},
+      			animations: {
+      				enabled: false
+      			},
+      		},
+      		plotOptions: {
+      			bar: {
+      				columnWidth: '40%',
+      			}
+      		},
+      		dataLabels: {
+      			enabled: false,
+      		},
+      		fill: {
+      			opacity: 1,
+      		},
+      		series: [{
+      			name: "Predios en el sector",
+      			data: [ {{ s3 }}, {{ s4 }}, {{ s5 }}, {{ s1 }}, {{ s6 }}]
+      		}],
+      		grid: {
+      			padding: {
+      				top: -20,
+      				right: 0,
+      				left: -4,
+      				bottom: -4
+      			},
+      			strokeDashArray: 4,
+      		},
+      		xaxis: {
+      			labels: {
+      				padding: 0,
+      			},
+      			tooltip: {
+      				enabled: false
+      			},
+      			axisBorder: {
+      				show: false,
+      			},
+      			type: 'text',
+      		},
+      		yaxis: {
+      			labels: {
+      				padding: 4
+      			},
+      		},
+      		labels: [
+      			'Centro', 'Barrio nuevo', 'V julio', 'Paso nivel','Hacienda'
+      		],
+      		colors: ["#206bc4"],
+      		legend: {
+      			show: false,
+      		},
+      	})).render();
+      });
+      // @formatter:on
+</script>
+<script>
+      // @formatter:off
+      document.addEventListener("DOMContentLoaded", function () {
+      	window.ApexCharts && (new ApexCharts(document.getElementById('chart-demo-pie'), {
+      		chart: {
+      			type: "donut",
+      			fontFamily: 'inherit',
+      			height: 270,
+      			sparkline: {
+      				enabled: true
+      			},
+      			animations: {
+      				enabled: false
+      			},
+      		},
+      		fill: {
+      			opacity: 1,
+      		},
+      		series: [{{unif}}, {{bif}}, {{multi}}, {{espe}}],
+      		labels: ["Unifamiliar", "Bifamiliar", "Multifamiliar", "Especial"],
+      		grid: {
+      			strokeDashArray: 4,
+      		},
+      		colors: ["#406bc5", "#78a5dc", "#d3e1f3", "#e9ccf1"],
+      		legend: {
+      			show: true,
+      			position: 'bottom',
+      			offsetY: 12,
+      			markers: {
+      				width: 10,
+      				height: 10,
+      				radius: 100,
+      			},
+      			itemMargin: {
+      				horizontal: 9,
+      				vertical: 9
+      			},
+      		},
+      		tooltip: {
+      			fillSeriesColor: false
+      		},
+      	})).render();
+      });
+      // @formatter:on
+    </script>
 {% endblock %}

@@ -1,16 +1,16 @@
 from django.conf.urls import url
-from usuarios.views import Inicio, Busquedas, Lmedidores, CobroRecargo, ControlPresupuestal, VerFactura, PagarMatricula
-from usuarios.views import V3, Consumos, ImprimirSoporteP, PagarRyS
-from usuarios.views import ListaViviendas, ListaPropietarios, Certificar, ReportePdfPagos, ReportePagoFechas
+from usuarios.views import Inicio, Busquedas, CobroRecargo, ControlPresupuestal, VerFactura, PagarMatricula
+from usuarios.views import V3, ImprimirSoporteP, PagarRyS
+from usuarios.views import ListaViviendas, ListaPropietarios, Certificar, ReportePdfPagos
 from usuarios.views import ReporteCierresAno, PazSalvo, CertificadoGral
-from usuarios.views import AgregarVivienda, AgregarPropietario, PerfilUsuario, Certificacion, ReporteCompleto
+from usuarios.views import AgregarVivienda, AgregarPropietario, PerfilUsuario, ReporteCompleto
 from usuarios.views import ReporteSuspenciones, ReporteReconexion, ModificarPropietario, ModificarVivienda
 from usuarios.views import EliminarPermisos, ReporteCiclo, Mapa, EliminarPoblacion
 from usuarios.views import VisualizarPropietario, CambioEstado, Facturacion, AgregarUsuarios, Reporte, RegistroCostoM
 from usuarios.views import RegistroTarifa, ReporteEstadoCuenta, Reportepdfpropi, ReporteGastos, ListasGastos
 from usuarios.views import Suspenciones, VerOrdenSuspencion, VerOrdenReconexion, CambioTitular
-from usuarios.views import ReportePredios, CierreFinanciero, ReportesVarios, ReporteSuspendido, ReportesEstado
-from usuarios.views import ReportesCiclo, ReportesInfoinstal, CambiosMasivos, Facturas, GenerarGasto
+from usuarios.views import ReportePredios, CierreFinanciero, ReporteSuspendido, ReportesEstado
+from usuarios.views import ReportesCiclo, CambiosMasivos, Facturas, GenerarGasto
 from usuarios.views import ListaCierre, InfoVivienda, GeneradorFacturas, DesactivarUsuarios, AnularFactura
 from usuarios.views import DescargarFactura, DescargaMasivaFacturas, VisualizarVivienda, BuscarSolicitud
 from usuarios.views import Reconexiones, Perfil, ModificarAcueducto, ListaPqrs, RegistroPqr, VerPqr, ListadoPqrs
@@ -35,14 +35,10 @@ urlpatterns = [
     url(r'^reportecompleto/', ReporteCompleto.as_view(), name='reportecompleto'),
     url(r'^vervivienda/(?P<IdVivienda>\w+)', VisualizarVivienda.as_view(), name='vervivienda'),
     url(r'^reportesuspendido/', ReporteSuspendido.as_view(), name='reportesuspendido'),
-    url(r'^reportesvarios/', ReportesVarios.as_view(), name='reportesvarios'),
     url(r'^reporteestados/', ReportesEstado.as_view(), name='reporteestados'),
     url(r'^reporteciclo/', ReportesCiclo.as_view(), name='reporteciclo'),
-    url(r'^reporteinfo/', ReportesInfoinstal.as_view(), name='reporteinfo'),
     url(r'^reportepagos/', ReportePdfPagos.as_view(), name='reportepagos'),
     url(r'^busquedas/', Busquedas.as_view(), name='busquedas'),
-    url(r'^certificacion/', Certificacion.as_view(), name='certificacion'),
-    url(r'^medidores/', Lmedidores.as_view(), name='medidores'),
     url(r'^reporteciclos/', ReporteCiclo.as_view(), name='reporteciclos'),
     url(r'^controlpresupuestal/', ControlPresupuestal.as_view(), name='controlpresupuestal'),
     url(r'^generargasto/', GenerarGasto.as_view(), name='generargasto'),
@@ -70,7 +66,6 @@ urlpatterns = [
     url(r'^descargarfactura/(?P<IdFactura>\w+)', DescargarFactura.as_view(), name='descargarfactura'),
     url(r'^facturaindividual/(?P<IdVivienda>\w+)', GeneradorFacturasIndividual.as_view(), name='facturaindividual'),
     url(r'^facturamasiva/', DescargaMasivaFacturas.as_view(), name='facturamasiva'),
-    url(r'^reportepagosfechas/', ReportePagoFechas.as_view(), name='reportepagosfechas'),
     url(r'^reportesuspenciones', ReporteSuspenciones.as_view(), name='reportesuspenciones'),
     url(r'^reportereconexiones', ReporteReconexion.as_view(), name='reportereconexiones'),
     url(r'^reportecierresano', ReporteCierresAno.as_view(), name='reportecierresano'),
@@ -97,7 +92,6 @@ urlpatterns = [
     url(r'^paneladmin', PanelAdmin.as_view(), name='paneladmin'),
     url(r'^perfilusuario/(?P<IdUsuario>\w+)', PerfilUsuario.as_view(), name='perfilusuario'),
     url(r'^anularsuspenciones', AnularSuspenciones.as_view(), name='anularsuspenciones'),
-    url(r'^consumos', Consumos.as_view(), name='consumos'),
     url(r'^imprimirpago/(?P<IdPago>\w+)', ImprimirSoporteP.as_view(), name='imprimirpago'),
     url(r'^pazysalvo', PazSalvo.as_view(), name='pazysalvo'),
     url(r'^certificadogral', CertificadoGral.as_view(), name='certificadogral'),

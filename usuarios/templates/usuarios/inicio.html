@@ -1,138 +1,200 @@
-{% extends 'usuarios/base_usuario2.html' %}
+{% extends 'usuarios/base_usuario3.html' %}
 {% load static %}
 {% block styles %}
 <link href="{% static 'stylesheets/diseno.css' %}" rel="stylesheet" type="text/css">
 {% endblock %}
 {%block title %} <title>Modulo - I</title> {%endblock%}
 {% block content %}
+{% load humanize %}
 {% include 'usuarios/alerts.html' %}
-<div class="row" >
-    <div class="col-sm-8">
-        <div class="row">
-            <div class="col-sm-4">
-                <div class="text-center">
-                    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 17rem;" src="{% static 'V3/img/logo.png' %}" alt="...">
-                </div>
-            </div>
-          <div class="col-sm-8">
-                <div class="card shadow mb-4 text-center">
-                        <div class="card-header py-2">
-                             <h6 class="m-0 font-weight-bold text-primary">Usuario de grupo empresarial - {{nombreproyecto}}</h6>
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="row">
+            <div class="col-sm-8">
+            <div class="row row-deck row-cards">
+              <div class="col-sm-6 col-lg-4">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div class="subheader">Facturas pagas</div>
+                      <div class="ms-auto lh-1">
+                        <div class="dropdown">
+                          <a class="text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Este mes</a>
+
                         </div>
-                        <div class="card-body">
+                      </div>
+                    </div>
+                    <div class="h1 mb-3">{{facturaspagas}}</div>
+                    <div class="d-flex mb-2">
+                      <div>Progreso</div>
+                      <div class="ms-auto">
+                        <span class="text-green d-inline-flex align-items-center lh-1">
+                          {{contador}}% <!-- Download SVG icon from http://tabler-icons.io/i/trending-up -->
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon ms-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="3 17 9 11 13 15 21 7" /><polyline points="14 7 21 7 21 14" /></svg>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="progress progress-sm">
+                      <div class="progress-bar bg-blue" style="width: {{contador}}%" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                        <span class="visually-hidden">75% Complete</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-lg-4">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div class="subheader">Recaudado</div>
+                      <div class="ms-auto lh-1">
+                        <div class="dropdown">
+                          <a class="text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Este mes</a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="h1 mb-3">$ {{pagos|intcomma}}</div>
+                    <div class="d-flex mb-2">
+                      <div>Progreso</div>
+                      <div class="ms-auto">
+                        <span class="text-green d-inline-flex align-items-center lh-1">
+                          {{porcentaje}}% <!-- Download SVG icon from http://tabler-icons.io/i/trending-up -->
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon ms-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="3 17 9 11 13 15 21 7" /><polyline points="14 7 21 7 21 14" /></svg>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="progress progress-sm">
+                      <div class="progress-bar bg-blue" style="width: {{porcentaje}}%" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                        <span class="visually-hidden">75% Complete</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 col-lg-2">
+                    <div class="card">
+                      <div class="card-body p-2 text-center">
+                        <div class="text-end text-green">
+                          <span class="text-orange d-inline-flex align-items-center lh-1">
+                            {{tpq}}% <!-- Download SVG icon from http://tabler-icons.io/i/trending-up -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon ms-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="3 17 9 11 13 15 21 7" /><polyline points="14 7 21 7 21 14" /></svg>
+                          </span>
+                        </div>
+                        <div class="h1 m-0">{{tp}}</div>
+                        <div class="text-muted mb-3">PQRS</div>
+                      </div>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-lg-2">
+                    <div class="card">
+                      <div class="card-body p-2 text-center">
+                        <div class="text-end text-green">
+                          <span class="text-orange d-inline-flex align-items-center lh-1">
+                            0% <!-- Download SVG icon from http://tabler-icons.io/i/trending-up -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon ms-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="3 17 9 11 13 15 21 7" /><polyline points="14 7 21 7 21 14" /></svg>
+                          </span>
+                        </div>
+                        <div class="h1 m-0">0</div>
+                        <div class="text-muted mb-3">Reclamaciones por facturación</div>
+                      </div>
+                    </div>
+                </div>
+              <div class="col-lg-12">
+                <div class="row row-cards">
+                  <div class="col-12">
+                    <div class="card">
+                        <div class="card-header text-center">
+                                <h3 class="card-title">Novedades del sistema</h3>
+                        </div>
+                      <div class="card-body">
+                        {% for novedad in novedades %}
+                        <div class="row">
+                          <div class="col-auto">
+                            <span class="avatar" style="color: red;">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="12" r="9" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg></span>
+                          </div>
+                          <div class="col">
+                            <div class="text-truncate">
+                              <strong>{{novedad.IdNovedad}}</strong> {{novedad.Descripcion}}
+                            </div>
+                            <div class="text-muted">{{novedad.Fecha}}</div>
+                          </div>
+                          <div class="col-auto align-self-center">
+                            <div class="badge bg-primary"></div>
+                          </div>
+                        </div>
+                        <br>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div>
+            <div class="col-sm-4">
+                            <div class="card  text-center">
+                              <div class="card-status-bottom bg-success"></div>
+                              <div class="card-header text-center">
+                                <h3 class="card-title">Modulo de recaudo</h3>
+                              </div>
+                              <div class="card-body">
+                                <form action="{% url 'usuarios:verfactura' %}" method="get" class="form-inline">
+                            {% csrf_token %}
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <b>{{tipousuario}}</b>
-                                    <p>
-                                        {{ acueducto }}
-                                    </p>
+                                    <video style="width: 100%;" src="" id="video" autoplay="true"></video>
                                 </div>
-                            </div>
+                                <div class="col-sm-12">
+                                    <input style="width: 100%" type="text" name="factura" class="form-control" placeholder="Ingrese el numero factura">
+                                </div>
+                                    <button style="margin-top: 1rem; width: 100%;" type="submit" class="btn btn-primary">Pagar</button>
+                            </div>     
                             
-                        </div>
-                     </div>
-              </div>
+                        </form>
+                              </div>
+                          </div>
 
-        </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card shadow mb-4 text-center">
-                    <div class="card-header py-2">
-                         <h6 class="m-0 font-weight-bold text-primary">Novedades del sistema</h6>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-borderless table-sm" style="font-size: 0.8rem;">
-                            <thead>
-                                <tr>
-                                  <th scope="col">#</th>
-                                  <th scope="col">Descripción</th>
-                                  <th scope="col">Fecha</th>
-                                </tr>
-                           </thead>
-                          <tbody>
-                            {% for novedad in novedades %}
-                            <tr>
-                              <th>{{novedad.IdNovedad}}</th>
-                              <th>{{novedad.Descripcion}}</th>
-                              <th>{{novedad.Fecha}}</th>
-                            </tr>
-                            {%endfor%}
-                          </tbody>
-                        </table>
-                    </div>
-                </div>
             </div>
+            </div>
+          </div>
         </div>
-    </div>
-    <div class="col-sm-4 text-center">
-        <div class="row">
-            <div class="col-sm-12">
-                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                  <li class="nav-item">
-                    <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#factura" role="tab" aria-controls="pills-home" aria-selected="true">Facturación</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">SyR</a>
+        <footer class="footer footer-transparent d-print-none">
+          <div class="container-fluid">
+            <div class="row text-center align-items-center flex-row-reverse">
+              <div class="col-lg-auto ms-lg-auto">
+                <ul class="list-inline list-inline-dots mb-0">
+                  <li class="list-inline-item"><a href="./docs/index.html" class="link-secondary">Documentation</a></li>
+                  <li class="list-inline-item"><a href="./license.html" class="link-secondary">License</a></li>
+                  <li class="list-inline-item"><a href="https://github.com/tabler/tabler" target="_blank" class="link-secondary" rel="noopener">Source code</a></li>
+                  <li class="list-inline-item">
+                    <a href="https://github.com/sponsors/codecalm" target="_blank" class="link-secondary" rel="noopener">
+                      <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon text-pink icon-filled icon-inline" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 13.572l-7.5 7.428l-7.5 -7.428m0 0a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" /></svg>
+                      Sponsor
+                    </a>
                   </li>
                 </ul>
-                <div class="tab-content" id="pills-tabContent">
-                    <div class="tab-pane fade show active" id="factura" role="tabpanel" aria-labelledby="pills-home-tab">
-                        <div class="card shadow mb-4">
-                            <div class="card-header py-2">
-                                <h6 class="m-0 font-weight-bold text-primary">Modulo de pago - aportes</h6>
-                            </div>
-                            <div class="card-body">
-                                <form action="{% url 'usuarios:verfactura' %}" method="get" class="form-inline">
-                                    {% csrf_token %}
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                        <video style="width: 100%;" src="" id="video" autoplay="true"></video>
-                                        </div>
-                                        <div class="col-sm-12">
-                                            <label class="sr-only" for="exampleInputEmail2">Numero factura</label>
-                                            <input style="width: 100%" type="text" name="factura" class="form-control" id="exampleInputEmail2" placeholder="Ingrese numero factura">
-                                        </div>
-                                        <button style="margin-top: 1rem; width: 100%;" type="submit" class="btn btn-primary">Pagar</button>
-                                    </div>     
-                            
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                        <div class="card shadow mb-4">
-                            <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Modulo de pago - RyS</h6>
-                            </div>
-                            <div class="card-body">
-                                <form action="{% url 'usuarios:pagarrys' %}" method="get" class="form-inline">
-                                    {% csrf_token %}
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <label class="sr-only" for="exampleInputEmail2">Numero de orden</label>
-                                            <input style="width: 100%" type="text" name="orden" class="form-control" id="exampleInputEmail2" placeholder="Ingrese numero de orden">
-                                        </div>
-                                        <button style="margin-top: 1rem; width: 100%;" type="submit" class="btn btn-primary">Pagar</button>
-                                    </div>     
-                            
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+              </div>
+              <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                <ul class="list-inline list-inline-dots mb-0">
+                  <li class="list-inline-item">
+                    Copyright &copy; 2022
+                    <a href="." class="link-secondary">Tabler</a>.
+                    All rights reserved.
+                  </li>
+                  <li class="list-inline-item">
+                    <a href="./changelog.html" class="link-secondary" rel="noopener">
+                      v1.0.0-beta5
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
-        </div>
-    </div> 
-</div>
-<div class="row">
-    <div class="col-sm-12">
-           <div class="col-sm-12">
-                
-            </div> 
+          </div>
+        </footer>
+      </div>
     </div>
-</div>
-
 
 {% endblock %}
 {% block scripts %}

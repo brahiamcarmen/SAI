@@ -5,8 +5,8 @@ from django.shortcuts import render
 from django.conf import settings
 from django.views.generic.base import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from SAAL.models import Usuario, Tarifa, CobroOrdenes,PagoOrdenes,Certificaciones, Cierres, Acueducto, ConfirCerti, ValorMatricula, OrdenesSuspencion, OrdenesReconexion, Poblacion, Factura, Ciclo, EstadoCuenta,NovedadVivienda
-from SAAL.models import Vivienda, SolicitudGastos, Propietario, NovedadesSistema,Medidores, Pqrs, RespuestasPqrs,NovedadesGenerales, CobroMatricula, Permisos, Pagos
+from SAAL.models import Usuario, Tarifa, CobroOrdenes, PagoOrdenes, Certificaciones, Cierres, Acueducto, ConfirCerti, ValorMatricula, OrdenesSuspencion, OrdenesReconexion, Poblacion, Factura, Ciclo, EstadoCuenta,NovedadVivienda
+from SAAL.models import Vivienda, SolicitudGastos, Propietario, NovedadesSistema,Medidores, Pqrs, RespuestasPqrs, NovedadesGenerales, CobroMatricula, Permisos, Pagos
 from SAAL.forms import FormRegistroPqrs,RegistroUsuario, RegistroUsuario2, RegistroVivienda,AcueductoAForm,PermisosForm, CertificarForm, CobroMatriculaForm, CostoMForm, RespuestPqrForm, RegistroPropietario, TarifasForm , ModificaPropietario
 from SAAL.forms import CambioFormEstado,AcueductoForm, GastosForm, MedidoresForm, PoblacionForm, ModificaVivienda
 from django.contrib import messages
@@ -113,21 +113,51 @@ class Inicio(LoginRequiredMixin, View):
             contqrs = Pqrs.objects.filter(Estado='Pendiente').count()
             contsoli = SolicitudGastos.objects.filter(Estado=ESTADO1).count()
             totalnoti = contqrs + contsoli
-            form = self.form_class(instance=acueducto)
             contadorpen = SolicitudGastos.objects.filter(Estado=ESTADO1)
-            novedades = NovedadesSistema.objects.all().order_by("-IdNovedad")[:5]
+            novedades = NovedadesSistema.objects.all().order_by("-IdNovedad")[:4]
+            #mensualidades:
+            fechaexp = (datetime.today())
+            ciclo = fechaexp.month
+            ano1 = fechaexp.year
+            #Los argumentos serán: Año, Mes, Día, Hora, Minutos, Segundos, Milisegundos.
+            new_date = datetime(ano1, ciclo, 1, 1, 00, 00, 00000)
+            new_date2 = datetime(ano1, ciclo, 30, 23, 59, 59, 00000)
+            pagos2 = Pagos.objects.filter(FechaPago__gte=new_date, FechaPago__lte=new_date2).all()
+            pago0 = 0
+            for i in pagos2:
+                valor = i.ValorPago
+                pago0 += int(valor)
+
+            predios = Vivienda.objects.filter(EstadoServicio='Operativo').count()
+            recaudot = int(predios)*8000
+
+            porcentaje = pago0 / recaudot * 100
+            # mensualidades:
+            ciclo2 = fechaexp.month
+            ano2 = fechaexp.year
+            # Los argumentos serán: Año, Mes, Día, Hora, Minutos, Segundos, Milisegundos.
+            new_date3 = datetime(ano2, ciclo2, 1, 1, 00, 00, 00000)
+            new_date4 = datetime(ano2, ciclo2, 28, 23, 59, 59, 00000)
+            factuasemi = Factura.objects.filter(FechaExpe__gte=new_date3, FechaExpe__lte=new_date4).count()
+            pagos3 = Pagos.objects.filter(FechaPago__gte=new_date, FechaPago__lte=new_date2).count()
+            contador = pagos3 / factuasemi * 100
+
+            pqrs = Pqrs.objects.all().count()
+            pqrsp = Pqrs.objects.filter(Estado='Pendiente').count()
+            tpq = pqrsp / pqrs * 100
+
             return render(request,
                           self.template_name,
                             {
-                            'tipousuario': tipousuario,
-                            'nombreproyecto':nombreproyecto,
-                            'nombreproyectol': nombreproyectol,
-                            'acueducto': nombreacueducto,
-                            'notificaciones': contadorpen,
-                            'versionp': versionp,
-                            'listapqrs': listapqrs,
-                            'totalnoti': totalnoti,
-                            'novedades': novedades
+                            'tipousuario': tipousuario, 'nombreproyecto':nombreproyecto,
+                            'nombreproyectol': nombreproyectol, 'acueducto': nombreacueducto,
+                            'notificaciones': contadorpen, 'versionp': versionp, 'listapqrs': listapqrs,
+                            'totalnoti': totalnoti, 'novedades': novedades, 'pagos': pago0,
+                            'porcentaje': int(porcentaje),
+                            'contador': int(contador),
+                            'facturaspagas': pagos3,
+                            'tpq': int(tpq),
+                            'tp': int(pqrsp)
                             })
         except Acueducto.DoesNotExist:
             return render(request, "pages-404.html")
@@ -505,7 +535,7 @@ class VisualizarVivienda(LoginRequiredMixin, View):
                 'lista':lista,'facturas': facturas,'cobromatricula': cobromatricula,'suspenciones': suspenciones,
                 'reconexion': reconexion,'facturasemi': facturasemi,'medidores':medidores,'matriculas': matriculas,'certificaciones': certificaciones,
                 'direccion': vivienda.Direccion,'casa' : vivienda.NumeroCasa,'piso': vivienda.Piso,'matricula': vivienda.IdVivienda,'tipo': vivienda.TipoInstalacion,
-                'estrato': vivienda.Estrato,'estado': vivienda.EstadoServicio,'propietario': vivienda.IdPropietario,'fichacatastral': vivienda.FichaCastral,
+                'estrato': vivienda.Estrato,'tipop':vivienda.InfoInstalacion,'estado': vivienda.EstadoServicio,'propietario': vivienda.IdPropietario,'fichacatastral': vivienda.FichaCastral,
                 'estados': estados,'pagos':pagos,'fecha': fecha,'novedades':novedades,'ultimopago': filtropagos,'vafacemi': vafacemi,
                 'viviendainfo': viviendainfo,'ordenesrs': ordenesrs,'pagosrys': pagosrys,
                 'reconexion2': cor,'suspenciones2': cos,'aportes': resultado,'cobromatricula1':matri,'repaciones': reparaciones,
@@ -663,6 +693,7 @@ class Reporte(LoginRequiredMixin, View):
            s3 = Vivienda.objects.filter(Direccion=S3).count()
            s4 = Vivienda.objects.filter(Direccion=S4).count()
            s5 = Vivienda.objects.filter(Direccion=S5).count()
+           s6 = Vivienda.objects.filter(Direccion='Hacienda').count()
            e1 = Vivienda.objects.filter(EstadoServicio=E1).count()
            e2 = Vivienda.objects.filter(EstadoServicio=E2).count()
            e3 = Vivienda.objects.filter(EstadoServicio=E3).count()
@@ -671,9 +702,12 @@ class Reporte(LoginRequiredMixin, View):
            c2 = Vivienda.objects.filter(Ciclo=C2).count()
            c3 = Vivienda.objects.filter(Ciclo=C3).count()
            c4 = Vivienda.objects.filter(Ciclo=C4).count()
-           t1 = Vivienda.objects.filter(TipoInstalacion=T1).count()
-           t2 = Vivienda.objects.filter(TipoInstalacion=T2).count()
-           t3 = Vivienda.objects.filter(TipoInstalacion=T3).count()
+
+           unif = Vivienda.objects.filter(InfoInstalacion='Unifamiliar').count()
+           bif= Vivienda.objects.filter(InfoInstalacion='Bifamiliar').count()
+           multi = Vivienda.objects.filter(InfoInstalacion='Multifamiliar').count()
+           espe = Vivienda.objects.filter(InfoInstalacion='Especial').count()
+
            enpagar = EstadoCuenta.objects.filter(Estado=EC).count()
            pagos = EstadoCuenta.objects.filter(Estado='PAGO').count()
            totalcantp = enpagar + pagos
@@ -704,13 +738,14 @@ class Reporte(LoginRequiredMixin, View):
                return render(request, self.template_name,{
                    'totalpropietarios': propietarios,
                    'totalviviendas': viviendas,
+                   'unif': unif, 'bif': bif, 'multi': multi, 'espe':espe,
                    's1': s1 + s2, 's3': s3,
-                   's4': s4, 's5': s5, 'e1': e1,
+                   's4': s4, 's5': s5, 's6': s6, 'e1': e1,
                    'e2': e2, 'e3': e3, 'e4': e4,
                    'c1': c1, 'c2': c2, 'c3': c3,
-                   'c4': c4, 't1': t1, 't2': t2, 'notificaciones': contadorpen,
+                   'c4': c4, 'notificaciones': contadorpen,
                    'listapqrs': listapqrs, 'totalnoti': totalnoti, 'porpoblacion': int(porcentajepoblacion),
-                   't3': t3, 'enpagar': enpagar,'personas': personas, 'porcentaje': int(porcentaje),'poblacion':poblacion,
+                   'enpagar': enpagar,'personas': personas, 'porcentaje': int(porcentaje),'poblacion':poblacion,
                    'pagos': pagos, 'totalcantp': totalcantp,'concesion': concesionv,
                    'valor': valor,'valorcuentas':valorcuentas, 'valor2':valor2, 'totalvc': totalv,'suscriptores': viviendasopera, 'disponible': disponible
                })
@@ -867,63 +902,6 @@ class ReporteSuspendido(LoginRequiredMixin, View):
         except Vivienda.DoesNotExist:
             return render(request, "pages-404.html")
 
-class ReportesVarios(LoginRequiredMixin, View):
-    login_url = '/'
-
-    def get(self, request,*args, **kwargs):
-        try:
-            sector = request.GET.get("sector")
-            centro = str(sector)
-            viviendas = Vivienda.objects.filter(Direccion=centro)
-            wb = Workbook()
-            ws = wb.active
-            sfecha = (datetime.today())
-            ws['A1'] = 'Matricula'
-            ws['B1'] = 'Dirección'
-            ws['C1'] = 'NumeroCasa'
-            ws['D1'] = 'Piso'
-            ws['E1'] = 'Ciclo'
-            ws['F1'] = 'TipoInstalación'
-            ws['G1'] = 'Estrato'
-            ws['H1'] = 'EstadoServicio'
-            ws['I1'] = 'Propietario'
-            ws['J1'] = 'Acueducto'
-            ws['K1'] = 'Usuario'
-            ws['L1'] = 'MatriculaAnt'
-            ws['M1'] = 'InfoInstalación'
-            ws['N1'] = 'ProfAcometida'
-            ws['O1'] = 'CantHabitantes'
-
-            cont = 2
-
-            for vivienda in viviendas:
-                ws.cell(row=cont, column=1).value = vivienda.IdVivienda
-                ws.cell(row=cont, column=2).value = vivienda.Direccion
-                ws.cell(row=cont, column=3).value = vivienda.NumeroCasa
-                ws.cell(row=cont, column=4).value = vivienda.Piso
-                ws.cell(row=cont, column=5).value = vivienda.Ciclo
-                ws.cell(row=cont, column=6).value = vivienda.TipoInstalacion
-                ws.cell(row=cont, column=7).value = vivienda.Estrato
-                ws.cell(row=cont, column=8).value = vivienda.EstadoServicio
-                ws.cell(row=cont, column=9).value = str(vivienda.IdPropietario)
-                ws.cell(row=cont, column=10).value = str(vivienda.IdAcueducto)
-                ws.cell(row=cont, column=11).value = str(vivienda.usuid)
-                ws.cell(row=cont, column=12).value = vivienda.MatriculaAnt
-                ws.cell(row=cont, column=13).value = vivienda.InfoInstalacion
-                ws.cell(row=cont, column=14).value = vivienda.ProfAcometida
-                ws.cell(row=cont, column=15).value = vivienda.CantHabitantes
-
-                cont += 1
-
-            archivo_predios = "Reporte"+ str(sector) + str(sfecha) + ".xlsx"
-            response = HttpResponse(content_type="application/ms-excel")
-            content = "attachment; filename = {0}".format(archivo_predios)
-            response['Content-Disposition'] = content
-            wb.save(response)
-            return response
-
-        except Vivienda.DoesNotExist:
-            return render(request, "pages-404.html")
 
 class ReportesEstado(LoginRequiredMixin, View):
     login_url = '/'
@@ -1043,64 +1021,6 @@ class ReportesCiclo(LoginRequiredMixin, View):
         except Vivienda.DoesNotExist:
             return render(request, "pages-404.html")
 
-class ReportesInfoinstal(LoginRequiredMixin, View):
-    login_url = '/'
-
-    def get(self, request, *args, **kwargs):
-        try:
-            sector = request.GET.get("infoinstal")
-            centro = str(sector)
-            viviendas = Vivienda.objects.filter(TipoInstalacion=centro)
-            wb = Workbook()
-            ws = wb.active
-            ws['A1'] = "Reporte de predios"
-            ws.merge_cells('A1:B1')
-            ws['A2'] = 'Matricula'
-            ws['B2'] = 'Dirección'
-            ws['C2'] = 'NumeroCasa'
-            ws['D2'] = 'Piso'
-            ws['E2'] = 'Ciclo'
-            ws['F2'] = 'TipoInstalación'
-            ws['G2'] = 'Estrato'
-            ws['H2'] = 'EstadoServicio'
-            ws['I2'] = 'Propietario'
-            ws['J2'] = 'Acueducto'
-            ws['K2'] = 'Usuario'
-            ws['L2'] = 'MatriculaAnt'
-            ws['M2'] = 'InfoInstalación'
-            ws['N2'] = 'ProfAcometida'
-            ws['O2'] = 'CantHabitantes'
-
-            cont = 3
-
-            for vivienda in viviendas:
-                ws.cell(row=cont, column=1).value = vivienda.IdVivienda
-                ws.cell(row=cont, column=2).value = vivienda.Direccion
-                ws.cell(row=cont, column=3).value = vivienda.NumeroCasa
-                ws.cell(row=cont, column=4).value = vivienda.Piso
-                ws.cell(row=cont, column=5).value = vivienda.Ciclo
-                ws.cell(row=cont, column=6).value = vivienda.TipoInstalacion
-                ws.cell(row=cont, column=7).value = vivienda.Estrato
-                ws.cell(row=cont, column=8).value = vivienda.EstadoServicio
-                ws.cell(row=cont, column=9).value = str(vivienda.IdPropietario)
-                ws.cell(row=cont, column=10).value = str(vivienda.IdAcueducto)
-                ws.cell(row=cont, column=11).value = str(vivienda.usuid)
-                ws.cell(row=cont, column=12).value = vivienda.MatriculaAnt
-                ws.cell(row=cont, column=13).value = vivienda.InfoInstalacion
-                ws.cell(row=cont, column=14).value = vivienda.ProfAcometida
-                ws.cell(row=cont, column=15).value = vivienda.CantHabitantes
-
-                cont += 1
-
-            archivo_predios = "ReportePorTipoInstalacion.xlsx"
-            response = HttpResponse(content_type="application/ms-excel")
-            content = "attachment; filename = {0}".format(archivo_predios)
-            response['Content-Disposition'] = content
-            wb.save(response)
-            return response
-
-        except Vivienda.DoesNotExist:
-            return render(request, "pages-404.html")
 
 class Busquedas(LoginRequiredMixin, View):
     login_url = '/'
@@ -1182,81 +1102,9 @@ class Busquedas(LoginRequiredMixin, View):
         except Usuario.DoesNotExist:
             return render(request, "pages-404.html")
 
-class Certificacion(LoginRequiredMixin, View):
-    login_url = '/'
-
-    def get(self, request):
-        certificaciones = Certificaciones.objects.all()
-        wb = Workbook()
-        ws = wb.active
-        ws.title = "Reporte de certificaciones"
-        ws['A1'] = 'IdCertificacion'
-        ws['B1'] = 'Nit'
-        ws['C1'] = 'NombreEmpresa'
-        ws['D1'] = 'Estado'
-        ws['E1'] = 'Soporte'
-        ws['F1'] = 'Descripcion'
-        ws['G1'] = 'IdVivienda'
-
-        cont = 2
-
-        for propietario in certificaciones:
-            ws.cell(row=cont, column=1).value = propietario.IdCertificacion
-            ws.cell(row=cont, column=2).value = propietario.Nit
-            ws.cell(row=cont, column=3).value = propietario.NombreEmpresa
-            ws.cell(row=cont, column=4).value = propietario.Estado
-            ws.cell(row=cont, column=5).value = propietario.Soporte
-            ws.cell(row=cont, column=6).value = propietario.Descripcion
-            ws.cell(row=cont, column=7).value = str(propietario.IdVivienda)
-
-            cont += 1
-
-        sfecha = (datetime.today())
-        archivo_propi = "ReporteCertificaciones" + str(sfecha) + ".xlsx"
-        response = HttpResponse(content_type="application/ms-excel")
-        content = "attachment; filename = {0}".format(archivo_propi)
-        response['Content-Disposition'] = content
-        wb.save(response)
-        return response
-
-class Lmedidores(LoginRequiredMixin, View):
-    login_url = '/'
-
-    def get(self, request):
-        medidores = Medidores.objects.all()
-        wb = Workbook()
-        ws = wb.active
-        ws.title = "Reporte de certificaciones"
-        ws['A1'] = 'IdMedidor'
-        ws['B1'] = 'Marca'
-        ws['C1'] = 'Tipo'
-        ws['D1'] = 'LeturaInicial'
-        ws['E1'] = 'AnoFabricacion'
-        ws['F1'] = 'IdVivienda'
-
-        cont = 2
-
-        for propietario in medidores:
-            ws.cell(row=cont, column=1).value = propietario.IdMedidor
-            ws.cell(row=cont, column=2).value = propietario.Marca
-            ws.cell(row=cont, column=3).value = propietario.Tipo
-            ws.cell(row=cont, column=4).value = propietario.LecturaInicial
-            ws.cell(row=cont, column=5).value = propietario.AnoFabricacion
-            ws.cell(row=cont, column=6).value = str(propietario.IdVivienda)
-
-            cont += 1
-
-        sfecha = (datetime.today())
-        archivo_propi = "ReporteMedidores" + str(sfecha) + ".xlsx"
-        response = HttpResponse(content_type="application/ms-excel")
-        content = "attachment; filename = {0}".format(archivo_propi)
-        response['Content-Disposition'] = content
-        wb.save(response)
-        return response
 
 class ReporteCiclo(LoginRequiredMixin, View):
     login_url = '/'
-
     def get(self, request, *args, **kwargs):
         try:
             tipo = request.GET.get("tipo")
@@ -1881,33 +1729,20 @@ class RegistroPqr(LoginRequiredMixin, View):
 
     def post(self, request):
         try:
-            identificacion = request.POST.get("identificacion")
-            nombrecompleto = request.POST.get("nombrecompleto")
-            celular = request.POST.get("celular")
-            email = request.POST.get("email")
-            direccion = request.POST.get("direccion")
-            tiposolicitud = request.POST.get("tiposolicitud")
-            anonimo = request.POST.get("anonimo")
-            soporte = request.FILES.get("soporte")
-            descripcion = request.POST.get("descripcion")
+            nombre = request.POST.get("Nombre")
+            celular = request.POST.get("Telefono")
+            correo = request.POST.get("Correo")
+            direccion = request.POST.get("Direccion")
+            tiposolicitud = request.POST.get("TipoSolicitud")
+            clasificacion= request.POST.get("Clasificacion")
+            descripcion = request.POST.get("Descripcion")
             usuario = Usuario.objects.get(usuid=request.user.pk)
-
-            if anonimo == "Si":
-                pqr = Pqrs(Descripcion=descripcion,Estado=ESTADOPQR1,TipoSolicitud=tiposolicitud,Anonimo=anonimo,usuid=usuario,Correo=email)
-                pqr.save()
-                idpqr = pqr.IdPqrs
-                messages.add_message(request, messages.INFO, 'la pqrs se registro correctamente, RADICADO No:' + str(idpqr))
-                return HttpResponseRedirect(reverse('usuarios:listapqrs'))
-
-            elif anonimo == "No":
-                estado = Pqrs(Descripcion=descripcion,Soporte=soporte,CedulaNit=identificacion,
-                              Estado=ESTADOPQR1,NombreCompleto=nombrecompleto,TipoSolicitud=tiposolicitud,
-                              Telefono=celular, Anonimo=anonimo, Direccion=direccion, usuid=usuario,
-                              Correo=email)
-                estado.save()
-                idpqr = estado.IdPqrs
-                messages.add_message(request, messages.INFO, 'la tarifa se registro correctamente, RADICADO No:' + str(idpqr))
-                return HttpResponseRedirect(reverse('usuarios:listapqrs'))
+            pqr = Pqrs(Nombre=nombre,Telefono=celular,Descripcion=descripcion,Correo=correo,Direccion=direccion,
+                       TipoSolicitud=tiposolicitud,Clasificacion=clasificacion,Estado=ESTADOPQR1, usuid=usuario)
+            pqr.save()
+            idpqr = pqr.IdPqrs
+            messages.add_message(request, messages.INFO, 'La pqrs se '+ str(tiposolicitud)+' registro correctamente, RADICADO No: ' + str(idpqr))
+            return HttpResponseRedirect(reverse('usuarios:listapqrs'))
 
         except Usuario.DoesNotExist:
             return render(request, "pages-404.html")
@@ -1918,6 +1753,7 @@ class ListaPqrs(LoginRequiredMixin, View):
 
     def get(self, request):
         try:
+            total = Pqrs.objects.all().count()
             lista = Pqrs.objects.filter(Estado='Pendiente')
             contcerrada = Pqrs.objects.filter(Estado='Cerrada').count()
             contpendiente = Pqrs.objects.filter(Estado='Pendiente').count()
@@ -1926,7 +1762,7 @@ class ListaPqrs(LoginRequiredMixin, View):
             contquejas = Pqrs.objects.filter(TipoSolicitud='Queja').count()
             contsolicitud = Pqrs.objects.filter(TipoSolicitud='Solicitud').count()
             contreclamo = Pqrs.objects.filter(TipoSolicitud='Reclamo').count()
-            contfelicitacion = Pqrs.objects.filter(TipoSolicitud='Felicitacion').count()
+
             usuario = Usuario.objects.get(usuid=request.user.pk)
             tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='APQRS').exists()
             drilistapqrs = Pqrs.objects.filter(Estado='Pendiente')
@@ -1938,11 +1774,11 @@ class ListaPqrs(LoginRequiredMixin, View):
             if tipousuario is True:
                 return render(request, self.template_name,{
                     'lista': lista,
+                    'total': total,
                     'contp': contpeticion,
                     'contq': contquejas,
                     'conts': contsolicitud,
                     'contr': contreclamo,
-                    'contf': contfelicitacion,
                     'contpen': contpendiente,
                     'contcerrada': contcerrada,
                     'notificaciones': contadorpen,
@@ -2124,6 +1960,7 @@ class GeneradorFacturas(LoginRequiredMixin, View):
            facturasemitidas2 = Factura.objects.filter(Estado=FE).count()
            facturaspg = Factura.objects.filter(Estado=FP).count()
            facturasanu = Factura.objects.filter(Estado=FA).count()
+           facturas = Factura.objects.filter(Estado='Emitida').order_by("-IdFactura")
            suma = 0
            for i in facturasemitidas:
                valor = int(i.Total)
@@ -2140,7 +1977,8 @@ class GeneradorFacturas(LoginRequiredMixin, View):
                                  'suma': suma,
                                  'notificaciones': contadorpen,
                                  'listapqrs': listapqrs,
-                                 'totalnoti': totalnoti
+                                 'totalnoti': totalnoti,
+                                 'facturas': facturas
                              })
            else:
                messages.add_message(request, messages.ERROR, 'Su usuario no tiene los permisos de acceso a esta seccion')
@@ -2192,7 +2030,7 @@ class GeneradorFacturas(LoginRequiredMixin, View):
                            cuotamatricula += int(valor)
 
                        # consulta facturas vencidas
-                       consumo1 = estadoc.Valor - 500
+                       consumo1 = estadoc.Valor - 1000
                        vencidas = -1
                        for i in range(1, consumo1, TARIFA):
                            if i != consumo:
@@ -2238,6 +2076,7 @@ class Suspenciones(LoginRequiredMixin,View):
             contsoli = SolicitudGastos.objects.filter(Estado=ESTADO1).count()
             totalnoti = contqrs + contsoli
             contadorpen = SolicitudGastos.objects.filter(Estado=ESTADO1)
+            totales = OrdenesSuspencion.objects.all().count()
 
             tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='ASR').exists()
 
@@ -2252,7 +2091,8 @@ class Suspenciones(LoginRequiredMixin,View):
                     'reejecutadas': contreeje,
                     'notificaciones': contadorpen,
                     'listapqrs': drilistapqrs,
-                    'totalnoti': totalnoti
+                    'totalnoti': totalnoti,
+                    'total': totales
 
                 })
             else:
@@ -2294,6 +2134,7 @@ class Reconexiones(LoginRequiredMixin,View):
     def get(self, request):
         try:
             usuario = Usuario.objects.get(usuid=request.user.pk)
+            total = OrdenesReconexion.objects.all().count()
             ordenesreconexion = OrdenesReconexion.objects.filter(Estado=SP)
             contreeje = OrdenesReconexion.objects.filter(Estado=SJ).count()
             contrepen = OrdenesReconexion.objects.filter(Estado=SP).count()
@@ -2311,7 +2152,8 @@ class Reconexiones(LoginRequiredMixin,View):
                     'reejecutadas': contreeje,
                     'notificaciones': contadorpen,
                     'listapqrs': drilistapqrs,
-                    'totalnoti': totalnoti
+                    'totalnoti': totalnoti,
+                    'total':total
 
                 })
             else:
@@ -2497,6 +2339,7 @@ class DescargarFactura(LoginRequiredMixin, View):
             estadoservicio = vivienda.EstadoServicio
             ciclo = vivienda.Ciclo
             diametro = vivienda.Diametro
+            cantpredios = vivienda.CantPredios
             # identificador de propietario
             titular = Propietario.objects.get(IdPropietario=idtitular.pk)
             nombretitular = titular.Nombres
@@ -2540,6 +2383,7 @@ class DescargarFactura(LoginRequiredMixin, View):
             ws['AL15'] = tipodepredio
             ws['AS13'] = estadoservicio
             ws['AB15'] = ciclo
+            ws['P11'] = cantpredios
             # Periodo facturado
             ws['AM20'] = periodofacturado
             #ultimo pago
@@ -2878,50 +2722,6 @@ class ReporteCompleto(LoginRequiredMixin, View):
             cont += 1
 
         archivo_predios = "ReporteCompleto" + str(sfecha) + ".xlsx"
-        response = HttpResponse(content_type="application/ms-excel")
-        content = "attachment; filename = {0}".format(archivo_predios)
-        response['Content-Disposition'] = content
-        wb.save(response)
-        return response
-
-class ReportePagoFechas(LoginRequiredMixin, View):
-    login_url = '/'
-    def get(self, request):
-        fechainicial = str(request.GET.get("fechainicial"))
-        fechafinal = str(request.GET.get("fechafinal"))
-        fecha_ini = datetime.strptime(fechainicial, '%m/%d/%Y')
-        fecha_fi = datetime.strptime(fechafinal, '%m/%d/%Y')
-        pagos = Pagos.objects.filter(FechaPago__gte=fecha_ini, FechaPago__lte=fecha_fi).all()
-        sfecha = (datetime.today())
-        wb = Workbook()
-        ws = wb.active
-        ws.title = "Reporte pagos"
-        ws['A1'] = 'Referencia pago'
-        ws['B1'] = 'Fecha de pago'
-        ws['C1'] = 'Numero factura'
-        ws['D1'] = 'Año'
-        ws['E1'] = 'Valor pago'
-        ws['F1'] = 'Efectivo'
-        ws['G1'] = 'Cambio'
-        ws['H1'] = 'Usuario registro'
-        ws['I1'] = 'Matricula'
-
-        cont = 2
-
-        for vivienda in pagos:
-            ws.cell(row=cont, column=1).value = vivienda.IdPago
-            ws.cell(row=cont, column=2).value = vivienda.FechaPago
-            ws.cell(row=cont, column=3).value = str(vivienda.IdFactura)
-            ws.cell(row=cont, column=4).value = vivienda.Ano
-            ws.cell(row=cont, column=5).value = vivienda.ValorPago
-            ws.cell(row=cont, column=6).value = vivienda.Efectivo
-            ws.cell(row=cont, column=7).value = vivienda.Devuelta
-            ws.cell(row=cont, column=8).value = str(vivienda.IdUsuario)
-            ws.cell(row=cont, column=9).value = str(vivienda.IdVivienda)
-
-            cont += 1
-
-        archivo_predios = "ReportePagos" + str(sfecha) + ".xlsx"
         response = HttpResponse(content_type="application/ms-excel")
         content = "attachment; filename = {0}".format(archivo_predios)
         response['Content-Disposition'] = content
@@ -4131,52 +3931,6 @@ class AnularSuspenciones(LoginRequiredMixin, View):
         except Usuario.DoesNotExist:
             return render(request, "pages-404.html")
 
-class Consumos(LoginRequiredMixin, View):
-    login_url = '/'
-    template_name = 'usuarios/consumos.html'
-
-    def get(self, request):
-        try:
-            usuario = Usuario.objects.get(usuid=request.user.pk)
-            idacueducto = usuario.IdAcueducto
-            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AC').exists()
-            acueducto = Acueducto.objects.get(IdAcueducto=idacueducto)
-            # consultas de tarifas
-            tarifa = acueducto.IdTarifa.Valor
-            idtarifa = acueducto.IdTarifa
-            tarifas = Tarifa.objects.get(IdTarifa=idtarifa)
-            #consulta de medidas en m3
-            consumomin = tarifas.consumomin
-            contipo1 = consumomin + 1
-            consumotipo1 = tarifas.consumotipo1
-            contipo2 = consumotipo1 + 1
-            consumotipo2 = tarifas.consumotipo2
-            consumotipo3 = consumotipo2 + 1
-            #porcentajes de aumento
-            porcentajetipo1 = float(tarifas.Potipo1)
-            porcentajetipo2 = tarifas.Potipo2
-            #tarifas por tipo de consumo
-            valormetro = int(tarifa)
-            portipo1 = int(valormetro * porcentajetipo1) / 100
-            portipo2 = int(valormetro * tarifas.Potipo2) / 100
-
-            medidores = Medidores.objects.all().count()
-            viviendas = Vivienda.objects.filter(EstadoServicio='Operativo').count()
-            sinmedidor= viviendas - medidores
-            if tipousuario is True:
-                return render(request, self.template_name,{
-                    'medidoresregistrados': medidores, 'porcentipo1': porcentajetipo1,'porcentipo2': porcentajetipo2,
-                    'sinmedidor': sinmedidor,'valormetro': int(valormetro),
-                    'tarifa': tarifa,'consumomin': consumomin,'contipo1':contipo1,'consumotipo1': consumotipo1,'contipo2': contipo2,
-                    'consumotipo2': consumotipo2,'consumotipo3': consumotipo3, 'portipo1': int(portipo1), 'portipo2': int(portipo2)
-                })
-
-            else:
-                messages.add_message(request, messages.ERROR,'Su usuario tiene permisos de acceso a este modulo')
-                return HttpResponseRedirect(reverse('usuarios:inicio'))
-
-        except Usuario.DoesNotExist:
-            return render(request, "pages-404.html")
 
 class ImprimirSoporteP(LoginRequiredMixin, View):
     login_url = '/'
@@ -4682,5 +4436,5 @@ class VerFactura(LoginRequiredMixin, View):
                 messages.add_message(request, messages.INFO, 'el valor a pagar debe ser superior a $7000')
                 return HttpResponseRedirect(reverse('usuarios:inicio'))
 
-        except Factura.DoesNotExist:
+        except usuario.DoesNotExist:
             return render(request, "pages-404.html")

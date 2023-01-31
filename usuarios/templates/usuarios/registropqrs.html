@@ -1,4 +1,4 @@
-{% extends 'usuarios/base_usuario2.html' %}
+{% extends 'usuarios/base_usuario3.html' %}
 {% load static %}
 {% block styles %}
 
@@ -7,49 +7,63 @@
 {% block content %}
 {% include 'usuarios/alerts.html' %}
 <!-- Titulo -->
-<div class="row">
-    <div class="col-sm-12">
-        <h1 class="h3 text-gray-800">Registro de peticiones, quejas, reclamos y sugerencias</h1>
-    </div>
-</div>
-
-<div class="row" style="margin-top: 1rem;">
-            <div class="col-sm-3">
-
+      <div class="page-wrapper">
+        <div class="container-fluid">
+          <!-- Page title -->
+          <div class="page-header d-print-none">
+            <div class="row align-items-center">
+              <div class="col">
+                <!-- Page pre-title -->
+                <div class="page-pretitle">
+                  Modulo
+                </div>
+                <h2 class="page-title">
+                  Registro de peticiones, quejas, reclamos y solicitudes
+                </h2>
+              </div>
             </div>
-            <div class="col-sm-8">
-                    <form method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        {{ form.non_field_errors }}
-                        {% for field in form %}
-                            <div class="form-group no-padding-t no-border-t panel-padding-h">
-                                {{ field.errors }}
-                                <label for="" class="col-sm-8 control-label">
-                                    <strong>{{ field.label }}</strong>
-                                </label>
-                                <div class="col-sm-8">
-                                    {{ field }}
-                                </div>
-                            </div>
-                        {% endfor %}
-                        <div class="row text-center" >
-                            <div class="col-sm-4" style="margin-top: 1rem;">
-                                <button style="width: 80%;" type="submit" class="btn btn-primary ">Registrar</button>
-                            </div>
-                        <br>
-                            <div class="col-sm-4" style="margin-top: 1rem;">
-                                <button style="width: 80%;" onclick="window.location='{% url 'usuarios:listapqrs' %}'" class="btn btn-primary ">Cancelar</button>
+          </div>
+        </div>
+      </div>
+<br>
+<div class="card-body">
+<div class="row">
+    <div class="col-sm-3">
+        
+    </div>
+    <div class="col-sm-6">
+        <form method="post" enctype="multipart/form-data" class="card">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="card-body">
+            {% for field in form %}
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="row">
+                        <div class="col-md-6 col-xl-12">
+                            <div class="mb-3">
+                            {{ field.errors }}
+                              <label class="form-label">{{ field.label }}</label>
+                              {{ field }}
                             </div>
                         </div>
-                        
-                    </form>             
+                    </div>
+                </div>
             </div>
-            <div class="col-sm-1">
-                
+            {% endfor %}
+            <div class="row">
+                <div class="col-sm-6" style="margin-top: 1rem;">
+                    <button style="width: 100%;" type="submit" class="btn btn-primary ">Registrar</button>
+                </div>
+                <div class="col-sm-6" style="margin-top: 1rem;">
+                    <button style="width: 100%;" onclick="window.location='{% url 'usuarios:listapqrs' %}'" class="btn btn-primary ">Cancelar</button>
+                </div>
             </div>
-
-</div>
-
+        </div>
+    </form>
+    </div>
+    </div>
+    </div>  
 {% endblock %}
 {% block scripts %}
 {% endblock %}
