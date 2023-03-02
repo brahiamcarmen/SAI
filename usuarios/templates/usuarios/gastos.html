@@ -27,9 +27,6 @@
              <div class="col-auto ms-auto d-print-none">
                 <div class="btn-list">
                     <div class="col-auto">
-                        <a href="{% url 'usuarios:cobrorecargo' %}" class="btn btn-primary btn-sm w-100">Generar recargos</a>
-                    </div>
-                    <div class="col-auto">
                         <a href="{% url 'usuarios:listadogastos' %}" class="btn btn-primary btn-sm w-100">
                                       Listado de ordenes</a>
                     </div>
@@ -165,25 +162,21 @@
                     <div class="card">
                        <div class="card-body">
                         <div class="row">
-                            <div class="col-lg-12">
-                                <h3 class="card-title">Opciones disponibles</h3>                     
-                                 <div class="row">
-                                    <div class="col-6">
-                                        
-                                    </div>
-                                    <div class="col-6">
-                                        
-                                    </div>
-                                 </div>
-                                 <div class="row" style="margin-top:1rem">
-                                    <div class="col-6">
-                                        
-                                    </div>
-                                    <div class="col-6">
-                                        
-                                    </div>
-                                 </div>
-                            </div>
+                            <h3 class="subheader">Estado ordenes</h3>
+                            <div class="row text-center">
+                                <div class="col-4 col-sm-4">
+                                    <b class="text-primary">Pendiente</b><br>
+                                   {{ contadorp }}
+                                </div>
+                                <div class="col-4 col-sm-4">
+                                    <b class="text-primary">Aprobadas</b><br>
+                                    {{ contadora }}
+                                </div>
+                                <div class="col-4 col-sm-4">
+                                    <b class="text-primary">Anuladas</b><br>
+                                    {{ contadoranu }}
+                                </div>
+                            </div> 
                         </div>
                        </div>
                     </div>      
@@ -217,7 +210,7 @@
                                                         <td>{{ facturas.Valor|intcomma }}</td>
                                                         <td>{{ facturas.Estado }}</td>
                                                         <td>{{ facturas.Fecha }}</td>
-                                                        <td><a class="btn btn-danger btn-sm" href="">
+                                                        <td><a class="btn btn-danger btn-sm" href="{% url 'usuarios:cambio' facturas.IdSoGa %}">
                                                               Ver</a>
                                                         </td>
                                                     </tr>
@@ -243,41 +236,6 @@
     
     </div>
 </div>
-
-            <div id="gestorordenes" class="modal fade text-center" tabindex="-1" role="dialog" style="display: none;">
-                <div class="modal-dialog modal-sm text-center">
-                        <div class="modal-content">
-                            <div class="modal-header align-items-center">
-                                <h4 class="modal-title">Gestor de ordenes</h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <form action="{% url 'usuarios:cambio' %}" method="get">
-                                        {% csrf_token %}
-                                            <div class="col-sm-12">
-                                                <div class="form-group no-margin-hr">
-                                                    <label class="control-label">Numero de orden</label>
-                                                    <input type="text" name="IdSolicitud" class="form-control">
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12 col-md-12">
-                                                <button type="submit" class="btn btn-primary" style="width: 100%">Buscar</button>
-                                            </div>
-                                        </form>
-                                        
-                                    </div>
-
-                                </div>
-
-                                <br>
-                            </div>
-                        </div> <!-- / .modal-content -->
-                    </div> <!-- / .modal-dialog -->
-                </div>
 
             <div id="estadisticas" class="modal fade text-center" tabindex="-1" role="dialog" style="display: none;">
                 <div class="modal-dialog modal-lg text-center">
@@ -342,42 +300,6 @@
                         </div> <!-- / .modal-content -->
                     </div> <!-- / .modal-dialog -->
                 </div>
-<div class="modal fade" id="porcentajes" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-body">
-            <div class="col-xl-12 col-md-6 mb-4">
-                <div class="card border-bottom-info shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Porcentaje de recaudo
-                                            </div>
-                                            <div class="row no-gutters align-items-center">
-                                                <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{porcentaje}}%</div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="progress progress-sm mr-2">
-                                                        <div class="progress-bar bg-info" role="progressbar"
-                                                            style="width: {{porcentaje}}%" aria-valuenow="{{porcentaje}}" aria-valuemin="0"
-                                                            aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                    </div>
-                </div>
-           </div>
-        </div>
-    </div>
-</div>
-
 {% endblock %}
 {% block scripts %}
 <script>

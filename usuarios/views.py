@@ -121,7 +121,7 @@ class Inicio(LoginRequiredMixin, View):
             ano1 = fechaexp.year
             #Los argumentos serán: Año, Mes, Día, Hora, Minutos, Segundos, Milisegundos.
             new_date = datetime(ano1, ciclo, 1, 1, 00, 00, 00000)
-            new_date2 = datetime(ano1, ciclo, 30, 23, 59, 59, 00000)
+            new_date2 = datetime(ano1, ciclo, 28, 23, 59, 59, 00000)
             pagos2 = Pagos.objects.filter(FechaPago__gte=new_date, FechaPago__lte=new_date2).all()
             pago0 = 0
             for i in pagos2:
@@ -133,7 +133,7 @@ class Inicio(LoginRequiredMixin, View):
 
             porcentaje = pago0 / recaudot * 100
             # mensualidades:
-            ciclo2 = fechaexp.month
+            ciclo2 = fechaexp.month - 1
             ano2 = fechaexp.year
             # Los argumentos serán: Año, Mes, Día, Hora, Minutos, Segundos, Milisegundos.
             new_date3 = datetime(ano2, ciclo2, 1, 1, 00, 00, 00000)
@@ -495,7 +495,8 @@ class VisualizarVivienda(LoginRequiredMixin, View):
             ordenesrs = CobroOrdenes.objects.filter(IdEstadoCuenta=idestado)
             resultado = verificarestado.Valor
             facturas = Factura.objects.filter(IdEstadoCuenta=idestado).order_by("-IdFactura")
-            facturasemi = Factura.objects.filter(IdEstadoCuenta=idestado, Estado=FE)
+            nofacturas = Factura.objects.filter(IdEstadoCuenta=idestado).count()
+            facturasemi = Factura.objects.filter(IdEstadoCuenta=idestado).order_by("-IdFactura")[:1]
             vafacemi = Factura.objects.filter(IdEstadoCuenta=idestado, Estado=FE).exists()
             matriculas = CobroMatricula.objects.filter(IdVivienda=IdVivienda)
             certificaciones = Certificaciones.objects.filter(IdVivienda=IdVivienda)
@@ -503,6 +504,7 @@ class VisualizarVivienda(LoginRequiredMixin, View):
             novedades = NovedadVivienda.objects.filter(IdVivienda=IdVivienda)
             reconexion = OrdenesReconexion.objects.filter(IdEstadoCuenta=idestado)
             suspenciones = OrdenesSuspencion.objects.filter(IdEstadoCuenta=idestado)
+            filtrosuspenciones =OrdenesSuspencion.objects.filter(IdEstadoCuenta=idestado,Estado='Pendiente').exists()
             ordenessuspencion = CobroOrdenes.objects.filter(IdEstadoCuenta=idestado,Estado=ESTADO1,TipoOrden='Cobro por suspencion')
             ordenesreconexion = CobroOrdenes.objects.filter(IdEstadoCuenta=idestado, Estado=ESTADO1,TipoOrden='Cobro por reconexión')
             validarcobro = CobroMatricula.objects.filter(IdVivienda=IdVivienda, Estado=ESTCOBRO)
@@ -532,14 +534,14 @@ class VisualizarVivienda(LoginRequiredMixin, View):
             print(lista)
 
             return render(request, self.template_name,{
-                'lista':lista,'facturas': facturas,'cobromatricula': cobromatricula,'suspenciones': suspenciones,
+                'nofac':nofacturas,'lista':lista,'facturas': facturas,'cobromatricula': cobromatricula,'suspenciones': suspenciones,
                 'reconexion': reconexion,'facturasemi': facturasemi,'medidores':medidores,'matriculas': matriculas,'certificaciones': certificaciones,
                 'direccion': vivienda.Direccion,'casa' : vivienda.NumeroCasa,'piso': vivienda.Piso,'matricula': vivienda.IdVivienda,'tipo': vivienda.TipoInstalacion,
                 'estrato': vivienda.Estrato,'tipop':vivienda.InfoInstalacion,'estado': vivienda.EstadoServicio,'propietario': vivienda.IdPropietario,'fichacatastral': vivienda.FichaCastral,
                 'estados': estados,'pagos':pagos,'fecha': fecha,'novedades':novedades,'ultimopago': filtropagos,'vafacemi': vafacemi,
                 'viviendainfo': viviendainfo,'ordenesrs': ordenesrs,'pagosrys': pagosrys,
                 'reconexion2': cor,'suspenciones2': cos,'aportes': resultado,'cobromatricula1':matri,'repaciones': reparaciones,
-                'total': resultado + cor + cos + matri + reparaciones
+                'total': resultado + cor + cos + matri + reparaciones, 'filtro':filtrosuspenciones
             })
 
         except Vivienda.DoesNotExist:
@@ -1221,7 +1223,7 @@ class ControlPresupuestal(LoginRequiredMixin, View):
             ano1 = fechaexp.year
             #Los argumentos serán: Año, Mes, Día, Hora, Minutos, Segundos, Milisegundos.
             new_date = datetime(ano1, ciclo, 1, 1, 00, 00, 00000)
-            new_date2 = datetime(ano1, ciclo, 30, 23, 59, 59, 00000)
+            new_date2 = datetime(ano1, ciclo, 28, 23, 59, 59, 00000)
             pagos2 = Pagos.objects.filter(FechaPago__gte=new_date, FechaPago__lte=new_date2).all()
             pagosrys = PagoOrdenes.objects.filter(FechaPago__gte=new_date, FechaPago__lte=new_date2).all()
             gastosaprobados = SolicitudGastos.objects.filter(Fecha__gte=new_date,Fecha__lte=new_date2, Estado=ESTADO2).all()
@@ -1321,16 +1323,9 @@ class BuscarSolicitud(LoginRequiredMixin, View):
     form_class = GastosForm
     template_name = 'usuarios/modificarestado.html'
 
-    def get(self, request):
+    def get(self, request, IdSoGa):
         try:
-            listapqrs = Pqrs.objects.filter(Estado='Pendiente')
-            contqrs = Pqrs.objects.filter(Estado='Pendiente').count()
-            contsoli = SolicitudGastos.objects.filter(Estado=ESTADO1).count()
-            totalnoti = contqrs + contsoli
-            contadorpen = SolicitudGastos.objects.filter(Estado=ESTADO1)
-
-            IdSolicitud = request.GET.get("IdSolicitud", "")
-            solicitud = SolicitudGastos.objects.get(IdSoGa=IdSolicitud)
+            solicitud = SolicitudGastos.objects.get(IdSoGa=IdSoGa)
             form = self.form_class(instance=solicitud)
             return render(request, self.template_name,
                           {
@@ -1343,19 +1338,15 @@ class BuscarSolicitud(LoginRequiredMixin, View):
                               'numerofactura': solicitud.NumeroFactura,
                               'fecha': solicitud.Fecha,
                               'descripcion': solicitud.Descripcion,
-                              'IdSoGa': solicitud.IdSoGa,
-                              'notificaciones': contadorpen,
-                              'listapqrs': listapqrs,
-                              'totalnoti': totalnoti
+                              'IdSoGa': solicitud.IdSoGa
                           })
 
         except Usuario.DoesNotExist:
             return render(request, "pages-404.html")
 
-    def post(self, request):
+    def post(self, request, IdSoGa):
         try:
-            IdSolicitud = request.POST.get("IdSolicitud", "")
-            solicitud = SolicitudGastos.objects.get(IdSoGa=IdSolicitud)
+            solicitud = SolicitudGastos.objects.get(IdSoGa=IdSoGa)
             form = self.form_class(request.user, request.POST, instance=solicitud)
 
             if form.is_valid():

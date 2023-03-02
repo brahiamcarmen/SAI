@@ -1,62 +1,108 @@
-{% extends 'usuarios/base_usuario2.html' %}
+{% extends 'usuarios/base_usuario3.html' %}
 {% load static %}
 {% block styles %}
 {% endblock %}
 {%block title %} <title>Modulo - LOG</title> {%endblock%}
-{% load humanize %}
 {% block content %}
+{% load humanize %}
 {% include 'usuarios/alerts.html' %}
 <!-- Titulo -->
+      <div class="page-wrapper">
+        <div class="container-fluid">
+          <!-- Page title -->
+          <div class="page-header d-print-none">
+            <div class="row align-items-center">
+              <div class="col">
+                <!-- Page pre-title -->
+                <div class="page-pretitle">
+                  Modulo
+                </div>
+                <h2 class="page-title">
+                  Listado de egresos
+                </h2>
+              </div>
+              <div class="col-auto ms-auto d-print-none">
+                <div class="btn-list">
+                    <span class="d-none d-sm-inline">
+                        <form class="table-search-form row gx-1 align-items-center">
+                            <div class="col-auto">
+                                <input type="text" id="search" name="searchorders" class="form-control search-orders" placeholder="Buscar">
+                            </div>
+                        </form>
+                    </span>
+                </div>
+              </div>
+              <div class="col-auto">
+                  <div class="btn-list">
+                    <a href="{% url 'usuarios:controlpresupuestal' %}" class="btn btn-primary w-100">Volver
+                    </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+<br>      
+<!-- tabla -->
 <div class="row">
-    <div class="col-sm-6">
-        <h1 class="h3 text-gray-800">Listado de solicitudes de gastos</h1>
-    </div>
-    <div class="col-sm-6">
-        <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" onclick="window.location='{% url 'usuarios:controlpresupuestal' %}'">Volver</button>
-    </div>
-</div>
-<div class="row">
-    <div class="col-sm-12">
-         <div class="card shadow">
+    <div class="col-12">
+        <div class="card">
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <div class="table-responsive" style="height:23rem">
+                    <table class="table card-table table-vcenter text-nowrap datatable" id="datatable" cellspacing="0">
                         <thead>
                             <tr>
                                 <th>Numero Orden</th>
-                                <th>Usuario</th>
                                 <th>Tipo Solicitud</th>
                                 <th>Valor</th>
                                 <th>Estado</th>
                                 <th>Fecha</th>
                                 <th>Area Responsable</th>
                                 <th>Numero factura</th>
-                                <th>Descripcion</th>
+                                <th>Opciones</th>
                             </tr>
                         </thead>
-                        <tbody class="">
+                        <tbody>
                             {% for facturas in solicitudesgastos %}
+                            <tr>
+                            
                                 <tr class="odd gradeX text-xl">
                                     <td>{{ facturas.IdSoGa }}</td>
-                                    <td>{{ facturas.IdUsuario }}</td>
                                     <td>{{ facturas.TipoSolicitud }}</td>
                                     <td>{{ facturas.Valor|intcomma}}</td>
                                     <td>{{ facturas.Estado }}</td>
                                     <td>{{ facturas.Fecha }}</td>
                                     <td>{{ facturas.AreaResponsable }}</td>
                                     <td>{{ facturas.NumeroFactura }}</td>
-                                    <td>{{ facturas.Descripcion }}</td>
-                                </tr>
-                            {% endfor %}
+                                    <td><a class="btn btn-danger btn-sm" href="{% url 'usuarios:cambio' facturas.IdSoGa %}">
+                                          Ver
+                                        </a>
+                                    </td>
+                            </tr>
+                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
             </div>
-        </div>               
-
+        </div>
     </div>
 </div>
 
 {% endblock %}
 {% block scripts %}
+<script>
+ // Write on keyup event of keyword input element
+ $(document).ready(function(){
+ $("#search").keyup(function(){
+ _this = this;
+ // Show only matching TR, hide rest of them
+ $.each($("#datatable tbody tr"), function() {
+ if($(this).text().toLowerCase().indexOf($(_this).val().toLowerCase()) === -1)
+ $(this).hide();
+ else
+ $(this).show();
+ });
+ });
+});
+</script>
 {% endblock %}
