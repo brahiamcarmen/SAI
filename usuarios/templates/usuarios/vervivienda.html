@@ -53,7 +53,7 @@
                                         <div class="col-md-4 col-lg-3">
                                             <div class="card">
                                               <div class="card-body p-4 text-center">
-                                                <span class="avatar avatar-xl mb-3 avatar-rounded" style="background-image: url({% static 'images/logo2.png' %})"></span>
+                                                <span class="avatar avatar-xl mb-3 avatar-rounded" style="background-image: url({% static 'images/logo4.png' %})"></span>
                                                 <h3 class="m-0 mb-1">{{ matricula }}</h3>
                                                 <div class="text-muted"><a href="{% url 'usuarios:verpropietario' propietario.IdPropietario %}">{{ propietario }}</a></div>
                                                 <div class="mt-3">
@@ -265,447 +265,185 @@
                         </div>
                       </div>
                       <div class="tab-pane" id="tabs-profile-7">
-            <div class="row" style="margin-top:0.5rem">
-                <div class="col-sm-9 text-center">
-                                <div class="card shadow mb-4">
-                                    <div class="card-header py-3">
-                                                <h6 class="m-0 font-weight-bold text-primary">Información detallada del predio</h6>
-                                    </div>
-                                    {% for vivienda in viviendainfo %}
-                                    <div class="card shadow h-100 py-2">
-                                        <div class="row">
-                                            <div class="col-sm-3">
-                                                <div class="card-body">
-                                                    <div class="row no-gutters align-items-center">
-                                                        <div class="col mr-2">
-                                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                             Matricula</div>
-                                                            <div class="mb-0 font-weight-bold text-gray-800">{{ vivienda.IdVivienda }}</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <div class="card-body">
-                                                    <div class="row no-gutters align-items-center">
-                                                        <div class="col mr-2">
-                                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                            Estado servicio</div>
-                                                            <div class="mb-0 font-weight-bold text-gray-800">{{ vivienda.EstadoServicio }}</div>
-                                                        </div>
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <div class="card-body">
-                                                    <div class="row no-gutters align-items-center">
-                                                        <div class="col mr-2">
-                                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                            Tipo instalacion
-                                                    </div>
-                                                            <div class="mb-0 font-weight-bold text-gray-800">{{ vivienda.TipoInstalacion }}</div>
-                                                        </div>
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <div class="card-body">
-                                                    <div class="row no-gutters align-items-center">
-                                                        <div class="col mr-2">
-                                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                            Tipo predio
-                                                    </div>
-                                                            <div class="mb-0 font-weight-bold text-gray-800">{{ vivienda.InfoInstalacion }}</div>
-                                                        </div>
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-3">
-                                                <div class="card-body">
-                                                    <div class="row no-gutters align-items-center">
-                                                        <div class="col mr-2">
-                                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                           Sector
-                                                            </div>
-                                                            <div class="mb-0 font-weight-bold text-gray-800">{{ vivienda.Direccion }}</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <div class="card-body">
-                                                    <div class="row no-gutters align-items-center">
-                                                        <div class="col mr-2">
-                                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                            Casa</div>
-                                                            <div class="mb-0 font-weight-bold text-gray-800">{{ vivienda.NumeroCasa }}</div>
-                                                            
-                                                        </div>
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <div class="card-body">
-                                                    <div class="row no-gutters align-items-center">
-                                                        <div class="col mr-2">
-                                                           <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                            Piso
-                                                            </div>
-                                                            <div class="mb-0 font-weight-bold text-gray-800">{{ vivienda.Piso }}</div>
-                                                        </div>
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <div class="card-body">
-                                                    <div class="row no-gutters align-items-center">
-                                                        <div class="col mr-2">
-                                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                            Estrato
-                                                            </div>
-                                                            <div class="mb-0 font-weight-bold text-gray-800">{{ vivienda.Estrato }}</div>
-                                                        </div>
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <div class="card-body">
-                                                    <div class="row no-gutters align-items-center">
-                                                        <div class="col mr-2">
-                                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                            Ficha catastral
-                                                            </div>
-                                                            <div class="mb-0 font-weight-bold text-gray-800">{{vivienda.FichaCastral}}</div>
-                                                        </div>
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-3">
-                                                <div class="card-body">
-                                                    <div class="row no-gutters align-items-center">
-                                                        <div class="col mr-2">
-                                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                                Propietario
-                                                            </div>
-                                                            <div class="mb-0 font-weight-bold text-gray-800">{{ vivienda.IdPropietario }}</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <div class="card-body">
-                                                    <div class="row no-gutters align-items-center">
-                                                        <div class="col mr-2">
-                                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                            Habitantes</div>
-                                                            <div class="mb-0 font-weight-bold text-gray-800">{{ vivienda.CantHabitantes }}</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <div class="card-body">
-                                                    <div class="row no-gutters align-items-center">
-                                                        <div class="col mr-2">
-                                                           <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                            Prof. acometida (cm)
-                                                            </div>
-                                                            <div class="mb-0 font-weight-bold text-gray-800">{{ vivienda.ProfAcometida }}</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <div class="card-body">
-                                                    <div class="row no-gutters align-items-center">
-                                                        <div class="col mr-2">
-                                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                            Ciclo
-                                                            </div>
-                                                            <div class="mb-0 font-weight-bold text-gray-800">{{ vivienda.Ciclo }}</div>
-                                                        </div>
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <div class="card-body">
-                                                    <div class="row no-gutters align-items-center">
-                                                        <div class="col mr-2">
-                                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                            Predios
-                                                            </div>
-                                                            <div class="mb-0 font-weight-bold text-gray-800">{{ vivienda.CantPredios }}</div>
-                                                        </div>
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {% endfor %}
+                        <div class="row">
+                            <div class="col-4">
+                               <div class="card">
+                                <div class="card-header">
+                                  <h3 class="card-title">
+                                    Informacion detallada
+                                  </h3>
                                 </div>
-                </div>
-                <div class="col-sm-3 text-center">
-                            <div class="card shadow mb-4">
-                                    <div class="card-header py-3">
-                                        <h6 class="m-0 font-weight-bold text-primary">Calificación</h6>
-                                    </div>
-                                    <div class="card shadow h-100 py-2">
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-sm-12">
-                                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                            Puntos
-                                                    </div>
-                                                    <div style="color:rgba(65,160,39); font-size: 1.3rem;"><b>100</b></div>
-                                                </div>
-                                            </div>
-                                            <div class="row" style="margin-top:0.4rem; font-size: 2rem;">
-                                                <div class="col-sm-4">
-                                                    <i class="fas fa-star"></i>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <i class="fas fa-star-half-alt"></i>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <i class="far fa-star"></i>
-                                                </div>
-                                            </div>
-                                            <div class="row" style="margin-top:0.4rem;">
-                                               <p>Los resultados de esta evaluación se analizan con inteligencia artificial teniendo en cuenta los patrones de pago.</p>
-                                            </div>
-
-                                        </div>
-                                    </div>
+                                <div class="card-body">
+                                  {% for vivienda in viviendainfo %}
+                                  <dl class="row">
+                                            <dt class="col-5">Matricula:</dt>
+                                            <dd class="col-7">{{ vivienda.IdVivienda }}</dd>
+                                            <dt class="col-5">Sector:</dt>
+                                            <dd class="col-7">{{ vivienda.Direccion}}</dd>
+                                            <dt class="col-5">Casa:</dt>
+                                            <dd class="col-7">{{ vivienda.NumeroCasa}}</dd>
+                                            <dt class="col-5">Piso:</dt>
+                                            <dd class="col-7">{{ vivienda.Piso}}</dd>
+                                            <dt class="col-5">Cant predios:</dt>
+                                            <dd class="col-7">{{vivienda.CantPredios}}</dd>
+                                            <dt class="col-5">Ciclo:</dt>
+                                            <dd class="col-7">{{vivienda.Ciclo}}</dd>
+                                            <dt class="col-5">Instalación:</dt>
+                                            <dd class="col-7">{{vivienda.TipoInstalacion}}</dd>
+                                            <dt class="col-5">Estrato:</dt>
+                                            <dd class="col-7">{{vivienda.Estrato}}</dd>
+                                            <dt class="col-5">Acometida:</dt>
+                                            <dd class="col-7">{{ vivienda.ProfAcometida }}</dd>
+                                            <dt class="col-5">Habitantes:</dt>
+                                            <dd class="col-7">{{ vivienda.CantHabitantes}}</dd>
+                                            <dt class="col-5">Ficha catastral:</dt>
+                                            <dd class="col-7">{{ vivienda.FichaCastral}}</dd>
+                                            <dt class="col-5">Diametro:</dt>
+                                            <dd class="col-7">{{ vivienda.Diametro}}</dd>
+                                            <dt class="col-5">Estado servicio:</dt>
+                                            <dd class="col-7">{{vivienda.EstadoServicio}}</dd>
+                                            <dt class="col-5">ID anterior:</dt>
+                                            <dd class="col-7">{{vivienda.MatriculaAnt}}</dd>
+                                            <dt class="col-5">Clase:</dt>
+                                            <dd class="col-7">{{vivienda.InfoInstalacion}}</dd>
+                                            <dt class="col-5">Propietario:</dt>
+                                            <dd class="col-7">{{vivienda.IdPropietario}}</dd>
+                                  </dl>
+                                  {% endfor %}
                                 </div>
-                                </div>
+                              </div>
                             </div>
-                                        <div class="row" style="margin-top:0.2rem">
-                <div class="col-sm-12 text-center">
-                                <div class="card shadow mb-4">
-                                    <div class="card-header py-3">
-                                                <h6 class="m-0 font-weight-bold text-primary">Certificación</h6>
-                                    </div>
-                                    {% for certificacion in certificaciones %}
-                                    <div class="card shadow h-100 py-2">
-                                        <div class="row">
-                                            <div class="col-sm-2">
-                                                <div class="card-body">
-                                                    <div class="row no-gutters align-items-center">
-                                                        <div class="col mr-2">
-                                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                             Codigo</div>
-                                                            <div class="mb-0 font-weight-bold text-gray-800">{{ certificacion.IdCertificacion }}</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <div class="card-body">
-                                                    <div class="row no-gutters align-items-center">
-                                                        <div class="col mr-2">
-                                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                            Nit certificadora</div>
-                                                            <div class="mb-0 font-weight-bold text-gray-800">{{ certificacion.Nit }}</div>
-                                                        </div>
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-7">
-                                                <div class="card-body">
-                                                    <div class="row no-gutters align-items-center">
-                                                        <div class="col mr-2">
-                                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                            Razón social certificadora
-                                                    </div>
-                                                            <div class="mb-0 font-weight-bold text-gray-800">{{ certificacion.NombreEmpresa}}</div>
-                                                        </div>
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
+                            <div class="col-4">
+                              <div class="card">
+                                <div class="card-body p-4 py-5 text-center">
+                                  <span class="avatar avatar-xl mb-4 avatar-rounded">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/stars -->
+                                      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17.8 19.817l-2.172 1.138a0.392 .392 0 0 1 -.568 -.41l.415 -2.411l-1.757 -1.707a0.389 .389 0 0 1 .217 -.665l2.428 -.352l1.086 -2.193a0.392 .392 0 0 1 .702 0l1.086 2.193l2.428 .352a0.39 .39 0 0 1 .217 .665l-1.757 1.707l.414 2.41a0.39 .39 0 0 1 -.567 .411l-2.172 -1.138z" /><path d="M6.2 19.817l-2.172 1.138a0.392 .392 0 0 1 -.568 -.41l.415 -2.411l-1.757 -1.707a0.389 .389 0 0 1 .217 -.665l2.428 -.352l1.086 -2.193a0.392 .392 0 0 1 .702 0l1.086 2.193l2.428 .352a0.39 .39 0 0 1 .217 .665l-1.757 1.707l.414 2.41a0.39 .39 0 0 1 -.567 .411l-2.172 -1.138z" /><path d="M12 9.817l-2.172 1.138a0.392 .392 0 0 1 -.568 -.41l.415 -2.411l-1.757 -1.707a0.389 .389 0 0 1 .217 -.665l2.428 -.352l1.086 -2.193a0.392 .392 0 0 1 .702 0l1.086 2.193l2.428 .352a0.39 .39 0 0 1 .217 .665l-1.757 1.707l.414 2.41a0.39 .39 0 0 1 -.567 .411l-2.172 -1.138z" /></svg>
+                                  </span>
+                                  <h3 class="mb-0">Calificación</h3>
+                                  <p class="text-muted">Due to: 28 Aug 2019</p>
+                                  <p class="mb-3">
+                                    <span class="badge bg-red-lt">Automatico</span>
+                                  </p>
+                                  <div>
+                                  <div class="card card-sm">
+                                    <div class="card-body">
+                                      <div class="row align-items-center">
+                                        <div class="col-auto">
+                                          <span class="bg-green-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/currency-dollar -->
+                                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16.7 8a3 3 0 0 0 -2.7 -2h-4a3 3 0 0 0 0 6h4a3 3 0 0 1 0 6h-4a3 3 0 0 1 -2.7 -2" /><path d="M12 3v3m0 12v3" /></svg>
+                                          </span>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-sm-4">
-                                                <div class="card-body">
-                                                    <div class="row no-gutters align-items-center">
-                                                        <div class="col mr-2">
-                                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                           Descripcion
-                                                            </div>
-                                                            <div class="mb-0 font-weight-bold text-gray-800">
-                                                                {{ certificacion.Descripcion }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <div class="card-body">
-                                                    <div class="row no-gutters align-items-center">
-                                                        <div class="col mr-2">
-                                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                            Estado</div>
-                                                            <div class="mb-0 font-weight-bold text-gray-800">{{ certificacion.Estado }}</div>
-                                                            
-                                                        </div>
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <div class="card-body">
-                                                    <div class="row no-gutters align-items-center">
-                                                        <div class="col mr-2">
-                                                           <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                            Cumple requisitos
-                                                            </div>
-                                                            <div class="mb-0 font-weight-bold text-gray-800">{{ certificacion.Soporte}}</div>
-                                                        </div>
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        <div class="col">
+                                          <div class="font-weight-medium">
+                                            $5,256.99
+                                            <span class="float-right font-weight-medium text-green">+4%</span>
+                                          </div>
+                                          <div class="text-muted">
+                                            Total pagado
+                                          </div>
                                         </div>
-                                    </div>
-                                    {% empty %}
-                                        <div class="col-sm-12">
-                                            <p>predio sin proceso de certificacion</p>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                                </div>
-                            </div>
-
-                            <div class="row" style="margin-top:0.5rem">
-                                <div class="col-sm-12 text-center">
-                                    <div class="card shadow mb-4">
-                                                    <div class="card-header py-3">
-                                                        <h6 class="m-0 font-weight-bold text-primary">Información del medidor</h6>
-                                                    </div>
-                                                    {% for medidor in medidores %}
-                                                    <div class="card shadow h-100 py-2">
-                                                        <div class="row">
-                                                            <div class="col-sm-3">
-                                                                <div class="card-body">
-                                                                    <div class="row no-gutters align-items-center">
-                                                                        <div class="col mr-2">
-                                                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                                             Codigo</div>
-                                                                            <div class="mb-0 font-weight-bold text-gray-800">{{ medidor.IdMedidor }}</div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-3">
-                                                                <div class="card-body">
-                                                                    <div class="row no-gutters align-items-center">
-                                                                        <div class="col mr-2">
-                                                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                                            Marca</div>
-                                                                            <div class="mb-0 font-weight-bold text-gray-800">{{ medidor.Marca }}</div>
-                                                                        </div>
-                                                                        
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-3">
-                                                                <div class="card-body">
-                                                                    <div class="row no-gutters align-items-center">
-                                                                        <div class="col mr-2">
-                                                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                                            Tipo
-                                                                            </div>
-                                                                            <div class="mb-0 font-weight-bold text-gray-800">{{ medidor.Tipo }}</div>
-                                                                        </div>
-                                                                        
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-3">
-                                                                <div class="card-body">
-                                                                    <div class="row no-gutters align-items-center">
-                                                                        <div class="col mr-2">
-                                                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                                            Lectura inicial
-                                                                            </div>
-                                                                            <div class="mb-0 font-weight-bold text-gray-800">{{ medidor.LecturaInicial }}</div>
-                                                                        </div>
-                                                                        
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-sm-12">
-                                                                <div class="card-body">
-                                                                    <div class="row no-gutters align-items-center">
-                                                                        <div class="col mr-2">
-                                                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                                            Año de fabricacion
-                                                                            </div>
-                                                                            <div class="mb-0 font-weight-bold text-gray-800">
-                                                                              {{ medidor.AnoFabricacion }}
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                        {% empty %}
-                                            <div class="col-sm-12" style="margin-top:0.5rem;">
-                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                     <p>Predio sin medidor asignado</p>
-                                                </div>
-                                               
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row" style="margin-top:0.5rem">
-                                <div class="col-sm-12 text-center">
-                                    <div class="row">
-
-                                        <div class="col-sm-4">
-                                            <div class="card shadow mb-4">
-                                                <div class="card-header py-3">
-                                                    <h6 class="m-0 font-weight-bold text-primary">Certificado</h6>
-                                                </div>
-                                                <div class="card-body">
-                                                    <form action="{% url 'usuarios:certificadogral' %}" method="get" class="form-inline">
-                                                        {% csrf_token %}
-                                                        <input type ="hidden" name="matricula" value="{{matricula}}" class="form-control">
-                                                        <br>
-                                                        <button style="margin-top: 0.3rem; width: 100%" type="submit" class="btn btn-sm btn-primary">Descargar</button>
-                                                    </form>
-                                                </div>         
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                   
-                                </div>
-                            </div>
-
-
                                       </div>
+                                    </div>
+                                  </div>
+                                  <br>
+                                  <div class="card card-sm">
+                                    <div class="card-body">
+                                      <div class="row align-items-center">
+                                        <div class="col-auto">
+                                          <span class="bg-green-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/currency-dollar -->
+                                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16.7 8a3 3 0 0 0 -2.7 -2h-4a3 3 0 0 0 0 6h4a3 3 0 0 1 0 6h-4a3 3 0 0 1 -2.7 -2" /><path d="M12 3v3m0 12v3" /></svg>
+                                          </span>
+                                        </div>
+                                        <div class="col">
+                                          <div class="font-weight-medium">
+                                            $5,256.99
+                                            <span class="float-right font-weight-medium text-green">+10%</span>
+                                          </div>
+                                          <div class="text-muted">
+                                            Estado de cuenta
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  </div>
+                                </div>
+                                <div class="progress card-progress">
+                                  <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38" aria-valuemin="0" aria-valuemax="100">
+                                    <span class="visually-hidden">38% Complete</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-4">
+                              <div class="row">
+                                <a class="card card-link" href="">
+                                  <div class="card-body">
+                                    <div class="row">
+                                      <div class="col-auto">
+                                        <span class="bg-green-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/currency-dollar -->
+                                          <!-- Download SVG icon from http://tabler-icons.io/i/arrow-autofit-down -->
+                                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 20h-6a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8" /><path d="M18 4v17" /><path d="M15 18l3 3l3 -3" /></svg>
+                                          </span>
+                                      </div>
+                                      <div class="col">
+                                        <div class="font-weight-medium">Informacion</div>
+                                        <div class="text-muted">Descargar</div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </a>
+                              </div>
+                              <br>
+                              <div class="row">
+                                <a class="card card-link" href="">
+                                  <div class="card-body">
+                                    <div class="row">
+                                      <div class="col-auto">
+                                        <span class="bg-green-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/currency-dollar -->
+                                          <!-- Download SVG icon from http://tabler-icons.io/i/arrow-autofit-down -->
+                                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 20h-6a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8" /><path d="M18 4v17" /><path d="M15 18l3 3l3 -3" /></svg>
+                                          </span>
+                                      </div>
+                                      <div class="col">
+                                        <div class="font-weight-medium">Paz y salvo</div>
+                                        <div class="text-muted">Descargar</div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </a>
+                              </div>
+                              <br>
+                              <div class="row">
+                                                               <div class="card">
+                                <div class="card-header">
+                                  <h3 class="card-title">
+                                    Micromedidor / Certificacion
+                                  </h3>
+                                </div>
+                                <div class="card-body">
+                                  {% for medidor in medidores %}
+                                  <dl class="row">
+                                            <dt class="col-5">Numero:</dt>
+                                            <dd class="col-7">{{ medidor.IdMedidor }}</dd>
+                                            <dt class="col-5">Marca:</dt>
+                                            <dd class="col-7">{{ medidor.Marca }}</dd>
+                                            <dt class="col-5">Tipo:</dt>
+                                            <dd class="col-7">{{ medidor.Tipo }}</dd>
+                                            <dt class="col-5">Lectura inicial:</dt>
+                                            <dd class="col-7">{{ medidor.LecturaInicial}}</dd>
+                                            <dt class="col-5">Fabricación:</dt>
+                                            <dd class="col-7">{{medidor.AnoFabricacion}}</dd>
+                                  </dl>
+                                  {% endfor %}
+                                </div>
+                              </div>
+                              </div>
+                            </div>
+                        </div>
+
+                      </div>
 
                       <div class="tab-pane" id="facturas">
                         <div>
