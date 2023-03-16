@@ -488,6 +488,7 @@ class VisualizarVivienda(LoginRequiredMixin, View):
             pagosrys = PagoOrdenes.objects.filter(IdVivienda=IdVivienda)
             cobromatricula = CobroMatricula.objects.filter(IdVivienda=IdVivienda, Estado=ESTCOBRO)
             pagos = Pagos.objects.filter(IdVivienda=IdVivienda)
+            contpagos = Pagos.objects.filter(IdVivienda=IdVivienda).count()
             filtropagos = Pagos.objects.filter(IdVivienda=IdVivienda).order_by("-IdPago")[:1]
             fecha = datetime.today()
             verificarestado = EstadoCuenta.objects.get(IdVivienda=IdVivienda)
@@ -499,11 +500,13 @@ class VisualizarVivienda(LoginRequiredMixin, View):
             facturasemi = Factura.objects.filter(IdEstadoCuenta=idestado).order_by("-IdFactura")[:1]
             vafacemi = Factura.objects.filter(IdEstadoCuenta=idestado, Estado=FE).exists()
             matriculas = CobroMatricula.objects.filter(IdVivienda=IdVivienda)
-            certificaciones = Certificaciones.objects.filter(IdVivienda=IdVivienda)
             medidores = Medidores.objects.filter(IdVivienda=IdVivienda)
             novedades = NovedadVivienda.objects.filter(IdVivienda=IdVivienda)
-            reconexion = OrdenesReconexion.objects.filter(IdEstadoCuenta=idestado)
-            suspenciones = OrdenesSuspencion.objects.filter(IdEstadoCuenta=idestado)
+            reconexion = OrdenesReconexion.objects.filter(IdEstadoCuenta=idestado).order_by("-IdOrden")
+            suspenciones = OrdenesSuspencion.objects.filter(IdEstadoCuenta=idestado).order_by("-IdOrden")
+            contsus = OrdenesSuspencion.objects.filter(IdEstadoCuenta=idestado).count()
+            contre = OrdenesReconexion.objects.filter(IdEstadoCuenta=idestado).count()
+            contor = PagoOrdenes.objects.filter(IdVivienda=IdVivienda).count()
             filtrosuspenciones =OrdenesSuspencion.objects.filter(IdEstadoCuenta=idestado,Estado='Pendiente').exists()
             ordenessuspencion = CobroOrdenes.objects.filter(IdEstadoCuenta=idestado,Estado=ESTADO1,TipoOrden='Cobro por suspencion')
             ordenesreconexion = CobroOrdenes.objects.filter(IdEstadoCuenta=idestado, Estado=ESTADO1,TipoOrden='Cobro por reconexión')
@@ -531,17 +534,20 @@ class VisualizarVivienda(LoginRequiredMixin, View):
                 if pago is True:
                     lista.append(idenfactura)
 
-            print(lista)
+            pagado = 0
+            for g in pagos:
+                valor = int(g.ValorPago)
+                pagado += valor
 
             return render(request, self.template_name,{
-                'nofac':nofacturas,'lista':lista,'facturas': facturas,'cobromatricula': cobromatricula,'suspenciones': suspenciones,
-                'reconexion': reconexion,'facturasemi': facturasemi,'medidores':medidores,'matriculas': matriculas,'certificaciones': certificaciones,
+                'noors':contor,'nore':contre,'nosus':contsus,'pagado':pagado,'nofac':nofacturas,'lista':lista,'facturas': facturas,'cobromatricula': cobromatricula,'suspenciones': suspenciones,
+                'reconexion': reconexion,'facturasemi': facturasemi,'medidores':medidores,'matriculas': matriculas,
                 'direccion': vivienda.Direccion,'casa' : vivienda.NumeroCasa,'piso': vivienda.Piso,'matricula': vivienda.IdVivienda,'tipo': vivienda.TipoInstalacion,
                 'estrato': vivienda.Estrato,'tipop':vivienda.InfoInstalacion,'estado': vivienda.EstadoServicio,'propietario': vivienda.IdPropietario,'fichacatastral': vivienda.FichaCastral,
                 'estados': estados,'pagos':pagos,'fecha': fecha,'novedades':novedades,'ultimopago': filtropagos,'vafacemi': vafacemi,
                 'viviendainfo': viviendainfo,'ordenesrs': ordenesrs,'pagosrys': pagosrys,
                 'reconexion2': cor,'suspenciones2': cos,'aportes': resultado,'cobromatricula1':matri,'repaciones': reparaciones,
-                'total': resultado + cor + cos + matri + reparaciones, 'filtro':filtrosuspenciones
+                'total': resultado + cor + cos + matri + reparaciones, 'filtro':filtrosuspenciones,'contpagos': contpagos
             })
 
         except Vivienda.DoesNotExist:
