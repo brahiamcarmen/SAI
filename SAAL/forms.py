@@ -126,6 +126,7 @@ class AcueductoForm(forms.ModelForm):
         model = Acueducto
         fields = [
             'Estado'
+
         ]
         labels = {
             'Estado': _(u'Estado Actual')
@@ -146,7 +147,7 @@ class GastosForm(forms.ModelForm):
             'Estado'
         ]
         labels = {
-            'Estado': _(u'Modificar el estado de orden')
+            'Estado': _(u'Estado de la orden')
         }
 
     def __init__(self, *args, **kwargs):

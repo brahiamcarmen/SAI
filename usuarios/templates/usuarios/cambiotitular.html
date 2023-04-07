@@ -1,70 +1,90 @@
-{% extends 'usuarios/base_usuario2.html' %}
+{% extends 'usuarios/base_usuario3.html' %}
 {% load static %}
 {% block styles %}
 {% endblock %}
 {%block title %} <title>Cambio titular</title> {%endblock%}
 {% block content %}
 {% include 'usuarios/alerts.html' %}
-<div class="row">
-    <div class="col-sm-8">
-        <h4 class="text-gray-800">Cambio de titular</h4>
-    </div>
-     <div class="col-sm-4">
-        <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" onclick="window.location='{% url 'usuarios:vervivienda' matricula %}'">Volver</button>
-    </div>
-</div>
-		<div class="row text-center" style="margin-top:0.5rem">
-			<div class="col-sm-6">
-				<div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Informacion del titular actual</h6>
+      <div class="page-wrapper">
+        <div class="container-fluid">
+          <!-- Page title -->
+          <div class="page-header d-print-none">
+            <div class="row align-items-center">
+              <div class="col">
+                <!-- Page pre-title -->
+                <div class="page-pretitle">
+                  Modulo
+                </div>
+                <h2 class="page-title">
+                  Cambio de titular
+                </h2>
+              </div>
+              <div class="col-auto ms-auto d-print-none">
+                <div class="btn-list">
+                    <div class="col-auto">
+                        <a href="{% url 'usuarios:vervivienda' matricula %}" class="btn btn-primary btn-sm w-100">
+                                      Volver</a>
                     </div>
-                    <div class="card-body">
-	                    <table class="table">
-							<thead>
-								<tr>
-									<th>ID</th>
-									<th>Nombres</th>
-									<th>Apellidos</th>
-									<th>No Telefono</th>
-								</tr>
-							</thead>
-							<tbody>
-								{% for estados in propietario %}
-									<tr class="odd gradeX">
-										<td>{{ estados.IdPropietario }}</td>
-										<td>{{ estados.Nombres }}</td>
-										<td>{{ estados.Apellidos }}</td>
-										<td>{{ estados.NoTelefono }}</td>									
-									</tr>
-								{% endfor %}
-							</tbody>
-						</table>
                     </div>
                 </div>
-			</div>
-			<div class="col-sm-6 text-center">
-				<div style="width: 100%">
-				<form method="post" enctype="multipart/form-data">
-					{% csrf_token %}
-					<div class="form-group">
-						<label class="control-label">Digite el numero de identificación del nuevo titular</label>
-						<div class="input-group" style="margin-top: 1rem">
-							<input name="idpropietario" type="text" class="form-control">
-							<span class="input-group-btn">
-								
-							</span>
-						</div>
-					</div>
-					<button style="width:100%" class="btn btn-primary" type="submit">Cambiar</button>
-				</form>
-				</div>
-				
-			</div>
-			<div class="col-sm-6">
-				
-			</div>
-		</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+        	<div class="page-body">
+            <div class="container-xl">
+              <div class="row row-cards">
+              {% for estados in propietario %}
+                      <div class="col-md-6 col-lg-6">
+                        <div class="card">
+                          <div class="card-body">
+                              <dl class="row">
+                                <h3 class="subheader">Informacion del titular actual</h3>
+                                  <dt class="col-5">Identificacion:</dt>
+                                  <dd class="col-7">{{ estados.IdPropietario }}</dd>
+                                  <dt class="col-5">Nombres:</dt>
+                                  <dd class="col-7">{{ estados.Nombres }}</dd>
+                                  <dt class="col-5">Apellidos:</dt>
+                                  <dd class="col-7">{{ estados.Apellidos }}</dd>
+                                  <dt class="col-5">Telefono:</dt>
+                                  <dd class="col-7">{{ estados.NoTelefono }}<dd>
+                                  <dt class="col-5">Correo:</dt>
+                                  <dd class="col-7">{{ estados.Email }}</dd>
+                                  <dt class="col-5">Fecha de registro:</dt>
+                                  <dd class="col-7">{{ ord.FechaEjecucion }}</dd>
+                              </dl>
+                            </div>
+                          </div>
+
+                        </div>
+                        <div class="col-md-6 col-lg-6">
+                          <div class="card">
+                            <div class="card-body">
+                              <h3 class="subheader">Ingrese el numero de documento del nuevo titular</h3>
+                          <form method="post" enctype="multipart/form-data">
+																{% csrf_token %}
+																<div class="form-group">
+
+																	<div class="input-group" style="margin-top: 1rem">
+																		<input name="idpropietario" type="text" class="form-control">
+																		<span class="input-group-btn">
+																			
+																		</span>
+																	</div>
+																</div>
+																<br>
+																<button style="width:100%" class="btn btn-primary" type="submit">Cambiar</button>
+															</form>
+														</div>
+													</div>
+                       </div>
+              {%endfor%}                                     
+            </div>
+            </div>
+          </div>
+        	
+        </div>
 
 {% endblock %}
 {% block scripts %}

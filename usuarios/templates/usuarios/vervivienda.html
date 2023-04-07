@@ -482,7 +482,7 @@
                                     </a>
                                 </div>
                                 <div class="col-6">
-                                  <a class="card card-link" href="">
+                                  <a class="card card-link" href="{% url 'usuarios:pazysalvo' matricula %}">
                                   <div class="card-body">
                                     <div class="row">
                                       <div class="col-auto">
@@ -845,10 +845,9 @@
                       <div class="tab-pane" id="tabs-settings-7">
                         <div>
                             <div class="btn-group" role="group" style="margin-top:0.3rem;">
-                                <a class="dropdown-item" href="{% url 'usuarios:cambiotitular' matricula %}">Cambiar propietario</a>
-                                    <a class="dropdown-item" href="{% url 'usuarios:facturaindividual' matricula %}">Generar factura</a>
-                                    <a class="dropdown-item" href="{% url 'usuarios:registromedidor' matricula %}">Asignar Medidor</a>
-                                    <a class="dropdown-item" href="{% url 'usuarios:pagarmatricula' matricula %}">Pago matricula</a>
+                                  <a class="btn btn-primary" href="{% url 'usuarios:cambiotitular' matricula %}">Cambiar propietario</a>&nbsp;
+                                    <a class="btn btn-primary" href="{% url 'usuarios:facturaindividual' matricula %}">Generar factura</a>&nbsp;
+                                    <a class="btn btn-primary" href="{% url 'usuarios:pagarmatricula' matricula %}">Pago matricula</a>
 
                                 </div>
                             </div>

@@ -107,14 +107,8 @@
                                     <td>{{ ord.FechaEjecucion }}</td>
                                     <td>{{ ord.Estado }}</td>
                                     <td>{{ ord.IdEstadoCuenta }}</td>
-                                <td><span class="dropdown">
-                                  <button class="btn dropdown-toggle align-text-top" data-bs-boundary="viewport" data-bs-toggle="dropdown">Opciones</button>
-                                  <div class="dropdown-menu dropdown-menu-end">
-                                    <a class="dropdown-item" href="{% url 'usuarios:verordenre' ord.IdOrden %}">
-                                      Ver
-                                    </a>
-                                  </div>
-                                </span>
+                                <td><a class="btn btn-danger btn-sm" href="{% url 'usuarios:verordenre' ord.IdOrden %}">
+                                                              Ver</a>
                                 </td>
                             </tr>
                              {% endfor %}

@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from usuarios.views import Inicio, Busquedas, CobroRecargo, ControlPresupuestal, VerFactura, PagarMatricula
-from usuarios.views import V3, ImprimirSoporteP, PagarRyS
+from usuarios.views import V3, ImprimirSoporteP, PagarRyS, AnularPago
 from usuarios.views import ListaViviendas, ListaPropietarios, Certificar, ReportePdfPagos
 from usuarios.views import ReporteCierresAno, PazSalvo, CertificadoGral
 from usuarios.views import AgregarVivienda, AgregarPropietario, PerfilUsuario, ReporteCompleto
@@ -93,8 +93,9 @@ urlpatterns = [
     url(r'^perfilusuario/(?P<IdUsuario>\w+)', PerfilUsuario.as_view(), name='perfilusuario'),
     url(r'^anularsuspenciones', AnularSuspenciones.as_view(), name='anularsuspenciones'),
     url(r'^imprimirpago/(?P<IdPago>\w+)', ImprimirSoporteP.as_view(), name='imprimirpago'),
-    url(r'^pazysalvo', PazSalvo.as_view(), name='pazysalvo'),
+    url(r'^pazysalvo/(?P<matricula>\w+)', PazSalvo.as_view(), name='pazysalvo'),
     url(r'^certificadogral', CertificadoGral.as_view(), name='certificadogral'),
     url(r'^pagarrys', PagarRyS.as_view(), name='pagarrys'),
     url(r'^cobrorecargo', CobroRecargo.as_view(), name='cobrorecargo'),
+    url(r'^anularpago', AnularPago.as_view(), name='anularpago'),
 ]

@@ -1,4 +1,4 @@
-{% extends 'usuarios/base_usuario2.html' %}
+{% extends 'usuarios/base_usuario3.html' %}
 {% load static %}
 {% block styles %}
 {% endblock %}
@@ -6,159 +6,95 @@
 {% load humanize %}
 {% block content %}
 	{% include 'usuarios/alerts.html' %}
-<div class="row">
-    <div class="col-sm-8">
-        <h1 class="h3 text-gray-800">Verificacion de orden de suspención</h1>
-    </div>
-     <div class="col-sm-4">
-        <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" onclick="window.location='{% url 'usuarios:suspenciones' %}'">Volver</button>
-
-    </div>
-</div>
-<div class="row">
-	<div class="col-sm-9 text-center">
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Información de la orden</h6>
-                        </div>
-                        <div class="card border-bottom-primary shadow h-100 py-2">
-                        	<div class="row">
-                        		<div class="col-sm-2">
-                        			<div class="card-body">
-	                                    <div class="row no-gutters align-items-center">
-	                                        <div class="col mr-2">
-	                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-	                                             Nu Orden</div>
-	                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ idorden  }}</div>
-	                                        </div>
-	                                    </div>
-                            		</div>
-                        		</div>
-                        		<div class="col-sm-3">
-                        			<div class="card-body">
-	                                    <div class="row no-gutters align-items-center">
-	                                        <div class="col mr-2">
-	                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-	                                            Estado de la orden</div>
-	                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ estado }}</div>
-	                                        </div>
-	                                        
-	                                    </div>
-                            		</div>
-                        		</div>
-                        		<div class="col-sm-3">
-                        			<div class="card-body">
-	                                    <div class="row no-gutters align-items-center">
-	                                        <div class="col mr-2">
-	                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-	                                            Valor sin cancelar
-										</div>
-	                                            <div class="h5 mb-0 font-weight-bold text-gray-800">${{ deuda|intcomma }}</div>
-	                                        </div>
-	                                        
-	                                    </div>
-                            		</div>
-                        		</div>
-                        		<div class="col-sm-4">
-                        			<div class="card-body">
-	                                    <div class="row no-gutters align-items-center">
-	                                        <div class="col mr-2">
-	                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-	                                           Fecha Expedición
-												</div>
-	                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ fechaexpe }}</div>
-	                                        </div>
-	                                        
-	                                    </div>
-                            		</div>
-                        		</div>
-                        	</div>
-                        	<div class="row">
-                        		<div class="col-sm-4">
-                        			<div class="card-body">
-	                                    <div class="row no-gutters align-items-center">
-	                                        <div class="col mr-2">
-	                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-	                                            Fecha maxima ejecución</div>
-	                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ fechaejecucion }}</div>
-	                                        </div>
-	                                    </div>
-                            		</div>
-                        		</div>
-                        		<div class="col-sm-4">
-                        			<div class="card-body">
-	                                    <div class="row no-gutters align-items-center">
-	                                        <div class="col mr-2">
-	                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-	                                            Operario asignado
-												</div>
-	                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ usuarioejecuta }}</div>
-	                                        </div>
-	                                        
-	                                    </div>
-                            		</div>
-                        		</div>
-                        		<div class="col-sm-4">
-                        			<div class="card-body">
-	                                    <div class="row no-gutters align-items-center">
-	                                        <div class="col mr-2">
-	                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-	                                            Referencia del predio
-												</div>
-	                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ referencia }}</div>
-	                                        </div>
-	                                        
-	                                    </div>
-                            		</div>
-                        		</div>
-                        	</div>
-                        	<div class="row">
-                        		<div class="col-sm-12">
-                        			<div class="card-body">
-	                                    <div class="row no-gutters align-items-center">
-	                                        <div class="col mr-2">
-	                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-	                                            Dirección
-												</div>
-	                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ vivienda }}</div>
-	                                        </div>
-	                                        
-	                                    </div>
-                            		</div>
-                        		</div>
-                        	</div>
-                        </div>
+      <div class="page-wrapper">
+        <div class="container-fluid">
+          <!-- Page title -->
+          <div class="page-header d-print-none">
+            <div class="row align-items-center">
+              <div class="col">
+                <!-- Page pre-title -->
+                <div class="page-pretitle">
+                  Modulo
+                </div>
+                <h2 class="page-title">
+                  Informacion orden de suspencion
+                </h2>
+              </div>
+              <div class="col-auto ms-auto d-print-none">
+                <div class="btn-list">
+                    <div class="col-auto">
+                        <a href="{% url 'usuarios:suspenciones' %}" class="btn btn-primary btn-sm w-100">
+                                      Volver</a>
                     </div>
-    </div>
-    <div class="col-sm-3 text-center">
-    	        <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Opciones</h6>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+        	<div class="page-body">
+            <div class="container-xl">
+              <div class="row row-cards">
+              
+                      <div class="col-md-6 col-lg-7">
+                        <div class="card">
+                          <div class="card-body">
+                          	{% for estados in ots %}
+                              <dl class="row">
+                                <h3 class="subheader">Informacion de la orden de trabajo</h3>
+                                  <dt class="col-5">No orden:</dt>
+                                  <dd class="col-7">{{ estados.IdOrden }}</dd>
+                                  <dt class="col-5">Deuda:</dt>
+                                  <dd class="col-7">${{ estados.Deuda|intcomma}}</dd>
+                                  <dt class="col-5">Generado:</dt>
+                                  <dd class="col-7">{{ estados.Generado }}</dd>
+                                  <dt class="col-5">Estado:</dt>
+                                  <dd class="col-7">{{ estados.Estado }}<dd>
+                                  <dt class="col-5">Usuario:</dt>
+                                  <dd class="col-7">{{ estados.UsuarioEjecuta }}</dd>
+                                  <dt class="col-5">Fecha de registro:</dt>
+                                  <dd class="col-7">{{ estados.FechaExpe }}</dd>
+                                  <dt class="col-5">Fecha de ejecuacion:</dt>
+                                  <dd class="col-7">{{ estados.FechaEjecucion }}</dd>
+                                  <dt class="col-5">Direccion:</dt>
+                                  <dd class="col-7">{{ estados.IdEstadoCuenta }}</dd>
+                              </dl>
+              				{%endfor%}  
+                            </div>
+                          </div>
+
                         </div>
-                        <div class="card border-bottom-primary shadow h-100 py-2">
-                            <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                             <form method="post" role="form" enctype="multipart/form-data">
+                        <div class="col-md-6 col-lg-5">
+                        	<div class="row">
+                        	</div>
+                          	<div class="card">
+	                            <div class="card-body">
+	                               <h3 class="subheader">Opciones disponibles</h3>
+	                               <div class="row">
+	                               		<div class="col-4">
+	                               			
+	                               		</div>
+	                               		<div class="col-4">
+	                               			<form method="post" role="form" enctype="multipart/form-data">
 												{% csrf_token %}
 												<button type="submit" class="btn btn-primary">Cerrar orden</button>
 											</form>  
-                                        </div>
-                                    </div>
-                                    <div class="row no-gutters align-items-center" style="margin-top: 1rem;">
-                                        <div class="col mr-2">
- 											<button class="btn btn-primary">
-                                        		Imprimir OT
-                                        	</button>
-                                        </div>
-                                       
-                                    </div>
-                            </div>
-                        </div>
-                    </div>
-    </div>
-</div>
-
+	                          
+	                               		</div>
+	                               		<div class="col-4">
+	                               			
+	                               		</div>
+	                               </div>
+	                               
+								</div>
+							</div>
+	                    </div>                                   
+            </div>
+            </div>
+          </div>
+        	
+        </div>
 {% endblock %}
 {% block scripts %}
 {% endblock %}

@@ -6,7 +6,7 @@
 {% load humanize %}
 {% block content %}
 	{% include 'usuarios/alerts.html' %}
-      <div class="page-wrapper">
+	      <div class="page-wrapper">
         <div class="container-fluid">
           <!-- Page title -->
           <div class="page-header d-print-none">
@@ -20,188 +20,108 @@
                   Información de la orden de gasto
                 </h2>
               </div>
-              <div class="col-auto">
-                  <div class="btn-list">
-                    <a href="{% url 'usuarios:listadogastos' %}" class="btn btn-primary w-100">Volver
-                    </a>
+              <div class="col-auto ms-auto d-print-none">
+                <div class="btn-list">
+                    <div class="col-auto">
+                        <a href="{% url 'usuarios:controlpresupuestal' %}" class="btn btn-primary btn-sm w-100">
+                                      Volver</a>
+                    </div>
+                    </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 <br>
-<div class="row">
-	<div class="col-sm-9 text-center">
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Información de la orden</h6>
-                        </div>
-                        <div class="card border-bottom-primary shadow h-100 py-2">
-                        	<div class="row">
-                        		<div class="col-sm-3">
-                        			<div class="card-body">
-	                                    <div class="row no-gutters align-items-center">
-	                                        <div class="col mr-2">
-	                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-	                                             Numero de orden</div>
-	                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ IdSoGa }}</div>
-	                                        </div>
-	                                    </div>
-                            		</div>
-                        		</div>
-                        		<div class="col-sm-3">
-                        			<div class="card-body">
-	                                    <div class="row no-gutters align-items-center">
-	                                        <div class="col mr-2">
-	                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-	                                            Estado de la orden</div>
-	                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ estado }}</div>
-	                                        </div>
-	                                        
-	                                    </div>
-                            		</div>
-                        		</div>
-                        		<div class="col-sm-3">
-                        			<div class="card-body">
-	                                    <div class="row no-gutters align-items-center">
-	                                        <div class="col mr-2">
-	                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-	                                            Tipo de orden
-										</div>
-	                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ tipo }}</div>
-	                                        </div>
-	                                        
-	                                    </div>
-                            		</div>
-                        		</div>
-                        		<div class="col-sm-3">
-                        			<div class="card-body">
-	                                    <div class="row no-gutters align-items-center">
-	                                        <div class="col mr-2">
-	                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-	                                            Numero de factura
-												</div>
-	                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ numerofactura }}</div>
-	                                        </div>
-	                                        
-	                                    </div>
-                            		</div>
-                        		</div>
-                        	</div>
-                        	<div class="row">
-                        		<div class="col-sm-3">
-                        			<div class="card-body">
-	                                    <div class="row no-gutters align-items-center">
-	                                        <div class="col mr-2">
-	                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-	                                            Costo de la orden</div>
-	                                            <div class="h5 mb-0 font-weight-bold text-gray-800">${{ valor|intcomma }}</div>
-	                                        </div>
-	                                    </div>
-                            		</div>
-                        		</div>
-                        		<div class="col-sm-3">
-                        			<div class="card-body">
-	                                    <div class="row no-gutters align-items-center">
-	                                        <div class="col mr-2">
-	                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-	                                            Area Responsable
-												</div>
-	                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ area }}</div>
-	                                        </div>
-	                                        
-	                                    </div>
-                            		</div>
-                        		</div>
-                        		<div class="col-sm-3">
-                        			<div class="card-body">
-	                                    <div class="row no-gutters align-items-center">
-	                                        <div class="col mr-2">
-	                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-	                                            Solicitante
-												</div>
-	                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ usuario }}</div>
-	                                        </div>
-	                                        
-	                                    </div>
-                            		</div>
-                        		</div>
-                        		<div class="col-sm-3">
-                        			<div class="card-body">
-	                                    <div class="row no-gutters align-items-center">
-	                                        <div class="col mr-2">
-	                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-	                                            Fecha de la orden
-												</div>
-	                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ fecha }}</div>
-	                                        </div>
-	                                        
-	                                    </div>
-                            		</div>
-                        		</div>
-                        	</div>
-                        	<div class="row">
-                        		<div class="col-sm-12">
-                        			<div class="card-body">
-	                                    <div class="row no-gutters align-items-center">
-	                                        <div class="col mr-2">
-	                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-	                                            Descripción
-												</div>
-	                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ descripcion }}</div>
-	                                        </div>
-	                                        
-	                                    </div>
-                            		</div>
-                        		</div>
-                        	</div>
-                        </div>
-                    </div>
-    </div>
-    <div class="col-sm-3 text-center">
-    	        <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Opciones</h6>
-                        </div>
-                        <div class="card border-bottom-primary shadow h-100 py-2">
-                            <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                             <form method="post" enctype="multipart/form-data">
-                                             	{% csrf_token %}
-                                             	{{ form.non_field_errors }}
-											    {% for field in form %}
-											    <div class="form-group no-padding-t no-border-t text-center panel-padding-h">
-											    {{ field.errors }}
-											        <label class="col-sm-12 control-label">
-											            <strong>{{ field.label }}</strong>
-											        </label>
-											        <div class="col-sm-12">
-											            {{ field }}
-											        </div>
-											    </div>
-											     {% endfor %}
-											     <div class="col-sm-12 text-center">
-													<div class="row form-group no-padding-t no-border-t text-center panel-padding-h">
-														<div class="col-sm-12"><label><b>Confirme numero de orden</b></label></div>
-														<div class="col-sm-12"><input name="IdSolicitud" type="text" class="form-control"></div>
-													</div>
-												</div>
-												<br>
-												<div class="pull-right panel-padding-h">
-													<button style="width: 100%;" type="submit" class="btn btn-primary ">Ejecutar</button>
-												</div>
-                                             </form>
-                                            
-                                        </div>
-                                    </div>
+        <div class="row">
+        	<div class="page-body">
+            <div class="container-xl">
+              <div class="row row-cards">
+              
+                      <div class="col-md-6 col-lg-7">
+                        <div class="card">
+                          <div class="card-body">
+                          	{% for estados in lsg %}
+                              <dl class="row">
+                                <h3 class="subheader">Informacion de la orden</h3>
+                                  <dt class="col-5">No orden:</dt>
+                                  <dd class="col-7">{{ estados.IdSoGa }}</dd>
+                                  <dt class="col-5">Solicitante:</dt>
+                                  <dd class="col-7">{{ estados.IdUsuario}}</dd>
+                                  <dt class="col-5">Tipo de solicitud:</dt>
+                                  <dd class="col-7">{{ estados.TipoSolicitud }}</dd>
+                                  <dt class="col-5">Estado:</dt>
+                                  <dd class="col-7">{{ estados.Estado }}<dd>
+                                  <dt class="col-5">Fecha de registro:</dt>
+                                  <dd class="col-7">{{ estados.Fecha}}</dd>
+                                  <dt class="col-5">Area de responsable:</dt>
+                                  <dd class="col-7">{{ estados.AreaResponsable }}</dd>
+                                  <dt class="col-5">Numero de factura:</dt>
+                                  <dd class="col-7">{{ estados.NumeroFactura }}</dd>
+                                  <dt class="col-5">Valor:</dt>
+                                  <dd class="col-7">${{ estados.Valor|intcomma }}</dd>
+                                  <dt class="col-5">Descripcion:</dt>
+                                  <dd class="col-7">{{ estados.Descripcion }}</dd>
+                              </dl>
+              				{%endfor%}  
                             </div>
-                        </div>
-                    </div>
-    </div>
-</div>
+                          </div>
 
+                        </div>
+                        <div class="col-md-6 col-lg-5">
+                        	<div class="row">
+                        	</div>
+                          	<div class="card">
+	                            <div class="card-body">
+	                               <h3 class="subheader">Opciones disponibles</h3>
+	                               <div class="row">
+	                               		<div class="col-2">
+	                               			
+	                               		</div>
+	                               		<div class="col-8">
+	                               			{% if estado == "Aprobada" %}
+	                               				<p>No se puede modificar la orden porque ya fue aprobada, si desea hacerlo comuniquese con soporte</p>
+
+	                               			{% elif estado == "Anulada" %}
+	                               				<p>No se puede modificar la orden porque ya fue anulada, si desea hacerlo comuniquese con soporte</p>
+
+	                               			{% else %}
+		                               			<form method="post" enctype="multipart/form-data">
+	                                        {% csrf_token %}
+	                                        {{ form.non_field_errors }}
+																			    {% for field in form %}
+																			    <div class="form-group no-padding-t no-border-t text-center panel-padding-h">
+																			    {{ field.errors }}
+																			        <label class="col-sm-12 control-label">
+																			            <strong>{{ field.label }}</strong>
+																			        </label>
+																			        <div class="col-sm-12">
+																			            {{ field }}
+																			        </div>
+																			    </div>
+																			     {% endfor %}
+																					<br>
+																					<div class="pull-right panel-padding-h">
+																						<button style="width: 100%;" type="submit" class="btn btn-primary ">Cerrar orden</button>
+																					</div>
+		                                    </form>
+		                                   {% endif %}
+
+	                          
+	                               		</div>
+	                               		<div class="col-2">
+	                               			
+	                               		</div>
+	                               </div>
+	                               
+								</div>
+							</div>
+	                    </div>                                   
+            </div>
+            </div>
+          </div>
+        	
+        </div>
 {% endblock %}
 {% block scripts %}
 {% endblock %}

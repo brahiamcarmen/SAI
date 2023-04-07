@@ -7,42 +7,76 @@
 {% block content %}
 {% include 'usuarios/alerts.html' %}
 <!-- Titulo -->
-<div class="row">
-    <div class="col-sm-12 text-center">
-        <h1 class="h3 text-gray-800">Anular ordenes de suspención</h1>
-    </div>
-    
-</div>
-
-<div class="row" style="margin-top: 1rem;">
-    <div class="col-sm-4">      
-        </div>
-            <div class="col-sm-4 text-center">
-                <div style="width: 100%">
-                <form method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label class="control-label">Esta seguro que desea anular todas las ordenes de supencion vigentes?</label>
-                    </div>
-                    <div class="form-group">
-                        <p>Numero de ordenes</p>
-                        <label style="font-size: 2rem; color: green; margin: 0rem" class="control-label">{{cantidad}}</label>
-                    </div>
-                    <div class="row text-center">
-                        <div class="col-sm-12" style="margin-top: 1rem;">
-                            <button style="width: 75%;" type="submit" class="btn btn-primary ">Anular</button>
-                        </div>
-                    </div>
-                </form>
-                <div class="col-sm-12" style="margin-top: 1rem;">
-                    <button style="width: 80%;" onclick="window.location='{% url 'usuarios:suspenciones' %}'" class="btn btn-primary ">Cancelar</button>
+      <div class="page-wrapper">
+        <div class="container-fluid">
+          <!-- Page title -->
+          <div class="page-header d-print-none">
+            <div class="row align-items-center">
+              <div class="col">
+                <!-- Page pre-title -->
+                <div class="page-pretitle">
+                  Modulo
                 </div>
+                <h2 class="page-title">
+                  Anulacion masiva de ordenes de suspencion
+                </h2>
+              </div>
+              <div class="col-auto ms-auto d-print-none">
+                <div class="btn-list">
+                    <div class="col-auto">
+                        <a href="{% url 'usuarios:suspenciones' %}" class="btn btn-primary btn-sm w-100">
+                                      Volver</a>
+                    </div>
+                    </div>
+                </div>
+              </div>
             </div>
-            <div class="col-sm-4">
-                
+          </div>
+        </div>
+        <div class="row">
+            <div class="page-body">
+            <div class="container-xl">
+              <div class="row row-cards">
+                        <div class="col-md-4 col-lg-4">
+                        </div>
+                        <div class="col-md-4 col-lg-4">
+                            <div class="row">
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                   <h3 class="subheader">Opciones disponibles</h3>
+                                   <dl class="row">
+                                      <dt class="col-6">Cantidad de ordenes:</dt>
+                                      <dd class="col-6">{{cantidad}}</dd>
+                                
+                                    </dl>
+                                   <div class="row">
+                                        <div class="col-3">
+                                            
+                                        </div>
+                                        <div class="col-6">
+                                            <form method="post" role="form" enctype="multipart/form-data">
+                                                {% csrf_token %}
+                                                <button  style="width: 100%;" type="submit" class="btn btn-primary">Anular</button>
+                                            </form>  
+                              
+                                        </div>
+                                        <div class="col-3">
+                                            
+                                        </div>
+                                   </div>
+                                   
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-lg-4">
+                        </div>                                   
             </div>
+            </div>
+          </div>
+            
+        </div>
 
-</div>
 
 {% endblock %}
 {% block scripts %}
