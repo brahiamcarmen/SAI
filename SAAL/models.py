@@ -320,13 +320,9 @@ class ValorMatricula(models.Model):
 DOC_CHOICES12 = (
     ('1', _(u"1")),
     ('2', _(u"2")),
-    ('3', _(u"3")),
     ('4', _(u"4")),
     ('5', _(u"5")),
     ('6', _(u"6")),
-    ('12', _(u"12")),
-    ('24', _(u"24")),
-    ('36', _(u"36"))
 )
 
 
@@ -606,6 +602,21 @@ class NovedadesSistema(models.Model):
 
     def __str__(self):
         return "%s" % self.IdNovedad
+
+    class Meta:
+        verbose_name_plural = "Novedades"
+        verbose_name = "Novedad"
+
+
+class AsignacionBloque(models.Model):
+    IdBloque = models.AutoField(primary_key=True)
+    Bloque = models.CharField(max_length=50, null=False)
+    Matricula = models.CharField(max_length=150, null=False)
+    Estada = models.CharField(max_length=150, null=False)
+    Fecha = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "%s" % self.IdBloque
 
     class Meta:
         verbose_name_plural = "Novedades"

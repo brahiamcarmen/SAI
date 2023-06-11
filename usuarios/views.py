@@ -7,7 +7,7 @@ from django.views.generic.base import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from SAAL.models import Usuario, Tarifa, CobroOrdenes, PagoOrdenes, Certificaciones, Cierres, Acueducto, ConfirCerti, ValorMatricula, OrdenesSuspencion, OrdenesReconexion, Poblacion, Factura, Ciclo, EstadoCuenta,NovedadVivienda
 from SAAL.models import Vivienda, SolicitudGastos, Propietario, NovedadesSistema,Medidores, Pqrs, RespuestasPqrs, NovedadesGenerales, CobroMatricula, Permisos, Pagos
-from SAAL.forms import FormRegistroPqrs,RegistroUsuario, RegistroUsuario2, RegistroVivienda,AcueductoAForm,PermisosForm, CertificarForm, CobroMatriculaForm, CostoMForm, RespuestPqrForm, RegistroPropietario, TarifasForm , ModificaPropietario
+from SAAL.forms import FormRegistroPqrs,RegistroUsuario, RegistroUsuario2, RegistroVivienda,AcueductoAForm,PermisosForm, CobroMatriculaForm, CostoMForm, RespuestPqrForm, RegistroPropietario, TarifasForm , ModificaPropietario
 from SAAL.forms import CambioFormEstado,AcueductoForm, GastosForm, MedidoresForm, PoblacionForm, ModificaVivienda
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -68,6 +68,7 @@ S2 = 'Pasonivel Destapada'
 S3 = 'Caimalito Centro'
 S4 = 'Barrio Nuevo'
 S5 = '20 de julio'
+
 #ESTADOS PRERIOS
 E1 = 'Operativo'
 E2 = 'Suspendido'
@@ -121,7 +122,7 @@ class Inicio(LoginRequiredMixin, View):
             ano1 = fechaexp.year
             #Los argumentos serán: Año, Mes, Día, Hora, Minutos, Segundos, Milisegundos.
             new_date = datetime(ano1, ciclo, 1, 1, 00, 00, 00000)
-            new_date2 = datetime(ano1, ciclo, 28, 23, 59, 59, 00000)
+            new_date2 = datetime(ano1, ciclo, 30, 23, 59, 59, 00000)
             pagos2 = Pagos.objects.filter(FechaPago__gte=new_date, FechaPago__lte=new_date2).all()
             pago0 = 0
             for i in pagos2:
@@ -137,7 +138,7 @@ class Inicio(LoginRequiredMixin, View):
             ano2 = fechaexp.year
             # Los argumentos serán: Año, Mes, Día, Hora, Minutos, Segundos, Milisegundos.
             new_date3 = datetime(ano2, ciclo2, 1, 1, 00, 00, 00000)
-            new_date4 = datetime(ano2, ciclo2, 28, 23, 59, 59, 00000)
+            new_date4 = datetime(ano2, ciclo2, 30, 23, 59, 59, 00000)
             factuasemi = Factura.objects.filter(FechaExpe__gte=new_date3, FechaExpe__lte=new_date4).count()
             pagos3 = Pagos.objects.filter(FechaPago__gte=new_date, FechaPago__lte=new_date2).count()
             contador = pagos3 / factuasemi * 100
@@ -227,13 +228,11 @@ class ListaPropietarios(LoginRequiredMixin, View):
 class AgregarVivienda(LoginRequiredMixin, View):
     login_url = '/'
     form_class = RegistroVivienda
-    form_class2 = CobroMatriculaForm
     template_name = 'usuarios/registrovivienda.html'
 
     def get(self, request):
         try:
             form = self.form_class()
-            form2 = self.form_class2()
             listapqrs = Pqrs.objects.filter(Estado='Pendiente')
             contqrs = Pqrs.objects.filter(Estado='Pendiente').count()
             contsoli = SolicitudGastos.objects.filter(Estado=ESTADO1).count()
@@ -246,7 +245,6 @@ class AgregarVivienda(LoginRequiredMixin, View):
                 return render(request, self.template_name,
                               {
                                   'form': form,
-                                  'form2': form2,
                                   'notificaciones': contadorpen,
                                   'listapqrs': listapqrs,
                                   'totalnoti': totalnoti
@@ -290,8 +288,6 @@ class AgregarVivienda(LoginRequiredMixin, View):
                                     IdPropietario=propietario,MatriculaAnt=matricula, InfoInstalacion=infoinstalacion,
                                     ProfAcometida=profacometida,CantHabitantes=canthabitantes,IdAcueducto=acueducto,FichaCastral=fichacatastral, usuid=datos.usuid)
                 vivienda.save()
-                certificacion = Certificaciones(Nit=acueducto,NombreEmpresa=acueducto.Nombre, Estado=ESTADOCERTI, IdVivienda=vivienda)
-                certificacion.save()
                 estadocuenta = EstadoCuenta(Valor=0,IdVivienda=vivienda,Estado=Estadocue,Descripcion=COBROCONSUMO)
                 estadocuenta.save()
                 messages.add_message(request, messages.INFO, 'El predio se registro correctamente')
@@ -1452,56 +1448,6 @@ class RegistroMedidor(LoginRequiredMixin, View):
                 return HttpResponseRedirect(reverse('usuarios:listaviviendas'))
 
         except Usuario.DoesNotExist:
-            return render(request, "pages-404.html")
-
-class Certificar(LoginRequiredMixin, View):
-    login_url = '/'
-    template_name = "usuarios/certificar.html"
-    form_class = CertificarForm
-    vervivienda = VisualizarVivienda
-
-    def get(self, request, IdCertificacion):
-        try:
-            usuario = Usuario.objects.get(usuid=request.user.pk)
-            certificado = Certificaciones.objects.get(IdCertificacion=IdCertificacion)
-            form = self.form_class(instance=certificado)
-
-            return render(request, self.template_name,{
-                'form': form,
-                'idcertificacion': certificado.IdCertificacion,
-                'nit': certificado.Nit,
-                'empresa': certificado.NombreEmpresa,
-                'estado': certificado.Estado,
-                'soporte': certificado.Soporte,
-                'descripcion': certificado.Descripcion,
-                'matricula': certificado.IdVivienda
-            })
-
-        except Usuario.DoesNotExist:
-            return render(request, "pages-404.html")
-
-    def post(self, request, IdCertificacion):
-        try:
-            certificado1 = Certificaciones.objects.get(IdCertificacion=IdCertificacion)
-            form = self.form_class(request.POST, instance=certificado1)
-            idvivienda= request.POST.get("IdVivienda")
-            usuario = Usuario.objects.get(usuid=request.user.pk)
-            if form.is_valid():
-                form.save()
-                confirmacion = ConfirCerti(IdUsuario=usuario, IdCertificacion=certificado1)
-                confirmacion.save()
-                messages.add_message(request, messages.INFO, 'El predio se certifico correctamente')
-                ver = self.vervivienda()
-                ejercutar = ver.get(request, idvivienda)
-                return ejercutar
-
-            else:
-                messages.add_message(request, messages.ERROR, 'El predio se No certifico correctamente')
-                ver = self.vervivienda()
-                ejercutar = ver.get(request, idvivienda)
-                return ejercutar
-
-        except User.DoesNotExist:
             return render(request, "pages-404.html")
 
 class Perfil(LoginRequiredMixin, View):
@@ -4414,3 +4360,53 @@ class AnularPago(LoginRequiredMixin, View):
 
         except Usuario.DoesNotExist:
             return render(request, "pages-404.html")
+
+class AsignarCargo(LoginRequiredMixin, View):
+    login_url = '/'
+    template_name = 'usuarios/asignacioncargo.html'
+    form_class = CobroMatriculaForm
+    def get(self, request):
+        try:
+            form = self.form_class
+            usuario = 0
+            if usuario == 0:
+                return render(request, self.template_name,{'form': form})
+
+        except usuario.DoesNotExist:
+            return render(request,"pages-404.html")
+
+    def post(self, request):
+        try:
+            IdVivienda = request.POST.get("IdVivienda")
+            Descripcion = 'Cargo por conexion'
+            Estado = 'Pendiente'
+            IdValor = request.POST.get("IdValor")
+            CantCuotas = request.POST.get("CantCuotas")
+            CuotasPendientes = CantCuotas
+
+            matricula = CobroMatricula(Descripcion=Descripcion, IdVivienda=IdVivienda, Estado=Estado, IdValor=IdValor, CantCuotas=CantCuotas,
+                                       CuotasPendientes=CuotasPendientes)
+
+        except User.DoesNotExist:
+            return render(request, "pages-404.html")
+
+
+class Matriculas(LoginRequiredMixin, View):
+    login_url = '/'
+    template_name = 'usuarios/matriculas.html'
+    def get(self, request):
+        try:
+            pnv = Vivienda.objects.filter(Direccion='Pasonivel Viejo').count()
+            pnd = Vivienda.objects.filter(Direccion='Pasonivel Destapada').count()
+            cc = Vivienda.objects.filter(Direccion='Caimalito Centro').count()
+            bn = Vivienda.objects.filter(Direccion='Barrio Nuevo').count()
+            vj = Vivienda.objects.filter(Direccion='20 de julio').count()
+            hd = Vivienda.objects.filter(Direccion='Hacienda').count()
+
+            usuario = 0
+            if usuario == 0:
+                return render(request, self.template_name,{'pnv': pnv, 'pnd': pnd, 'cc': cc, 'bn': bn, 'vj': vj, 'hd':hd
+                                                           })
+
+        except usuario.DoesNotExist:
+            return render(request,"pages-404.html")

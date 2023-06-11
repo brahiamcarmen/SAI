@@ -1,8 +1,8 @@
 from django.conf.urls import url
 from usuarios.views import Inicio, Busquedas, CobroRecargo, ControlPresupuestal, VerFactura, PagarMatricula
-from usuarios.views import V3, ImprimirSoporteP, PagarRyS, AnularPago
-from usuarios.views import ListaViviendas, ListaPropietarios, Certificar, ReportePdfPagos
-from usuarios.views import ReporteCierresAno, PazSalvo, CertificadoGral
+from usuarios.views import V3, ImprimirSoporteP, PagarRyS, AnularPago, AsignarCargo
+from usuarios.views import ListaViviendas, ListaPropietarios, ReportePdfPagos
+from usuarios.views import ReporteCierresAno, PazSalvo, CertificadoGral, Matriculas
 from usuarios.views import AgregarVivienda, AgregarPropietario, PerfilUsuario, ReporteCompleto
 from usuarios.views import ReporteSuspenciones, ReporteReconexion, ModificarPropietario, ModificarVivienda
 from usuarios.views import EliminarPermisos, ReporteCiclo, Mapa, EliminarPoblacion
@@ -46,7 +46,6 @@ urlpatterns = [
     url(r'^listadogastos/', ListasGastos.as_view(), name='listadogastos'),
     url(r'^infovivienda/(?P<IdVivienda>\w+)', InfoVivienda.as_view(), name='infovivienda'),
     url(r'^registromedidor/(?P<IdVivienda>\w+)', RegistroMedidor.as_view(), name='registromedidor'),
-    url(r'^certificar/(?P<IdCertificacion>\w+)', Certificar.as_view(), name='certificar'),
     url(r'^perfil/', Perfil.as_view(), name='perfil'),
     url(r'^registropoblacion/', RegistroPoblacion.as_view(), name='registropoblacion'),
     url(r'^registrocostomatricula/', RegistroCostoM.as_view(), name='registrocostomatricula'),
@@ -98,4 +97,6 @@ urlpatterns = [
     url(r'^pagarrys', PagarRyS.as_view(), name='pagarrys'),
     url(r'^cobrorecargo', CobroRecargo.as_view(), name='cobrorecargo'),
     url(r'^anularpago', AnularPago.as_view(), name='anularpago'),
+    url(r'^asignarcargo', AsignarCargo.as_view(), name='asignarcargo'),
+    url(r'^matriculas', Matriculas.as_view(), name='matriculas'),
 ]

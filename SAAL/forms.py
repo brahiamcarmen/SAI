@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
-from SAAL.models import Vivienda, SolicitudGastos, Certificaciones, Medidores, Poblacion
+from SAAL.models import Vivienda, SolicitudGastos, Medidores, Poblacion
 from SAAL.models import Propietario, CobroMatricula, ValorMatricula, Usuario
 from SAAL.models import Acueducto, Tarifa, Permisos, Pqrs
 
@@ -182,42 +182,17 @@ class MedidoresForm(forms.ModelForm):
             self.fields[field].widget.attrs.update({'class': 'form-control'})
 
 
-class CertificarForm(forms.ModelForm):
-    class Meta:
-        model = Certificaciones
-        fields = [
-            'Estado',
-            'Descripcion',
-            'Soporte',
-            'IdVivienda'
-        ]
-        labels = {
-            'Estado': _(u'Modificar estado'),
-            'Descripcion': _(u'Descripcion'),
-            'Soporte': _(u'Cumple los requisitos minimos de certificacion'),
-            'IdVivienda': _(u''),
-        }
-        widgets = {
-            'IdVivienda': forms.HiddenInput()
-        }
-
-    def __init__(self, *args, **kwargs):
-        super(CertificarForm, self).__init__(*args, **kwargs)
-        self.fields['Estado'].required = True
-
-        for field in self.fields:
-            self.fields[field].widget.attrs.update({'class': 'form-control'})
-
-
 class CobroMatriculaForm(forms.ModelForm):
     class Meta:
         model = CobroMatricula
         fields = [
+            'IdVivienda',
             'IdValor',
-            'CantCuotas'
+            'CantCuotas',
         ]
         labels = {
-            'IdValor': _(u'Seleccione el valor de la matricula'),
+            'IdVivienda': _(u'Seleccione la matricula'),
+            'IdValor': _(u'Valor de la matricula'),
             'CantCuotas': _(u'Cantidad de cuotas')
         }
 
