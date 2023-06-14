@@ -9,9 +9,25 @@ from SAAL.models import Acueducto, Tarifa, Permisos, Pqrs
 class RegistroVivienda(forms.ModelForm):
     class Meta:
         model = Vivienda
-        fields = "__all__"
+        fields = [
+            'Direccion',
+            'NumeroCasa',
+            'Piso',
+            'Ciclo',
+            'TipoInstalacion',
+            'EstadoServicio',
+            'Estrato',
+            'IdPropietario',
+            'MatriculaAnt',
+            'InfoInstalacion',
+            'ProfAcometida',
+            'CantHabitantes',
+            'FichaCastral',
+            'Diametro',
+            'IdAcueducto',
+            'usuid',
+        ]
         labels = {
-            'IdVivienda': _(u'Numero de matricula'),
             'Direccion': _(u'Direccion Completa'),
             'NumeroCasa': _(u'Numero de la casa'),
             'Piso': _(u'Piso'),
@@ -30,6 +46,7 @@ class RegistroVivienda(forms.ModelForm):
             'usuid': _(u''),
         }
         widgets = {
+            'IdVivienda': forms.HiddenInput(),
             'IdAcueducto': forms.HiddenInput(),
             'usuid': forms.HiddenInput(),
         }
@@ -186,12 +203,10 @@ class CobroMatriculaForm(forms.ModelForm):
     class Meta:
         model = CobroMatricula
         fields = [
-            'IdVivienda',
             'IdValor',
             'CantCuotas',
         ]
         labels = {
-            'IdVivienda': _(u'Seleccione la matricula'),
             'IdValor': _(u'Valor de la matricula'),
             'CantCuotas': _(u'Cantidad de cuotas')
         }

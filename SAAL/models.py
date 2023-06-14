@@ -148,6 +148,7 @@ DOC_CHOICES8 = (
     ('Barrio Nuevo', _(u"Sector barrio nuevo")),
     ('20 de julio', _(u"Sector 20 de julio")),
     ('Hacienda', _(u"Hacienda")),
+    ('Carbonera', _(u"Carbonera")),
 )
 
 DOC_CHOICES9 = (
@@ -607,17 +608,17 @@ class NovedadesSistema(models.Model):
         verbose_name_plural = "Novedades"
         verbose_name = "Novedad"
 
-
 class AsignacionBloque(models.Model):
     IdBloque = models.AutoField(primary_key=True)
     Bloque = models.CharField(max_length=50, null=False)
     Matricula = models.CharField(max_length=150, null=False)
-    Estada = models.CharField(max_length=150, null=False)
+    Estado = models.CharField(max_length=150, null=False)
+    Estadocuenta = models.CharField(max_length=150, null=True)
     Fecha = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return "%s" % self.IdBloque
 
     class Meta:
-        verbose_name_plural = "Novedades"
-        verbose_name = "Novedad"
+        verbose_name_plural = "Bloques"
+        verbose_name = "Bloque"

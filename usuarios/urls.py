@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from usuarios.views import Inicio, Busquedas, CobroRecargo, ControlPresupuestal, VerFactura, PagarMatricula
-from usuarios.views import V3, ImprimirSoporteP, PagarRyS, AnularPago, AsignarCargo
+from usuarios.views import V3, ImprimirSoporteP, PagarRyS, AnularPago, AsignarCargo, Bloque
 from usuarios.views import ListaViviendas, ListaPropietarios, ReportePdfPagos
 from usuarios.views import ReporteCierresAno, PazSalvo, CertificadoGral, Matriculas
 from usuarios.views import AgregarVivienda, AgregarPropietario, PerfilUsuario, ReporteCompleto
@@ -22,7 +22,7 @@ urlpatterns = [
     url(r'^inicio/', Inicio.as_view(), name='inicio'),
     url(r'^listaviviendas/', ListaViviendas.as_view(), name='listaviviendas'),
     url(r'^listapropietarios/', ListaPropietarios.as_view(), name='listapropietarios'),
-    url(r'^agregarvivienda/', AgregarVivienda.as_view(), name='agregarvivienda'),
+    url(r'^agregarvivienda/(?P<IdBloque>\w+)', AgregarVivienda.as_view(), name='agregarvivienda'),
     url(r'^agregarpropietario/', AgregarPropietario.as_view(), name='agregarpropietario'),
     url(r'^modificarpropietario/(?P<IdPropietario>\w+)', ModificarPropietario.as_view(), name='modificarpropietario'),
     url(r'^modificarvivienda/(?P<IdVivienda>\w+)', ModificarVivienda.as_view(), name='modificarvivienda'),
@@ -97,6 +97,7 @@ urlpatterns = [
     url(r'^pagarrys', PagarRyS.as_view(), name='pagarrys'),
     url(r'^cobrorecargo', CobroRecargo.as_view(), name='cobrorecargo'),
     url(r'^anularpago', AnularPago.as_view(), name='anularpago'),
-    url(r'^asignarcargo', AsignarCargo.as_view(), name='asignarcargo'),
+    url(r'^asignarcargo/(?P<matricula>\w+)', AsignarCargo.as_view(), name='asignarcargo'),
     url(r'^matriculas', Matriculas.as_view(), name='matriculas'),
+    url(r'^Bloque', Bloque.as_view(), name='bloque'),
 ]

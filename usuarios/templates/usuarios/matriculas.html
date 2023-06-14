@@ -18,17 +18,15 @@
                   Modulo
                 </div>
                 <h2 class="page-title">
-                  Listado de egresos
+                  Asignacion de matricula
                 </h2>
               </div>
               <div class="col-auto ms-auto d-print-none">
                 <div class="btn-list">
                     <span class="d-none d-sm-inline">
-                        <form class="table-search-form row gx-1 align-items-center">
-                            <div class="col-auto">
-                                <input type="text" id="search" name="searchorders" class="form-control search-orders" placeholder="Buscar">
-                            </div>
-                        </form>
+                        <a href="" class="btn btn-primary btn-sm w-100">
+                            Matricula
+                        </a>
                     </span>
                 </div>
               </div>
@@ -46,13 +44,12 @@
               <div class="col-sm-6 col-lg-4">
                 <div class="card card-sm">
                   <div class="card-body">
-
                     <div class="d-flex align-items-center">
 
                       <span class="avatar me-3 rounded">CC</span>
                       <div>
                         <div>Caimalito centro</div>
-                        <div class="text-muted">3 days ago</div>
+                        <div class="text-muted">Sector</div>
                       </div>
                       <div class="ms-auto">
                         <a href="#" class="text-muted">
@@ -61,8 +58,8 @@
                         </a>
                         <a href="#" class="ms-3 text-muted">
                           <!-- Download SVG icon from http://tabler-icons.io/i/flag-3 -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 14h14l-4.5 -4.5l4.5 -4.5h-14v16" /></svg>
-                          0
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-filled text-red" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 14h14l-4.5 -4.5l4.5 -4.5h-14v16" /></svg>
+                          {{bcc}}
                         </a>
                       </div>
                     </div>
@@ -71,17 +68,19 @@
                   <div class="card-body">
                     <div class="row align-items-center">
                       <div class="col-auto">
-                        <span class="bg-red-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/arrow-down -->
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="12" y1="5" x2="12" y2="19" /><line x1="18" y1="13" x2="12" y2="19" /><line x1="6" y1="13" x2="12" y2="19" /></svg>
+                        <a href="" data-bs-toggle="modal" data-bs-target="#caimalitocentro"><span class="bg-red-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/arrow-down -->
+                        
+                          <span class="float-right font-weight-medium text-red">{{ecc}}</span>
                         </span>
+                        </a>
+                        
                       </div>
                       <div class="col">
                         <div class="font-weight-medium">
-                          150
-                          <span class="float-right font-weight-medium text-red">-4.3%</span>
+                          
                         </div>
                         <div class="text-muted">
-                          Matriculas asignadas
+                          Matriculas disponibles
                         </div>
                       </div>
                     </div>
@@ -97,7 +96,7 @@
                       <span class="avatar me-3 rounded">BN</span>
                       <div>
                         <div>Barrio nuevo</div>
-                        <div class="text-muted">5 days ago</div>
+                        <div class="text-muted">Sector</div>
                       </div>
                       <div class="ms-auto">
                         <a href="#" class="text-muted">
@@ -107,7 +106,7 @@
                         <a href="#" class="ms-3 text-muted">
                           <!-- Download SVG icon from http://tabler-icons.io/i/flag-3 -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 14h14l-4.5 -4.5l4.5 -4.5h-14v16" /></svg>
-                          0
+                          {{bbn}}
                         </a>
                       </div>
                     </div>
@@ -116,17 +115,17 @@
                   <div class="card-body">
                     <div class="row align-items-center">
                       <div class="col-auto">
-                        <span class="bg-red-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/arrow-down -->
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="12" y1="5" x2="12" y2="19" /><line x1="18" y1="13" x2="12" y2="19" /><line x1="6" y1="13" x2="12" y2="19" /></svg>
+                        <a href="" data-bs-toggle="modal" data-bs-target="#barrionuevo"><span class="bg-red-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/arrow-down -->
+                           <span class="float-right font-weight-medium text-red">{{ebn}}</span>
                         </span>
+                        </a>
                       </div>
                       <div class="col">
                         <div class="font-weight-medium">
-                          150
-                          <span class="float-right font-weight-medium text-red">-4.3%</span>
+                         
                         </div>
                         <div class="text-muted">
-                          Matriculas asignadas
+                          Matriculas disponibles
                         </div>
                       </div>
                     </div>
@@ -142,7 +141,7 @@
                       <span class="avatar me-3 rounded">VJ</span>
                       <div>
                         <div>20 de Julio</div>
-                        <div class="text-muted">yesterday</div>
+                        <div class="text-muted">Sector</div>
                       </div>
                       <div class="ms-auto">
                         <a href="#" class="text-muted">
@@ -152,7 +151,7 @@
                         <a href="#" class="ms-3 text-muted">
                           <!-- Download SVG icon from http://tabler-icons.io/i/flag-3 -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 14h14l-4.5 -4.5l4.5 -4.5h-14v16" /></svg>
-                          0
+                          {{bvj}}
                         </a>
                       </div>
                     </div>
@@ -162,16 +161,17 @@
                     <div class="row align-items-center">
                       <div class="col-auto">
                         <span class="bg-red-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/arrow-down -->
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="12" y1="5" x2="12" y2="19" /><line x1="18" y1="13" x2="12" y2="19" /><line x1="6" y1="13" x2="12" y2="19" /></svg>
+                             <a href="" data-bs-toggle="modal" data-bs-target="#vjulio"><span class="bg-red-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/arrow-down -->
+                           <span class="float-right font-weight-medium text-red">{{evj}}</span>
+                        </span>
+                        </a>
                         </span>
                       </div>
                       <div class="col">
                         <div class="font-weight-medium">
-                          150
-                          <span class="float-right font-weight-medium text-red">-4.3%</span>
-                        </div>
+                         </div>
                         <div class="text-muted">
-                          Matriculas asignadas
+                          Matriculas disponibles
                         </div>
                       </div>
                     </div>
@@ -187,7 +187,7 @@
                       <span class="avatar me-3 rounded">PNV</span>
                       <div>
                         <div>Pasonivel viejo</div>
-                        <div class="text-muted">1 week and 3 days ago</div>
+                        <div class="text-muted">Sector</div>
                       </div>
                       <div class="ms-auto">
                         <a href="#" class="text-muted">
@@ -196,8 +196,8 @@
                         </a>
                         <a href="#" class="ms-3 text-muted">
                           <!-- Download SVG icon from http://tabler-icons.io/i/flag-3 -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 14h14l-4.5 -4.5l4.5 -4.5h-14v16" /></svg>
-                          0
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-filled text-red" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 14h14l-4.5 -4.5l4.5 -4.5h-14v16" /></svg>
+                          {{bpnv}}
                         </a>
                       </div>
                     </div>
@@ -206,17 +206,17 @@
                   <div class="card-body">
                     <div class="row align-items-center">
                       <div class="col-auto">
-                        <span class="bg-red-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/arrow-down -->
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="12" y1="5" x2="12" y2="19" /><line x1="18" y1="13" x2="12" y2="19" /><line x1="6" y1="13" x2="12" y2="19" /></svg>
+                        <a href="" data-bs-toggle="modal" data-bs-target="#pasonivelv"><span class="bg-red-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/arrow-down -->
+                          <span class="float-right font-weight-medium text-red">{{epnv}}</span>
                         </span>
+                        </a>
                       </div>
                       <div class="col">
                         <div class="font-weight-medium">
-                          150
-                          <span class="float-right font-weight-medium text-red">-4.3%</span>
+                          
                         </div>
                         <div class="text-muted">
-                          Matriculas asignadas
+                          Matriculas disponibles
                         </div>
                       </div>
                     </div>
@@ -232,7 +232,7 @@
                       <span class="avatar me-3 rounded">PND</span>
                       <div>
                         <div>Pasonivel destapada</div>
-                        <div class="text-muted">5 days ago</div>
+                        <div class="text-muted">Sector</div>
                       </div>
                       <div class="ms-auto">
                         <a href="#" class="text-muted">
@@ -242,7 +242,7 @@
                         <a href="#" class="ms-3 text-muted">
                           <!-- Download SVG icon from http://tabler-icons.io/i/flag-3 -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 14h14l-4.5 -4.5l4.5 -4.5h-14v16" /></svg>
-                          0
+                          {{bpnd}}
                         </a>
                       </div>
                     </div>
@@ -251,17 +251,17 @@
                   <div class="card-body">
                     <div class="row align-items-center">
                       <div class="col-auto">
-                        <span class="bg-red-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/arrow-down -->
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="12" y1="5" x2="12" y2="19" /><line x1="18" y1="13" x2="12" y2="19" /><line x1="6" y1="13" x2="12" y2="19" /></svg>
+                        <a href="" data-bs-toggle="modal" data-bs-target="#pasoniveld"><span class="bg-red-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/arrow-down -->
+                          <span class="float-right font-weight-medium text-red">{{epnd}}</span>
                         </span>
+                        </a>
                       </div>
                       <div class="col">
                         <div class="font-weight-medium">
-                          150
-                          <span class="float-right font-weight-medium text-red">-4.3%</span>
+                          
                         </div>
                         <div class="text-muted">
-                          Matriculas asignadas
+                          Matriculas disponibles
                         </div>
                       </div>
                     </div>
@@ -277,7 +277,7 @@
                       <span class="avatar me-3 rounded">HD</span>
                       <div>
                         <div>Hacienda</div>
-                        <div class="text-muted">3 days ago</div>
+                        <div class="text-muted">Area</div>
                       </div>
                       <div class="ms-auto">
                         <a href="#" class="text-muted">
@@ -287,7 +287,7 @@
                         <a href="#" class="ms-3 text-muted">
                           <!-- Download SVG icon from http://tabler-icons.io/i/flag-3 -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 14h14l-4.5 -4.5l4.5 -4.5h-14v16" /></svg>
-                          0
+                          {{bhd}}
                         </a>
                       </div>
                     </div>
@@ -296,17 +296,17 @@
                   <div class="card-body">
                     <div class="row align-items-center">
                       <div class="col-auto">
-                        <span class="bg-red-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/arrow-down -->
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="12" y1="5" x2="12" y2="19" /><line x1="18" y1="13" x2="12" y2="19" /><line x1="6" y1="13" x2="12" y2="19" /></svg>
+                        <a href="" data-bs-toggle="modal" data-bs-target="#hacienda"><span class="bg-red-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/arrow-down -->
+                          <span class="float-right font-weight-medium text-red">{{ehd}}</span>
                         </span>
+                        </a>
                       </div>
                       <div class="col">
                         <div class="font-weight-medium">
-                          150
-                          <span class="float-right font-weight-medium text-red">-4.3%</span>
+                          
                         </div>
                         <div class="text-muted">
-                          Matriculas asignadas
+                          Matriculas disponibles
                         </div>
                       </div>
                     </div>
@@ -320,7 +320,235 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <hr>
+</div>
 
+    <div class="modal modal-blur fade" id="hacienda" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-full-width modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Matricula disponibles - Hacienda</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+                {% for hd in fhd %}
+                <div class="col-sm-6 col-lg-3" style="margin-top: 1rem;">
+                <div class="card card-sm">
+                      <div class="card-body">
+                        <div class="d-flex align-items-center">
+                          <span class="avatar me-3 rounded">{{ forloop.counter}}</span>
+                          <div>
+                            <div>{{ hd.Matricula }}</div>
+                            <div class="text-muted">{{hd.Estado}}</div>
+                          </div>
+                          <div class="ms-auto">
+                            <a href="{% url 'usuarios:agregarvivienda' hd.IdBloque %}" class="ms-3 text-muted">
+                              <!-- Download SVG icon from http://tabler-icons.io/i/flag-3 -->
+                                <!-- Download SVG icon from http://tabler-icons.io/i/circle-plus -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="12" r="9" /><line x1="9" y1="12" x2="15" y2="12" /><line x1="12" y1="9" x2="12" y2="15" /></svg>
+                              Asignar
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+        <div class="modal modal-blur fade" id="pasoniveld" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-full-width modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Matricula disponibles - Pasonivel Destapada</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+                {% for hd in fpnd %}
+                <div class="col-sm-6 col-lg-3" style="margin-top: 1rem;">
+                <div class="card card-sm">
+                      <div class="card-body">
+                        <div class="d-flex align-items-center">
+                          <span class="avatar me-3 rounded">{{ forloop.counter}}</span>
+                          <div>
+                            <div>{{ hd.Matricula }}</div>
+                            <div class="text-muted">{{hd.Estado}}</div>
+                          </div>
+                          <div class="ms-auto">
+                            <a href="{% url 'usuarios:agregarvivienda' hd.IdBloque %}" class="ms-3 text-muted">
+                              <!-- Download SVG icon from http://tabler-icons.io/i/flag-3 -->
+                                <!-- Download SVG icon from http://tabler-icons.io/i/circle-plus -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="12" r="9" /><line x1="9" y1="12" x2="15" y2="12" /><line x1="12" y1="9" x2="12" y2="15" /></svg>
+                              Asignar
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal modal-blur fade" id="pasonivelv" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-full-width modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Matricula disponibles - Pasonivel viejo</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+                {% for hd in fpnv %}
+                <div class="col-sm-6 col-lg-3" style="margin-top: 1rem;">
+                <div class="card card-sm">
+                      <div class="card-body">
+                        <div class="d-flex align-items-center">
+                          <span class="avatar me-3 rounded">{{ forloop.counter}}</span>
+                          <div>
+                            <div>{{ hd.Matricula }}</div>
+                            <div class="text-muted">{{hd.Estado}}</div>
+                          </div>
+                          <div class="ms-auto">
+                            <a href="{% url 'usuarios:agregarvivienda' hd.IdBloque %}" class="ms-3 text-muted">
+                              <!-- Download SVG icon from http://tabler-icons.io/i/flag-3 -->
+                                <!-- Download SVG icon from http://tabler-icons.io/i/circle-plus -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="12" r="9" /><line x1="9" y1="12" x2="15" y2="12" /><line x1="12" y1="9" x2="12" y2="15" /></svg>
+                              Asignar
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal modal-blur fade" id="vjulio" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-full-width modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Matricula disponibles - 20 de julio</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+                {% for hd in fvj %}
+                <div class="col-sm-6 col-lg-3" style="margin-top: 1rem;">
+                <div class="card card-sm">
+                      <div class="card-body">
+                        <div class="d-flex align-items-center">
+                          <span class="avatar me-3 rounded">{{ forloop.counter}}</span>
+                          <div>
+                            <div>{{ hd.Matricula }}</div>
+                            <div class="text-muted">{{hd.Estado}}</div>
+                          </div>
+                          <div class="ms-auto">
+                            <a href="{% url 'usuarios:agregarvivienda' hd.IdBloque %}" class="ms-3 text-muted">
+                              <!-- Download SVG icon from http://tabler-icons.io/i/flag-3 -->
+                                <!-- Download SVG icon from http://tabler-icons.io/i/circle-plus -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="12" r="9" /><line x1="9" y1="12" x2="15" y2="12" /><line x1="12" y1="9" x2="12" y2="15" /></svg>
+                              Asignar
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal modal-blur fade" id="barrionuevo" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-full-width modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Matricula disponibles - Barrio nuevo</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+                {% for hd in fbn %}
+                <div class="col-sm-6 col-lg-3" style="margin-top: 1rem;">
+                <div class="card card-sm">
+                      <div class="card-body">
+                        <div class="d-flex align-items-center">
+                          <span class="avatar me-3 rounded">{{ forloop.counter}}</span>
+                          <div>
+                            <div>{{ hd.Matricula }}</div>
+                            <div class="text-muted">{{hd.Estado}}</div>
+                          </div>
+                          <div class="ms-auto">
+                            <a href="{% url 'usuarios:agregarvivienda' hd.IdBloque %}" class="ms-3 text-muted">
+                              <!-- Download SVG icon from http://tabler-icons.io/i/flag-3 -->
+                                <!-- Download SVG icon from http://tabler-icons.io/i/circle-plus -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="12" r="9" /><line x1="9" y1="12" x2="15" y2="12" /><line x1="12" y1="9" x2="12" y2="15" /></svg>
+                              Asignar
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal modal-blur fade" id="caimalitocentro" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-full-width modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Matricula disponibles - Barrio nuevo</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+                {% for hd in fcc %}
+                <div class="col-sm-6 col-lg-3" style="margin-top: 1rem;">
+                <div class="card card-sm">
+                      <div class="card-body">
+                        <div class="d-flex align-items-center">
+                          <span class="avatar me-3 rounded">{{ forloop.counter}}</span>
+                          <div>
+                            <div>{{ hd.Matricula }}</div>
+                            <div class="text-muted">{{hd.Estado}}</div>
+                          </div>
+                          <div class="ms-auto">
+                            <a href="{% url 'usuarios:agregarvivienda' hd.IdBloque %}" class="ms-3 text-muted">
+                              <!-- Download SVG icon from http://tabler-icons.io/i/flag-3 -->
+                                <!-- Download SVG icon from http://tabler-icons.io/i/circle-plus -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="12" r="9" /><line x1="9" y1="12" x2="15" y2="12" /><line x1="12" y1="9" x2="12" y2="15" /></svg>
+                              Asignar
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 {% endblock %}
 {% block scripts %}
 {% endblock %}

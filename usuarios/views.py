@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.conf import settings
 from django.views.generic.base import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from SAAL.models import Usuario, Tarifa, CobroOrdenes, PagoOrdenes, Certificaciones, Cierres, Acueducto, ConfirCerti, ValorMatricula, OrdenesSuspencion, OrdenesReconexion, Poblacion, Factura, Ciclo, EstadoCuenta,NovedadVivienda
+from SAAL.models import Usuario, Tarifa, CobroOrdenes, AsignacionBloque, PagoOrdenes, Certificaciones, Cierres, Acueducto, ConfirCerti, ValorMatricula, OrdenesSuspencion, OrdenesReconexion, Poblacion, Factura, Ciclo, EstadoCuenta,NovedadVivienda
 from SAAL.models import Vivienda, SolicitudGastos, Propietario, NovedadesSistema,Medidores, Pqrs, RespuestasPqrs, NovedadesGenerales, CobroMatricula, Permisos, Pagos
 from SAAL.forms import FormRegistroPqrs,RegistroUsuario, RegistroUsuario2, RegistroVivienda,AcueductoAForm,PermisosForm, CobroMatriculaForm, CostoMForm, RespuestPqrForm, RegistroPropietario, TarifasForm , ModificaPropietario
 from SAAL.forms import CambioFormEstado,AcueductoForm, GastosForm, MedidoresForm, PoblacionForm, ModificaVivienda
@@ -225,76 +225,6 @@ class ListaPropietarios(LoginRequiredMixin, View):
         except Propietario.DoesNotExist:
             return render(request, "pages-404.html")
 
-class AgregarVivienda(LoginRequiredMixin, View):
-    login_url = '/'
-    form_class = RegistroVivienda
-    template_name = 'usuarios/registrovivienda.html'
-
-    def get(self, request):
-        try:
-            form = self.form_class()
-            listapqrs = Pqrs.objects.filter(Estado='Pendiente')
-            contqrs = Pqrs.objects.filter(Estado='Pendiente').count()
-            contsoli = SolicitudGastos.objects.filter(Estado=ESTADO1).count()
-            totalnoti = contqrs + contsoli
-            contadorpen = SolicitudGastos.objects.filter(Estado=ESTADO1)
-
-            usuario = Usuario.objects.get(usuid=request.user.pk)
-            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AIP').exists()
-            if tipousuario is True:
-                return render(request, self.template_name,
-                              {
-                                  'form': form,
-                                  'notificaciones': contadorpen,
-                                  'listapqrs': listapqrs,
-                                  'totalnoti': totalnoti
-
-                              })
-            else:
-                messages.add_message(request, messages.ERROR,'Su usuario no tiene los permisos de acceso a esta seccion')
-                return HttpResponseRedirect(reverse('usuarios:inicio'))
-
-        except Usuario.DoesNotExist:
-            return render(request, "pages-404.html")
-
-    def post(self, request):
-        try:
-            idvivienda = request.POST.get("IdVivienda")
-            direccion = request.POST.get("Direccion")
-            numerocasa = request.POST.get("NumeroCasa")
-            piso = request.POST.get("Piso")
-            ciclo = request.POST.get("Ciclo")
-            tipoinstalacion = request.POST.get("TipoInstalacion")
-            estrato = request.POST.get("Estrato")
-            estadoservicio = request.POST.get("EstadoServicio")
-            idpropietario = request.POST.get("IdPropietario")
-            matricula = request.POST.get("MatriculaAnt")
-            infoinstalacion = request.POST.get("InfoInstalacion")
-            profacometida = request.POST.get("ProfAcometida")
-            canthabitantes = request.POST.get("CantHabitantes")
-            fichacatastral = request.POST.get("FichaCastral")
-            datos = Usuario.objects.get(usuid=request.user.pk)
-            dr = datos.IdAcueducto
-            acueducto = Acueducto.objects.get(IdAcueducto=dr.pk)
-            propietario = Propietario.objects.get(IdPropietario=idpropietario)
-            validarvi = Vivienda.objects.filter(IdVivienda=idvivienda).exists()
-            if validarvi == True:
-                messages.add_message(request, messages.ERROR, 'la Vivienda ya existe')
-                return HttpResponseRedirect(reverse('usuarios:agregarvivienda'))
-
-            else:
-                vivienda = Vivienda(IdVivienda=idvivienda, Direccion=direccion, NumeroCasa=numerocasa, Piso=piso,Ciclo=ciclo,
-                                    TipoInstalacion=tipoinstalacion, Estrato=estrato, EstadoServicio=estadoservicio,
-                                    IdPropietario=propietario,MatriculaAnt=matricula, InfoInstalacion=infoinstalacion,
-                                    ProfAcometida=profacometida,CantHabitantes=canthabitantes,IdAcueducto=acueducto,FichaCastral=fichacatastral, usuid=datos.usuid)
-                vivienda.save()
-                estadocuenta = EstadoCuenta(Valor=0,IdVivienda=vivienda,Estado=Estadocue,Descripcion=COBROCONSUMO)
-                estadocuenta.save()
-                messages.add_message(request, messages.INFO, 'El predio se registro correctamente')
-                return HttpResponseRedirect(reverse('usuarios:listaviviendas'))
-
-        except User.DoesNotExist:
-            return render(request, "pages-404.html")
 
 class AgregarPropietario(LoginRequiredMixin, View):
     login_url = '/'
@@ -496,6 +426,7 @@ class VisualizarVivienda(LoginRequiredMixin, View):
             facturasemi = Factura.objects.filter(IdEstadoCuenta=idestado).order_by("-IdFactura")[:1]
             vafacemi = Factura.objects.filter(IdEstadoCuenta=idestado, Estado=FE).exists()
             matriculas = CobroMatricula.objects.filter(IdVivienda=IdVivienda)
+            matriculas2 = CobroMatricula.objects.filter(IdVivienda=IdVivienda).exists()
             medidores = Medidores.objects.filter(IdVivienda=IdVivienda)
             novedades = NovedadVivienda.objects.filter(IdVivienda=IdVivienda)
             reconexion = OrdenesReconexion.objects.filter(IdEstadoCuenta=idestado).order_by("-IdOrden")
@@ -543,10 +474,84 @@ class VisualizarVivienda(LoginRequiredMixin, View):
                 'estados': estados,'pagos':pagos,'fecha': fecha,'novedades':novedades,'ultimopago': filtropagos,'vafacemi': vafacemi,
                 'viviendainfo': viviendainfo,'ordenesrs': ordenesrs,'pagosrys': pagosrys,
                 'reconexion2': cor,'suspenciones2': cos,'aportes': resultado,'cobromatricula1':matri,'repaciones': reparaciones,
-                'total': resultado + cor + cos + matri + reparaciones, 'filtro':filtrosuspenciones,'contpagos': contpagos
+                'total': resultado + cor + cos + matri + reparaciones, 'filtro':filtrosuspenciones,'contpagos': contpagos,'vmatri': matriculas2
             })
 
         except Vivienda.DoesNotExist:
+            return render(request, "pages-404.html")
+
+class AgregarVivienda(LoginRequiredMixin, View):
+    login_url = '/'
+    form_class = RegistroVivienda
+    vizualizarv = VisualizarVivienda
+    template_name = 'usuarios/registrovivienda.html'
+
+    def get(self, request, IdBloque):
+        try:
+            form = self.form_class()
+            matricula = AsignacionBloque.objects.get(IdBloque=IdBloque)
+            asignada = matricula.Matricula
+            usuario = Usuario.objects.get(usuid=request.user.pk)
+            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AIP').exists()
+            if tipousuario is True:
+                return render(request, self.template_name,
+                              {
+                                  'form': form,
+                                  'asignada':asignada
+                              })
+            else:
+                messages.add_message(request, messages.ERROR,'Su usuario no tiene los permisos de acceso a esta seccion')
+                return HttpResponseRedirect(reverse('usuarios:inicio'))
+
+        except Usuario.DoesNotExist:
+            return render(request, "pages-404.html")
+
+    def post(self, request, IdBloque):
+        try:
+            matricula = AsignacionBloque.objects.get(IdBloque=IdBloque)
+            asignada = matricula.Matricula
+            idvivienda = asignada
+            direccion = request.POST.get("Direccion")
+            numerocasa = request.POST.get("NumeroCasa")
+            piso = request.POST.get("Piso")
+            ciclo = request.POST.get("Ciclo")
+            tipoinstalacion = request.POST.get("TipoInstalacion")
+            estrato = request.POST.get("Estrato")
+            estadoservicio = request.POST.get("EstadoServicio")
+            idpropietario = request.POST.get("IdPropietario")
+            matricula = request.POST.get("MatriculaAnt")
+            infoinstalacion = request.POST.get("InfoInstalacion")
+            profacometida = request.POST.get("ProfAcometida")
+            canthabitantes = request.POST.get("CantHabitantes")
+            fichacatastral = request.POST.get("FichaCastral")
+            diametro = request.POST.get("Diametro")
+            datos = Usuario.objects.get(usuid=request.user.pk)
+            dr = datos.IdAcueducto
+            acueducto = Acueducto.objects.get(IdAcueducto=dr.pk)
+            propietario = Propietario.objects.get(IdPropietario=idpropietario)
+            validarvi = Vivienda.objects.filter(IdVivienda=idvivienda).exists()
+            if validarvi == True:
+                messages.add_message(request, messages.ERROR, 'la Vivienda ya existe')
+                return HttpResponseRedirect(reverse('usuarios:matriculas'))
+
+            else:
+                vivienda = Vivienda(IdVivienda=idvivienda, Direccion=direccion, NumeroCasa=numerocasa, Piso=piso,Ciclo=ciclo,
+                                    TipoInstalacion=tipoinstalacion, Estrato=estrato, EstadoServicio=estadoservicio,
+                                    IdPropietario=propietario,MatriculaAnt=matricula, InfoInstalacion=infoinstalacion,
+                                    ProfAcometida=profacometida,CantHabitantes=canthabitantes,IdAcueducto=acueducto,FichaCastral=fichacatastral, Diametro=diametro, usuid=datos.usuid)
+                vivienda.save()
+                estadocuenta = EstadoCuenta(Valor=0,IdVivienda=vivienda,Estado='Operativo',Descripcion=COBROCONSUMO)
+                estadocuenta.save()
+                matriculas = AsignacionBloque.objects.get(IdBloque=IdBloque)
+                matriculas.Estado = 'Asignada'
+                matriculas.Estadocuenta = estadocuenta.IdEstadoCuenta
+                matriculas.save()
+                ver = self.vizualizarv()
+                messages.add_message(request, messages.INFO,'La informacion del predio se agrego correctamente')
+                ejercutar = ver.get(request, idvivienda)
+                return ejercutar
+
+        except User.DoesNotExist:
             return render(request, "pages-404.html")
 
 class Facturacion(LoginRequiredMixin, View):
@@ -4202,7 +4207,7 @@ class VerFactura(LoginRequiredMixin, View):
     imptiquet = ImprimirSoporteP
     def get(self, request):
         try:
-            numerofactura = request.GET.get("factura")
+            numerofactura = request.GET.get('factura',' ')
             usuario = Usuario.objects.get(usuid=request.user.pk)
             anulada = Factura.objects.filter(IdFactura=numerofactura, Estado=FA).exists()
             paga = Factura.objects.filter(IdFactura=numerofactura, Estado=FP).exists()
@@ -4232,30 +4237,29 @@ class VerFactura(LoginRequiredMixin, View):
                     reconexion = factura.reconexion
                     suspencion2 = factura.suspencion
                     cuenta = factura.IdEstadoCuenta
-
                     return render(request, self.template_name,{
-                        'aportes': int(aporteporconsumo),
-                        'cuenta': cuenta,
-                        'cuotam': int(cuotamatricula),
-                        'reconexion': int(reconexion),
-                        'suspencion': int(suspencion2),
-                        'cobromatricula': cobromatricula,
-                        'estadoscuenta': total,
-                        'factura': numerofactura,
-                        'fe': fe,
-                        'fl': fl,
-                        'total': total,
-                        'estadofactura': estadofactura,
-                        'matricula': matricula,
-                        'casa': casa,
-                        'sector': sector,
-                        'piso': piso,
-                        'pagos':pagos,
-                        'ciclo': ciclo,
-                        'anulada':anulada,
-                        'paga': paga,
-                        'vencida': vencida,
-                    })
+                            'aportes': int(aporteporconsumo),
+                            'cuenta': cuenta,
+                            'cuotam': int(cuotamatricula),
+                            'reconexion': int(reconexion),
+                            'suspencion': int(suspencion2),
+                            'cobromatricula': cobromatricula,
+                            'estadoscuenta': total,
+                            'factura': numerofactura,
+                            'fe': fe,
+                            'fl': fl,
+                            'total': total,
+                            'estadofactura': estadofactura,
+                            'matricula': matricula,
+                            'casa': casa,
+                            'sector': sector,
+                            'piso': piso,
+                            'pagos':pagos,
+                            'ciclo': ciclo,
+                            'anulada':anulada,
+                            'paga': paga,
+                            'vencida': vencida,
+                        })
                 else:
                     messages.add_message(request, messages.ERROR, 'El numero de factura ingresado no existe')
                     return HttpResponseRedirect(reverse('usuarios:inicio'))
@@ -4361,41 +4365,13 @@ class AnularPago(LoginRequiredMixin, View):
         except Usuario.DoesNotExist:
             return render(request, "pages-404.html")
 
-class AsignarCargo(LoginRequiredMixin, View):
-    login_url = '/'
-    template_name = 'usuarios/asignacioncargo.html'
-    form_class = CobroMatriculaForm
-    def get(self, request):
-        try:
-            form = self.form_class
-            usuario = 0
-            if usuario == 0:
-                return render(request, self.template_name,{'form': form})
-
-        except usuario.DoesNotExist:
-            return render(request,"pages-404.html")
-
-    def post(self, request):
-        try:
-            IdVivienda = request.POST.get("IdVivienda")
-            Descripcion = 'Cargo por conexion'
-            Estado = 'Pendiente'
-            IdValor = request.POST.get("IdValor")
-            CantCuotas = request.POST.get("CantCuotas")
-            CuotasPendientes = CantCuotas
-
-            matricula = CobroMatricula(Descripcion=Descripcion, IdVivienda=IdVivienda, Estado=Estado, IdValor=IdValor, CantCuotas=CantCuotas,
-                                       CuotasPendientes=CuotasPendientes)
-
-        except User.DoesNotExist:
-            return render(request, "pages-404.html")
-
 
 class Matriculas(LoginRequiredMixin, View):
     login_url = '/'
     template_name = 'usuarios/matriculas.html'
     def get(self, request):
         try:
+            #lista de predios
             pnv = Vivienda.objects.filter(Direccion='Pasonivel Viejo').count()
             pnd = Vivienda.objects.filter(Direccion='Pasonivel Destapada').count()
             cc = Vivienda.objects.filter(Direccion='Caimalito Centro').count()
@@ -4403,10 +4379,114 @@ class Matriculas(LoginRequiredMixin, View):
             vj = Vivienda.objects.filter(Direccion='20 de julio').count()
             hd = Vivienda.objects.filter(Direccion='Hacienda').count()
 
+            #contador de bloques
+            bpnv = AsignacionBloque.objects.filter(Bloque='PNV').count()
+            bcc = AsignacionBloque.objects.filter(Bloque='CC').count()
+            bpnd = AsignacionBloque.objects.filter(Bloque='PND').count()
+            bbn = AsignacionBloque.objects.filter(Bloque='BN').count()
+            bhd = AsignacionBloque.objects.filter(Bloque='HD').count()
+            bvj = AsignacionBloque.objects.filter(Bloque='VJ').count()
+
+            #calculos
+            cpnv = bpnv - pnv
+            cpnd = bpnd - pnd
+            ccc = bcc - cc
+            cbn = bbn - bn
+            chd = bhd - hd
+            cvj = bvj - vj
+
+            #disponible
+            epnv = AsignacionBloque.objects.filter(Bloque='PNV', Estado='Sin asignar').count()
+            epnd = AsignacionBloque.objects.filter(Bloque='PND', Estado='Sin asignar').count()
+            ecc = AsignacionBloque.objects.filter(Bloque='CC', Estado='Sin asignar').count()
+            ebn = AsignacionBloque.objects.filter(Bloque='BN', Estado='Sin asignar').count()
+            ehd = AsignacionBloque.objects.filter(Bloque='HD', Estado='Sin asignar').count()
+            evj = AsignacionBloque.objects.filter(Bloque='VJ', Estado='Sin asignar').count()
+
+            #filtros
+            fpnv = AsignacionBloque.objects.filter(Bloque='PNV', Estado='Sin asignar')
+            fpnd = AsignacionBloque.objects.filter(Bloque='PND', Estado='Sin asignar')
+            fcc = AsignacionBloque.objects.filter(Bloque='CC', Estado='Sin asignar')
+            fbn = AsignacionBloque.objects.filter(Bloque='BN', Estado='Sin asignar')
+            fhd = AsignacionBloque.objects.filter(Bloque='HD', Estado='Sin asignar')
+            fvj = AsignacionBloque.objects.filter(Bloque='VJ', Estado='Sin asignar')
+
             usuario = 0
             if usuario == 0:
-                return render(request, self.template_name,{'pnv': pnv, 'pnd': pnd, 'cc': cc, 'bn': bn, 'vj': vj, 'hd':hd
+                return render(request, self.template_name,{'pnv': pnv, 'pnd': pnd, 'cc': cc, 'bn': bn, 'vj': vj, 'hd':hd,
+                                                           'bpnv': bpnv, 'bcc': bcc, 'bpnd':bpnd, 'bbn': bbn, 'bhd': bhd, 'bvj': bvj,
+                                                           'cpnv': cpnv, 'cpnd': cpnd, 'ccc': ccc, 'cbn': cbn, 'chd': chd, 'cvj': cvj,
+                                                           'epnv': epnv,'epnd': epnd, 'ecc': ecc, 'ebn': ebn, 'ehd': ehd, 'evj': evj,
+                                                           'fhd': fhd, 'fpnv':fpnv, 'fpnd': fpnd, 'fvj': fvj, 'fbn':fbn, 'fcc': fcc
                                                            })
+        except usuario.DoesNotExist:
+            return render(request,"pages-404.html")
+
+class Bloque(LoginRequiredMixin, View):
+    login_url = '/'
+    def get(self, request):
+        sector = 'Pasonivel Viejo'
+        csector = Vivienda.objects.filter(Direccion=sector).count()
+        predios = Vivienda.objects.filter(Direccion=sector)
+        suma = 0
+        for i in predios:
+            idvivienda = i.IdVivienda
+            estadocuenta = EstadoCuenta.objects.get(IdVivienda=idvivienda)
+            idestadocuenta = estadocuenta.IdEstadoCuenta
+            buscar = AsignacionBloque.objects.get(Matricula=idvivienda)
+            buscar.Estado='Asignada'
+            buscar.Estadocuenta= idestadocuenta
+            buscar.save()
+            suma+=1
+
+        return suma
+
+class AsignarCargo(LoginRequiredMixin, View):
+    login_url = '/'
+    template_name = 'usuarios/asignacioncargo.html'
+    form_class = CobroMatriculaForm
+    vizualizarv = VisualizarVivienda
+    def get(self, request, matricula):
+        try:
+            form = self.form_class
+            vivienda = Vivienda.objects.get(IdVivienda=matricula)
+            direccion = vivienda.Direccion + ' Cs '+ vivienda.NumeroCasa  + ' Piso '+ vivienda.Piso
+            bloque = AsignacionBloque.objects.get(Matricula=matricula)
+            fecha = bloque.Fecha
+            estadocuenta = bloque.Estadocuenta
+            usuario = Usuario.objects.get(usuid=request.user.pk)
+            usuario1 = 0
+            if usuario1 == 0:
+                return render(request, self.template_name,{'form': form, 'matricula': matricula, 'direccion': direccion, 'fecha':fecha, 'cuenta': estadocuenta})
 
         except usuario.DoesNotExist:
             return render(request,"pages-404.html")
+
+    def post(self, request, matricula):
+        try:
+            IdVivienda = matricula
+            Descripcion = 'Cargo por conexion'
+            Estado = 'Pendiente'
+            IdValor = request.POST.get("IdValor")
+            CantCuotas = request.POST.get("CantCuotas")
+            CuotasPendientes = CantCuotas
+            vivienda = Vivienda.objects.filter(IdVivienda=IdVivienda).exists()
+            vivienda2 = Vivienda.objects.get(IdVivienda=IdVivienda)
+            valor = ValorMatricula.objects.get(IdValor=IdValor)
+            valorpendiente = valor.Valor
+            cuota = int(valorpendiente)
+            if vivienda is True:
+                matricula = CobroMatricula(Descripcion=Descripcion, IdVivienda=vivienda2, Estado=Estado, IdValor=valor, CantCuotas=CantCuotas,
+                                           CuotasPendientes=CuotasPendientes, ValorPendiente=valorpendiente, Cuota=cuota)
+                matricula.save()
+                ver = self.vizualizarv()
+                messages.add_message(request, messages.INFO, 'La informacion del predio se agrego correctamente')
+                ejercutar = ver.get(request, IdVivienda)
+                return ejercutar
+
+            else:
+                messages.add_message(request, messages.ERROR, 'ERROR')
+                return HttpResponseRedirect(reverse('usuarios:matriculas'))
+
+        except User.DoesNotExist:
+            return render(request, "pages-404.html")

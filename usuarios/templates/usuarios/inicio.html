@@ -133,6 +133,7 @@
             </div>
             </div>
             <div class="col-sm-3">
+                <div class="row">
                             <div class="card  text-center">
                               <div class="card-status-bottom bg-success"></div>
                               <div class="card-header text-center">
@@ -140,21 +141,20 @@
                               </div>
                               <div class="card-body">
                                 <form action="{% url 'usuarios:verfactura' %}" method="get" class="form-inline">
-                            {% csrf_token %}
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <video style="width: 100%;" src="" id="video" autoplay="true"></video>
-                                </div>
-                                <div class="col-sm-12">
-                                    <input style="width: 100%" type="text" name="factura" class="form-control" placeholder="Ingrese el numero factura">
-                                </div>
-                                    <button style="margin-top: 1rem; width: 100%;" type="submit" class="btn btn-primary">Pagar</button>
-                            </div>     
-                            
-                        </form>
+                                  {% csrf_token %}
+                                  <div class="row">
+                                      <div class="col-sm-12">
+                                          <video style="width: 100%;" src="" id="video" autoplay="true"></video>
+                                      </div>
+                                      <div class="col-sm-12">
+                                          <input style="width: 100%" type="text" name="factura" class="form-control" placeholder="Numero de factura - aportes" id="miInput" oninput="verificarTexto()">
+                                      </div>
+                                          <button id="miBoton" style="margin-top: 1rem; width: 100%;" type="submit" class="btn btn-primary" disabled>Validar</button>
+                                  </div>
+                                </form>
                               </div>
                           </div>
-
+                  </div>
             </div>
             </div>
           </div>
@@ -190,4 +190,16 @@
 {% endblock %}
 {% block scripts %}
 <script src="{% static 'javascripts/video.js' %}"></script>
+  <script>
+    function verificarTexto() {
+      var input = document.getElementById("miInput");
+      var boton = document.getElementById("miBoton");
+      
+      if (input.value === "") {
+        boton.disabled = true;
+      } else {
+        boton.disabled = false;
+      }
+    }
+  </script>
 {% endblock %}

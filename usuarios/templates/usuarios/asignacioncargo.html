@@ -7,7 +7,7 @@
 {% block content %}
 {% include 'usuarios/alerts.html' %}
 <!-- Titulo -->
-      <div class="page-wrapper">
+ <div class="page-wrapper">
         <div class="container-fluid">
           <!-- Page title -->
           <div class="page-header d-print-none">
@@ -18,53 +18,93 @@
                   Modulo
                 </div>
                 <h2 class="page-title">
-                  Registrar cobro de cargo por conexion
+                   Registrar cobro de cargo por conexion
                 </h2>
+              </div>
+              <div class="col-auto ms-auto d-print-none">
+                <div class="btn-list">
+                    <div class="col-auto">
+                        
+                    </div>
+                    </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-<br>
-<div class="card-body">
-<div class="row">
-    <div class="col-sm-3">
-        
-    </div>
-    <div class="col-sm-6">
-        <form method="post" enctype="multipart/form-data" class="card">
-        {% csrf_token %}
-        {{ form.non_field_errors }}
-        <div class="card-body">
-            {% for field in form %}
-            <div class="row">
-                <div class="col-xl-12">
-                    <div class="row">
-                        <div class="col-md-6 col-xl-12">
-                            <div class="mb-3">
-                            {{ field.errors }}
-                              <label class="form-label">{{ field.label }}</label>
-                              {{ field }}
+        <div class="row">
+            <div class="page-body">
+            <div class="container-xl">
+              <div class="row row-cards">
+                      <div class="col-md-6 col-lg-7">
+                        <div class="card">
+                          <div class="card-body">
+                              <dl class="row">
+                                <h3 class="subheader">Informacion de la orden de trabajo</h3>
+                                  <dt class="col-5">Matricula asignada:</dt>
+                                  <dd class="col-7">{{ matricula }}</dd>
+                                  <dt class="col-5">Direccion:</dt>
+                                  <dd class="col-7">{{ direccion }}</dd>
+                                  <dt class="col-5">Fecha de asignacion:</dt>
+                                  <dd class="col-7">{{ fecha }}</dd>
+                                  <dt class="col-5">Estado cuenta:</dt>
+                                  <dd class="col-7">{{ cuenta }}</dd>
+                              </dl>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-            <div class="row">
-                <div class="col-sm-6" style="margin-top: 1rem;">
-                    <button style="width: 100%;" type="submit" class="btn btn-primary ">Registrar</button>
-                </div>
-                <div class="col-sm-6" style="margin-top: 1rem;">
-                    <button style="width: 100%;" onclick="window.location='{% url 'usuarios:inicio' %}'" class="btn btn-primary ">Cancelar</button>
-                </div>
-            </div>
-        </div>
-    </form>
-    </div>
-    </div>
-    </div>                 
+                          </div>
 
+                        </div>
+                        <div class="col-md-6 col-lg-5">
+                            <div class="row">
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                   <h3 class="subheader">Opciones disponibles</h3>
+                                   <div class="row">
+                                        <div class="col-2">
+                                            
+                                        </div>
+                                        <div class="col-8">
+                                            <form method="post" enctype="multipart/form-data" class="card">
+                                                {% csrf_token %}
+                                                {{ form.non_field_errors }}
+                                                <div class="card-body">
+                                                    {% for field in form %}
+                                                    <div class="row">
+                                                        <div class="col-xl-12">
+                                                            <div class="row">
+                                                                <div class="col-md-6 col-xl-12">
+                                                                    <div class="mb-3">
+                                                                    {{ field.errors }}
+                                                                      <label class="form-label">{{ field.label }}</label>
+                                                                      {{ field }}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {% endfor %}
+                                                    <div class="row">
+                                                        <div class="col-sm-12" style="margin-top: 1rem;">
+                                                            <button style="width: 100%;" type="submit" class="btn btn-primary ">Registrar</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-2">
+                                            
+                                        </div>
+                                   </div>
+                                   
+                                </div>
+                            </div>
+                        </div>                                   
+            </div>
+            </div>
+          </div>
+            
+        </div>
 {% endblock %}
 {% block scripts %}
 
