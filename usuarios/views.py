@@ -4324,7 +4324,7 @@ class VerFactura(LoginRequiredMixin, View):
                 ejecutar = tiquet2.get(request, idpago)
                 return ejecutar
             else:
-                messages.add_message(request, messages.INFO, 'el valor a pagar debe ser superior a $7000')
+                messages.add_message(request, messages.INFO, 'el valor a pagar debe ser superior a $2000')
                 return HttpResponseRedirect(reverse('usuarios:inicio'))
 
         except usuario.DoesNotExist:
