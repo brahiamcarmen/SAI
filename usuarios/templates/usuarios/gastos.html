@@ -38,11 +38,6 @@
                     <div class="col-auto">
                         <a href="" class="btn btn-primary btn-sm w-100">Aprobar/Anular </a>
                     </div>
-                    <div class="col-auto">
-                        <a href="" class="btn btn-primary btn-sm w-100">
-                                      Estadisticas
-                        </a>
-                    </div>
                 </div>
               </div>
 
@@ -236,70 +231,6 @@
     
     </div>
 </div>
-
-            <div id="estadisticas" class="modal fade text-center" tabindex="-1" role="dialog" style="display: none;">
-                <div class="modal-dialog modal-lg text-center">
-                        <div class="modal-content">
-                            <div class="modal-header ">
-                                <h4 class="modal-title">Estadisticas</h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <div class="card shadow mb-4 text-center">
-                                            <div class="card-header py-3">
-                                                <h6 class="m-0 font-weight-bold text-primary">Estado de ordenes</h6>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-sm-4">
-                                                        <span class="text-bg"><strong>{{ contadorp }}</strong></span><br>
-                                                        <span class="text-xs text-muted">Pendientes</span>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <span class="text-bg"><strong>{{ contadora }}</strong></span><br>
-                                                        <span class="text-xs text-muted">Aprobadas</span>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                       <span class="text-bg"><strong>{{ contadoranu }}</strong></span><br>
-                                                        <span class="text-xs text-muted">Anuladas</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="card shadow mb-4 text-center">
-                                            <div class="card-header py-3">
-                                                <h6 class="m-0 font-weight-bold text-primary">Total ingresos y egresos</h6>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-sm-4">
-                                                        <span class="text-bg"><strong>${{pago|intcomma}}</strong></span><br>
-                                                        <span class="text-xs text-muted">Ingresos a la fecha</span>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <span class="text-bg"><strong>${{gastos|intcomma}}</strong></span><br>
-                                                        <span class="text-xs text-muted">Egresos a la fecha</span>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                       <span class="text-bg"><strong>${{presupuesto|intcomma}}</strong></span><br>
-                                                        <span class="text-xs text-muted">Presupuesto actual</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <br>
-                            </div>
-                        </div> <!-- / .modal-content -->
-                    </div> <!-- / .modal-dialog -->
-                </div>
 {% endblock %}
 {% block scripts %}
 <script>

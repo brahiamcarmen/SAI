@@ -2,12 +2,11 @@
 {% load static %}
 {% block styles %}
 {% endblock %}
-{%block title %} <title>Modulo - CP</title> {%endblock%}
+{%block title %} <title>Modulo - CIE</title> {%endblock%}
 {% load humanize %}
 {% block content %}
 {% include 'usuarios/alerts.html' %}
 <!-- Titulo -->
-
       <div class="page-wrapper">
         <div class="container-fluid">
           <!-- Page title -->
@@ -19,7 +18,7 @@
                   Modulo
                 </div>
                 <h2 class="page-title">
-                  Cierres mensuales
+                  Ingresos y egresos anuales
                 </h2>
               </div>
                 <div class="col-auto">
@@ -32,9 +31,12 @@
                         Periodos registrados</a>
                     </div>
                     <div class="col-auto">
-                        <a href="" class="btn btn-primary btn-sm w-100">
-                             Registrar cierre
+                        <a href="{% url 'usuarios:generargasto' %}" class="btn btn-primary btn-sm w-100">Generar orden
                         </a>
+
+                    </div>
+                    <div class="col-auto">
+                        <a href="" class="btn btn-primary btn-sm w-100">Aprobar/Anular </a>
                     </div>
                 </div>
               </div>
@@ -43,96 +45,238 @@
           </div>
         </div>
     </div>
-
-<div class="row" style="margin-top: 1rem;">
-    <div class="col-sm-12">
-        <div class="row">
-             <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-bottom-primary shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                    Ingresos (Año en curso)</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">${{ingresos|intcomma}}</div>
+<div class="page-body">
+          <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-7">
+                    <div class="row">
+                         <div class="col-sm-6 col-lg-6">
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center">
+                              <div class="subheader">Ingresos</div>
+                              <div class="ms-auto lh-1">
+                                <div class="dropdown">
+                                  <a class="text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Este año</a>
+                                </div>
+                              </div>
                             </div>
-                            <div class="col-auto">
-                                <i class="fas fa-file-invoice-dollar fa-2x text-gray-300"></i>
+                            <div class="h1 mb-3">${{iua|intcomma}}</div>
+                            <div class="d-flex mb-2">
+                              <div>Progreso</div>
+                              <div class="ms-auto">
+                                <span class="text-green d-inline-flex align-items-center lh-1">
+                                  0% <!-- Download SVG icon from http://tabler-icons.io/i/trending-up -->
+                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon ms-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="3 17 9 11 13 15 21 7" /><polyline points="14 7 21 7 21 14" /></svg>
+                                </span>
+                              </div>
                             </div>
+                            <div class="progress progress-sm">
+                              <div class="progress-bar bg-blue" style="width: 0%" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                                <span class="visually-hidden">75% Complete</span>
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-bottom-warning shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                    Egresos (Año en curso)</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">${{gastos|intcomma}}</div>
+                      </div>
+                <div class="col-sm-6 col-lg-6">
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="d-flex align-items-center">
+                              <div class="subheader">Egresos</div>
+                              <div class="ms-auto lh-1">
+                                <div class="dropdown">
+                                  <a class="text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Este año</a>
+                                </div>
+                              </div>
                             </div>
-                            <div class="col-auto">
-                                <i class="fas fa-shopping-cart fa-2x text-gray-300"></i>
+                            <div class="h1 mb-3">${{gua|intcomma}}</div>
+                            <div class="d-flex mb-2">
+                              <div>Progreso</div>
+                              <div class="ms-auto">
+                                <span class="text-green d-inline-flex align-items-center lh-1">
+                                  0% <!-- Download SVG icon from http://tabler-icons.io/i/trending-up -->
+                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon ms-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="3 17 9 11 13 15 21 7" /><polyline points="14 7 21 7 21 14" /></svg>
+                                </span>
+                              </div>
                             </div>
+                            <div class="progress progress-sm">
+                              <div class="progress-bar bg-blue" style="width: 0%" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                                <span class="visually-hidden">75% Complete</span>
+                              </div>
+                            </div>
+                          </div>
                         </div>
+                      </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-bottom-success shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Saldo (Año en curso)</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">${{saldo|intcomma}}</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-hand-holding-usd fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-bottom-info shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">% de recaudo anual
-                                            </div>
-                                            <div class="row no-gutters align-items-center">
-                                                <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{porcentaje}}%</div>
+                    <br>
+                    <div class="row">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="subheader">Historico de cierres ingresos, egresos y saldos - usuario - 2021</h3>
+                               <div class="col-xl-12 col-lg-12">
+                                <div class="row row-deck row-cards"> 
+                                  <div class="col-sm-6 col-lg-4">
+                                        <div class="card card-sm">
+                                          <div class="card-body">
+                                            <div class="row align-items-center">
+                                              <div class="col-auto">
+                                                <span class="bg-green-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/arrow-up -->
+                                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="12" y1="5" x2="12" y2="19" /><line x1="18" y1="11" x2="12" y2="5" /><line x1="6" y1="11" x2="12" y2="5" /></svg>
+                                                </span>
+                                              </div>
+                                              <div class="col">
+                                                <div class="font-weight-medium">
+                                                   ${{ingre|intcomma}}
+                                                  <span class="float-right font-weight-medium text-green">+0%</span>
                                                 </div>
-                                                <div class="col">
-                                                    <div class="progress progress-sm mr-2">
-                                                        <div class="progress-bar bg-info" role="progressbar"
-                                                            style="width: {{porcentaje}}%" aria-valuenow="{{porcentaje}}" aria-valuemin="0"
-                                                            aria-valuemax="100"></div>
-                                                    </div>
+                                                <div class="text-muted">
+                                                  Total de ingresos
                                                 </div>
+                                              </div>
                                             </div>
+                                          </div>
                                         </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                  </div>
+                                  <div class="col-sm-6 col-lg-4">
+                                        <div class="card card-sm">
+                                          <div class="card-body">
+                                            <div class="row align-items-center">
+                                              <div class="col-auto">
+                                                <span class="bg-red-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/arrow-up -->
+                                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="12" y1="5" x2="12" y2="19" /><line x1="18" y1="13" x2="12" y2="19" /><line x1="6" y1="13" x2="12" y2="19" /></svg>
+                                                </span>
+                                              </div>
+                                              <div class="col">
+                                                <div class="font-weight-medium">
+                                                  ${{gas|intcomma}}
+                                                  <span class="float-right font-weight-medium text-green">+0%</span>
+                                                </div>
+                                                <div class="text-muted">
+                                                  Total de egresos
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
                                         </div>
-                                    </div>
+                                  </div>
+                                  <div class="col-sm-6 col-lg-4">
+                                        <div class="card card-sm">
+                                          <div class="card-body">
+                                            <div class="row align-items-center">
+                                              <div class="col-auto">
+                                                <span class="bg-orange-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/arrow-up -->
+                                                  <!-- Download SVG icon from http://tabler-icons.io/i/currency-dollar -->
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16.7 8a3 3 0 0 0 -2.7 -2h-4a3 3 0 0 0 0 6h4a3 3 0 0 1 0 6h-4a3 3 0 0 1 -2.7 -2" /><path d="M12 3v3m0 12v3" /></svg>
+                                                </span>
+                                              </div>
+                                              <div class="col">
+                                                <div class="font-weight-medium">
+                                                  ${{saldo2|intcomma}}
+                                                  <span class="float-right font-weight-medium text-green">+0%</span>
+                                                </div>
+                                                <div class="text-muted">
+                                                  Saldo
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                  </div>
                                 </div>
                             </div>
+                          </div>
+                        <div class="card-body">
+                            <h3 class="subheader">Historico de ingresos, egresos y saldos - sistema - 2021</h3>
+                               <div class="col-xl-12 col-lg-12">
+                                <div class="row row-deck row-cards"> 
+                                  <div class="col-sm-6 col-lg-4">
+                                        <div class="card card-sm">
+                                          <div class="card-body">
+                                            <div class="row align-items-center">
+                                              <div class="col-auto">
+                                                <span class="bg-green-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/arrow-up -->
+                                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="12" y1="5" x2="12" y2="19" /><line x1="18" y1="11" x2="12" y2="5" /><line x1="6" y1="11" x2="12" y2="5" /></svg>
+                                                </span>
+                                              </div>
+                                              <div class="col">
+                                                <div class="font-weight-medium">
+                                                  ${{ingresos|intcomma}}
+                                                  <span class="float-right font-weight-medium text-green">+0%</span>
+                                                </div>
+                                                <div class="text-muted">
+                                                  Total de ingresos
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                  </div>
+                                  <div class="col-sm-6 col-lg-4">
+                                        <div class="card card-sm">
+                                          <div class="card-body">
+                                            <div class="row align-items-center">
+                                              <div class="col-auto">
+                                                <span class="bg-red-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/arrow-up -->
+                                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="12" y1="5" x2="12" y2="19" /><line x1="18" y1="13" x2="12" y2="19" /><line x1="6" y1="13" x2="12" y2="19" /></svg>
+                                                </span>
+                                              </div>
+                                              <div class="col">
+                                                <div class="font-weight-medium">
+                                                  ${{gastos|intcomma}}                                                  
+                                                  <span class="float-right font-weight-medium text-green">+0%</span>
+                                                </div>
+                                                <div class="text-muted">
+                                                  Total de egresos
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                  </div>
+                                  <div class="col-sm-6 col-lg-4">
+                                        <div class="card card-sm">
+                                          <div class="card-body">
+                                            <div class="row align-items-center">
+                                              <div class="col-auto">
+                                                <span class="bg-orange-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/arrow-up -->
+                                                  <!-- Download SVG icon from http://tabler-icons.io/i/currency-dollar -->
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16.7 8a3 3 0 0 0 -2.7 -2h-4a3 3 0 0 0 0 6h4a3 3 0 0 1 0 6h-4a3 3 0 0 1 -2.7 -2" /><path d="M12 3v3m0 12v3" /></svg>
+                                                </span>
+                                              </div>
+                                              <div class="col">
+                                                <div class="font-weight-medium">
+                                                  ${{saldo|intcomma}}
+                                                  <span class="float-right font-weight-medium text-green">+0%</span>
+                                                </div>
+                                                <div class="text-muted">
+                                                  Saldo
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                  </div>
+                                </div>
+                            </div>
+                          </div>
+                </div>
+                </div>
             </div>
+            <div class="col-sm-5">
                 
-
-        </div>
-        <div class="row">
-            <div class="col-sm-9 text-center">
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Lista anual de cierres</h6>
-                        </div>
-                        <div class="card-body" style=" height: 13rem;overflow: auto;">
-                            <table class="table text-xs">
-                                <thead>
+            </div>
+    
+    </div>
+    <br>
+    <div class="row">
+            <div class="col-sm-12">
+        <div class="card shadow">
+            <div class="card-body">
+                 <h3 class="subheader">Listado de cierres registrados</h3>
+                <div class="table-responsive" style="height:23rem">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
                                     <tr>
                                         <th>Identificador de cierre</th>
                                         <th>Ingresos</th>
@@ -143,10 +287,10 @@
                                         <th>Fecha de cierre</th>
                                         <th>Usuario</th>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    {% for cierre in cierres %}
-                                        <tr class="odd gradeX">
+                        </thead>
+                        <tbody>
+                            {% for cierre in cierres %}
+                                <tr class="odd gradeX">
                                             <td>{{ cierre.IdCierre }}</td>
                                             <td>{{ cierre.Ingresos|intcomma }}</td>
                                             <td>{{ cierre.Gastos|intcomma }}</td>
@@ -155,159 +299,62 @@
                                             <td>{{ cierre.Ano }}</td>
                                             <td>{{ cierre.Fecha }}</td>
                                             <td>{{ cierre.NoRecaudo }}</td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
-                 <div class="col-sm-3 text-center">
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Opciones adicionales</h6>
-                        </div>
-                        <div class="card border-bottom-primary shadow h-100 py-2">
-                            <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                             % de perdidas</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ perdidas }}%</div>
-                                        </div>
-                                    </div>
-                            </div>
-                            <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                            Valor de perdidas</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">${{ cont|intcomma }}</div>
-                                        </div>
-                                        
-                                    </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-        </div>        
+            </div>
+        </div>            
+
+    </div>
     </div>
 </div>
-                <div id="cierre" class="modal fade" tabindex="-1" role="dialog" style="display: none;">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                
-                                <h4 class="modal-title">Cierre periodico</h4>
-                            </div>
-                            <div class="modal-body">
-                                <form method="post" class="panel form-horizontal">
-                                    {% csrf_token %}
-                                    <div class="card shadow mb-4">
-                                        <div class="card-header py-3 text-center">
-                                            <h6 class="m-0 font-weight-bold text-primary">Autenticacion de usuario</h6>
-                                        </div>
-                                        <div class="card-body">
-                                             <div class="row">
-                                            <div class="col-sm-6">
-                                                <div class="form-group no-margin-hr">
-                                                    <label class="control-label">Usuario</label>
-                                                    <input type="text" name="username" class="form-control">
-                                                </div>
-                                            </div><!-- col-sm-6 -->
-                                            <div class="col-sm-6">
-                                                <div class="form-group no-margin-hr">
-                                                    <label class="control-label">Contraseña</label>
-                                                    <input type="password" name="password" class="form-control">
-                                                </div>
-                                            </div><!-- col-sm-6 -->
-                                        </div>
-                                        </div>
-                                    </div>
-                                    <div class="card shadow mb-4">
-                                        <div class="card-header py-3 text-center">
-                                            <h6 class="m-0 font-weight-bold text-primary">Informacion del cierre</h6>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="row">
-                                            <div class="col-sm-4">
-                                                <div class="form-group no-margin-hr">
-                                                    <label class="control-label">Ingresos ultimo periodo</label>
-                                                    <input type="text" name="ingresos" class="form-control">
-                                                </div>
-                                            </div><!-- col-sm-6 -->
-                                            <div class="col-sm-4">
-                                                <div class="form-group no-margin-hr">
-                                                    <label class="control-label">Egresos ultimo periodo</label>
-                                                    <input type="text" name="egresos" class="form-control">
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <div class="form-group no-margin-hr">
-                                                    <label class="control-label">Fecha</label>
-                                                    <input type="text" disabled="" class="form-control">
-                                                </div>
-                                            </div><!-- col-sm-6 -->
-                                        </div><!-- row -->
-                                        
-                                        <div class="row">
-                                            <div class="col-sm-4">
-                                                <div class="form-group no-margin-hr">
-                                                    <label class="control-label">Saldo actual</label>
-                                                    <input type="number" name="presupuesto" class="form-control">
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <div class="form-group no-margin-hr">
-                                                    <label class="control-label">Periodo</label>
-                                                    <select name="periodo" class="form-control form-group-margin">
-                                                        <option>Enero</option>
-                                                        <option>Febrero</option>
-                                                        <option>Marzo</option>
-                                                        <option>Abril</option>
-                                                        <option>Mayo</option>
-                                                        <option>Junio</option>
-                                                        <option>Julio</option>
-                                                        <option>Agosto</option>
-                                                        <option>Septiembre</option>
-                                                        <option>Octubre</option>
-                                                        <option>Noviembre</option>
-                                                        <option>Diciembre</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <div class="form-group no-margin-hr">
-                                                    <label class="control-label">Año</label>
-                                                    <select name="ano" class="form-control form-group-margin">
-                                                        <option>2021</option>
-                                                        <option>2022</option>
-                                                        <option>2023</option>
-                                                        <option>2024</option>
-                                                        <option>2025</option>
-                                                        <option>2026</option>
-                                                        <option>2027</option>
-                                                        <option>2028</option>
-                                                        <option>2029</option>
-                                                        <option>2030</option>
-                                                    </select>
-                                                </div>
-                                            </div><!-- col-sm-6 -->
-                                            <!-- col-sm-6 -->
-                                        </div><!-- row -->
-                                    </div>
-                                       
-                                    </div>
-                                        
-                                    <div class="panel-footer text-center">
-                                        <button style="width: 40%;" class="btn btn-primary">Registrar</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div> <!-- / .modal-content -->
-                    </div> <!-- / .modal-dialog -->
-                </div>
 {% endblock %}
 {% block scripts %}
-
+<script>
+      // @formatter:off
+      document.addEventListener("DOMContentLoaded", function () {
+        window.ApexCharts && (new ApexCharts(document.getElementById('chart-demo-pie'), {
+            chart: {
+                type: "donut",
+                fontFamily: 'inherit',
+                height: 270,
+                sparkline: {
+                    enabled: true
+                },
+                animations: {
+                    enabled: false
+                },
+            },
+            fill: {
+                opacity: 1,
+            },
+            series: [{{ingresomensual}}, {{gastosmensuales}}],
+            labels: ["Ingresos", "Egresos"],
+            grid: {
+                strokeDashArray: 4,
+            },
+            colors: ["#406bc5", "#78a5dc", "#d3e1f3", "#e9ccf1"],
+            legend: {
+                show: true,
+                position: 'bottom',
+                offsetY: 12,
+                markers: {
+                    width: 10,
+                    height: 10,
+                    radius: 100,
+                },
+                itemMargin: {
+                    horizontal: 9,
+                    vertical: 9
+                },
+            },
+            tooltip: {
+                fillSeriesColor: false
+            },
+        })).render();
+      });
+      // @formatter:on
+    </script>
 {% endblock %}
