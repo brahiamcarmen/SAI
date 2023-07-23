@@ -1389,25 +1389,6 @@ class ListasGastos(LoginRequiredMixin, View):
         except Usuario.DoesNotExist:
             return render(request, "pages-404.html")
 
-class InfoVivienda(LoginRequiredMixin, View):
-    login_url = '/'
-    template_name = 'usuarios/infovivienda.html'
-
-    def get(self, request, IdVivienda):
-        try:
-            usuario = Usuario.objects.get(usuid=request.user.pk)
-            vivienda = Vivienda.objects.filter(IdVivienda=IdVivienda)
-            certificacion = Certificaciones.objects.filter(IdVivienda=IdVivienda)
-            medidores = Medidores.objects.filter(IdVivienda=IdVivienda)
-            return render(request, self.template_name, {
-                'viviendas': vivienda,
-                'certificaciones': certificacion,
-                'medidores': medidores
-            })
-
-        except Usuario.DoesNotExist:
-            return render(request, "pages-404.html")
-
 class RegistroMedidor(LoginRequiredMixin, View):
     login_url = '/'
     template_name = 'usuarios/registromedidor.html'
@@ -2613,9 +2594,11 @@ class DescargaMasivaFacturas(LoginRequiredMixin, View):
 
     def get(self, request):
         try:
+            total = Factura.objects.filter(Estado='Emitida').count()
             facturas = Factura.objects.filter(Estado=EF).order_by('IdFactura')
             return render(request, self.template_name,{
-                'facturas': facturas
+                'facturas': facturas,
+                'total': total
             })
 
         except Usuario.DoesNotExist:
@@ -3764,27 +3747,6 @@ class V3(LoginRequiredMixin, View):
         try:
 
             return render(request, self.template_name
-            )
-
-        except Usuario.DoesNotExist:
-            return render(request, "pages-404.html")
-
-class ListaCierre(LoginRequiredMixin, View):
-    login_url = '/'
-    template_name = 'usuarios/listadecierres.html'
-
-    def get(self, request):
-        try:
-            cierres = Cierres.objects.all()
-            drilistapqrs = Pqrs.objects.filter(Estado='Pendiente')
-            contqrs = Pqrs.objects.filter(Estado='Pendiente').count()
-            contsoli = SolicitudGastos.objects.filter(Estado=ESTADO1).count()
-            totalnoti = contqrs + contsoli
-            contadorpen = SolicitudGastos.objects.filter(Estado=ESTADO1)
-
-            return render(request, self.template_name,{
-                'cierres': cierres,
-            }
             )
 
         except Usuario.DoesNotExist:

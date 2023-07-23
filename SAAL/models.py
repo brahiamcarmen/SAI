@@ -622,3 +622,38 @@ class AsignacionBloque(models.Model):
     class Meta:
         verbose_name_plural = "Bloques"
         verbose_name = "Bloque"
+
+DOC_CHOICES16 = (
+    ('Persona natural', _(u"Persona natural")),
+    ('Personeria juridica', _(u"Personeria juridica")),
+)
+class Proveedor(models.Model):
+    IdProvedor = models.CharField(max_length=30, primary_key=True, null=False)
+    Nombrecompleto = models.CharField(max_length=100, null=False)
+    Personeria = models.CharField(max_length=100,null=True, choices=DOC_CHOICES16)
+    Direccion = models.CharField(max_length=100, null=False)
+    telefono = models.CharField(max_length=100, null=False)
+    Representantelegal = models.CharField(max_length=100, null=True)
+
+    def __str__(self):
+        return "%s" % self.IdProvedor
+
+    class Meta:
+        verbose_name_plural = "Proveedores"
+        verbose_name = "Proveedor"
+
+
+class Credito(models.Model):
+    IdCredito = models.CharField(max_length=30, primary_key=True, null=False)
+    IdProveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
+    ValorInicial = models.CharField(max_length=40,null=False)
+    CantCuotas = models.CharField(max_length=3, null=False)
+    CantPendientes = models.CharField(max_length=3, null=False)
+    Fecha = models.DateTimeField(auto_now_add=True, null=False)
+
+    def __str__(self):
+        return "%s" % self.IdCredito
+
+    class Meta:
+        verbose_name_plural = "Creditos"
+        verbose_name = "Credito"

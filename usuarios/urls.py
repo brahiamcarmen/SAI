@@ -11,7 +11,7 @@ from usuarios.views import RegistroTarifa, ReporteEstadoCuenta, Reportepdfpropi,
 from usuarios.views import Suspenciones, VerOrdenSuspencion, VerOrdenReconexion, CambioTitular
 from usuarios.views import ReportePredios, CierreFinanciero, ReporteSuspendido, ReportesEstado
 from usuarios.views import ReportesCiclo, CambiosMasivos, Facturas, GenerarGasto
-from usuarios.views import ListaCierre, InfoVivienda, GeneradorFacturas, DesactivarUsuarios, AnularFactura
+from usuarios.views import GeneradorFacturas, DesactivarUsuarios, AnularFactura
 from usuarios.views import DescargarFactura, DescargaMasivaFacturas, VisualizarVivienda, BuscarSolicitud
 from usuarios.views import Reconexiones, Perfil, ModificarAcueducto, ListaPqrs, RegistroPqr, VerPqr, ListadoPqrs
 from usuarios.views import RespuestaPqrs, PanelAdmin, ReporteCierre, AnularSuspenciones
@@ -44,7 +44,6 @@ urlpatterns = [
     url(r'^generargasto/', GenerarGasto.as_view(), name='generargasto'),
     url(r'^cambio/(?P<IdSoGa>\w+)', BuscarSolicitud.as_view(), name='cambio'),
     url(r'^listadogastos/', ListasGastos.as_view(), name='listadogastos'),
-    url(r'^infovivienda/(?P<IdVivienda>\w+)', InfoVivienda.as_view(), name='infovivienda'),
     url(r'^registromedidor/(?P<IdVivienda>\w+)', RegistroMedidor.as_view(), name='registromedidor'),
     url(r'^perfil/', Perfil.as_view(), name='perfil'),
     url(r'^registropoblacion/', RegistroPoblacion.as_view(), name='registropoblacion'),
@@ -86,7 +85,6 @@ urlpatterns = [
     url(r'^reportecierre', ReporteCierre.as_view(), name='reportecierre'),
     url(r'^reportegastos', ReporteGastos.as_view(), name='reportegastos'),
     url(r'^V', V3.as_view(), name='V'),
-    url(r'^listacierres', ListaCierre.as_view(), name='listacierres'),
     url(r'^reconexiones', Reconexiones.as_view(), name='reconexiones'),
     url(r'^paneladmin', PanelAdmin.as_view(), name='paneladmin'),
     url(r'^perfilusuario/(?P<IdUsuario>\w+)', PerfilUsuario.as_view(), name='perfilusuario'),
