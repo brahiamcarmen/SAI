@@ -3,7 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from SAAL.models import Vivienda, SolicitudGastos, Medidores, Poblacion
 from SAAL.models import Propietario, CobroMatricula, ValorMatricula, Usuario
-from SAAL.models import Acueducto, Tarifa, Permisos, Pqrs
+from SAAL.models import Acueducto, Tarifa, Permisos, Pqrs, Credito, Proveedor
 
 
 class RegistroVivienda(forms.ModelForm):
@@ -459,6 +459,43 @@ class FormRegistroPqrs(forms.ModelForm):
         super(FormRegistroPqrs, self).__init__(*args, **kwargs)
         if propietario is not None:
             self.fields[''].widget = forms.HiddenInput()
+
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+class FormRegistroCredito(forms.ModelForm):
+    class Meta:
+        model = Credito
+        fields = "__all__"
+        labels = {
+            'NombreCredito': _(u'Nombre o descripcion credito'),
+            'IdProveedor': _(u'Proveedor del credito'),
+            'ValorInicial': _(u'Monto del credito'),
+            'CantCuotas': _(u'Numero de cuotas'),
+            'Estado': _(u'Estado'),
+        }
+
+    def __init__(self, propietario=None, *args, **kwargs):
+        super(FormRegistroCredito, self).__init__(*args, **kwargs)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+
+class FormRegistroProveedor(forms.ModelForm):
+    class Meta:
+        model = Proveedor
+        fields = "__all__"
+        labels = {
+            'IdProvedor': _(u'Numero de documento'),
+            'Nombrecompleto': _(u'Nombre completo o razon social'),
+            'Personeria': _(u'Tipo de personeria'),
+            'Direccion': _(u'Direccion'),
+            'telefono': _(u'Telefono'),
+        }
+
+    def __init__(self, propietario=None, *args, **kwargs):
+        super(FormRegistroProveedor, self).__init__(*args, **kwargs)
 
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})

@@ -633,23 +633,28 @@ class Proveedor(models.Model):
     Personeria = models.CharField(max_length=100,null=True, choices=DOC_CHOICES16)
     Direccion = models.CharField(max_length=100, null=False)
     telefono = models.CharField(max_length=100, null=False)
-    Representantelegal = models.CharField(max_length=100, null=True)
 
     def __str__(self):
-        return "%s" % self.IdProvedor
+        return "%s %s" % (self.IdProvedor,self.Nombrecompleto)
 
     class Meta:
         verbose_name_plural = "Proveedores"
         verbose_name = "Proveedor"
 
-
+DOC_CHOICES17 = (
+    ('Vigente', _(u"Vigente")),
+    ('Pagado', _(u"Pagado")),
+)
 class Credito(models.Model):
-    IdCredito = models.CharField(max_length=30, primary_key=True, null=False)
+    IdCredito = models.AutoField(primary_key=True)
+    NombreCredito = models.CharField(max_length=40,null=False)
     IdProveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
     ValorInicial = models.CharField(max_length=40,null=False)
     CantCuotas = models.CharField(max_length=3, null=False)
-    CantPendientes = models.CharField(max_length=3, null=False)
+    ValorPendiente = models.CharField(max_length=10, null=False)
+    CuotasPendiente = models.CharField(max_length=10, null=False)
     Fecha = models.DateTimeField(auto_now_add=True, null=False)
+    Estado = models.CharField(max_length=10, null=False, choices=DOC_CHOICES17)
 
     def __str__(self):
         return "%s" % self.IdCredito

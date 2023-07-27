@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from usuarios.views import Inicio, Busquedas, CobroRecargo, ControlPresupuestal, VerFactura, PagarMatricula
-from usuarios.views import V3, ImprimirSoporteP, PagarRyS, AnularPago, AsignarCargo, Bloque
-from usuarios.views import ListaViviendas, ListaPropietarios, ReportePdfPagos
+from usuarios.views import V3, ImprimirSoporteP, PagarRyS, AnularPago, AsignarCargo, Bloque, VerCredito
+from usuarios.views import ListaViviendas, ListaPropietarios, ReportePdfPagos, Creditos, RegistroCredito, RegistroProveedor
 from usuarios.views import ReporteCierresAno, PazSalvo, CertificadoGral, Matriculas
 from usuarios.views import AgregarVivienda, AgregarPropietario, PerfilUsuario, ReporteCompleto
 from usuarios.views import ReporteSuspenciones, ReporteReconexion, ModificarPropietario, ModificarVivienda
@@ -98,4 +98,8 @@ urlpatterns = [
     url(r'^asignarcargo/(?P<matricula>\w+)', AsignarCargo.as_view(), name='asignarcargo'),
     url(r'^matriculas', Matriculas.as_view(), name='matriculas'),
     url(r'^Bloque', Bloque.as_view(), name='bloque'),
+    url(r'^credito', Creditos.as_view(), name='credito'),
+    url(r'^registrocredito', RegistroCredito.as_view(), name='registrocredito'),
+    url(r'^registroproveedor', RegistroProveedor.as_view(), name='registroproveedor'),
+    url(r'^vercredito/(?P<IdCredito>\w+)', VerCredito.as_view(), name='vercredito'),
 ]

@@ -5,10 +5,10 @@ from django.shortcuts import render
 from django.conf import settings
 from django.views.generic.base import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from SAAL.models import Usuario, Tarifa, CobroOrdenes, AsignacionBloque, PagoOrdenes, Certificaciones, Cierres, Acueducto, ConfirCerti, ValorMatricula, OrdenesSuspencion, OrdenesReconexion, Poblacion, Factura, Ciclo, EstadoCuenta,NovedadVivienda
+from SAAL.models import Usuario, Tarifa, CobroOrdenes, Credito,AsignacionBloque, PagoOrdenes, Certificaciones, Cierres, Acueducto, ConfirCerti, ValorMatricula, OrdenesSuspencion, OrdenesReconexion, Poblacion, Factura, Ciclo, EstadoCuenta,NovedadVivienda
 from SAAL.models import Vivienda, SolicitudGastos, Propietario, NovedadesSistema,Medidores, Pqrs, RespuestasPqrs, NovedadesGenerales, CobroMatricula, Permisos, Pagos
 from SAAL.forms import FormRegistroPqrs,RegistroUsuario, RegistroUsuario2, RegistroVivienda,AcueductoAForm,PermisosForm, CobroMatriculaForm, CostoMForm, RespuestPqrForm, RegistroPropietario, TarifasForm , ModificaPropietario
-from SAAL.forms import CambioFormEstado,AcueductoForm, GastosForm, MedidoresForm, PoblacionForm, ModificaVivienda
+from SAAL.forms import CambioFormEstado,AcueductoForm, GastosForm, MedidoresForm, PoblacionForm, ModificaVivienda, FormRegistroCredito, FormRegistroProveedor
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
@@ -1204,6 +1204,8 @@ class ControlPresupuestal(LoginRequiredMixin, View):
             contadorapro = SolicitudGastos.objects.filter(Estado=ESTADO2).count()
             contadoranu = SolicitudGastos.objects.filter(Estado=ESTADO3).count()
             aprobado = SolicitudGastos.objects.filter(Estado=ESTADO2)
+
+            credito = Credito.objects.filter(Estado='Vigente')
             pagos = Pagos.objects.all()
             viviendasope = Vivienda.objects.filter(EstadoServicio=E1).count()
             nit = usuario.IdAcueducto
@@ -1220,6 +1222,11 @@ class ControlPresupuestal(LoginRequiredMixin, View):
             for i in aprobado:
                 valor = int(i.Valor)
                 suma2 += valor
+
+            suma8 = 0
+            for i in credito:
+                valor = int(i.ValorPendiente)
+                suma8 += valor
 
             totalingresos = pago
             gastos = int(suma2)
@@ -1264,10 +1271,8 @@ class ControlPresupuestal(LoginRequiredMixin, View):
                     'presupuesto': presupuesto,
                     'ingresomensual': pago0,
                     'gastosmensuales': gasto4,
-                    'notificaciones': contadorpen1,
-                    'listapqrs': listapqrs,
-                    'totalnoti': totalnoti,
-                    'rys': rys
+                    'credito': suma8,
+
                 })
             else:
                 messages.add_message(request, messages.ERROR, 'Su usuario no tiene los permisos de acceso a esta seccion')
@@ -2421,7 +2426,7 @@ class DescargarFactura(LoginRequiredMixin, View):
                     ws['AK11'] = int(aporteporconsumo)
 
                 if int(suspencion) > 0:
-                    ws['012'] = 'Orden de suspensión'
+                    ws['o12'] = 'Orden de suspensión'
                     ws['AB12'] = suspencion
                     ws['AG12'] = ''
                     ws['AK12'] = suspencion
@@ -3547,6 +3552,11 @@ class CierreFinanciero(LoginRequiredMixin, View):
             acueducto = Acueducto.objects.get(IdAcueducto=nit)
             tarifa = acueducto.IdTarifa.Valor
             totalpormes = int(int(viviendasope) * int(tarifa))
+            credito = Credito.objects.filter(Estado='Vigente')
+
+            suma8 = 0
+            for i in credito:
+                suma8 += int(i.ValorPendiente)
 
             iua = 0
             for i in pagosultimoano:
@@ -3586,7 +3596,8 @@ class CierreFinanciero(LoginRequiredMixin, View):
                     'saldo2': saldo2,
                     'iua':iua,
                     'gua': gua,
-                    'cierres':pingregos
+                    'cierres':pingregos,
+                    'credito': suma8
 
                 })
 
@@ -4556,4 +4567,118 @@ class AsignarCargo(LoginRequiredMixin, View):
                 return HttpResponseRedirect(reverse('usuarios:matriculas'))
 
         except User.DoesNotExist:
+            return render(request, "pages-404.html")
+
+class Creditos(LoginRequiredMixin, View):
+    login_url = '/'
+    template_name = 'usuarios/creditos.html'
+    def get(self, request):
+        try:
+            usuario = Usuario.objects.get(usuid=request.user.pk)
+            creditos = Credito.objects.all()
+            vigentes = Credito.objects.filter(Estado='Vigente').count()
+            creditosv = Credito.objects.filter(Estado='Vigente')
+            creditosp = Credito.objects.filter(Estado='Pagado')
+            pagados = Credito.objects.filter(Estado='Pagado').count()
+            deudatotal = 0
+            for i in creditos:
+                valor = i.ValorInicial
+                deudatotal += int(valor)
+
+            deudapendiente = 0
+            for i in creditos:
+                valor = i.ValorPendiente
+                deudapendiente += int(valor)
+
+            usuario1 = 0
+            if usuario1 == 0:
+                return render(request, self.template_name,{'vigentes':vigentes,
+                                                           'creditosv': creditosv, 'creditosp': creditosp,'deudatotal': deudatotal,
+                                                           'deudapendiente': deudapendiente, 'pagados': pagados})
+
+        except usuario.DoesNotExist:
+            return render(request,"pages-404.html")
+
+
+class RegistroCredito(LoginRequiredMixin, View):
+    login_url = '/'
+    form_class = FormRegistroCredito
+    template_name = 'usuarios/registrocredito.html'
+
+    def get(self, request):
+        try:
+            usuario = Usuario.objects.get(usuid=request.user.pk)
+            form = self.form_class()
+            return render(request, self.template_name,
+                          {
+                              'form': form
+                          })
+
+        except Usuario.DoesNotExist:
+            return render(request, "pages-404.html")
+
+    def post(self, request):
+        try:
+            usuario = Usuario.objects.get(usuid=request.user.pk)
+            form = self.form_class(request.user, request.POST)
+
+            if form.is_valid():
+                form.save()
+                messages.add_message(request, messages.INFO, 'El credito se agrego correctamente')
+                return HttpResponseRedirect(reverse('usuarios:credito'))
+
+            else:
+                messages.add_message(request, messages.ERROR,'No se pudo agregar la informacion al sistema')
+                return HttpResponseRedirect(reverse('usuarios:credito'))
+
+        except Usuario.DoesNotExist:
+            return render(request, "pages-404.html")
+
+class RegistroProveedor(LoginRequiredMixin, View):
+    login_url = '/'
+    form_class = FormRegistroProveedor
+    template_name = 'usuarios/registroproveedor.html'
+
+    def get(self, request):
+        try:
+            usuario = Usuario.objects.get(usuid=request.user.pk)
+            form = self.form_class()
+            return render(request, self.template_name,
+                          {
+                              'form': form
+                          })
+
+        except Usuario.DoesNotExist:
+            return render(request, "pages-404.html")
+
+    def post(self, request):
+        try:
+            usuario = Usuario.objects.get(usuid=request.user.pk)
+            form = self.form_class(request.user,request.POST)
+
+            if form.is_valid():
+                form.save()
+                messages.add_message(request, messages.INFO, 'La informacion del proveedor se agrego correctamente')
+                return HttpResponseRedirect(reverse('usuarios:controlpresupuestal'))
+
+            else:
+                messages.add_message(request, messages.ERROR,
+                                     'No se pudo agregar la informacion al sistema')
+                return HttpResponseRedirect(reverse('usuarios:controlpresupuestal'))
+
+        except Usuario.DoesNotExist:
+            return render(request, "pages-404.html")
+
+class VerCredito(LoginRequiredMixin, View):
+    login_url = '/'
+    template_name = 'usuarios/vercredito.html'
+
+    def get(self, request, IdCredito):
+        try:
+            usuario = Usuario.objects.get(usuid=request.user.pk)
+            credito = Credito.objects.filter(IdCredito=IdCredito)
+            verificarpagos = SolicitudGastos.objects.filter(NumeroFactura=IdCredito)
+            return render(request, self.template_name,{'credito': credito, 'pagos': verificarpagos})
+
+        except Usuario.DoesNotExist:
             return render(request, "pages-404.html")
