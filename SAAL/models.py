@@ -356,7 +356,6 @@ class SolicitudGastos(models.Model):
     Fecha = models.DateTimeField(auto_now=True, null=False)
     AreaResponsable = models.CharField(max_length=100, null=False)
     NumeroFactura = models.CharField(max_length=10, null=False)
-
     def __str__(self):
         return "%s" % self.IdSoGa
 
