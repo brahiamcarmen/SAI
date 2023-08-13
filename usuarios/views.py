@@ -4682,3 +4682,25 @@ class VerCredito(LoginRequiredMixin, View):
 
         except Usuario.DoesNotExist:
             return render(request, "pages-404.html")
+
+    def post(self, request, IdCredito):
+        try:
+            usuario = Usuario.objects.get(usuid=request.user.pk)
+            valor = request.POST.get("valor")
+            credito = Credito.objects.get(IdCredito=IdCredito)
+            numcuota = credito.CuotasPendiente
+            nombrecredito = credito.NombreCredito
+            mensaje = 'Cuota no' + str(numcuota) + '|' + str(nombrecredito)
+            savegasto = SolicitudGastos(Descripcion=mensaje,TipoSolicitud='Pago de creditos', Valor=valor,Estado='Pendiente',
+                                        AreaResponsable='Area Administrativa',NumeroFactura=IdCredito, IdUsuario=usuario)
+            savegasto.save()
+            cuotamenos = int(numcuota) - 1
+            valorpen = int(credito.ValorPendiente) - int(valor)
+            credito.CuotasPendiente = str(cuotamenos)
+            credito.ValorPendiente = str(valorpen)
+            credito.save()
+            messages.add_message(request, messages.INFO, 'La pqrs se  registro correctamente, RADICADO No:')
+            return HttpResponseRedirect(reverse('usuarios:credito'))
+
+        except Usuario.DoesNotExist:
+            return render(request, "pages-404.html")

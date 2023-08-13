@@ -49,7 +49,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-SESSION_COOKIE_AGE = 60 * 60  # 1 hora en segundos
+SESSION_COOKIE_AGE = 120 * 120  # 1 hora en segundos
 ROOT_URLCONF = 'SYSADMIN.urls'
 
 TEMPLATES = [
