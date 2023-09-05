@@ -499,3 +499,30 @@ class FormRegistroProveedor(forms.ModelForm):
 
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+
+class FormAgregarGasto(forms.ModelForm):
+    class Meta:
+        model = SolicitudGastos
+        fields = [
+            'TipoSolicitud',
+            'Valor',
+            'Descripcion',
+            'AreaResponsable',
+            'NumeroFactura',
+            'proveedor'
+        ]
+        labels = {
+            'TipoSolicitud':_(u'Tipo de pago'),
+            'AreaResponsable': _(u'Area responsable'),
+            'Valor': _(u'Valor del pago'),
+            'Descripcion': _(u'Descripcion del pago'),
+            'NumeroFactura': _(u'Numero de factura'),
+            'proveedor': _(u'Identificacion del proveedor'),
+        }
+
+    def __init__(self, vivienda=None, *args, **kwargs):
+        super(FormAgregarGasto, self).__init__(*args, **kwargs)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})

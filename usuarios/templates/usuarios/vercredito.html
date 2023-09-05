@@ -50,7 +50,11 @@
                                   <dt class="col-5">Proveedor:</dt>
                                   <dd class="col-7">{{ i.IdProveedor }}</dd>
                                   <dt class="col-5">Estado:</dt>
-                                  <dd class="col-7">{{ i.Estado }}<dd>
+                                  {% if i.Estado == "Pagado" %}
+                                  <dd class="col-7"><span class="badge bg-success-lt">{{i.Estado}}</span>&nbsp;<dd>
+                                  {%else%}
+                                  <dd class="col-7"><span class="badge bg-warging-lt">{{i.Estado}}</span>&nbsp;<dd>
+                                  {%endif%}
                                   <dt class="col-5">Fecha de registro:</dt>
                                   <dd class="col-7">{{ i.Fecha }}</dd>
                                   <dt class="col-5">Valor inicial del credito:</dt>
@@ -72,7 +76,7 @@
                         	</div>
                           	<div class="card">
 	                            <div class="card-body">
-	                               <h3 class="subheader">Opciones disponibles</h3>
+	                               <h3 class="subheader">Pagos registrados</h3>
 	                               <div class="row">
 	                               		<div class="col-12">
 	                               			<table class="table card-table table-vcenter text-nowrap datatable" id="datatable" cellspacing="0">
@@ -98,7 +102,12 @@
 	                               		</div>
 	                               </div>
                                  <br>
-                                 <form method="post" class="panel form-horizontal">
+                                <h3 class="subheader">Opciones disponibles</h3>
+                                 {% if estado == "Pagado" %}
+                                  <div>
+                                  </div>
+                                  {%else%}
+                                  <form method="post" class="panel form-horizontal">
                                  <div class="row">
                                     {% csrf_token %}
                                   <div class="col-6">
@@ -108,7 +117,9 @@
                                      <button type="submit" class="btn btn-primary">Registrar pago</button>
                                    </div>
                                  </div>
-	                               </form>
+                                 </form>
+                                  {%endif%}
+                                 
 								</div>
 							</div>
 	                    </div>                                   

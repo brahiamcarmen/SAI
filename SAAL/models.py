@@ -345,17 +345,36 @@ class CobroMatricula(models.Model):
         verbose_name_plural = "Cobro matriculas"
         verbose_name = "Cobro matricula"
 
+DOC_CHOICES20 = (
+    ('Gerencia', _(u"Gerencia")),
+    ('Secretaria general', _(u"Secretaria general")),
+    ('Control interno', _(u"Control interno")),
+    ('Subgerencia tecnica', _(u"Subgerencia tecnica")),
+    ('Subgerencia operaciones', _(u"Subgerencia operaciones")),
+    ('Subgerencia comercial', _(u"Subgerencia comercial")),
+    ('Subgerencia financiera y administrativa', _(u"Subgerencia financiera y administrativa")),
+)
+
+DOC_CHOICES21 = (
+    ('Servicios publicos', _(u"Pago - servicios publicos")),
+    ('Nomina', _(u"Pago - nomina")),
+    ('Viaticos', _(u"Pago - viaticos")),
+    ('Impuestos', _(u"Pago - impuestos")),
+    ('Mantenimiento infrastructura', _(u"Pago - Mantenimiento de infraestructura")),
+    ('Transporte', _(u"Pago - transporte")),
+)
 
 class SolicitudGastos(models.Model):
     IdSoGa = models.AutoField(primary_key=True)
     IdUsuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     Descripcion = models.CharField(max_length=5000, null=False)
-    TipoSolicitud = models.CharField(max_length=50, null=False)
+    TipoSolicitud = models.CharField(max_length=50, null=False, choices=DOC_CHOICES21)
     Valor = models.CharField(max_length=10, null=False)
     Estado = models.CharField(max_length=15, null=False, choices=DOC_CHOICES9)
     Fecha = models.DateTimeField(auto_now=True, null=False)
-    AreaResponsable = models.CharField(max_length=100, null=False)
+    AreaResponsable = models.CharField(max_length=100, null=False, choices=DOC_CHOICES20)
     NumeroFactura = models.CharField(max_length=10, null=False)
+    proveedor = models.CharField(max_length=20, null=True)
     def __str__(self):
         return "%s" % self.IdSoGa
 

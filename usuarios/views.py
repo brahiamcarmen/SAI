@@ -7,7 +7,7 @@ from django.views.generic.base import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from SAAL.models import Usuario, Tarifa, CobroOrdenes, Credito,AsignacionBloque, PagoOrdenes, Certificaciones, Cierres, Acueducto, ConfirCerti, ValorMatricula, OrdenesSuspencion, OrdenesReconexion, Poblacion, Factura, Ciclo, EstadoCuenta,NovedadVivienda
 from SAAL.models import Vivienda, SolicitudGastos, Propietario, NovedadesSistema,Medidores, Pqrs, RespuestasPqrs, NovedadesGenerales, CobroMatricula, Permisos, Pagos
-from SAAL.forms import FormRegistroPqrs,RegistroUsuario, RegistroUsuario2, RegistroVivienda,AcueductoAForm,PermisosForm, CobroMatriculaForm, CostoMForm, RespuestPqrForm, RegistroPropietario, TarifasForm , ModificaPropietario
+from SAAL.forms import FormAgregarGasto,FormRegistroPqrs,RegistroUsuario, RegistroUsuario2, RegistroVivienda,AcueductoAForm,PermisosForm, CobroMatriculaForm, CostoMForm, RespuestPqrForm, RegistroPropietario, TarifasForm , ModificaPropietario
 from SAAL.forms import CambioFormEstado,AcueductoForm, GastosForm, MedidoresForm, PoblacionForm, ModificaVivienda, FormRegistroCredito, FormRegistroProveedor
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -1286,21 +1286,15 @@ class ControlPresupuestal(LoginRequiredMixin, View):
 
 class GenerarGasto(LoginRequiredMixin, View):
     login_url = '/'
+    form_class = FormAgregarGasto
     template_name = 'usuarios/generargasto.html'
 
     def get(self, request):
         try:
-            listapqrs = Pqrs.objects.filter(Estado='Pendiente')
-            contqrs = Pqrs.objects.filter(Estado='Pendiente').count()
-            contsoli = SolicitudGastos.objects.filter(Estado=ESTADO1).count()
-            totalnoti = contqrs + contsoli
-            contadorpen = SolicitudGastos.objects.filter(Estado=ESTADO1)
-
             usuario = Usuario.objects.get(usuid=request.user.pk)
+            form = self.form_class()
             return render(request, self.template_name, {
-                'notificaciones': contadorpen,
-                'listapqrs': listapqrs,
-                'totalnoti': totalnoti
+                'form': form,
             })
 
         except Usuario.DoesNotExist:
@@ -1308,17 +1302,18 @@ class GenerarGasto(LoginRequiredMixin, View):
 
     def post(self, request):
         try:
-            area = request.POST.get("areaencargada", "")
-            tiposolicitud = request.POST.get("tiposolicitud", "")
-            valor = request.POST.get("valor", "")
-            numerofactura = request.POST.get("NumeroFactura", "")
-            descripcion = request.POST.get("descripcion", "")
+            area = request.POST.get("AreaResponsable")
+            tiposolicitud = request.POST.get("TipoSolicitud")
+            valor = request.POST.get("Valor")
+            numerofactura = request.POST.get("NumeroFactura")
+            descripcion = request.POST.get("Descripcion")
+            proveedor = request.POST.get("proveedor")
             usuario = Usuario.objects.get(usuid=request.user.pk)
 
             if area and numerofactura and tiposolicitud and valor and descripcion is not None:
                 solicitud = SolicitudGastos(IdUsuario=usuario, Descripcion=descripcion,
                                             TipoSolicitud=tiposolicitud, Valor=valor,
-                                            Estado=ESTADO1, AreaResponsable=area, NumeroFactura=numerofactura)
+                                            Estado=ESTADO1, AreaResponsable=area, NumeroFactura=numerofactura, proveedor=proveedor)
                 solicitud.save()
                 messages.add_message(request, messages.INFO, 'la solicitud se registro correctamente')
                 return HttpResponseRedirect(reverse('usuarios:controlpresupuestal'))
@@ -4425,19 +4420,26 @@ class AnularPago(LoginRequiredMixin, View):
         try:
             comprobante = request.POST.get("Numero")
             pago = Pagos.objects.get(IdPago=comprobante)
-            factura = Factura.objects.get(IdFactura=pago.IdFactura)
+            matricula = pago.IdVivienda
+            valorpagado = pago.ValorPago
+            estadocuenta = EstadoCuenta.objects.get(IdVivienda=matricula)
+            factura = Factura.objects.get(IdFactura=pago.IdFactura.pk)
             if int(comprobante) >=1:
                 factura.Estado = 'Emitida'
                 factura.save()
-                descripcion = 'Se anula pago no: ' + str(comprobante) +' Matricula: ' + str(pago.IdVivienda) + ' valor: ' + str(pago.Valor)
+                valor = estadocuenta.Valor + int(valorpagado)
+                estadocuenta.Valor = valor
+                estadocuenta.save()
+                descripcion = 'Se anula pago no: ' + str(comprobante) +' Matricula: ' + str(pago.IdVivienda) + ' valor: ' + str(pago.ValorPago)
                 novedad = NovedadesSistema(Descripcion=descripcion)
                 novedad.save()
-                pago.delete()
+                pago1 = Pagos.objects.get(IdPago=comprobante)
+                pago1.delete()
                 messages.add_message(request, messages.INFO, 'El pago se anulo correctamente')
                 return HttpResponseRedirect(reverse('usuarios:inicio'))
 
             else:
-                messages.add_message(request, messages.ERROR, 'El codigo de permiso seleccionado no esta asignado al usuario')
+                messages.add_message(request, messages.ERROR, 'No se pudo anular el pago')
                 return HttpResponseRedirect(reverse('usuarios:inicio'))
 
         except Usuario.DoesNotExist:
@@ -4677,8 +4679,10 @@ class VerCredito(LoginRequiredMixin, View):
         try:
             usuario = Usuario.objects.get(usuid=request.user.pk)
             credito = Credito.objects.filter(IdCredito=IdCredito)
+            credito2 = Credito.objects.get(IdCredito=IdCredito)
+            estado = credito2.Estado
             verificarpagos = SolicitudGastos.objects.filter(NumeroFactura=IdCredito)
-            return render(request, self.template_name,{'credito': credito, 'pagos': verificarpagos})
+            return render(request, self.template_name,{'credito': credito, 'pagos': verificarpagos, 'estado': estado})
 
         except Usuario.DoesNotExist:
             return render(request, "pages-404.html")
@@ -4696,11 +4700,33 @@ class VerCredito(LoginRequiredMixin, View):
             savegasto.save()
             cuotamenos = int(numcuota) - 1
             valorpen = int(credito.ValorPendiente) - int(valor)
-            credito.CuotasPendiente = str(cuotamenos)
-            credito.ValorPendiente = str(valorpen)
-            credito.save()
-            messages.add_message(request, messages.INFO, 'La pqrs se  registro correctamente, RADICADO No:')
-            return HttpResponseRedirect(reverse('usuarios:credito'))
+            if cuotamenos <=0:
+                credito.CuotasPendiente = str(cuotamenos)
+                credito.ValorPendiente = str(valorpen)
+                credito.Estado = 'Pagado'
+                credito.save()
+                messages.add_message(request, messages.INFO, 'El credito fue pagado con exito')
+                return HttpResponseRedirect(reverse('usuarios:credito'))
+
+            else:
+                credito.CuotasPendiente = str(cuotamenos)
+                credito.ValorPendiente = str(valorpen)
+                credito.save()
+                messages.add_message(request, messages.INFO, 'La cuota se registro correctamente')
+                return HttpResponseRedirect(reverse('usuarios:credito'))
+
 
         except Usuario.DoesNotExist:
             return render(request, "pages-404.html")
+
+class PagoParcial(LoginRequiredMixin, View):
+    login_url = '/'
+    template_name = 'usuarios/pagoparcial.html'
+    def get(self, request):
+        try:
+            usuario = 0
+            if usuario == 0:
+                return render(request, self.template_name)
+
+        except usuario.DoesNotExist:
+            return render(request,"pages-404.html")

@@ -11,7 +11,7 @@ from usuarios.views import RegistroTarifa, ReporteEstadoCuenta, Reportepdfpropi,
 from usuarios.views import Suspenciones, VerOrdenSuspencion, VerOrdenReconexion, CambioTitular
 from usuarios.views import ReportePredios, CierreFinanciero, ReporteSuspendido, ReportesEstado
 from usuarios.views import ReportesCiclo, CambiosMasivos, Facturas, GenerarGasto
-from usuarios.views import GeneradorFacturas, DesactivarUsuarios, AnularFactura
+from usuarios.views import GeneradorFacturas, DesactivarUsuarios, AnularFactura, PagoParcial
 from usuarios.views import DescargarFactura, DescargaMasivaFacturas, VisualizarVivienda, BuscarSolicitud
 from usuarios.views import Reconexiones, Perfil, ModificarAcueducto, ListaPqrs, RegistroPqr, VerPqr, ListadoPqrs
 from usuarios.views import RespuestaPqrs, PanelAdmin, ReporteCierre, AnularSuspenciones
@@ -102,4 +102,5 @@ urlpatterns = [
     url(r'^registrocredito', RegistroCredito.as_view(), name='registrocredito'),
     url(r'^registroproveedor', RegistroProveedor.as_view(), name='registroproveedor'),
     url(r'^vercredito/(?P<IdCredito>\w+)', VerCredito.as_view(), name='vercredito'),
+    url(r'^pagoparcial', PagoParcial.as_view(), name='pagoparcial'),
 ]
