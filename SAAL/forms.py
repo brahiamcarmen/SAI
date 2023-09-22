@@ -463,6 +463,7 @@ class FormRegistroPqrs(forms.ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
 
+
 class FormRegistroCredito(forms.ModelForm):
     class Meta:
         model = Credito
@@ -475,7 +476,7 @@ class FormRegistroCredito(forms.ModelForm):
             'Estado': _(u'Estado'),
         }
 
-    def __init__(self, propietario=None, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super(FormRegistroCredito, self).__init__(*args, **kwargs)
 
         for field in self.fields:
@@ -494,7 +495,7 @@ class FormRegistroProveedor(forms.ModelForm):
             'telefono': _(u'Telefono'),
         }
 
-    def __init__(self, propietario=None, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super(FormRegistroProveedor, self).__init__(*args, **kwargs)
 
         for field in self.fields:
@@ -513,7 +514,7 @@ class FormAgregarGasto(forms.ModelForm):
             'proveedor'
         ]
         labels = {
-            'TipoSolicitud':_(u'Tipo de pago'),
+            'TipoSolicitud': _(u'Tipo de pago'),
             'AreaResponsable': _(u'Area responsable'),
             'Valor': _(u'Valor del pago'),
             'Descripcion': _(u'Descripcion del pago'),
@@ -521,7 +522,7 @@ class FormAgregarGasto(forms.ModelForm):
             'proveedor': _(u'Identificacion del proveedor'),
         }
 
-    def __init__(self, vivienda=None, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super(FormAgregarGasto, self).__init__(*args, **kwargs)
 
         for field in self.fields:

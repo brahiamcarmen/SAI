@@ -42,7 +42,6 @@ class Acueducto(models.Model):
     Estado = models.CharField(max_length=30, null=True, choices=DOC_CHOICES, default='ES')
     IdTarifa = models.ForeignKey(Tarifa, on_delete=models.CASCADE)
     Email = models.EmailField(null=True)
-
     def __str__(self):
         return "%s" % self.IdAcueducto
 
@@ -345,6 +344,7 @@ class CobroMatricula(models.Model):
         verbose_name_plural = "Cobro matriculas"
         verbose_name = "Cobro matricula"
 
+
 DOC_CHOICES20 = (
     ('Gerencia', _(u"Gerencia")),
     ('Secretaria general', _(u"Secretaria general")),
@@ -364,6 +364,7 @@ DOC_CHOICES21 = (
     ('Transporte', _(u"Pago - transporte")),
 )
 
+
 class SolicitudGastos(models.Model):
     IdSoGa = models.AutoField(primary_key=True)
     IdUsuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
@@ -375,6 +376,7 @@ class SolicitudGastos(models.Model):
     AreaResponsable = models.CharField(max_length=100, null=False, choices=DOC_CHOICES20)
     NumeroFactura = models.CharField(max_length=10, null=False)
     proveedor = models.CharField(max_length=20, null=True)
+
     def __str__(self):
         return "%s" % self.IdSoGa
 
@@ -626,6 +628,7 @@ class NovedadesSistema(models.Model):
         verbose_name_plural = "Novedades"
         verbose_name = "Novedad"
 
+
 class AsignacionBloque(models.Model):
     IdBloque = models.AutoField(primary_key=True)
     Bloque = models.CharField(max_length=50, null=False)
@@ -641,33 +644,39 @@ class AsignacionBloque(models.Model):
         verbose_name_plural = "Bloques"
         verbose_name = "Bloque"
 
+
 DOC_CHOICES16 = (
     ('Persona natural', _(u"Persona natural")),
     ('Personeria juridica', _(u"Personeria juridica")),
 )
+
+
 class Proveedor(models.Model):
     IdProvedor = models.CharField(max_length=30, primary_key=True, null=False)
     Nombrecompleto = models.CharField(max_length=100, null=False)
-    Personeria = models.CharField(max_length=100,null=True, choices=DOC_CHOICES16)
+    Personeria = models.CharField(max_length=100, null=True, choices=DOC_CHOICES16)
     Direccion = models.CharField(max_length=100, null=False)
     telefono = models.CharField(max_length=100, null=False)
 
     def __str__(self):
-        return "%s %s" % (self.IdProvedor,self.Nombrecompleto)
+        return "%s %s" % (self.IdProvedor, self.Nombrecompleto)
 
     class Meta:
         verbose_name_plural = "Proveedores"
         verbose_name = "Proveedor"
 
+
 DOC_CHOICES17 = (
     ('Vigente', _(u"Vigente")),
     ('Pagado', _(u"Pagado")),
 )
+
+
 class Credito(models.Model):
     IdCredito = models.AutoField(primary_key=True)
-    NombreCredito = models.CharField(max_length=40,null=False)
+    NombreCredito = models.CharField(max_length=40, null=False)
     IdProveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
-    ValorInicial = models.CharField(max_length=40,null=False)
+    ValorInicial = models.CharField(max_length=40, null=False)
     CantCuotas = models.CharField(max_length=3, null=False)
     ValorPendiente = models.CharField(max_length=10, null=False)
     CuotasPendiente = models.CharField(max_length=10, null=False)

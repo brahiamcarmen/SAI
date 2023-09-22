@@ -11,8 +11,6 @@ from SAAL.models import Tarifa, Pqrs
 from SAAL.models import Medidores, ConfirCerti, CobroMatricula
 from SAAL.models import Poblacion, SolicitudGastos, Permisos, RespuestasPqrs
 
-# Register your models here.
-admin.site.register(Usuario)
 admin.site.register(Acueducto)
 admin.site.register(Propietario)
 admin.site.register(Vivienda)
@@ -31,3 +29,4 @@ admin.site.register(Pqrs)
 admin.site.register(RespuestasPqrs)
 admin.site.register(Pagos)
 admin.site.register(CobroMatricula)
+admin.site.register(Usuario)

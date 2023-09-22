@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.shortcuts import render
 from django.views.generic.base import View
 from django.contrib import auth
 from django.contrib import messages
@@ -19,8 +18,9 @@ class Login(View):
         proyecton = nombre2.read()
         version = open('static/serial/Version.txt', 'r')
         versionp = version.read()
-        return render(request, 'index.html', {'proyecto': proyectov,'nombre2':proyecton,
+        return render(request, 'index.html', {'proyecto': proyectov, 'nombre2': proyecton,
                                               'version': versionp})
+
     def post(self, request):
         username1 = request.POST.get("username", "")
         password1 = request.POST.get("password", "")
@@ -42,6 +42,7 @@ class Login(View):
         else:
             messages.add_message(request, messages.ERROR, "Las credenciales de acceso son incorrectas")
             return HttpResponseRedirect(reverse('login'))
+
 
 class Logout(View):
     def get(self, request):

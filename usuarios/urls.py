@@ -1,7 +1,8 @@
 from django.conf.urls import url
 from usuarios.views import Inicio, Busquedas, CobroRecargo, ControlPresupuestal, VerFactura, PagarMatricula
 from usuarios.views import V3, ImprimirSoporteP, PagarRyS, AnularPago, AsignarCargo, Bloque, VerCredito
-from usuarios.views import ListaViviendas, ListaPropietarios, ReportePdfPagos, Creditos, RegistroCredito, RegistroProveedor
+from usuarios.views import ListaViviendas, ListaPropietarios, ReportePdfPagos, Creditos, RegistroCredito
+from usuarios.views import RegistroProveedor
 from usuarios.views import ReporteCierresAno, PazSalvo, CertificadoGral, Matriculas
 from usuarios.views import AgregarVivienda, AgregarPropietario, PerfilUsuario, ReporteCompleto
 from usuarios.views import ReporteSuspenciones, ReporteReconexion, ModificarPropietario, ModificarVivienda

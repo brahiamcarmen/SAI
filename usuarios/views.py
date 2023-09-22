@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
-import os
-import socket
 from django.shortcuts import render
 from django.conf import settings
 from django.views.generic.base import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from SAAL.models import Usuario, Tarifa, CobroOrdenes, Credito,AsignacionBloque, PagoOrdenes, Certificaciones, Cierres, Acueducto, ConfirCerti, ValorMatricula, OrdenesSuspencion, OrdenesReconexion, Poblacion, Factura, Ciclo, EstadoCuenta,NovedadVivienda
+from SAAL.models import Usuario, Tarifa, CobroOrdenes, Credito,AsignacionBloque, PagoOrdenes, Certificaciones, Cierres, Acueducto, ValorMatricula, OrdenesSuspencion, OrdenesReconexion, Poblacion, Factura, Ciclo, EstadoCuenta,NovedadVivienda
 from SAAL.models import Vivienda, SolicitudGastos, Propietario, NovedadesSistema,Medidores, Pqrs, RespuestasPqrs, NovedadesGenerales, CobroMatricula, Permisos, Pagos
 from SAAL.forms import FormAgregarGasto,FormRegistroPqrs,RegistroUsuario, RegistroUsuario2, RegistroVivienda,AcueductoAForm,PermisosForm, CobroMatriculaForm, CostoMForm, RespuestPqrForm, RegistroPropietario, TarifasForm , ModificaPropietario
 from SAAL.forms import CambioFormEstado,AcueductoForm, GastosForm, MedidoresForm, PoblacionForm, ModificaVivienda, FormRegistroCredito, FormRegistroProveedor
@@ -4730,3 +4728,10 @@ class PagoParcial(LoginRequiredMixin, View):
 
         except usuario.DoesNotExist:
             return render(request,"pages-404.html")
+
+    def post(self, request):
+        try:
+            comprobante = request.POST.get("Numero")
+
+        except Usuario.DoesNotExist:
+            return render(request, "pages-404.html")
