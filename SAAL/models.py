@@ -3,6 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django.contrib.auth.models import User
 
+
 DOC_CHOICES = (
     ('En Servicio', _(u"En Servicio (ES)")),
     ('Baja Presion', _(u"Baja Presion (BP)")),
@@ -23,7 +24,7 @@ class Tarifa(models.Model):
     multifamiliar = models.CharField(max_length=5, null=True)
     FechaInicial = models.DateTimeField(auto_now=True)
     Ano = models.CharField(max_length=4, null=True)
-
+    objects = models.Manager()
     def __str__(self):
         return "%s" % self.IdTarifa
 
@@ -42,6 +43,7 @@ class Acueducto(models.Model):
     Estado = models.CharField(max_length=30, null=True, choices=DOC_CHOICES, default='ES')
     IdTarifa = models.ForeignKey(Tarifa, on_delete=models.CASCADE)
     Email = models.EmailField(null=True)
+    objects = models.Manager()
     def __str__(self):
         return "%s" % self.IdAcueducto
 
@@ -68,7 +70,7 @@ class Usuario(models.Model):
     celular = models.CharField(max_length=10, null=False)
     usuid = models.OneToOneField(User, on_delete=models.CASCADE)
     IdAcueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
-
+    objects = models.Manager()
     def __str__(self):
         return "%s" % self.usuid.username
 
@@ -80,7 +82,7 @@ class Usuario(models.Model):
 class Poblacion(models.Model):
     IdPoblacion = models.CharField(primary_key=True, max_length=15, null=False)
     Descripcion = models.CharField(max_length=50, null=False)
-
+    objects = models.Manager()
     def __str__(self):
         return "%s" % self.Descripcion
 
@@ -96,7 +98,7 @@ class Propietario(models.Model):
     NoTelefono = models.CharField(max_length=60, null=False)
     Email = models.EmailField(max_length=150, null=True)
     IdPoblacion = models.ForeignKey(Poblacion, on_delete=models.CASCADE)
-
+    objects = models.Manager()
     def __str__(self):
         return "%s %s" % (self.Nombres, self.Apellidos)
 
@@ -182,6 +184,8 @@ class Vivienda(models.Model):
     CantHabitantes = models.CharField(max_length=2, null=False)
     FichaCastral = models.CharField(max_length=26, null=True)
     Diametro = models.CharField(max_length=5, null=True)
+    # You should have the default 'objects' manager by default
+    objects = models.Manager()
 
     def __str__(self):
         return "%s %s %s" % (self.IdVivienda, self.Direccion, self.NumeroCasa)
@@ -194,7 +198,7 @@ class Vivienda(models.Model):
 class Ciclo(models.Model):
     IdCiclo = models.CharField(max_length=5, primary_key=True)
     Nombre = models.CharField(max_length=10)
-
+    objects = models.Manager()
     def __str__(self):
         return "%s" % self.Nombre
 
@@ -210,7 +214,7 @@ class EstadoCuenta(models.Model):
     Estado = models.CharField(max_length=100)
     FechaActualizacion = models.DateTimeField(auto_now=True)
     Descripcion = models.CharField(max_length=100)
-
+    objects = models.Manager()
     def __str__(self):
         return "%s" % self.IdEstadoCuenta
 
@@ -237,7 +241,7 @@ class Factura(models.Model):
     IdCiclo = models.ForeignKey(Ciclo, on_delete=models.CASCADE)
     OtrosCobros = models.CharField(max_length=100, null=False)
     Total = models.CharField(max_length=100, null=False)
-
+    objects = models.Manager()
     def __str__(self):
         return "%s" % self.IdFactura
 
@@ -265,7 +269,7 @@ class Certificaciones(models.Model):
     Soporte = models.CharField(max_length=2, choices=DOC_CHOICES11, null=True, blank=True)
     Descripcion = models.CharField(max_length=500, null=True, blank=True)
     IdVivienda = models.ForeignKey(Vivienda, on_delete=models.CASCADE)
-
+    objects = models.Manager()
     def __str__(self):
         return "%s" % self.Estado
 
@@ -279,7 +283,7 @@ class ConfirCerti(models.Model):
     IdUsuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     Fecha = models.DateTimeField(auto_now=True)
     IdCertificacion = models.ForeignKey(Certificaciones, on_delete=models.CASCADE)
-
+    objects = models.Manager()
     def __str__(self):
         return "%s" % self.IdOrden
 
@@ -295,7 +299,7 @@ class Medidores(models.Model):
     LecturaInicial = models.CharField(max_length=6, null=False)
     AnoFabricacion = models.CharField(max_length=4, null=False)
     IdVivienda = models.ForeignKey(Vivienda, on_delete=models.CASCADE)
-
+    objects = models.Manager()
     def __str__(self):
         return "%s" % self.IdMedidor
 
@@ -308,7 +312,7 @@ class ValorMatricula(models.Model):
     IdValor = models.AutoField(primary_key=True)
     Valor = models.CharField(max_length=10, null=False)
     Fecha = models.DateTimeField(auto_now=True)
-
+    objects = models.Manager()
     def __str__(self):
         return "%s" % self.Valor
 
@@ -336,7 +340,7 @@ class CobroMatricula(models.Model):
     CuotasPendientes = models.CharField(max_length=10, null=False)
     ValorPendiente = models.CharField(max_length=50, null=False)
     Cuota = models.CharField(max_length=50, null=False)
-
+    objects = models.Manager()
     def __str__(self):
         return "%s %s" % (self.IdCobroM, self.Descripcion)
 
@@ -376,7 +380,7 @@ class SolicitudGastos(models.Model):
     AreaResponsable = models.CharField(max_length=100, null=False, choices=DOC_CHOICES20)
     NumeroFactura = models.CharField(max_length=10, null=False)
     proveedor = models.CharField(max_length=20, null=True)
-
+    objects = models.Manager()
     def __str__(self):
         return "%s" % self.IdSoGa
 
@@ -413,7 +417,7 @@ class Permisos(models.Model):
     IdPermiso = models.AutoField(primary_key=True)
     TipoPermiso = models.CharField(max_length=50, null=False, choices=DOC_CHOICES13)
     usuid = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-
+    objects = models.Manager()
     def __str__(self):
         return "%s %s %s" % (self.IdPermiso, self.TipoPermiso, self.usuid)
 
@@ -450,7 +454,7 @@ class Pqrs(models.Model):
     Descripcion = models.TextField(max_length=10000, null=True)
     usuid = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     Estado = models.CharField(max_length=40, null=False)
-
+    objects = models.Manager()
     def __str__(self):
         return "%s %s" % (self.IdPqrs, self.TipoSolicitud)
 
@@ -465,7 +469,7 @@ class RespuestasPqrs(models.Model):
     Fecha = models.DateTimeField(auto_now_add=True)
     Descripcion = models.CharField(max_length=5000, null=False)
     Soporte = models.FileField(upload_to='respuestaspqr/', null=True)
-
+    objects = models.Manager()
     def __str__(self):
         return "%s" % self.IdRespuesta
 
@@ -486,7 +490,7 @@ class Pagos(models.Model):
     resta = models.CharField(max_length=10, null=True)
     IdUsuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     IdVivienda = models.ForeignKey(Vivienda, on_delete=models.CASCADE)
-
+    objects = models.Manager()
     def __str__(self):
         return "%s" % self.IdPago
 
@@ -504,7 +508,7 @@ class OrdenesSuspencion(models.Model):
     Estado = models.CharField(max_length=40, null=False)
     UsuarioEjecuta = models.CharField(max_length=100, null=False)
     IdEstadoCuenta = models.ForeignKey(EstadoCuenta, on_delete=models.CASCADE)
-
+    objects = models.Manager()
     def __str__(self):
         return "%s" % self.IdOrden
 
@@ -522,7 +526,7 @@ class OrdenesReconexion(models.Model):
     Estado = models.CharField(max_length=40, null=False)
     UsuarioEjecuta = models.CharField(max_length=30, null=False)
     IdEstadoCuenta = models.ForeignKey(EstadoCuenta, on_delete=models.CASCADE)
-
+    objects = models.Manager()
     def __str__(self):
         return "%s" % self.IdOrden
 
@@ -540,7 +544,7 @@ class NovedadVivienda(models.Model):
     IdVivienda = models.ForeignKey(Vivienda, on_delete=models.CASCADE)
     Fecha = models.DateTimeField(auto_now_add=True)
     EstadoCuenta = models.ForeignKey(EstadoCuenta, on_delete=models.CASCADE)
-
+    objects = models.Manager()
     def __str__(self):
         return "%s" % self.TipoNovedad
 
@@ -559,7 +563,7 @@ class Cierres(models.Model):
     Fecha = models.DateTimeField(auto_now_add=True)
     NoRecaudo = models.CharField(max_length=100, null=False)
     Recaudado = models.CharField(max_length=100, null=False)
-
+    objects = models.Manager()
     def __str__(self):
         return "%s %s" % (self.IdCierre, self.Ciclo)
 
@@ -575,7 +579,7 @@ class NovedadesGenerales(models.Model):
     Fecha = models.DateTimeField(auto_now_add=True)
     usuario = models.CharField(max_length=30, null=False)
     matricula = models.CharField(max_length=30, null=False)
-
+    objects = models.Manager()
     def __str__(self):
         return "%s %s" % (self.IdNovedad, self.TipoNovedad)
 
@@ -592,7 +596,7 @@ class CobroOrdenes(models.Model):
     Valor = models.CharField(max_length=30, null=False)
     IdOrdenT = models.CharField(max_length=30, null=False)
     TipoOrden = models.CharField(max_length=30, null=False)
-
+    objects = models.Manager()
     def __str__(self):
         return "%s %s" % (self.IdOrden, self.TipoOrden)
 
@@ -607,7 +611,7 @@ class PagoOrdenes(models.Model):
     Valor = models.CharField(max_length=30, null=False)
     IdVivienda = models.ForeignKey(Vivienda, on_delete=models.CASCADE)
     IdOrden = models.ForeignKey(CobroOrdenes, on_delete=models.CASCADE)
-
+    objects = models.Manager()
     def __str__(self):
         return "%s" % self.IdPagoSR
 
@@ -620,7 +624,7 @@ class NovedadesSistema(models.Model):
     IdNovedad = models.AutoField(primary_key=True)
     Descripcion = models.CharField(max_length=150, null=False)
     Fecha = models.DateTimeField(auto_now=True)
-
+    objects = models.Manager()
     def __str__(self):
         return "%s" % self.IdNovedad
 
@@ -636,7 +640,7 @@ class AsignacionBloque(models.Model):
     Estado = models.CharField(max_length=150, null=False)
     Estadocuenta = models.CharField(max_length=150, null=True)
     Fecha = models.DateTimeField(auto_now=True)
-
+    objects = models.Manager()
     def __str__(self):
         return "%s" % self.IdBloque
 
@@ -657,7 +661,7 @@ class Proveedor(models.Model):
     Personeria = models.CharField(max_length=100, null=True, choices=DOC_CHOICES16)
     Direccion = models.CharField(max_length=100, null=False)
     telefono = models.CharField(max_length=100, null=False)
-
+    objects = models.Manager()
     def __str__(self):
         return "%s %s" % (self.IdProvedor, self.Nombrecompleto)
 
@@ -682,7 +686,7 @@ class Credito(models.Model):
     CuotasPendiente = models.CharField(max_length=10, null=False)
     Fecha = models.DateTimeField(auto_now_add=True, null=False)
     Estado = models.CharField(max_length=10, null=False, choices=DOC_CHOICES17)
-
+    objects = models.Manager()
     def __str__(self):
         return "%s" % self.IdCredito
 
