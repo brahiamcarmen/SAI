@@ -693,3 +693,29 @@ class Credito(models.Model):
     class Meta:
         verbose_name_plural = "Creditos"
         verbose_name = "Credito"
+
+class DescargaFacturas(models.Model):
+    IdDescarga = models.AutoField(primary_key=True)
+    IdFactura = models.ForeignKey(Factura, on_delete=models.CASCADE)
+    Fecha = models.DateTimeField(auto_now_add=True, null=False)
+    objects = models.Manager()
+    def __str__(self):
+        return "%s" % self.IdDescarga
+
+    class Meta:
+        verbose_name_plural = "Descargas"
+        verbose_name = "Descarga"
+
+
+class NovedadesRetiro(models.Model):
+    IdNovedad = models.AutoField(primary_key=True)
+    IdVivienda = models.ForeignKey(Vivienda, on_delete=models.CASCADE)
+    Fecha = models.DateTimeField(auto_now_add=True, null=False)
+    Descripcion = models.CharField(max_length=1000, null=False)
+    objects = models.Manager()
+    def __str__(self):
+        return "%s" % self.IdNovedad
+
+    class Meta:
+        verbose_name_plural = "Novedades de retiro"
+        verbose_name = "Novedad de retiro"

@@ -17,7 +17,7 @@ from usuarios.views import DescargarFactura, DescargaMasivaFacturas, VisualizarV
 from usuarios.views import Reconexiones, Perfil, ModificarAcueducto, ListaPqrs, RegistroPqr, VerPqr, ListadoPqrs
 from usuarios.views import RespuestaPqrs, PanelAdmin, ReporteCierre, AnularSuspenciones
 from usuarios.views import RegistroMedidor, ReporteCobroMatricula, AsignarPermisos
-from usuarios.views import RegistroPoblacion, CambiarContraUsuario, ListasOrdenes, GeneradorFacturasIndividual
+from usuarios.views import RegistroPoblacion, CambiarContraUsuario, ListasOrdenes, GeneradorFacturasIndividual,ReporteRetiro
 
 urlpatterns = [
     url(r'^inicio/', Inicio.as_view(), name='inicio'),
@@ -26,7 +26,7 @@ urlpatterns = [
     url(r'^agregarvivienda/(?P<idbloque>\w+)', AgregarVivienda.as_view(), name='agregarvivienda'),
     url(r'^agregarpropietario/', AgregarPropietario.as_view(), name='agregarpropietario'),
     url(r'^modificarpropietario/(?P<IdPropietario>\w+)', ModificarPropietario.as_view(), name='modificarpropietario'),
-    url(r'^modificarvivienda/(?P<IdVivienda>\w+)', ModificarVivienda.as_view(), name='modificarvivienda'),
+    url(r'^modificarvivienda/(?P<idvivienda>\w+)', ModificarVivienda.as_view(), name='modificarvivienda'),
     url(r'^verpropiedario/(?P<idpropietario>\w+)', VisualizarPropietario.as_view(), name='verpropietario'),
     url(r'^facturacion/', Facturacion.as_view(), name='facturacion'),
     url(r'^facturas/', Facturas.as_view(), name='facturas'),
@@ -104,4 +104,5 @@ urlpatterns = [
     url(r'^registroproveedor', RegistroProveedor.as_view(), name='registroproveedor'),
     url(r'^vercredito/(?P<idcredito>\w+)', VerCredito.as_view(), name='vercredito'),
     url(r'^pagoparcial', PagoParcial.as_view(), name='pagoparcial'),
+    url(r'^novedadretiro/(?P<matricula>\w+)', ReporteRetiro.as_view(), name='novedadretiro')
 ]

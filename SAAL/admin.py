@@ -4,7 +4,7 @@ from SAAL.models import Acueducto
 from SAAL.models import Propietario
 from SAAL.models import Vivienda
 from SAAL.models import NovedadVivienda
-from SAAL.models import Ciclo
+from SAAL.models import Ciclo, DescargaFacturas
 from SAAL.models import Factura
 from SAAL.models import EstadoCuenta, Pagos
 from SAAL.models import Tarifa, Pqrs
@@ -30,3 +30,4 @@ admin.site.register(RespuestasPqrs)
 admin.site.register(Pagos)
 admin.site.register(CobroMatricula)
 admin.site.register(Usuario)
+admin.site.register(DescargaFacturas)

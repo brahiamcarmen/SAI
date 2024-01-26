@@ -3,7 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from SAAL.models import Vivienda, SolicitudGastos, Medidores, Poblacion
 from SAAL.models import Propietario, CobroMatricula, ValorMatricula, Usuario
-from SAAL.models import Acueducto, Tarifa, Permisos, Pqrs, Credito, Proveedor
+from SAAL.models import Acueducto, Tarifa, Permisos, Pqrs, Credito, Proveedor, NovedadesRetiro
 
 
 class RegistroVivienda(forms.ModelForm):

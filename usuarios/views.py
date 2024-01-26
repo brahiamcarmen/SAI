@@ -4,10 +4,11 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic.base import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from SAAL.models import Usuario, Tarifa, CobroOrdenes, Credito, AsignacionBloque, PagoOrdenes, Certificaciones
+from SAAL.models import Usuario, Tarifa, CobroOrdenes, Credito, AsignacionBloque, PagoOrdenes, Certificaciones, NovedadesRetiro
 from SAAL.models import OrdenesSuspencion, OrdenesReconexion, Poblacion, Factura, Ciclo, EstadoCuenta, NovedadVivienda
 from SAAL.models import Vivienda, SolicitudGastos, Propietario, NovedadesSistema, Medidores, Pqrs, RespuestasPqrs
 from SAAL.models import NovedadesGenerales, CobroMatricula, Permisos, Pagos, Cierres, Acueducto, ValorMatricula
+from SAAL.models import DescargaFacturas
 from SAAL.forms import FormAgregarGasto, FormRegistroPqrs, RegistroUsuario, RegistroUsuario2, RegistroVivienda
 from SAAL.forms import AcueductoAForm, PermisosForm, CobroMatriculaForm, CostoMForm, RespuestPqrForm
 from SAAL.forms import RegistroPropietario, TarifasForm, ModificaPropietario, FormRegistroCredito, FormRegistroProveedor
@@ -36,7 +37,7 @@ DIASPARASUSPENCION = 15
 # permisos
 CT = 'AC'
 # TARIFA
-TARIFA = 8000
+TARIFA = 10000
 # ------------
 EF = 'Emitida'
 EPC = 'Se registro propietario'
@@ -142,8 +143,8 @@ class Inicio(LoginRequiredMixin, View):
             ciclo2 = fechaexp.month - 1
             ano2 = fechaexp.year
             # Los argumentos serán: Año, Mes, Día, Hora, Minutos, Segundos, Milisegundos.
-            new_date3 = datetime(ano2, ciclo2, 1, 1, 00, 00, 00000)
-            new_date4 = datetime(ano2, ciclo2, 30, 23, 59, 59, 00000)
+            new_date3 = datetime(2023, 12, 1, 1, 00, 00, 00000)
+            new_date4 = datetime(2023, 12, 30, 23, 59, 59, 00000)
             factuasemi = Factura.objects.filter(FechaExpe__gte=new_date3, FechaExpe__lte=new_date4).count()
             pagos3 = Pagos.objects.filter(FechaPago__gte=new_date, FechaPago__lte=new_date2).count()
             contador = pagos3 / factuasemi * 100
@@ -152,6 +153,9 @@ class Inicio(LoginRequiredMixin, View):
             pqrsp = Pqrs.objects.filter(Estado='Pendiente').count()
             tpq = pqrsp / pqrs * 100
 
+            promedio = pago0 / pagos3
+            promtarifa = promedio / 8000 * 100
+
             return render(request,
                           self.template_name, {'tipousuario': tipousuario, 'nombreproyecto': nombreproyecto,
                                                'nombreproyectol': nombreproyectol, 'acueducto': nombreacueducto,
@@ -159,8 +163,8 @@ class Inicio(LoginRequiredMixin, View):
                                                'listapqrs': listapqrs, 'totalnoti': totalnoti,
                                                'novedades': novedades, 'pagos': pago0,
                                                'porcentaje': int(porcentaje), 'contador': int(contador),
-                                               'facturaspagas': pagos3,
-                                               'tpq': int(tpq), 'tp': int(pqrsp)})
+                                               'facturaspagas': pagos3, 'promedio': int(promedio),
+                                               'tpq': int(tpq), 'tp': int(pqrsp),'promtarifa': int(promtarifa)})
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
 
@@ -438,6 +442,8 @@ class VisualizarVivienda(LoginRequiredMixin, View):
             ordenesreconexion = CobroOrdenes.objects.filter(IdEstadoCuenta=idestado, Estado=ESTADO1,
                                                             TipoOrden='Cobro por reconexión')
             validarcobro = CobroMatricula.objects.filter(IdVivienda=idvivienda, Estado=ESTCOBRO)
+            validarretiro = NovedadesRetiro.objects.filter(IdVivienda=idvivienda).exists()
+            novretiro = NovedadesRetiro.objects.filter(IdVivienda=idvivienda)
             reparaciones = 0
             matri = 0
             for i in validarcobro:
@@ -478,7 +484,8 @@ class VisualizarVivienda(LoginRequiredMixin, View):
                 'vafacemi': vafacemi, 'viviendainfo': viviendainfo, 'ordenesrs': ordenesrs, 'pagosrys': pagosrys,
                 'reconexion2': cor, 'suspenciones2': cos, 'aportes': resultado, 'cobromatricula1': matri,
                 'repaciones': reparaciones, 'total': resultado + cor + cos + matri + reparaciones,
-                'filtro': filtrosuspenciones, 'contpagos': contpagos, 'vmatri': matriculas2
+                'filtro': filtrosuspenciones, 'contpagos': contpagos, 'vmatri': matriculas2,'novedadr': validarretiro,
+                'novretiro':novretiro
             })
 
         except ObjectDoesNotExist:
@@ -622,8 +629,7 @@ class Facturacion(LoginRequiredMixin, View):
                                   'totalnoti': totalnoti
                               })
             else:
-                messages.add_message(request, messages.ERROR,
-                                     'Su usuario no tiene los permiso de acceso a esta seccion')
+                messages.add_message(request, messages.ERROR, 'Su usuario no tiene los permiso de acceso a esta seccion')
                 return HttpResponseRedirect(reverse('usuarios:inicio'))
 
         except ObjectDoesNotExist:
@@ -2392,11 +2398,13 @@ class DescargarFactura(LoginRequiredMixin, View):
                     ws['AU61'] = int(Total)
 
                 ws.title = IdFactura
-                archivo_predios = "Factura " + str(IdFactura) + ".xlsx"
+                archivo_predios = str(IdFactura) + ".xlsx"
                 response = HttpResponse(content_type="application/ms-excel")
                 content = "attachment; filename = {0}".format(archivo_predios)
                 response['Content-Disposition'] = content
                 wb.save(response)
+                orden = DescargaFacturas(IdFactura=factura)
+                orden.save()
                 return response
 
             else:
@@ -2505,11 +2513,13 @@ class DescargarFactura(LoginRequiredMixin, View):
                     ws['A46'] = int(Total)
 
                 ws.title = IdFactura
-                archivo_predios = "Factura " + str(IdFactura) + ".xlsx"
+                archivo_predios = str(IdFactura) + ".xlsx"
                 response = HttpResponse(content_type="application/ms-excel")
                 content = "attachment; filename = {0}".format(archivo_predios)
                 response['Content-Disposition'] = content
                 wb.save(response)
+                orden = DescargaFacturas(IdFactura=factura)
+                orden.save()
                 return response
 
         except ObjectDoesNotExist:
@@ -2643,9 +2653,11 @@ class DescargaMasivaFacturas(LoginRequiredMixin, View):
         try:
             total = Factura.objects.filter(Estado='Emitida').count()
             facturas = Factura.objects.filter(Estado=EF).order_by('IdFactura')
+            descarga = DescargaFacturas.objects.all()
             return render(request, self.template_name, {
                 'facturas': facturas,
-                'total': total
+                'total': total,
+                'descargas': descarga
             })
 
         except ObjectDoesNotExist:
@@ -2655,7 +2667,7 @@ class DescargaMasivaFacturas(LoginRequiredMixin, View):
 class ReportePdfPagos(LoginRequiredMixin, View):
     login_url = '/'
 
-    def get(self):
+    def get(self, request):
         pagos = Pagos.objects.all()
         wb = Workbook()
         ws = wb.active
@@ -2696,7 +2708,7 @@ class ReportePdfPagos(LoginRequiredMixin, View):
 class ReporteCompleto(LoginRequiredMixin, View):
     login_url = '/'
 
-    def get(self):
+    def get(self, request):
         viviendas = Vivienda.objects.all()
         sfecha = (datetime.today())
         wb = Workbook()
@@ -2775,7 +2787,7 @@ class ReporteCompleto(LoginRequiredMixin, View):
 class ReporteSuspenciones(LoginRequiredMixin, View):
     login_url = '/'
 
-    def get(self):
+    def get(self, *args, **kwargs):
         pagos = OrdenesSuspencion.objects.filter(Estado=SP)
         sfecha = (datetime.today())
         wb = Workbook()
@@ -4335,7 +4347,7 @@ class CobroRecargo(LoginRequiredMixin, View):
             cont = 0
             for i in estadoscuenta:
                 valor = int(i.Valor)
-                if valor >= 9500:
+                if valor >= 14000:
                     cont += 1
 
             return render(request, self.template_name, {
@@ -4357,7 +4369,7 @@ class CobroRecargo(LoginRequiredMixin, View):
             cont = 0
             for i in estadoscuenta:
                 valor = i.Valor
-                if valor >= 9500:
+                if valor >= 14000:
                     cont += 1
                     estadoscu = EstadoCuenta.objects.get(IdEstadoCuenta=i.pk)
                     estadoscu.Valor += int(recargo)
@@ -4729,7 +4741,7 @@ class RegistroCredito(LoginRequiredMixin, View):
 
     def post(self, request):
         try:
-            form = self.form_class(request.user, request.POST)
+            form = self.form_class(request.POST)
 
             if form.is_valid():
                 form.save()
@@ -4749,7 +4761,7 @@ class RegistroProveedor(LoginRequiredMixin, View):
     form_class = FormRegistroProveedor
     template_name = 'usuarios/registroproveedor.html'
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         try:
             form = self.form_class()
             return render(request, self.template_name,
@@ -4760,9 +4772,9 @@ class RegistroProveedor(LoginRequiredMixin, View):
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
 
-    def post(self, request):
+    def post(self, request, *args):
         try:
-            form = self.form_class(request.user, request.POST)
+            form = self.form_class(request.POST)
 
             if form.is_valid():
                 form.save()
@@ -4770,8 +4782,7 @@ class RegistroProveedor(LoginRequiredMixin, View):
                 return HttpResponseRedirect(reverse('usuarios:controlpresupuestal'))
 
             else:
-                messages.add_message(request, messages.ERROR,
-                                     'No se pudo agregar la informacion al sistema')
+                messages.add_message(request, messages.ERROR, 'No se pudo agregar la informacion al sistema')
                 return HttpResponseRedirect(reverse('usuarios:controlpresupuestal'))
 
         except ObjectDoesNotExist:
@@ -4836,6 +4847,41 @@ class PagoParcial(LoginRequiredMixin, View):
             usuario = 0
             if usuario == 0:
                 return render(request, self.template_name)
+
+        except ObjectDoesNotExist:
+            return render(request, "pages-404.html")
+
+class ReporteRetiro(LoginRequiredMixin, View):
+    login_url = '/'
+    template_name = 'usuarios/retiro.html'
+
+    def get(self, request, matricula):
+        try:
+            usuario = 0
+            vivienda = Vivienda.objects.get(IdVivienda=matricula)
+            matricula1 = vivienda.IdVivienda
+            if usuario == 0:
+                return render(request, self.template_name, {'idvivienda': matricula1})
+
+        except ObjectDoesNotExist:
+            return render(request, "pages-404.html")
+
+    def post(self, request, matricula):
+        try:
+            Descripcion = request.POST.get("descripcion")
+            usuario =0
+            if usuario == 0:
+                vivienda = Vivienda.objects.get(IdVivienda=matricula)
+                registrarnovedad = NovedadesRetiro(IdVivienda=vivienda,Descripcion=Descripcion)
+                vivienda.EstadoServicio = 'Retirado'
+                vivienda.save()
+                estadodecuenta = EstadoCuenta.objects.get(IdVivienda=vivienda)
+                estadodecuenta.Estado='Retirado'
+                estadodecuenta.save()
+                registrarnovedad.save()
+                messages.add_message(request, messages.INFO, 'La novedad se registro correctamente')
+                return HttpResponseRedirect(reverse('usuarios:inicio'))
+
 
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")

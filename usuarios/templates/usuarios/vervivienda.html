@@ -8,7 +8,34 @@
 {% include 'usuarios/alerts.html' %}
 
 <div class="page-body">
+
     <div class="container-fluid">
+      {% if novedadr is True %}
+      <div class="row">
+        <div class="card card-sm">
+          <div class="col-md-12">
+                  <div class="card-body">
+                      <div class="row align-items-center">
+                        <div class="col-auto">
+                        <span class="bg-red text-white avatar">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/alert-octagon -->
+  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8.7 3h6.6c.3 0 .5 .1 .7 .3l4.7 4.7c.2 .2 .3 .4 .3 .7v6.6c0 .3 -.1 .5 -.3 .7l-4.7 4.7c-.2 .2 -.4 .3 -.7 .3h-6.6c-.3 0 -.5 -.1 -.7 -.3l-4.7 -4.7c-.2 -.2 -.3 -.4 -.3 -.7v-6.6c0 -.3 .1 -.5 .3 -.7l4.7 -4.7c.2 -.2 .4 -.3 .7 -.3z" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
+                        </span>
+                      </div>
+                      <div class="col">
+                        <div class="font-weight-medium">
+                          {%for nov in novretiro %}
+                          {{ nov.Descripcion}} <strong> Se registra en el sistema en la fecha: </strong>{{ nov.Fecha}}
+                          {%endfor%}
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+           </div>
+      </div>
+      <br>
+      {%endif%}
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -858,8 +885,8 @@
                             <div class="btn-group" role="group" style="margin-top:0.3rem;">
                                   <a class="btn btn-primary" href="{% url 'usuarios:cambiotitular' matricula %}">Cambiar propietario</a>&nbsp;
                                     <a class="btn btn-primary" href="{% url 'usuarios:facturaindividual' matricula %}">Generar factura</a>&nbsp;
-                                    <a class="btn btn-primary" href="{% url 'usuarios:pagarmatricula' matricula %}">Pago matricula</a>
-
+                                    <a class="btn btn-primary" href="{% url 'usuarios:pagarmatricula' matricula %}">Pago matricula</a>&nbsp;
+                                    <a class="btn btn-primary" href="{% url 'usuarios:novedadretiro' matricula %}">Generar retiro</a>
                                 </div>
                             </div>
                         </div>

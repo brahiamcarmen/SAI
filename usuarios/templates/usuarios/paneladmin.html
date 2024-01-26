@@ -2,400 +2,408 @@
 {% load static %}
 {% block styles %}
 {% endblock %}
-{%block title %} <title>Modulo - PA</title> {%endblock%}
-{% block content %}
 {% load humanize %}
+{%block title %} <title>Modulo admin</title> {%endblock%}
+{% block content %}
 {% include 'usuarios/alerts.html' %}
-<div class="row">
-    <div class="col-sm-12">
-        <nav>
-          <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <a class="nav-link active" id="nav-home-tab" data-toggle="tab" href="#Inicio" role="tab" aria-controls="nav-home" aria-selected="true">Inicio</a>
-            <a class="nav-link" id="nav-profile-tab" data-toggle="tab" href="#usuarios" role="tab" aria-controls="nav-profile" aria-selected="false">Usuarios del sistema</a>
-            <a class="nav-link" id="nav-profile-tab" data-toggle="tab" href="#tarifas" role="tab" aria-controls="nav-profile" aria-selected="false">Tarifas</a>
-            <a class="nav-link" id="nav-contact-tab" data-toggle="tab" href="#matriculas" role="tab" aria-controls="nav-contact" aria-selected="false">Costos de matricula</a>
-            <a class="nav-link" id="nav-contact-tab" data-toggle="tab" href="#interés" role="tab" aria-controls="nav-contact" aria-selected="false">Tasa de interés</a>
-            <a class="nav-link" id="nav-contact-tab" data-toggle="tab" href="#poblacion" role="tab" aria-controls="nav-contact" aria-selected="false">Tipos de poblacion</a>
-          </div>
-        </nav>
-        <div class="tab-content" id="nav-tabContent">
-            <!-- panel de inicio -->
-          <div class="tab-pane fade show active" id="Inicio" role="tabpanel" aria-labelledby="nav-home-tab">
-                <div class="row" style="margin-top: 0.5rem;">
-                    <div class="col-sm-4">
-                        <div class="row">
-                             <img src="{{ logo.url }}" class="img-thumbnail" alt="...">
-                        </div>
-                        <div class="row">
-                                <div class="col-sm-12 text-center" style="margin: 0.5rem;">
-                                    <h5>
-                                        {{razonsocial}}
-                                    </h5>
+
+<div class="page-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                  <ul class="nav nav-tabs" data-bs-toggle="tabs">
+                    <li class="nav-item">
+                      <a href="#tabs-home-7" class="nav-link active" data-bs-toggle="tab">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="5 12 3 12 12 3 21 12 19 12" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>Inicio
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#tabs-profile-7" class="nav-link" data-bs-toggle="tab">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><rect x="9" y="3" width="6" height="4" rx="2" /><path d="M9 14h.01" /><path d="M9 17h.01" /><path d="M12 16l1 1l3 -3" /></svg>&nbsp;Informacion detallada
+                    </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#tabs-profile-8" class="nav-link" data-bs-toggle="tab">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><rect x="9" y="3" width="6" height="4" rx="2" /><path d="M9 14h.01" /><path d="M9 17h.01" /><path d="M12 16l1 1l3 -3" /></svg>&nbsp;Usuarios del sistema
+                    </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#tabs-profile-9" class="nav-link" data-bs-toggle="tab">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><rect x="9" y="3" width="6" height="4" rx="2" /><path d="M9 14h.01" /><path d="M9 17h.01" /><path d="M12 16l1 1l3 -3" /></svg>&nbsp;Cargos por conexión
+                    </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#tabs-profile-10" class="nav-link" data-bs-toggle="tab">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><rect x="9" y="3" width="6" height="4" rx="2" /><path d="M9 14h.01" /><path d="M9 17h.01" /><path d="M12 16l1 1l3 -3" /></svg>&nbsp;Clasificacion de persona
+                    </a>
+                    </li>
+                    <li class="nav-item ms-auto">
+                      <a href="#tabs-settings-7" class="nav-link" title="Settings" data-bs-toggle="tab"><!-- Download SVG icon from http://tabler-icons.io/i/settings -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" /><circle cx="12" cy="12" r="3" /></svg>
+                      </a>
+                    </li>
+
+                  </ul>
+                  <div class="card-body">
+                    <div class="tab-content">
+                      <div class="tab-pane active show" id="tabs-home-7">
+                        <div>
+                            <div class="row">
+                                <div class="col-xl-12">
+                                    <div class="row">
+                                        <div class="col-md-4 col-lg-3">
+                                            <div class="card">
+                                              <div class="card-body p-4 text-center">
+                                                <span class="avatar avatar-xl mb-3" style="background-image: url({% static 'images/2da.png' %})"></span>
+                                                <h3 class="m-0 mb-1">{{razonsocial}}</h3>
+                                                <div class="text-muted"><a href="">{{ propietario }}</a></div>
+                                                <div class="mt-3">
+                                                    <span class="badge bg-green-lt">{{ estado }}</span>&nbsp;
+                                                </div>
+                                              </div>
+                                              <div class="d-flex">
+                                                <a href="{% url 'usuarios:modificarempresa' %}" class="card-btn"><!-- Download SVG icon from http://tabler-icons.io/i/pencil -->
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" /><line x1="13.5" y1="6.5" x2="17.5" y2="10.5" /></svg>
+                                                  Modificar informacion</a>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div class="col-md-4 col-lg-6">
+                                            <div class="row" style="margin-top:0.5rem">
+                                                <div class="col-12">
+                                                    <h3 class="subheader">Informacion de la empresa</h3>
+                                                    <div class="row text-center">
+                                                        <div class="col-4 col-sm-4">
+                                                            <h4>Nit</h4>
+                                                            {{ nit|intcomma }}
+                                                        </div>
+                                                        <div class="col-5 col-sm-5">
+                                                            <h4>Correo</h4>
+                                                            {{ email }}
+                                                        </div>
+                                                        <div class="col-3 col-sm-3">
+                                                            <h4>Telefono</h4>
+                                                             {{ telefono }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row" style="margin-top:0.5rem">
+                                                <div class="col-12">
+                                                    <div class="row text-center">
+                                                        <div class="col-6 col-sm-6">
+                                                            <h4>Representante legal</h4>
+                                                            {{ legal }}
+                                                        </div>
+                                                        <div class="col-6 col-sm-6">
+                                                            <h4>Direccion</h4>
+                                                            {{ direccion }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    <hr>
+                                    <div class="row" style="margin-top:0.5rem">
+                                        <div class="col-6">
+                                            <h3 class="subheader">Ultima factura</h3>
+                                            {% for factura in facturasemi %}
+                                            <div class="card">
+                                              <div class="card-body p-4 text-center">
+                                                <h3 class="m-0 mb-1">{{ factura.IdFactura }}</h3>
+                                                <div class="text-muted">{{ factura.IdCiclo }}</div>
+                                                <div class="mt-3">
+                                                    {% if factura.Estado == "Vencida" %}
+                                                    <span class="badge bg-warging-lt">Vencida</span>&nbsp;
+                                                    {% elif factura.Estado == "Paga" %}
+                                                     <span class="badge bg-success-lt">Paga</span>&nbsp;
+                                                     {% elif factura.Estado == "Anulada" %}
+                                                    <span class="badge bg-purple-lt">Anulada</span>&nbsp;
+                                                    {% else %}
+                                                    <span class="badge bg-info-lt">Emitida</span>
+                                                    {% endif %}
+                                                </div>
+                                              </div>
+                                              <div class="d-flex">
+                                                <a href="{% url 'usuarios:descargarfactura' factura.IdFactura %}" class="card-btn">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" /><polyline points="7 11 12 16 17 11" /><line x1="12" y1="4" x2="12" y2="16" /></svg>&nbsp; Descargar
+                                                  </a>
+                                              </div>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="col-6">
+                                            <h3 class="subheader">Ultimo pago</h3>
+                                            {%for filtropago in ultimopago %}
+                                            <div class="card">
+                                              <div class="card-body p-4 text-center">
+                                                <h3 class="m-0 mb-1">{{ filtropago.IdPago }}</h3>
+                                                <div class="text-muted"> {{filtropago.FechaPago}}  </div>
+                                                <div class="mt-3">
+                                                    <span class="badge bg-warging-lt">{{ filtropago.IdFactura }}</span>&nbsp;
+                                                    <span class="badge bg-warging-lt">${{ filtropago.ValorPago|intcomma }}</span>&nbsp;
+                                                </div>
+                                              </div>
+                                              <div class="d-flex">
+                                                <a href="{% url 'usuarios:imprimirpago' filtropago.IdPago %}" class="card-btn">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2" /><path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4" /><rect x="7" y="13" width="10" height="8" rx="2" /></svg>&nbsp; Imprimir
+                                                  </a>
+                                              </div>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                     </div>
+                                    <br>
+                                          </div>
+                                          <div class="col-md-4 col-lg-3">
+                                            <h3 class="subheader">Estado de cuenta</h3>
+                                             <table class="table table-transparent table-responsive">
+                                              <thead>
+                                                <tr>
+                                                  <th>Descripción</th>
+                                                  <th class="text-end" style="width: 1%">Cuotas</th>
+                                                  <th class="text-end" style="width: 1%">Valor</th>
+                                                </tr>
+                                              </thead>
+                                              <tr>
+                                                <td>
+                                                  <p class="strong mb-1">Aportes</p>
+                                                  <div class="text-muted">{{estadocuenta}}</div>
+                                                </td>
+                                                <td class="text-end">0</td>
+                                                <td class="text-end"> ${{ aportes|intcomma }}</td>
+                                              </tr>
+                                              <tr>
+                                                <td>
+                                                  <p class="strong mb-1">Matricula</p>
+                                                  <div class="text-muted">{{nocuenta}}</div>
+                                                </td>
+                                                <td class="text-end">0</td>
+                                                <td class="text-end"> ${{ cobromatricula1|intcomma }}</td>
+                                              </tr>
+                                              <tr>
+                                                <td>
+                                                  <p class="strong mb-1">Suspención</p>
+                                                  <div class="text-muted">Auto</div>
+                                                </td>
+                                                <td class="text-end">0</td>
+                                                <td class="text-end"> ${{ suspenciones2|intcomma }}</td>
+                                              </tr>
+                                              <tr>
+                                                <td>
+                                                  <p class="strong mb-1">Reconexión</p>
+                                                  <div class="text-muted">Auto</div>
+                                                </td>
+                                                <td class="text-end">0</td>
+                                                <td class="text-end"> ${{ reconexion2|intcomma }}</td>
+                                              </tr>
+                                              <tr>
+                                                <td>
+                                                  <p class="strong mb-1">Reparaciones</p>
+                                                  <div class="text-muted">Auto</div>
+                                                </td>
+                                                <td class="text-end">0</td>
+                                                <td class="text-end"> $0</td>
+
+                                              <tr>
+                                                <td colspan="2" class="font-weight-bold text-uppercase text-end">Total</td>
+                                                <td class="font-weight-bold text-end">${{total|intcomma}}</td>
+                                              </tr>
+                                            </table>
+                                          </div>
+                                        </div>
                                 </div>
-                                <div class="col-sm-12" style="margin: 0.5rem;">
-                                    <div class="row text-center">
-                                      <div class="col-12">
-                                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                                            <a class="nav-link active" href="{% url 'usuarios:modificarempresa' %}" >Modificar información</a>
+                            </div>
+                        </div>
+                      </div>
+                      <div class="tab-pane" id="tabs-profile-7">
+                            <div class="row">
+                                 {% for tarifa in tarifas %}
+                                    <div class="col-md-3 col-lg-3">
+                                      <div class="card" >
+                                        <div class="card-header">
+                                            <b class="text-primary">Identificador de tarifa: </b> &nbsp;{{ tarifa.IdTarifa }}&nbsp;
+                                            {% if tarifa.Ano == ano %}
+                                                <span class="badge badge-pill badge-success">Activa</span>
+                                            {% else %}
+                                                <span class="badge badge-pill badge-warning">Inactiva</span>
+                                            {% endif %}
+                                        </div>
+                                        <div class="card-body">
+                                            <dl class="row">
+                                              <h3 class="subheader">Aportes fijos</h3>
+                                                <dt class="col-5">Unifamiliar:</dt>
+                                                <dd class="col-7">${{ tarifa.Valor|intcomma }}</dd>
+                                                <dt class="col-5">Bifamiliar:</dt>
+                                                <dd class="col-7">${{ tarifa.bifamiliar|intcomma }}</dd>
+                                                <dt class="col-5">Manteni..to:</dt>
+                                                <dd class="col-7">${{ tarifa.Mantenimiento|intcomma }}</dd>
+                                                <dt class="col-5">Recargo:</dt>
+                                                <dd class="col-7">${{ tarifa.Recargo|intcomma }}</dd>
+                                                <dt class="col-5">Especial:</dt>
+                                                <dd class="col-7">${{ tarifa.especial|intcomma }}</dd>
+                                                <dt class="col-5">Multifa... * P:</dt>
+                                                <dd class="col-7">${{ tarifa.multifamiliar|intcomma }}</dd>
+                                                <h3 class="subheader">Ordenes</h3>
+                                                <dt class="col-5">Suspencion:</dt>
+                                                <dd class="col-7">${{ tarifa.TarifaSuspencion|intcomma }}</dd>
+                                                <dt class="col-5">Reconexion:</dt>
+                                                <dd class="col-7">${{ tarifa.TarifaReconexion|intcomma }}</dd>
+                                                <h3 class="subheader">Vigencia</h3>
+                                                <dt class="col-5">Registro:</dt>
+                                                <dd class="col-7">{{ tarifa.FechaInicial }}</dd>
+                                                <dt class="col-5">Año:</dt>
+                                                <dd class="col-7">{{ tarifa.Ano }}</dd>
+                                            </dl>
                                         </div>
                                       </div>
+                                      <br>
+                                    </div>
+                                    {%endfor%}
+                            </div>
+                                   
+                      </div>
+                      <div class="tab-pane" id="tabs-profile-8">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                </div>
+                                <div class="col-auto">
+                                   
+                                </div>
+                             <div class="col-auto ms-auto d-print-none">
+                                <div class="btn-list">
+                                    <div class="col-auto">
+                                        <a href="{% url 'usuarios:agregarusuarios' %}" class="btn btn-primary btn-sm w-100">Agregar usuario
+                                        </a>
                                     </div>
                                 </div>
                             </div>
-                        
-                    </div>
-                    <div class="col-sm-8">
-                        <div class="card shadow mb-4 text-center" style="margin-top:1rem;">
-                                    <div class="card-header py-3">
-                                        <h6 class="m-0 font-weight-bold text-primary">Información de la empresa</h6>
+                        </div>
+                        <div class="row">
+                            {% for usuario in usuarios %}
+                            <div class="col-md-6 col-lg-3">
+                                <div class="card">
+                                  <div class="card-body p-4 text-center">
+                                    <span class="avatar avatar-xl mb-3 avatar-rounded" style="background-image: url({{ usuario.fotoUsuario.url }})"></span>
+                                    <h4 class="m-0 mb-1"><a href="#">{{ usuario.usuid.first_name }} {{ usuario.usuid.last_name }}</a></h4>
+                                    <div class="text-muted">{{usuario.TipoUsuario}}</div>
+                                        <div class="mt-3">
+                                            {% if usuario.usuid.is_active is True %}
+                                                <span class="badge bg-purple-lt">Activo</span>
+                                            {% else %}
+                                                <span class="badge bg-red-lt">Inactivo</span>
+                                            {% endif %}
+                                          
+                                        </div>
+                                    <div class="text-muted">
+                                        
                                     </div>
-                                    <div class="card-body">
-                                        <div class="row text-center">
-                                            <div class="col-sm">
-                                                <div class="row">
-                                                    <div class="col-sm-12">
-                                                        <b>NIT</b>
-                                                    </div>
-                                                    <div class="col-sm-12">
-                                                        {{ nit }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm">
-                                                <div class="row">
-                                                    <div class="col-sm-12">
-                                                        <b>Razon social</b>
-                                                    </div>
-                                                    <div class="col-sm-12">
-                                                       {{ razonsocial }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row text-center" style="margin-top: 1rem;">
-                                            <div class="col-sm">
-                                                <div class="row">
-                                                    <div class="col-sm-12">
-                                                        <b>Correo electronico</b>
-                                                    </div>
-                                                    <div class="col-sm-12">
-                                                        {{ email }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm">
-                                                <div class="row">
-                                                    <div class="col-sm-12">
-                                                        <b>Dirección</b>
-                                                    </div>
-                                                    <div class="col-sm-12">
-                                                        {{ direccion }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row text-center" style="margin-top: 1rem;">
-                                            <div class="col-sm">
-                                                <div class="row">
-                                                    <div class="col-sm-12">
-                                                        <b>Representante legal</b>
-                                                    </div>
-                                                    <div class="col-sm-12">
-                                                        {{ legal }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm">
-                                                <div class="row">
-                                                    <div class="col-sm-12">
-                                                        <b>Telefono</b>
-                                                    </div>
-                                                    <div class="col-sm-12">
-                                                        {{ telefono }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row text-center" style="margin-top: 1rem;">
-                                            <div class="col-sm">
-                                                <div class="row">
-                                                    <div class="col-sm-12">
-                                                        <b>Estado actual</b>
-                                                    </div>
-                                                    <div class="col-sm-12">
-                                                        {{ estado }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm">
-                                                <div class="row">
-                                                    <div class="col-sm-12">
-                                                        <b>Tarifa</b>
-                                                    </div>
-                                                    <div class="col-sm-12">
-                                                        {{ tarifa|intcomma }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                  </div>
+                                  <div class="d-flex">
+                                    <a href="{% url 'usuarios:perfilusuario' usuario.IdUsuario %}" class="card-btn">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="12" r="2" /><path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7" /></svg>
+                                       Ver perfil </a>
+                                  </div>
+                                </div>
+                              </div>
+                            {%endfor%}
+                        </div>
+                      </div>
+                      <div class="tab-pane" id="tabs-profile-9">
+                        <div class="row align-items-center">
+                              <div class="col">
+                              </div>
+                            <div class="col-auto">
+                               
+                            </div>
+                            <div class="col-auto ms-auto d-print-none">
+                                <div class="btn-list">
+                                    <div class="col-auto">
+                                        <a href="{% url 'usuarios:registrocostomatricula' %}" class="btn btn-primary btn-sm w-100">Agregar tarifa
+                                        </a>
                                     </div>
                                 </div>
+                          </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                                    {% for matricula in matriculas %}
+                                    <div class="col-md-6 col-lg-4">
+                                      <div class="card" >
+                                        <div class="card-body">
+                                            <dl class="row">
+                                              <h3 class="subheader">Informacion de la tarifa - cargo por conexion</h3>
+                                                <dt class="col-5">No tarifa:</dt>
+                                                <dd class="col-7">{{ matricula.IdValor }}</dd>
+                                                <dt class="col-5">Valor:</dt>
+                                                <dd class="col-7">{{ matricula.Valor|intcomma }}</dd>
+                                                <dt class="col-5">Fecha:</dt>
+                                                <dd class="col-7">{{ matricula.Fecha }}</dd>
+                                            </dl>
+                                        </div>
+                                      </div>
+                                      <br>
+                                    </div>
+
+                                    {%endfor%}
+                        </div>
+                      </div>
+                      <div class="tab-pane" id="tabs-profile-10">
+                                                <div class="row align-items-center">
+                              <div class="col">
+                              </div>
+                            <div class="col-auto">
+                               
+                            </div>
+                            <div class="col-auto ms-auto d-print-none">
+                                <div class="btn-list">
+                                    <div class="col-auto">
+                                        <a href="{% url 'usuarios:registropoblacion' %}" class="btn btn-primary btn-sm w-100">Agregar clasificacion
+                                        </a>
+                                    </div>
+                                </div>
+                          </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                                   {% for matricula in poblacion %}
+                                    <div class="col-md-6 col-lg-4">
+                                      <div class="card" >
+                                        <div class="card-body">
+                                            <dl class="row">
+                                              <h3 class="subheader">Informacion de clasificacion</h3>
+                                                <dt class="col-5">No clasificacion:</dt>
+                                                <dd class="col-7">{{ matricula.IdPoblacion }}</dd>
+                                                <dt class="col-5">Descripcion:</dt>
+                                                <dd class="col-7">{{ matricula.Descripcion }}</dd>
+                                            </dl>
+                                        </div>
+                                      </div>
+                                      <br>
+                                    </div>
+
+                                    {%endfor%}
+                        </div>
                     </div>
-                </div>
-          </div>
-          <!-- panel de usuarios -->
-          <div class="tab-pane fade" id="usuarios" role="tabpanel" aria-labelledby="nav-profile-tab">
-            <div class="row" style="margin-top:0.5rem;">
-                    <div class="col-sm-6">
-                        <h1 class="h3 text-gray-800">Listado de usuarios del sistema</h1>
-                    </div>
-                     <div class="col-sm-6">
-                        <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" onclick="window.location='{% url 'usuarios:agregarusuarios' %}'">Agregar usuario</button>
-                    </div>
-                </div>
-            <div class="row text-center" style="margin-top: 0.5rem">
-                {% for usuario in usuarios %}
-                <div class="col-sm-3" style="margin-bottom: 0.5rem;">
-                    <div class="card">
-                      <img src="{{ usuario.fotoUsuario.url }}" class="card-img-top" alt="...">
-                      <div class="card-body" style="margin-top: -1rem;">
-                        <h5 class="card-title">{{ usuario.usuid.first_name }} {{ usuario.usuid.last_name }}</h5>
-                        {% if usuario.usuid.is_active is True %}
-                            <span class="badge badge-pill badge-success">Activo</span>
-                        {% else %}
-                            <span class="badge badge-pill badge-warning">Inactivo</span>
-                        {% endif %}
-                        <span class="badge badge-pill badge-primary">{{usuario.TipoUsuario}}</span>
-                        <p class="card-text">
-                        </p>
-                        <a href="{% url 'usuarios:perfilusuario' usuario.IdUsuario %}" class="btn btn-primary" style="width: 100%;">Ver perfil</a>
+                      <div class="tab-pane" id="tabs-settings-7">
+                        <div>
+                            <div class="btn-group" role="group" style="margin-top:0.3rem;">
+                                  <a class="btn btn-primary" href="">Cambiar propietario</a>&nbsp;
+                                    <a class="btn btn-primary" href="">Generar factura</a>&nbsp;
+                                    <a class="btn btn-primary" href="">Pago matricula</a>
+
+                                </div>
+                            </div>
+                        </div>
                       </div>
                     </div>
+                  </div>
                 </div>
-                {%endfor%}
-            </div>
-          </div>
-          <div class="tab-pane fade" id="tarifas" role="tabpanel" aria-labelledby="nav-contact-tab">
-            <div class="row" style="margin-top:0.5rem;">
-                <div class="col-sm-6">
-
-                </div>
-                 <div class="col-sm-6">
-                    <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" onclick="window.location='{% url 'usuarios:registrotarifa' %}'">Agregar tarifa</button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12" style="margin-top:0.5rem;">
-                    <div class="row">    
-                        {% for tarifa in tarifas %}
-                        <div class="col-sm-12" style="margin-top:0.5rem;">
-                            <div class="card text-center">
-                                <div class="card-header">
-                                    <b class="text-primary">Identificador de tarifa: </b>{{ tarifa.IdTarifa }}
-                                    {% if tarifa.Ano == ano %}
-                                        <span class="badge badge-pill badge-success">Activa</span>
-                                    {% else %}
-                                        <span class="badge badge-pill badge-warning">Inactiva</span>
-                                    {% endif %}
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-sm-12 text-success"><b>Aportes fijos</b></div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <b class="text-primary">Aporte unifamiliar</b><br>
-                                            ${{ tarifa.Valor|intcomma }}
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <b class="text-primary">Aporte mantenimiento</b><br>
-                                            ${{ tarifa.Mantenimiento|intcomma }}
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <b class="text-primary">Aporte por mora</b><br>
-                                            ${{ tarifa.Recargo|intcomma }}
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <b class="text-primary">Aporte especial</b><br>
-                                            ${{ tarifa.especial|intcomma }}
-                                        </div>
-                                    </div>
-                                    <br>
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <b class="text-primary">Aporte por suspensión</b><br>
-                                            ${{ tarifa.TarifaSuspencion|intcomma }}
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <b class="text-primary">Aporte por reconexión</b><br>
-                                            ${{ tarifa.TarifaReconexion|intcomma }}
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <b class="text-primary">Aporte bifamiliar</b><br>
-                                            ${{ tarifa.bifamiliar|intcomma }}
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <b class="text-primary">Aporte multifamiliar * P</b><br>
-                                            ${{ tarifa.multifamiliar|intcomma }}
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    <div class="row" style="margin-top:0.3rem">
-                                        <div class="col-sm-12 text-success"><b>Vigencia</b></div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <b class="text-primary">Fecha de registro</b>
-                                            {{ tarifa.FechaInicial }}
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <b class="text-primary">Vigencia</b>
-                                            {{ tarifa.Ano }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                         {% endfor %}
-                     </div>
-                </div>
-            </div>
-          </div>
-        <div class="tab-pane fade" id="matriculas" role="tabpanel" aria-labelledby="nav-contact-tab">
-            <div class="row" style="margin-top:0.5rem;">
-                <div class="col-sm-6">
-                    <h1 class="h3 text-gray-800">Listado de tarifas de matricula</h1>
-                </div>
-                 <div class="col-sm-6">
-                    <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" onclick="window.location='{% url 'usuarios:registrocostomatricula' %}'">Agregar tarifa</button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12" style="margin-top:0.5rem;">
-                    <div class="card shadow">
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable1" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th>Id Valor</th>
-                                            <th>Valor</th>
-                                            <th>Fecha</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for matricula in matriculas %}
-                                    <tr>
-                                        <td>{{ matricula.IdValor }}</td>
-                                        <td>{{ matricula.Valor|intcomma }}</td>
-                                        <td>{{ matricula.Fecha }}</td>
-                                    </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-          </div>
-            <div class="tab-pane fade" id="interés" role="tabpanel" aria-labelledby="nav-contact-tab">
-                <div class="row" style="margin-top:0.5rem;">
-                    <div class="col-sm-6">
-                        <h1 class="h3 text-gray-800">Listado de tasas de interés</h1>
-                    </div>
-                     <div class="col-sm-6">
-                        <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" onclick="window.location=''">Agregar tarifa</button>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12" style="margin-top:0.5rem;">
-                        <div class="card shadow">
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered" id="dataTable2" width="100%" cellspacing="0">
-                                        <thead>
-                                            <tr>
-                                                <th>Id</th>
-                                                <th>Valor</th>
-                                                <th>Fecha</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for interes in intereses %}
-                                        <tr>
-                                            <td>{{ interes.IdValor }}</td>
-                                            <td>{{ interes.Valor|intcomma }}</td>
-                                            <td>{{ interes.Fecha }}</td>
-                                        </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-           </div>
-            <div class="tab-pane fade" id="poblacion" role="tabpanel" aria-labelledby="nav-contact-tab">
-                <div class="row" style="margin-top:0.5rem;">
-                    <div class="col-sm-6">
-                        <h1 class="h3 text-gray-800">Listado de tipos de población</h1>
-                    </div>
-                     <div class="col-sm-6">
-                        <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" onclick="window.location='{% url 'usuarios:registropoblacion' %}'">Agregar población</button>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12" style="margin-top:0.5rem;">
-                        <div class="card shadow">
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered" id="dataTable3" width="100%" cellspacing="0">
-                                        <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Id poblacion</th>
-                                            <th>Descripcion</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for matricula in poblacion %}
-                                        <tr>
-                                            <td>{{ forloop.counter }}</td>
-                                            <td>{{ matricula.IdPoblacion }}</td>
-                                            <td>{{ matricula.Descripcion }}</td>
-                                        </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-           </div>
+              </div>
         </div>
-
     </div>
-       
 </div>
-                   
+
 {% endblock %}
 {% block scripts %}
-<script type="text/javascript">
-    $(document).ready( function () {
-    $('#dataTable1').DataTable();
-} );
-</script>
-<script type="text/javascript">
-    $(document).ready( function () {
-    $('#dataTable2').DataTable();
-} );
-</script>
-<script type="text/javascript">
-    $(document).ready( function () {
-    $('#dataTable3').DataTable();
-} );
-</script>
 {% endblock %}
