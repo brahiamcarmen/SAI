@@ -2,8 +2,7 @@
 {% load static %}
 {% block styles %}
 {% endblock %}
-{%block title %} <title>Modulo - GMF</title> {%endblock%}
-{% load humanize %}
+{%block title %} <title>Generador de facturas</title> {%endblock%}
 {% block content %}
 {% include 'usuarios/alerts.html' %}
 <!-- Titulo -->
@@ -18,145 +17,58 @@
                   Modulo
                 </div>
                 <h2 class="page-title">
-                  Generador masivo facturas
+                  Generador de facturacion
                 </h2>
               </div>
-                <div class="col-auto">
-                    <a class="btn btn-primary" href="{% url 'usuarios:facturamasiva' %}">Descargar facturas</a>
-                </div>
-             <div class="col-auto ms-auto d-print-none">
+              <div class="col-auto ms-auto d-print-none">
                 <div class="btn-list">
-                    <a href="" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#modal-danger"> Generar facturas
-                    </a>
+                    <div class="col-auto">
+                        <a href="{% url 'usuarios:estadoscuenta' %}" class="btn btn-sm btn-indigo btn-pill w-100">
+                                      Volver</a>
+                    </div>
+                    </div>
                 </div>
               </div>
-              <div class="col-auto">
-                    <form class="table-search-form row gx-1 align-items-center">
-                        <div class="col-auto">
-                            <input type="text" id="search" name="searchorders" class="form-control search-orders" placeholder="Buscar">
-                        </div>
-                    </form>
-               </div>
-
-               
             </div>
           </div>
         </div>
-    </div>
-<br>
-<div class="page-body">
-    <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-6 col-xl-3">
-                <div class="row">
-                    <div class="col-sm-6 col-lg-6">
-                        <div class="card">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center">
-                              <div class="subheader">Generadas</div>
-                            </div>
-                            <div class="h1 mb-3">{{ facturasemi|intcomma }}</div>
-                          </div>
+            <div class="page-body">
+            <div class="container-xl">
+              <div class="row row-cards">
+                        <div class="col-md-4 col-lg-4">
                         </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-6">
-                        <div class="card">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center">
-                              <div class="subheader">Vencidas</div>
+                        <div class="col-md-4 col-lg-4">
+
+                            <div class="card">
+                                 <div class="row">
+                                <div class="col-sm-12 text-center">
+                                    <img style="width: 40%" alt="" src="{% static 'images/alerta.png' %}">
+                                </div>
                             </div>
-                            <div class="h1 mb-3">{{ facturasven|intcomma }}</div>
-                          </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row" style="margin-top:1rem">
-                    <div class="col-sm-6 col-lg-6">
-                        <div class="card">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center">
-                              <div class="subheader">Anuladas</div>
+                                <div class="card-body">
+                                   <h3 class="subheader">Opciones disponibles</h3>
+                                   <div class="row">
+                                        <div class="col-3">
+                                            
+                                        </div>
+                                        <div class="col-6">
+                                            <a href="" class="btn btn-indigo w-100" data-bs-toggle="modal" data-bs-target="#modal-danger"> Continuar</a>
+                                        </div>
+                                        <div class="col-3">
+                                            
+                                        </div>
+                                   </div>
+                                   
+                                </div>
                             </div>
-                            <div class="h1 mb-3">{{ facturasanu|intcomma }}</div>
-                          </div>
                         </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-6">
-                        <div class="card">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center">
-                              <div class="subheader">Pagadas</div>
-                            </div>
-                            <div class="h1 mb-3">{{ facturaspg|intcomma }}</div>
-                          </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row" style="margin-top:1rem">
-                    <div class="col-sm-5 col-lg-5">
-                        <div class="card">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center">
-                              <div class="subheader">Vigentes</div>
-                            </div>
-                            <div class="h1 mb-3">{{ totalemitidas|intcomma }}</div>
-                          </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-7 col-lg-7">
-                        <div class="card">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center">
-                              <div class="subheader">Valor</div>
-                            </div>
-                            <div class="h1 mb-3">${{ suma|intcomma }}</div>
-                          </div>
-                        </div>
-                    </div>
-                </div>
+                        <div class="col-md-4 col-lg-4">
+                        </div>                                   
             </div>
-            <div class="col-lg-9 col-xl-9">
-                <div class="card">
-                  <div class="card-body">
-                        <h3 class="card-title">Listado de facturas</h3>
-                    <div class="table-responsive" style="height:15rem">
-                    <table class="table card-table table-vcenter text-nowrap datatable" id="datatable" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th>No factura</th>
-                                <th>Matricula</th>
-                                <th>Estado</th>
-                                <th>Fecha expedicion</th>
-                                <th>Opciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for ord in facturas %}
-                            <tr>
-                                <td>{{ ord.IdFactura }}</td>
-                                <td>{{ ord.Matricula }}</td>
-                                <td>{{ ord.Estado }}</td>
-                                <td>{{ ord.FechaExpe }}</td>
-                                <td><span class="dropdown">
-                                  <button class="btn dropdown-toggle align-text-top" data-bs-boundary="viewport" data-bs-toggle="dropdown">Opciones</button>
-                                  <div class="dropdown-menu dropdown-menu-end">
-                                    <a class="dropdown-item" href="">
-                                      Ver
-                                    </a>
-                                  </div>
-                                </span>
-                                </td>
-                            </tr>
-                             {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                  </div>
-                </div>
             </div>
+          </div>  
         </div>
-    </div>
-</div>
     <div class="modal modal-blur fade" id="modal-danger" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -175,21 +87,17 @@
                     Cancelar
                   </a></div>
                 <div class="col">
-                    <form method="post" role="form" enctype="multipart/form-data" onsubmit="return valida(this)">
-                    {% csrf_token %}
-                    <button style="width: 100%" type="submit" class="btn btn-danger">Generar</button>
-                </form>
+                    <form method="post" role="form" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <button  style="width: 100%;" type="submit" class="btn btn-primary">Finalizar</button>
+                    </form>  
                   </div>
-
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-
-
 {% endblock %}
 {% block scripts %}
 {% endblock %}

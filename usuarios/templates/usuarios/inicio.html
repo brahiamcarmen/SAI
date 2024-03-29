@@ -3,146 +3,218 @@
 {% block styles %}
 <link href="{% static 'stylesheets/diseno.css' %}" rel="stylesheet" type="text/css">
 {% endblock %}
-{%block title %} <title>Modulo - I</title> {%endblock%}
+{%block title %} <title>Inicio</title> {%endblock%}
 {% block content %}
 {% load humanize %}
 {% include 'usuarios/alerts.html' %}
-        <div class="page-body">
-          <div class="container-fluid">
-            <div class="row">
-            <div class="col-sm-9">
-            <div class="row row-deck row-cards">
-              <div class="col-sm-6 col-lg-3">
-                <div class="card">
+<div class="page-body">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-2">
+        <h3 class="subheader">Estadisticas</h3>
+          <div class="col-auto">
+                <div class="card card-sm">
                   <div class="card-body">
-                    <div class="d-flex align-items-center">
-                      <div class="subheader">Facturas pagas</div>
-                      <div class="ms-auto lh-1">
-                        <div class="dropdown">
-                          <a class="text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Este mes</a>
-
-                        </div>
-                      </div>
-                    </div>
-                    <div class="h1 mb-3">{{facturaspagas}}</div>
-                    <div class="d-flex mb-2">
-                      <div>Progreso</div>
-                      <div class="ms-auto">
-                        <span class="text-green d-inline-flex align-items-center lh-1">
-                          {{contador}}% <!-- Download SVG icon from http://tabler-icons.io/i/trending-up -->
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon ms-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="3 17 9 11 13 15 21 7" /><polyline points="14 7 21 7 21 14" /></svg>
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <span class="bg-orange text-white avatar">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="9" cy="7" r="4" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /><path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></svg>
                         </span>
                       </div>
-                    </div>
-                    <div class="progress progress-sm">
-                      <div class="progress-bar bg-blue" style="width: {{contador}}%" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                        <span class="visually-hidden">75% Complete</span>
+                      <div class="col">
+                        <div class="font-weight-medium">
+                          {{personas}}
+                        </div>
+                        <div class="text-muted">
+                          Usuarios
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="col-sm-6 col-lg-4">
-                <div class="card">
+              <div class="col-auto" style="margin-top: 0.5rem">
+                <div class="card card-sm">
                   <div class="card-body">
-                    <div class="d-flex align-items-center">
-                      <div class="subheader">Recaudado</div>
-                      <div class="ms-auto lh-1">
-                        <div class="dropdown">
-                          <a class="text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Este mes</a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="h1 mb-3">$ {{pagos|intcomma}}</div>
-                    <div class="d-flex mb-2">
-                      <div>Progreso</div>
-                      <div class="ms-auto">
-                        <span class="text-green d-inline-flex align-items-center lh-1">
-                          {{porcentaje}}% <!-- Download SVG icon from http://tabler-icons.io/i/trending-up -->
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon ms-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="3 17 9 11 13 15 21 7" /><polyline points="14 7 21 7 21 14" /></svg>
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <span class="bg-indigo text-white avatar">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="5 12 3 12 12 3 21 12 19 12" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
                         </span>
                       </div>
-                    </div>
-                    <div class="progress progress-sm">
-                      <div class="progress-bar bg-blue" style="width: {{porcentaje}}%" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                        <span class="visually-hidden">75% Complete</span>
+                      <div class="col">
+                        <div class="font-weight-medium">
+                          {{suscriptores}}
+                        </div>
+                        <div class="text-muted">
+                          Suscriptores activos
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="col-sm-6 col-lg-3">
-                <div class="card">
+              <div class="col-auto" style="margin-top: 0.5rem">
+                <div class="card card-sm">
                   <div class="card-body">
-                    <div class="d-flex align-items-center">
-                      <div class="subheader">Promedio por usuario</div>
-                      <div class="ms-auto lh-1">
-                        <div class="dropdown">
-                          <a class="text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Este mes</a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="h1 mb-3">$ {{promedio|intcomma}}</div>
-                    <div class="d-flex mb-2">
-                      <div>Progreso</div>
-                      <div class="ms-auto">
-                        <span class="text-green d-inline-flex align-items-center lh-1">
-                          {{promtarifa}}% <!-- Download SVG icon from http://tabler-icons.io/i/trending-up -->
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon ms-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="3 17 9 11 13 15 21 7" /><polyline points="14 7 21 7 21 14" /></svg>
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <span class="bg-indigo text-white avatar">
+                              <!-- Download SVG icon from http://tabler-icons.io/i/gauge -->
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="1" /><line x1="13.41" y1="10.59" x2="16" y2="8" /><path d="M7 12a5 5 0 0 1 5 -5" /></svg>
                         </span>
                       </div>
-                    </div>
-                    <div class="progress progress-sm">
-                      <div class="progress-bar bg-blue" style="width: {{promtarifa}}%" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                        <span class="visually-hidden">75% Complete</span>
+                      <div class="col">
+                        <div class="font-weight-medium">
+                          0
+                        </div>
+                        <div class="text-muted">
+                          Medidores activos
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-
-
-              <div class="col-lg-12">
-                <div class="row row-cards">
-                  <div class="col-12">
-                    <div class="card">
-                        <div class="card-header text-center">
-                                <h3 class="card-title">Novedades del sistema</h3>
+              <div class="col-auto" style="margin-top: 0.5rem">
+                <div class="card card-sm">
+                  <div class="card-body">
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <span class="bg-success text-white avatar">
+                              <!-- Download SVG icon from http://tabler-icons.io/i/chart-bar -->
+  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><rect x="3" y="12" width="6" height="8" rx="1" /><rect x="9" y="8" width="6" height="12" rx="1" /><rect x="15" y="4" width="6" height="16" rx="1" /><line x1="4" y1="20" x2="18" y2="20" /></svg>
+                        </span>
+                      </div>
+                      <div class="col">
+                        <div class="font-weight-medium">
+                          0 m3
                         </div>
-                      <div class="card-body">
-                        {% for novedad in novedades %}
-                        <div class="row">
-                          <div class="col-auto">
-                            <span class="avatar" style="color: red;">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="12" r="9" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg></span>
-                          </div>
-                          <div class="col">
-                            <div class="text-truncate">
-                              <strong>{{novedad.IdNovedad}}</strong> {{novedad.Descripcion}}
-                            </div>
-                            <div class="text-muted">{{novedad.Fecha}}</div>
-                          </div>
-                          <div class="col-auto align-self-center">
-                            <div class="badge bg-primary"></div>
-                          </div>
+                        <div class="text-muted">
+                          Consumo
                         </div>
-                        <br>
-                        {% endfor %}
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+      </div>
+      <div class="col-md-8">
+        <div class="row">
+          <h3 class="subheader">Informacion financiera - mes actual</h3>
+              <div class="col-md-6 col-xl-4" style="margin-top: 0.5rem">
+                <div class="card card-sm">
+                  <div class="card-body">
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <span class="bg-green-lt avatar">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><line x1="9" y1="7" x2="10" y2="7" /><line x1="9" y1="13" x2="15" y2="13" /><line x1="13" y1="17" x2="15" y2="17" /></svg>
+                        </span>
+                      </div>
+                      <div class="col">
+                        <div class="font-weight-medium">
+                          {{facturaspagas}}
+                          <span class="float-right font-weight-medium text-green">+{{contador}}%</span>
+                        </div>
+                        <div class="text-muted">
+                          Facturas pagas
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-xl-4" style="margin-top: 0.5rem">
+                <div class="card card-sm">
+                  <div class="card-body">
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <span class="bg-green-lt avatar">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16.7 8a3 3 0 0 0 -2.7 -2h-4a3 3 0 0 0 0 6h4a3 3 0 0 1 0 6h-4a3 3 0 0 1 -2.7 -2" /><path d="M12 3v3m0 12v3" /></svg>
+                        </span>
+                      </div>
+                      <div class="col">
+                        <div class="font-weight-medium">
+                          $ {{pagos|intcomma}}
+                          <span class="float-right font-weight-medium text-green">+{{porcentaje}}%</span>
+                        </div>
+                        <div class="text-muted">
+                          Recaudado
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-xl-4" style="margin-top: 0.5rem">
+                <div class="card card-sm">
+                  <div class="card-body">
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <span class="bg-green-lt avatar">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12l-6.5 5.5" /><path d="M12 3v9h9" /><circle cx="12" cy="12" r="9" /></svg>
+                        </span>
+                      </div>
+                      <div class="col">
+                        <div class="font-weight-medium">
+                          $ {{promedio|intcomma}}
+                          <span class="float-right font-weight-medium text-green">+{{promtarifa}}%</span>
+                        </div>
+                        <div class="text-muted">
+                          Promedio
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>            
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-6">
+              <h3 class="subheader">Comparacion grafica</h3>
+              <div id="chart-demo-pie"></div>
             </div>
+            <div class="col-md-6">
+              <h3 class="subheader">Ultimos registros</h3>
+                  <table class="table card-table table-vcenter">
+                    <thead>
+                      <tr>
+                        <th>Descripcion</th>
+                        <th colspan="2">Fecha</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for novedad in novedades %}
+                      <tr>
+                        <td>{{novedad.Descripcion}}</td>
+                        <td>{{novedad.Fecha}}</td>
+                      </tr>
+                      {%endfor%}
+                    </tbody>
+                  </table>
             </div>
-            <div class="col-sm-3">
-                <div class="row">
-                            <div class="card  text-center">
-                              <div class="card-status-bottom bg-success"></div>
-                              <div class="card-header text-center">
-                                <h3 class="card-title">Modulo de recaudo</h3>
-                              </div>
-                              <div class="card-body">
+        </div>
+        
+      </div>
+      <div class="col-md-2">
+          <h3 class="subheader">Reportes disponibles</h3>
+          <div class="row">
+            <div class="col-md-12" style="margin-top: 0.5rem">
+               <a href="{% url 'usuarios:reportecompleto' %}" class="btn btn-sm btn-indigo btn-pill w-100">Informe completo</a>
+            </div>
+            <div class="col-md-12" style="margin-top: 0.5rem">
+               <a href="{% url 'usuarios:reportepagos' %}" class="btn btn-sm btn-indigo btn-pill w-100">Ingresos</a>
+            </div>
+            <div class="col-md-12" style="margin-top: 0.5rem">
+               <a href="{% url 'usuarios:reportegastos' %}" class="btn btn-sm btn-indigo btn-pill w-100">Egresos</a>
+            </div>
+            <div class="col-md-12" style="margin-top: 0.5rem">
+               <a href="{% url 'usuarios:reportecierre' %}" class="btn btn-sm btn-indigo btn-pill w-100">Cierres mensuales</a>
+            </div>
+            <div class="col-md-12" style="margin-top: 0.5rem">
+              <h3 class="subheader">Modulo de recaudo</h3>
+                <div class="card-body">
                                 <form action="{% url 'usuarios:verfactura' %}" method="get" class="form-inline">
                                   {% csrf_token %}
                                   <div class="row">
@@ -150,18 +222,28 @@
                                           <video style="width: 100%;" src="" id="video" autoplay="true"></video>
                                       </div>
                                       <div class="col-sm-12">
-                                          <input style="width: 100%" type="text" name="factura" class="form-control" placeholder="Numero de factura - aportes" id="miInput" oninput="verificarTexto()">
+                                          <input style="width: 100%" type="text" name="factura" class="form-control" placeholder="Numero de factura" id="miInput" oninput="verificarTexto()">
                                       </div>
                                           <button id="miBoton" style="margin-top: 1rem; width: 100%;" type="submit" class="btn btn-primary" disabled>Validar</button>
                                   </div>
                                 </form>
                               </div>
-                          </div>
-                  </div>
             </div>
-            </div>
+            
           </div>
-        </div>
+      </div>
+
+    </div>
+    <br>
+
+
+
+
+
+
+  </div>
+</div>
+
         <footer class="footer footer-transparent d-print-none">
           <div class="container-fluid">
             <div class="row text-center align-items-center flex-row-reverse">
@@ -205,4 +287,49 @@
       }
     }
   </script>
+  <script>
+      // @formatter:off
+      document.addEventListener("DOMContentLoaded", function () {
+        window.ApexCharts && (new ApexCharts(document.getElementById('chart-demo-pie'), {
+          chart: {
+            type: "donut",
+            fontFamily: 'inherit',
+            height: 270,
+            sparkline: {
+              enabled: true
+            },
+            animations: {
+              enabled: false
+            },
+          },
+          fill: {
+            opacity: 1,
+          },
+          series: [{{cc}}, {{pn}}, {{bn}}, {{vj}},{{ca}}, {{ha}}],
+          labels: ["Centro", "Paso nivel", "Barrio nuevo", "V Julio","Carbonera","Hacienda"],
+          grid: {
+            strokeDashArray: 6,
+          },
+          colors: ["#406bc5", "#78a5dc", "#d3e1f3", "#e9ccf1","#B8F5A4","#739668"],
+          legend: {
+            show: true,
+            position: 'bottom',
+            offsetY: 12,
+            markers: {
+              width: 10,
+              height: 10,
+              radius: 100,
+            },
+            itemMargin: {
+              horizontal: 9,
+              vertical: 9
+            },
+          },
+          tooltip: {
+            fillSeriesColor: false
+          },
+        })).render();
+      });
+      // @formatter:on
+    </script>
 {% endblock %}

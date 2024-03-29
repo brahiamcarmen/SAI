@@ -1,0 +1,61 @@
+{% extends 'usuarios/base_usuario3.html' %}
+{% load static %}
+{% block styles %}
+{% endblock %}
+{%block title %} <title>Modulo - RT</title> {%endblock%}
+{% block content %}
+{% include 'usuarios/alerts.html' %}
+<!-- Titulo -->
+      <div class="page-wrapper">
+        <div class="container-fluid">
+          <!-- Page title -->
+          <div class="page-header d-print-none">
+            <div class="row align-items-center">
+              <div class="col">
+                <!-- Page pre-title -->
+                <div class="page-pretitle">
+                  Modulo
+                </div>
+                <h2 class="page-title">
+                  Registro novedad para retiro
+                </h2>
+              </div>
+              <div class="col">
+                    <button style="width: 100%;" onclick="window.location='{% url 'usuarios:vervivienda' idvivienda %}'" class="btn btn-primary ">Cancelar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>                
+<br>
+<div class="card-body">
+<div class="row">
+    <div class="col-sm-3">
+        
+    </div>
+    <div class="col-sm-6">
+        <form method="post" enctype="multipart/form-data" class="card">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="card-body">
+           
+						<div class="mb-3">
+                              <label class="form-label">Por favor ingresar el motivo del retiro <span class="form-label-description">1/1000</span></label>
+                              <textarea class="form-control" name="descripcion" rows="6" placeholder="Escribir.."></textarea>
+                            </div>
+            <div class="row">
+                <div class="col-sm-6" style="margin-top: 1rem;">
+                    <button style="width: 100%;" type="submit" class="btn btn-primary ">Registrar</button>
+                </div>
+
+            </div>
+        </div>
+    </form>
+    </div>
+    </div>
+    </div>                 
+
+{% endblock %}
+{% block scripts %}
+
+{% endblock %}

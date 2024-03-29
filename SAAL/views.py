@@ -22,7 +22,7 @@ class Login(View):
                                               'version': versionp})
 
     def post(self, request):
-        username1 = request.POST.get("username", "")
+        username1 = request.POST.get("username")
         password1 = request.POST.get("password", "")
         usuario = auth.authenticate(username=username1, password=password1)
 

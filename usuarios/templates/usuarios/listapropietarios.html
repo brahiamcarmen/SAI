@@ -1,7 +1,12 @@
 {% extends 'usuarios/base_usuario3.html' %}
 {% load static %}
 {% block styles %}
-
+<style>
+  /* Estilos para ocultar elementos */
+  .hidden {
+    display: none;
+  }
+</style>
 {% endblock %}
 {%block title %} <title>Modulo - LT</title> {%endblock%}
 {% block content %}
@@ -27,7 +32,7 @@
                     <span class="d-none d-sm-inline">
                         <form class="table-search-form row gx-1 align-items-center">
                             <div class="col-auto">
-                                <input type="text" id="search" name="searchorders" class="form-control search-orders" placeholder="Buscar">
+                                <input type="text" id="search-input" name="searchorders" class="form-control search-orders" placeholder="Buscar">
                             </div>
                         </form>
                     </span>
@@ -39,64 +44,55 @@
       </div>
 <br>      
 <!-- tabla -->
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="table-responsive" style="height:23rem">
-                    <table class="table card-table table-vcenter text-nowrap datatable" id="datatable" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Id Propietario</th>
-                                <th>Nombres</th>
-                                <th>Apellidos</th>
-                                <th>Opciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for usuarios in usuarios %}
-                            <tr>
-                                <td>{{ forloop.counter }}</td>
-                                <td>{{ usuarios.IdPropietario }}</td>
-                                <td>{{ usuarios.Nombres }}</td>
-                                <td>{{ usuarios.Apellidos }}</td>
-                                <td><span class="dropdown">
-                                  <button class="btn dropdown-toggle align-text-top" data-bs-boundary="viewport" data-bs-toggle="dropdown">Opciones</button>
-                                  <div class="dropdown-menu dropdown-menu-end">
-                                    <a class="dropdown-item" href="{% url 'usuarios:verpropietario' usuarios.IdPropietario %}">
-                                      Ver
-                                    </a>
-                                    <a class="dropdown-item" href="{% url 'usuarios:modificarpropietario' usuarios.IdPropietario %}">
-                                      Modificar
-                                    </a>
+<div class="item container-xl">
+    <div class="row item">
+        {% for usuarios in usuarios %}
+                    <div class="col-md-6 col-lg-3 item">
+                        <br>
+                        <div class="card item">
+                            <div class="card-body p-4 text-center item">
+                                        <span class="avatar avatar-xl mb-3 avatar-rounded" style="background-image: url({% static 'images/logo3.png' %})"></span>
+                                        <h3 class="m-0 mb-1 item"><a href="#">{{ usuarios.Nombres }} {{ usuarios.Apellidos }}</a></h3>
+                                        <div class="text-muted">{{ usuarios.IdPropietario }}</div>
+                                      </div>
+                                      <div class="d-flex">
+                                        <a href="{% url 'usuarios:verpropietario' usuarios.IdPropietario %}" class="card-btn">
+                                         <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="12" r="2" /><path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7" /></svg>
+                                           Ver informacion</a>
+                                      </div>
+                                    </div>
                                   </div>
-                                </span>
-                                </td>
-                            </tr>
-                             {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+                                  
+        {% endfor %}
     </div>
-</div>           
+</div>            
 {% endblock %}
 {% block scripts %}
+
 <script>
- // Write on keyup event of keyword input element
- $(document).ready(function(){
- $("#search").keyup(function(){
- _this = this;
- // Show only matching TR, hide rest of them
- $.each($("#datatable tbody tr"), function() {
- if($(this).text().toLowerCase().indexOf($(_this).val().toLowerCase()) === -1)
- $(this).hide();
- else
- $(this).show();
- });
- });
-});
+  // Función para realizar la búsqueda
+  function search() {
+    var searchTerm = document.getElementById("search-input").value.toLowerCase();
+    var items = document.getElementsByClassName("item");
+
+    // Iterar sobre todos los elementos dentro del div #content
+    for (var i = 0; i < items.length; i++) {
+      var itemText = items[i].innerText.toLowerCase();
+      
+      // Comprobar si el texto del elemento coincide con el término de búsqueda
+      if (itemText.includes(searchTerm)) {
+        // Mostrar el elemento si coincide
+        items[i].classList.remove("hidden");
+      } else {
+        // Ocultar el elemento si no coincide
+        items[i].classList.add("hidden");
+      }
+    }
+  }
+
+  // También podemos agregar un evento de búsqueda en tiempo real mientras el usuario escribe
+  document.getElementById("search-input").addEventListener("input", search);
 </script>
+
 {% endblock %}

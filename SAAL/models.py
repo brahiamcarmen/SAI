@@ -13,7 +13,7 @@ DOC_CHOICES = (
 
 
 class Tarifa(models.Model):
-    IdTarifa = models.CharField(primary_key=True, max_length=4, null=False)
+    IdTarifa = models.AutoField(primary_key=True)
     Valor = models.CharField(max_length=5, null=False)
     Mantenimiento = models.CharField(max_length=5, null=False)
     Recargo = models.CharField(max_length=5, null=False)
@@ -22,6 +22,7 @@ class Tarifa(models.Model):
     bifamiliar = models.CharField(max_length=5, null=True)
     especial = models.CharField(max_length=5, null=True)
     multifamiliar = models.CharField(max_length=5, null=True)
+    m3 = models.CharField(max_length=4, null=True)
     FechaInicial = models.DateTimeField(auto_now=True)
     Ano = models.CharField(max_length=4, null=True)
     objects = models.Manager()
@@ -36,6 +37,7 @@ class Tarifa(models.Model):
 class Acueducto(models.Model):
     IdAcueducto = models.CharField(primary_key=True, max_length=9, null=False)
     Nombre = models.CharField(max_length=150, null=False)
+    Sigla = models.CharField(max_length=20, null=True)
     DirOficina = models.CharField(max_length=100, null=False)
     logo = models.ImageField(upload_to='usuarios', default='usuarios/usuario.png')
     Relegal = models.CharField(max_length=60, null=False)
@@ -53,10 +55,12 @@ class Acueducto(models.Model):
 
 
 DOC_CHOICES2 = (
-    ('Presidente', _(u"Presidente (Pdte)")),
-    ('Cartera', _(u"Cartera (Ct)")),
-    ('Operario', _(u"Operario (Ope)")),
-    ('Auxiliar', _(u"Auxiliar (Aux)")),
+    ('Presidente', _(u"Presidente")),
+    ('Vicepresidente', _(u"Vicepresidente")),
+    ('Operario', _(u"Operario)")),
+    ('Secretario/a', _(u"Secretario/a")),
+    ('Tesorero', _(u"Tesorero")),
+    ('Auxiliar', _(u"Auxiliar")),
     ('Administrador de sistemas', _(u"Administrador de sistemas(Dir)")),
 )
 
@@ -294,11 +298,16 @@ class ConfirCerti(models.Model):
 
 class Medidores(models.Model):
     IdMedidor = models.CharField(primary_key=True, max_length=10, null=False)
-    Marca = models.CharField(max_length=20, null=False)
-    Tipo = models.CharField(max_length=20, null=False)
-    LecturaInicial = models.CharField(max_length=6, null=False)
+    Marca = models.CharField(max_length=100, null=False)
+    Modelo = models.CharField(max_length=100, null=False)
+    Tipo = models.CharField(max_length=50, null=False)
+    Designacion = models.CharField(max_length=100, null=False)
+    clase = models.CharField(max_length=100, null=False)
+    Diametronominal = models.CharField(max_length=100, null=False)
     AnoFabricacion = models.CharField(max_length=4, null=False)
+    Certificado = models.CharField(max_length=100, null=False, choices=DOC_CHOICES11)
     IdVivienda = models.ForeignKey(Vivienda, on_delete=models.CASCADE)
+    Fecha = models.DateTimeField(auto_now_add=True, null=True)
     objects = models.Manager()
     def __str__(self):
         return "%s" % self.IdMedidor

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render
 from django.conf import settings
+from django.db import connection
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic.base import View
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -10,7 +11,7 @@ from SAAL.models import Vivienda, SolicitudGastos, Propietario, NovedadesSistema
 from SAAL.models import NovedadesGenerales, CobroMatricula, Permisos, Pagos, Cierres, Acueducto, ValorMatricula
 from SAAL.models import DescargaFacturas
 from SAAL.forms import FormAgregarGasto, FormRegistroPqrs, RegistroUsuario, RegistroUsuario2, RegistroVivienda
-from SAAL.forms import AcueductoAForm, PermisosForm, CobroMatriculaForm, CostoMForm, RespuestPqrForm
+from SAAL.forms import AcueductoAForm, PermisosForm, CobroMatriculaForm, CostoMForm, FormRespuestaPqrs
 from SAAL.forms import RegistroPropietario, TarifasForm, ModificaPropietario, FormRegistroCredito, FormRegistroProveedor
 from SAAL.forms import CambioFormEstado, AcueductoForm, GastosForm, MedidoresForm, PoblacionForm, ModificaVivienda
 from django.contrib import messages
@@ -28,9 +29,29 @@ from openpyxl.drawing.image import Image
 from django.template.loader import get_template
 from django.core.mail import EmailMultiAlternatives
 from usuarios.ConectorPython import *
+from django.db.models import Sum
 
 # Reemplaza estos valores con tus credenciales de Google Mail
 username = 'sistemas.acueducto.caimalito@gmail.com'
+
+#SECTORES
+SECTOR1 = 'Pasonivel Viejo'
+SECTOR2 = 'Pasonivel Destapada'
+SECTOR3 = 'Caimalito Centro'
+SECTOR4 = 'Barrio Nuevo'
+SECTOR5 = '20 de julio'
+SECTOR6 = 'Carbonera'
+SECTOR7 = 'Hacienda'
+
+# ESTADOS PRERIOS
+ESTADOS1 = 'Operativo'
+ESTADOS2 = 'Suspendido'
+ESTADOS3 = 'Mantenimiento'
+ESTADOS4 = 'Retirado'
+
+#NOVEDADES
+NOVEDAD1 = 'Cerrada'
+
 # Tiempos de facturacion
 DIASFACTURACION = 10
 DIASPARASUSPENCION = 15
@@ -52,7 +73,7 @@ ADI = 'Adicion'
 SA = 'Anulada'
 SP = 'Pendiente'
 SJ = 'Ejecutada'
-TARIFASUSPENCION = 14000
+TARIFASUSPENCION = 17000
 # estados ciclos
 EC = 'SIN PAGAR'
 EC2 = 'PAGO'
@@ -111,31 +132,27 @@ class Inicio(LoginRequiredMixin, View):
             nombreproyecto = version2.read()
             version3 = open('static/serial/NombreProyectoL.txt', 'r')
             nombreproyectol = version3.read()
+
             datos = Usuario.objects.get(usuid=request.user.pk)
             dr = datos.IdAcueducto
             tipousuario = datos.TipoUsuario
             acueducto = Acueducto.objects.get(IdAcueducto=dr.pk)
             nombreacueducto = acueducto.Nombre
-            listapqrs = Pqrs.objects.filter(Estado='Pendiente')
-            contqrs = Pqrs.objects.filter(Estado='Pendiente').count()
-            contsoli = SolicitudGastos.objects.filter(Estado=ESTADO1).count()
-            totalnoti = contqrs + contsoli
-            contadorpen = SolicitudGastos.objects.filter(Estado=ESTADO1)
-            novedades = NovedadesSistema.objects.all().order_by("-IdNovedad")[:4]
+            novedades = NovedadesSistema.objects.all().order_by("-IdNovedad")[:3]
             # mensualidades:
             fechaexp = (datetime.today())
             ciclo = fechaexp.month
             ano1 = fechaexp.year
             # Los argumentos serán: Año, Mes, Día, Hora, Minutos, Segundos, Milisegundos.
             new_date = datetime(ano1, ciclo, 1, 1, 00, 00, 00000)
-            new_date2 = datetime(ano1, ciclo, 30, 23, 59, 59, 00000)
+            new_date2 = datetime(ano1, ciclo, 28, 23, 59, 59, 00000)
             pagos2 = Pagos.objects.filter(FechaPago__gte=new_date, FechaPago__lte=new_date2).all()
             pago0 = 0
             for i in pagos2:
                 valor = i.ValorPago
                 pago0 += int(valor)
 
-            predios = Vivienda.objects.filter(EstadoServicio='Operativo').count()
+            predios = Vivienda.objects.filter(EstadoServicio=ESTADOS1).count()
             recaudot = int(predios) * 8000
 
             porcentaje = pago0 / recaudot * 100
@@ -143,28 +160,74 @@ class Inicio(LoginRequiredMixin, View):
             ciclo2 = fechaexp.month - 1
             ano2 = fechaexp.year
             # Los argumentos serán: Año, Mes, Día, Hora, Minutos, Segundos, Milisegundos.
-            new_date3 = datetime(2023, 12, 1, 1, 00, 00, 00000)
-            new_date4 = datetime(2023, 12, 30, 23, 59, 59, 00000)
+            new_date3 = datetime(ano2, 1, 1, 1, 00, 00, 00000)
+            new_date4 = datetime(ano2, 1, 31, 23, 59, 59, 00000)
             factuasemi = Factura.objects.filter(FechaExpe__gte=new_date3, FechaExpe__lte=new_date4).count()
             pagos3 = Pagos.objects.filter(FechaPago__gte=new_date, FechaPago__lte=new_date2).count()
             contador = pagos3 / factuasemi * 100
 
-            pqrs = Pqrs.objects.all().count()
-            pqrsp = Pqrs.objects.filter(Estado='Pendiente').count()
-            tpq = pqrsp / pqrs * 100
-
             promedio = pago0 / pagos3
-            promtarifa = promedio / 8000 * 100
+            promtarifa = promedio / 10000 * 100
+
+            viviendas = Vivienda.objects.filter(EstadoServicio=ESTADOS1) | Vivienda.objects.filter(EstadoServicio=ESTADOS3)| Vivienda.objects.filter(EstadoServicio=ESTADOS2)
+            personas = 0
+            for i in viviendas:
+                valor = int(i.CantHabitantes)
+                personas += valor
+
+            suscriptoresactivos = Vivienda.objects.filter(EstadoServicio=ESTADOS3)| Vivienda.objects.filter(EstadoServicio=ESTADOS1) | Vivienda.objects.filter(EstadoServicio=ESTADOS2)
+            suscriptores = 0
+            for i in suscriptoresactivos:
+                valor = 1
+                suscriptores += valor
+
+            # paso nivel
+            pop = Vivienda.objects.filter(Direccion=SECTOR1, EstadoServicio=ESTADOS1).count()
+            pma =Vivienda.objects.filter(Direccion=SECTOR1, EstadoServicio=ESTADOS3).count()
+            psu = Vivienda.objects.filter(Direccion=SECTOR1, EstadoServicio=ESTADOS2).count()
+            pdop = Vivienda.objects.filter(Direccion=SECTOR2, EstadoServicio=ESTADOS1).count()
+            pdma = Vivienda.objects.filter(Direccion=SECTOR2, EstadoServicio=ESTADOS3).count()
+            pdsu = Vivienda.objects.filter(Direccion=SECTOR2, EstadoServicio=ESTADOS2).count()
+            pn = pop + pma + psu + pdop + pdma + pdsu
+
+            #caimalito centro
+            cop = Vivienda.objects.filter(Direccion=SECTOR3, EstadoServicio=ESTADOS1).count()
+            cma =Vivienda.objects.filter(Direccion=SECTOR3, EstadoServicio=ESTADOS3).count()
+            csu = Vivienda.objects.filter(Direccion=SECTOR3, EstadoServicio=ESTADOS2).count()
+            cc = cop + cma + csu
+            #Barrio nuevo
+            bop = Vivienda.objects.filter(Direccion=SECTOR4, EstadoServicio=ESTADOS1).count()
+            bma = Vivienda.objects.filter(Direccion=SECTOR4, EstadoServicio=ESTADOS3).count()
+            bsu = Vivienda.objects.filter(Direccion=SECTOR4, EstadoServicio=ESTADOS2).count()
+            bn = bop + bma + bsu
+
+            #20 de julio
+            vop = Vivienda.objects.filter(Direccion=SECTOR5, EstadoServicio=ESTADOS1).count()
+            vma = Vivienda.objects.filter(Direccion=SECTOR5, EstadoServicio=ESTADOS3).count()
+            vsu = Vivienda.objects.filter(Direccion=SECTOR5, EstadoServicio=ESTADOS2).count()
+            vj = vop + vma + vsu
+
+            #Hacienda
+            hop = Vivienda.objects.filter(Direccion=SECTOR7, EstadoServicio=ESTADOS1).count()
+            hma = Vivienda.objects.filter(Direccion=SECTOR7, EstadoServicio=ESTADOS3).count()
+            hsu = Vivienda.objects.filter(Direccion=SECTOR7, EstadoServicio=ESTADOS2).count()
+            ha = hop + hma + hsu
+
+            # Hacienda
+            caop = Vivienda.objects.filter(Direccion=SECTOR6, EstadoServicio=ESTADOS1).count()
+            cama = Vivienda.objects.filter(Direccion=SECTOR6, EstadoServicio=ESTADOS3).count()
+            casu = Vivienda.objects.filter(Direccion=SECTOR6, EstadoServicio=ESTADOS2).count()
+            ca = caop + cama + casu
 
             return render(request,
                           self.template_name, {'tipousuario': tipousuario, 'nombreproyecto': nombreproyecto,
                                                'nombreproyectol': nombreproyectol, 'acueducto': nombreacueducto,
-                                               'notificaciones': contadorpen, 'versionp': versionp,
-                                               'listapqrs': listapqrs, 'totalnoti': totalnoti,
-                                               'novedades': novedades, 'pagos': pago0,
+                                               'versionp': versionp,'personas':personas,
+                                               'novedades': novedades, 'pagos': pago0,'suscriptores':suscriptores,
                                                'porcentaje': int(porcentaje), 'contador': int(contador),
                                                'facturaspagas': pagos3, 'promedio': int(promedio),
-                                               'tpq': int(tpq), 'tp': int(pqrsp),'promtarifa': int(promtarifa)})
+                                               'promtarifa': int(promtarifa),
+                                               'pn':pn, 'vj':vj, 'cc':cc, 'bn':bn, 'ha':ha,'ca':ca})
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
 
@@ -279,7 +342,7 @@ class AgregarPropietario(LoginRequiredMixin, View):
                 return HttpResponseRedirect(reverse('usuarios:agregarpropietario'))
 
             else:
-                if int(idpropietario) <= 10000000:
+                if int(idpropietario) <= 400000:
                     messages.add_message(request, messages.ERROR, 'El numero de identificacion del '
                                                                   'propietario no es valido')
                     return HttpResponseRedirect(reverse('usuarios:agregarpropietario'))
@@ -570,17 +633,12 @@ class AgregarVivienda(LoginRequiredMixin, View):
             return render(request, "pages-404.html")
 
 
-class Facturacion(LoginRequiredMixin, View):
+class Estadoscuenta(LoginRequiredMixin, View):
     login_url = '/'
-    template_name = 'usuarios/facturacion.html'
+    template_name = 'usuarios/estadosdecuenta.html'
 
     def get(self, request):
         try:
-            listapqrs = Pqrs.objects.filter(Estado='Pendiente')
-            contqrs = Pqrs.objects.filter(Estado='Pendiente').count()
-            contsoli = SolicitudGastos.objects.filter(Estado=ESTADO1).count()
-            totalnoti = contqrs + contsoli
-            contadorpen = SolicitudGastos.objects.filter(Estado=ESTADO1)
             # operaciones de conteo
             operativos = EstadoCuenta.objects.filter(Estado='Operativo').count()
             mantenimiento = EstadoCuenta.objects.filter(Estado='Mantenimiento').count()
@@ -614,6 +672,25 @@ class Facturacion(LoginRequiredMixin, View):
 
             usuario = Usuario.objects.get(usuid=request.user.pk)
             totalcuentas = EstadoCuenta.objects.all().count()
+
+            totalfac = Factura.objects.all().count()
+            facemi2 = Factura.objects.filter(Estado=FE).count()
+            facven = Factura.objects.filter(Estado=FV).count()
+            facpg = Factura.objects.filter(Estado=FP).count()
+            facanu = Factura.objects.filter(Estado=FA).count()
+
+            facturasvalor = Factura.objects.filter(Estado='Emitida').aggregate(Total=Sum('Total'))
+            total = facturasvalor['Total']
+
+            vapo = EstadoCuenta.objects.filter(Estado='Operativo').aggregate(Valor=Sum('Valor'))
+            sumatotal = vapo['Valor']
+            vasu = EstadoCuenta.objects.filter(Estado='Suspendido').aggregate(Valor=Sum('Valor'))
+            sumatotal2 = vasu['Valor']
+            vama = EstadoCuenta.objects.filter(Estado='Mantenimiento').aggregate(Valor=Sum('Valor'))
+            sumatotal3 = vama['Valor']
+            vare = EstadoCuenta.objects.filter(Estado='Retirado').aggregate(Valor=Sum('Valor'))
+            sumatotal4 = vare['Valor']
+
             tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='ACC').exists()
             if tipousuario is True:
                 return render(request, self.template_name,
@@ -622,15 +699,32 @@ class Facturacion(LoginRequiredMixin, View):
                                   'retirados': int(retirados), 'suspendidos': int(suspendidos),
                                   'contoperativos': contoperativos, 'contretirados': contretirado,
                                   'contmantenimiento': contmantenimiento, 'contsuspendidos': contsuspendido,
-                                  'totalcuentascobro': totalcuentas,
+                                  'totalcuentascobro': totalcuentas, 'total': total, 'vapo': sumatotal,
+                                  'vasu':sumatotal2, 'vama':sumatotal3, 'vare':sumatotal4,
                                   'totalvalores': contoperativos + contmantenimiento + contretirado + contsuspendido,
-                                  'notificaciones': contadorpen,
-                                  'listapqrs': listapqrs,
-                                  'totalnoti': totalnoti
+                                  'totalfac':totalfac,  'facven':facven, 'facanu': facanu, 'facpg':facpg, 'facemi': facemi2
                               })
             else:
                 messages.add_message(request, messages.ERROR, 'Su usuario no tiene los permiso de acceso a esta seccion')
                 return HttpResponseRedirect(reverse('usuarios:inicio'))
+
+        except ObjectDoesNotExist:
+            return render(request, "pages-404.html")
+
+
+class GenerarCobros(LoginRequiredMixin, View):
+    login_url = '/'
+    template_name = 'usuarios/generarcobros.html'
+
+    def get(self, request):
+        try:
+            estadoscuenta = EstadoCuenta.objects.filter(Estado='Operativo')|EstadoCuenta.objects.filter(Estado='Mantenimiento')|EstadoCuenta.objects.filter(Estado='Suspendido')
+            cont = 0
+            for i in estadoscuenta:
+                cont += 1
+
+            return render(request, self.template_name, {
+                'cont': cont})
 
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
@@ -657,7 +751,7 @@ class Facturacion(LoginRequiredMixin, View):
                 if facturas >= 1:
                     messages.add_message(request, messages.ERROR,
                                          'No se puede generar cobros, hay facturacion con estado *emitida*', ano)
-                    return HttpResponseRedirect(reverse('usuarios:facturacion'))
+                    return HttpResponseRedirect(reverse('usuarios:estadoscuenta'))
 
                 else:
                     cont = 0
@@ -675,326 +769,15 @@ class Facturacion(LoginRequiredMixin, View):
                         else:
                             pass
                     messages.add_message(request, messages.SUCCESS, 'Se generaron ', cont, ' cobros')
-                    return HttpResponseRedirect(reverse('usuarios:facturacion'))
+                    return HttpResponseRedirect(reverse('usuarios:estadoscuenta'))
 
             else:
                 messages.add_message(request, messages.ERROR,
                                      'Su usuario no tiene los permiso de acceso a esta seccion')
-                return HttpResponseRedirect(reverse('usuarios:inicio'))
+                return HttpResponseRedirect(reverse('usuarios:estadoscuenta'))
 
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
-
-
-class Reporte(LoginRequiredMixin, View):
-    login_url = '/'
-    template_name = 'usuarios/reporte.html'
-
-    def get(self, request):
-        try:
-            usuario = Usuario.objects.get(usuid=request.user.pk)
-            concesion = open('static/serial/Consecion.txt', 'r')
-            concesionv = concesion.read()
-            poblacion = open('static/serial/Poblacion.txt', 'r')
-            poblacion = poblacion.read()
-            viviendas = Vivienda.objects.all().count()
-            viviendasopera = Vivienda.objects.filter(EstadoServicio=E1).count()
-            disponible = int(concesionv) - viviendasopera
-            porcentaje = viviendas * 100 / int(concesionv)
-            viviendasc = Vivienda.objects.all()
-            personas = 0
-            for i in viviendasc:
-                valor = int(i.CantHabitantes)
-                personas += valor
-
-            estadoscuenta2 = EstadoCuenta.objects.all()
-            valorcuentas = 0
-            for i in estadoscuenta2:
-                valor = int(i.Valor)
-                valorcuentas += valor
-
-            porcentajepoblacion = personas * 100 / int(poblacion)
-            propietarios = Propietario.objects.all().count()
-
-            # presupuesto anual
-            s1 = Vivienda.objects.filter(Direccion=S1).count()
-            s2 = Vivienda.objects.filter(Direccion=S2).count()
-            s3 = Vivienda.objects.filter(Direccion=S3).count()
-            s4 = Vivienda.objects.filter(Direccion=S4).count()
-            s5 = Vivienda.objects.filter(Direccion=S5).count()
-            s6 = Vivienda.objects.filter(Direccion='Hacienda').count()
-            e1 = Vivienda.objects.filter(EstadoServicio=E1).count()
-            e2 = Vivienda.objects.filter(EstadoServicio=E2).count()
-            e3 = Vivienda.objects.filter(EstadoServicio=E3).count()
-            e4 = Vivienda.objects.filter(EstadoServicio='Mantenimiento').count()
-            c1 = Vivienda.objects.filter(Ciclo=C1).count()
-            c2 = Vivienda.objects.filter(Ciclo=C2).count()
-            c3 = Vivienda.objects.filter(Ciclo=C3).count()
-            c4 = Vivienda.objects.filter(Ciclo=C4).count()
-
-            unif = Vivienda.objects.filter(InfoInstalacion='Unifamiliar').count()
-            bif = Vivienda.objects.filter(InfoInstalacion='Bifamiliar').count()
-            multi = Vivienda.objects.filter(InfoInstalacion='Multifamiliar').count()
-            espe = Vivienda.objects.filter(InfoInstalacion='Especial').count()
-
-            enpagar = EstadoCuenta.objects.filter(Estado=EC).count()
-            pagos = EstadoCuenta.objects.filter(Estado='PAGO').count()
-            totalcantp = enpagar + pagos
-
-            ciclos = EstadoCuenta.objects.filter(Estado=EC)
-            ciclos2 = EstadoCuenta.objects.filter(Estado=EC2)
-
-            valor2 = 0
-            for ciclo in ciclos2:
-                valor2 += ciclo.Valor
-
-            valor = 0
-            for ciclo in ciclos:
-                valor += ciclo.Valor
-
-            totalv = 0
-            if valor and valor2 is not None:
-                totalv = valor + valor2
-
-            listapqrs = Pqrs.objects.filter(Estado='Pendiente')
-            contqrs = Pqrs.objects.filter(Estado='Pendiente').count()
-            contsoli = SolicitudGastos.objects.filter(Estado=ESTADO1).count()
-            totalnoti = contqrs + contsoli
-            contadorpen = SolicitudGastos.objects.filter(Estado=ESTADO1)
-
-            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AR').exists()
-            if tipousuario is True:
-                return render(request, self.template_name, {
-                    'totalpropietarios': propietarios,
-                    'totalviviendas': viviendas,
-                    'unif': unif, 'bif': bif, 'multi': multi, 'espe': espe,
-                    's1': s1 + s2, 's3': s3,
-                    's4': s4, 's5': s5, 's6': s6, 'e1': e1,
-                    'e2': e2, 'e3': e3, 'e4': e4,
-                    'c1': c1, 'c2': c2, 'c3': c3,
-                    'c4': c4, 'notificaciones': contadorpen,
-                    'listapqrs': listapqrs, 'totalnoti': totalnoti, 'porpoblacion': int(porcentajepoblacion),
-                    'enpagar': enpagar, 'personas': personas, 'porcentaje': int(porcentaje), 'poblacion': poblacion,
-                    'pagos': pagos, 'totalcantp': totalcantp, 'concesion': concesionv,
-                    'valor': valor, 'valorcuentas': valorcuentas, 'valor2': valor2, 'totalvc': totalv,
-                    'suscriptores': viviendasopera, 'disponible': disponible
-                })
-            else:
-                messages.add_message(request, messages.ERROR,
-                                     'Su usuario no tiene los permisos de acceso a esta seccion')
-                return HttpResponseRedirect(reverse('usuarios:inicio'))
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
-
-
-class Reportepdfpropi(LoginRequiredMixin, View):
-    login_url = '/'
-
-    def get(self):
-        propietarios = Propietario.objects.all()
-        sfecha = (datetime.today())
-        wb = Workbook()
-        ws = wb.active
-        ws.title = "Reporte de titulares"
-        ws['A1'] = 'IdPropietario'
-        ws['B1'] = 'Nombres'
-        ws['C1'] = 'Apellidos'
-        ws['D1'] = 'NoTelefono'
-        ws['E1'] = 'Email'
-        ws['F1'] = 'TipoPoblacion'
-
-        cont = 2
-
-        for propietario in propietarios:
-            ws.cell(row=cont, column=1).value = propietario.IdPropietario
-            ws.cell(row=cont, column=2).value = propietario.Nombres
-            ws.cell(row=cont, column=3).value = propietario.Apellidos
-            ws.cell(row=cont, column=4).value = propietario.NoTelefono
-            ws.cell(row=cont, column=5).value = propietario.Email
-            ws.cell(row=cont, column=6).value = str(propietario.IdPoblacion)
-
-            cont += 1
-
-        archivo_propi = "ReporteTitulares" + str(sfecha) + ".xlsx"
-        response = HttpResponse(content_type="application/ms-excel")
-        content = "attachment; filename = {0}".format(archivo_propi)
-        response['Content-Disposition'] = content
-        wb.save(response)
-        return response
-
-
-class ReportePredios(LoginRequiredMixin, View):
-    login_url = '/'
-
-    def get(self):
-        viviendas = Vivienda.objects.all()
-        sfecha = (datetime.today())
-        wb = Workbook()
-        ws = wb.active
-        ws.title = "Reporte de predios"
-        ws['A1'] = 'Matricula'
-        ws['B1'] = 'Dirección'
-        ws['C1'] = 'NumeroCasa'
-        ws['D1'] = 'Piso'
-        ws['E1'] = 'Ciclo'
-        ws['F1'] = 'TipoInstalación'
-        ws['G1'] = 'Estrato'
-        ws['H1'] = 'EstadoServicio'
-        ws['I1'] = 'Propietario'
-        ws['J1'] = 'Acueducto'
-        ws['K1'] = 'Usuario'
-        ws['L1'] = 'MatriculaAnt'
-        ws['M1'] = 'InfoInstalación'
-        ws['N1'] = 'ProfAcometida'
-        ws['O1'] = 'CantHabitantes'
-
-        cont = 2
-
-        for vivienda in viviendas:
-            ws.cell(row=cont, column=1).value = vivienda.IdVivienda
-            ws.cell(row=cont, column=2).value = vivienda.Direccion
-            ws.cell(row=cont, column=3).value = vivienda.NumeroCasa
-            ws.cell(row=cont, column=4).value = vivienda.Piso
-            ws.cell(row=cont, column=5).value = vivienda.Ciclo
-            ws.cell(row=cont, column=6).value = vivienda.TipoInstalacion
-            ws.cell(row=cont, column=7).value = vivienda.Estrato
-            ws.cell(row=cont, column=8).value = vivienda.EstadoServicio
-            ws.cell(row=cont, column=9).value = str(vivienda.IdPropietario)
-            ws.cell(row=cont, column=10).value = str(vivienda.IdAcueducto)
-            ws.cell(row=cont, column=11).value = str(vivienda.usuid)
-            ws.cell(row=cont, column=12).value = vivienda.MatriculaAnt
-            ws.cell(row=cont, column=13).value = vivienda.InfoInstalacion
-            ws.cell(row=cont, column=14).value = vivienda.ProfAcometida
-            ws.cell(row=cont, column=15).value = vivienda.CantHabitantes
-
-            cont += 1
-
-        archivo_predios = "ReportePredios" + str(sfecha) + ".xlsx"
-        response = HttpResponse(content_type="application/ms-excel")
-        content = "attachment; filename = {0}".format(archivo_predios)
-        response['Content-Disposition'] = content
-        wb.save(response)
-        return response
-
-
-class ReporteSuspendido(LoginRequiredMixin, View):
-    login_url = '/'
-
-    def get(self, request):
-        try:
-            sectores = Vivienda.objects.filter(EstadoServicio=REPORTESUSPEN)
-            sfecha = (datetime.today())
-            wb = Workbook()
-            ws = wb.active
-            ws.title = "Reporte predios suspendidos"
-            ws['A1'] = 'Matricula'
-            ws['B1'] = 'Dirección'
-            ws['C1'] = 'NumeroCasa'
-            ws['D1'] = 'Piso'
-            ws['E1'] = 'Ciclo'
-            ws['F1'] = 'TipoInstalación'
-            ws['G1'] = 'Estrato'
-            ws['H1'] = 'EstadoServicio'
-            ws['I1'] = 'Propietario'
-            ws['J1'] = 'Acueducto'
-            ws['K1'] = 'Usuario'
-            ws['L1'] = 'MatriculaAnt'
-            ws['M1'] = 'InfoInstalación'
-            ws['N1'] = 'ProfAcometida'
-            ws['O1'] = 'CantHabitantes'
-
-            cont = 2
-
-            for vivienda in sectores:
-                ws.cell(row=cont, column=1).value = vivienda.IdVivienda
-                ws.cell(row=cont, column=2).value = vivienda.Direccion
-                ws.cell(row=cont, column=3).value = vivienda.NumeroCasa
-                ws.cell(row=cont, column=4).value = vivienda.Piso
-                ws.cell(row=cont, column=5).value = vivienda.Ciclo
-                ws.cell(row=cont, column=6).value = vivienda.TipoInstalacion
-                ws.cell(row=cont, column=7).value = vivienda.Estrato
-                ws.cell(row=cont, column=8).value = vivienda.EstadoServicio
-                ws.cell(row=cont, column=9).value = str(vivienda.IdPropietario)
-                ws.cell(row=cont, column=10).value = str(vivienda.IdAcueducto)
-                ws.cell(row=cont, column=11).value = str(vivienda.usuid)
-                ws.cell(row=cont, column=12).value = vivienda.MatriculaAnt
-                ws.cell(row=cont, column=13).value = vivienda.InfoInstalacion
-                ws.cell(row=cont, column=14).value = vivienda.ProfAcometida
-                ws.cell(row=cont, column=15).value = vivienda.CantHabitantes
-
-                cont += 1
-
-            archivo_predios = "ReporteSuspendidos" + str(sfecha) + ".xlsx"
-            response = HttpResponse(content_type="application/ms-excel")
-            content = "attachment; filename = {0}".format(archivo_predios)
-            response['Content-Disposition'] = content
-            wb.save(response)
-            return response
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
-
-
-class ReportesEstado(LoginRequiredMixin, View):
-    login_url = '/'
-
-    def get(self, request):
-        try:
-            sector = request.GET.get("estado")
-            centro = str(sector)
-            viviendas = Vivienda.objects.filter(EstadoServicio=centro)
-            wb = Workbook()
-            ws = wb.active
-            ws['A1'] = "Reporte de predios"
-            ws.merge_cells('A1:B1')
-            ws['A2'] = 'Matricula'
-            ws['B2'] = 'Dirección'
-            ws['C2'] = 'NumeroCasa'
-            ws['D2'] = 'Piso'
-            ws['E2'] = 'Ciclo'
-            ws['F2'] = 'TipoInstalación'
-            ws['G2'] = 'Estrato'
-            ws['H2'] = 'EstadoServicio'
-            ws['I2'] = 'Propietario'
-            ws['J2'] = 'Acueducto'
-            ws['K2'] = 'Usuario'
-            ws['L2'] = 'MatriculaAnt'
-            ws['M2'] = 'InfoInstalación'
-            ws['N2'] = 'ProfAcometida'
-            ws['O2'] = 'CantHabitantes'
-
-            cont = 3
-
-            for vivienda in viviendas:
-                ws.cell(row=cont, column=1).value = vivienda.IdVivienda
-                ws.cell(row=cont, column=2).value = vivienda.Direccion
-                ws.cell(row=cont, column=3).value = vivienda.NumeroCasa
-                ws.cell(row=cont, column=4).value = vivienda.Piso
-                ws.cell(row=cont, column=5).value = vivienda.Ciclo
-                ws.cell(row=cont, column=6).value = vivienda.TipoInstalacion
-                ws.cell(row=cont, column=7).value = vivienda.Estrato
-                ws.cell(row=cont, column=8).value = vivienda.EstadoServicio
-                ws.cell(row=cont, column=9).value = str(vivienda.IdPropietario)
-                ws.cell(row=cont, column=10).value = str(vivienda.IdAcueducto)
-                ws.cell(row=cont, column=11).value = str(vivienda.usuid)
-                ws.cell(row=cont, column=12).value = vivienda.MatriculaAnt
-                ws.cell(row=cont, column=13).value = vivienda.InfoInstalacion
-                ws.cell(row=cont, column=14).value = vivienda.ProfAcometida
-                ws.cell(row=cont, column=15).value = vivienda.CantHabitantes
-
-                cont += 1
-
-            archivo_predios = "ReportePredios.xlsx"
-            response = HttpResponse(content_type="application/ms-excel")
-            content = "attachment; filename = {0}".format(archivo_predios)
-            response['Content-Disposition'] = content
-            wb.save(response)
-            return response
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
-
 
 class ReportesCiclo(LoginRequiredMixin, View):
     login_url = '/'
@@ -1558,17 +1341,12 @@ class RegistroCostoM(LoginRequiredMixin, View):
     def get(self, request):
         try:
             form = self.form_class()
-            listapqrs = Pqrs.objects.filter(Estado='Pendiente')
-            contqrs = Pqrs.objects.filter(Estado='Pendiente').count()
-            contsoli = SolicitudGastos.objects.filter(Estado=ESTADO1).count()
-            totalnoti = contqrs + contsoli
-            contadorpen = SolicitudGastos.objects.filter(Estado=ESTADO1)
 
             usuario = Usuario.objects.get(usuid=request.user.pk)
             tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AccessPanel').exists()
             if tipousuario is True:
                 return render(request, self.template_name, {
-                    'form': form, 'notificaciones': contadorpen, 'listapqrs': listapqrs, 'totalnoti': totalnoti
+                    'form': form
                 })
             else:
                 messages.add_message(request, messages.ERROR,
@@ -1603,22 +1381,16 @@ class RegistroTarifa(LoginRequiredMixin, View):
 
     def get(self, request):
         try:
-            listapqrs = Pqrs.objects.filter(Estado='Pendiente')
-            contqrs = Pqrs.objects.filter(Estado='Pendiente').count()
-            contsoli = SolicitudGastos.objects.filter(Estado=ESTADO1).count()
-            totalnoti = contqrs + contsoli
-            contadorpen = SolicitudGastos.objects.filter(Estado=ESTADO1)
             usuario = Usuario.objects.get(usuid=request.user.pk)
             form = self.form_class()
             tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AccessPanel').exists()
             if tipousuario is True:
                 return render(request, self.template_name, {
-                    'form': form, 'notificaciones': contadorpen, 'listapqrs': listapqrs, 'totalnoti': totalnoti
+                    'form': form
                 })
 
             else:
-                messages.add_message(request, messages.ERROR,
-                                     'Su usuario no tiene los permiso de acceso a esta seccion')
+                messages.add_message(request, messages.ERROR,'Su usuario no tiene los permiso de acceso a esta seccion')
                 return HttpResponseRedirect(reverse('usuarios:paneladmin'))
 
         except ObjectDoesNotExist:
@@ -1702,6 +1474,7 @@ class ListaPqrs(LoginRequiredMixin, View):
 
     def get(self, request):
         try:
+            listado = Pqrs.objects.all().order_by("-IdPqrs")
             total = Pqrs.objects.all().count()
             lista = Pqrs.objects.filter(Estado='Pendiente')
             contcerrada = Pqrs.objects.filter(Estado='Cerrada').count()
@@ -1732,7 +1505,8 @@ class ListaPqrs(LoginRequiredMixin, View):
                     'contcerrada': contcerrada,
                     'notificaciones': contadorpen,
                     'listapqrs': drilistapqrs,
-                    'totalnoti': totalnoti
+                    'totalnoti': totalnoti,
+                    'listado': listado
 
                 })
             else:
@@ -1748,9 +1522,8 @@ class VerPqr(LoginRequiredMixin, View):
     login_url = '/'
     template_name = 'usuarios/verpqr.html'
 
-    def get(self, request):
+    def get(self, request, idpqr):
         try:
-            idpqr = request.GET.get("idpqr")
             pqr = Pqrs.objects.filter(IdPqrs=idpqr)
             respuesta = RespuestasPqrs.objects.filter(IdPqrs=idpqr)
             idsolicitud = Pqrs.objects.get(IdPqrs=idpqr)
@@ -1765,34 +1538,19 @@ class VerPqr(LoginRequiredMixin, View):
             return render(request, "pages-404.html")
 
 
-class ListadoPqrs(LoginRequiredMixin, View):
-    login_url = '/'
-    template_name = 'usuarios/listadopqrs.html'
-
-    def get(self, request):
-        try:
-            listado = Pqrs.objects.all()
-
-            return render(request, self.template_name, {
-                'listado': listado
-            })
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
-
-
 class RespuestaPqrs(LoginRequiredMixin, View):
     login_url = '/'
     template_name = 'usuarios/respuestapqr.html'
-    form_class = RespuestPqrForm
+    form_class = FormRespuestaPqrs
 
     def get(self, request, idsolicitud):
         try:
             prq = Pqrs.objects.get(IdPqrs=idsolicitud)
-            form = self.form_class(instance=prq)
+            form = self.form_class()
 
             return render(request, self.template_name, {
-                'form': form
+                'form': form,
+                'idsolicitud': idsolicitud
             })
 
         except ObjectDoesNotExist:
@@ -1800,73 +1558,42 @@ class RespuestaPqrs(LoginRequiredMixin, View):
 
     def post(self, request, idsolicitud):
         try:
-            idpqr = request.POST.get("idpqr")
-            soporte = request.FILES.get("soporte")
-            descripcion = request.POST.get("descripcion")
-            pqr = Pqrs.objects.get(IdPqrs=idpqr)
-            form = self.form_class(request.POST, instance=pqr)
-
-            if idpqr == idsolicitud:
-                if form.is_valid():
-                    form.save()
-                    respuesta = RespuestasPqrs(IdPqrs=pqr, Descripcion=descripcion, Soporte=soporte)
-                    respuesta.save()
-                    messages.add_message(request, messages.INFO, 'La solicitud se respondio correctamente')
-                    return HttpResponseRedirect(reverse('usuarios:listapqrs'))
-
-                else:
-                    messages.add_message(request, messages.ERROR, 'No se pudo confirmar el origen del error')
-                    return HttpResponseRedirect(reverse('usuarios:listapqrs'))
+            id = 1
+            soporte = request.FILES.get("Soporte")
+            descripcion = request.POST.get("Descripcion")
+            pqrs = Pqrs.objects.get(IdPqrs=idsolicitud)
+            if id>=1:
+                cpqrs = Pqrs.objects.get(IdPqrs=idsolicitud)
+                cpqrs.Estado = NOVEDAD1
+                cpqrs.save()
+                respuesta = RespuestasPqrs(IdPqrs=pqrs, Descripcion=descripcion, Soporte=soporte)
+                respuesta.save()
+                messages.add_message(request, messages.INFO, 'La respuesta se agrego correctamente')
+                return HttpResponseRedirect(reverse('usuarios:listapqrs'))
 
             else:
-                messages.add_message(request, messages.WARNING, 'No se pudo confirmar el numero de radicado')
+                messages.add_message(request, messages.WARNING, 'No se pudo agregar la respuesta')
                 return HttpResponseRedirect(reverse('usuarios:listapqrs'))
 
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
 
 
-class GenerarCuentas(LoginRequiredMixin, View):
+class CambioEstadoFacturas(LoginRequiredMixin, View):
     login_url = '/'
-    template_name = 'usuarios/respuestapqr.html'
-    form_class = RespuestPqrForm
-
-    def get(self, request, idsolicitud):
-        try:
-            prq = Pqrs.objects.get(IdPqrs=idsolicitud)
-            form = self.form_class(instance=prq)
-
-            return render(request, self.template_name, {
-                'form': form
-            })
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
-
-
-class Facturas(LoginRequiredMixin, View):
-    login_url = '/'
-    template_name = 'usuarios/facturas.html'
+    template_name = 'usuarios/anularfs.html'
 
     def get(self, request):
         try:
-            listapqrs = Pqrs.objects.filter(Estado='Pendiente')
-            contqrs = Pqrs.objects.filter(Estado='Pendiente').count()
-            contsoli = SolicitudGastos.objects.filter(Estado=ESTADO1).count()
-            totalnoti = contqrs + contsoli
-            contadorpen = SolicitudGastos.objects.filter(Estado=ESTADO1)
             facturasemi = Factura.objects.filter(Estado=FE).count()
-            facturasven = Factura.objects.filter(Estado=FV).count()
+            orsuspencion = OrdenesSuspencion.objects.filter(Estado='Pendiente').count()
             usuario = Usuario.objects.get(usuid=request.user.pk)
             tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AMFV').exists()
             if tipousuario is True:
                 return render(request, self.template_name,
                               {
                                   'facturasemi': facturasemi,
-                                  'facturasven': facturasven,
-                                  'notificaciones': contadorpen,
-                                  'listapqrs': listapqrs,
-                                  'totalnoti': totalnoti
+                                  'orsus': orsuspencion,
                               })
             else:
                 messages.add_message(request, messages.ERROR,
@@ -1879,17 +1606,25 @@ class Facturas(LoginRequiredMixin, View):
     def post(self, request):
         try:
             facturas = Factura.objects.filter(Estado=FE)
+            ordensus = OrdenesSuspencion.objects.filter(Estado="Pendiente")
             verificacion = Factura.objects.filter(Estado=FE).count()
             if verificacion >= 1:
                 for factura in facturas:
                     cambio = Factura.objects.get(IdFactura=factura.pk)
                     cambio.Estado = FV
                     cambio.save()
-                messages.add_message(request, messages.INFO, 'Se cambio el estado de las facturas emitidas a vencidas')
-                return HttpResponseRedirect(reverse('usuarios:facturas'))
+
+                for orden in ordensus:
+                    cambio = OrdenesSuspencion.objects.get(IdOrden=orden.pk)
+                    cambio.Estado = "Anulada"
+                    cambio.UsuarioEjecuta = "Sistema"
+                    cambio.save()
+
+                messages.add_message(request, messages.INFO, 'Se cambio el estado de las facturas vigentes a vencidas y se anularon las ordenes de suspencion vigentes')
+                return HttpResponseRedirect(reverse('usuarios:estadoscuenta'))
             else:
-                messages.add_message(request, messages.ERROR, 'No hay facturacion emitida')
-                return HttpResponseRedirect(reverse('usuarios:facturas'))
+                messages.add_message(request, messages.ERROR, 'No hay facturacion vigente')
+                return HttpResponseRedirect(reverse('usuarios:estadoscuenta'))
 
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
@@ -1901,16 +1636,12 @@ class GeneradorFacturas(LoginRequiredMixin, View):
 
     def get(self, request):
         try:
-            listapqrs = Pqrs.objects.filter(Estado='Pendiente')
-            contqrs = Pqrs.objects.filter(Estado='Pendiente').count()
-            contsoli = SolicitudGastos.objects.filter(Estado=ESTADO1).count()
-            totalnoti = contqrs + contsoli
-            contadorpen = SolicitudGastos.objects.filter(Estado=ESTADO1)
             usuario = Usuario.objects.get(usuid=request.user.pk)
-            facturasven = Factura.objects.filter(Estado=FV).count()
+
             facturasemi = Factura.objects.all().count()
             facturasemitidas = Factura.objects.filter(Estado=FE)
             facturasemitidas2 = Factura.objects.filter(Estado=FE).count()
+            facturasven = Factura.objects.filter(Estado=FV).count()
             facturaspg = Factura.objects.filter(Estado=FP).count()
             facturasanu = Factura.objects.filter(Estado=FA).count()
             facturas = Factura.objects.filter(Estado='Emitida').order_by("-IdFactura")
@@ -1928,9 +1659,6 @@ class GeneradorFacturas(LoginRequiredMixin, View):
                                'facturaspg': facturaspg,
                                'facturasanu': facturasanu,
                                'suma': suma,
-                               'notificaciones': contadorpen,
-                               'listapqrs': listapqrs,
-                               'totalnoti': totalnoti,
                                'facturas': facturas
                                })
             else:
@@ -2003,12 +1731,12 @@ class GeneradorFacturas(LoginRequiredMixin, View):
                         factura.save()
                         contador += 1
 
-                    messages.add_message(request, messages.INFO, 'Se generaron' + str(contador) + 'facturas')
-                    return HttpResponseRedirect(reverse('usuarios:generadorfacturas'))
+                    messages.add_message(request, messages.INFO, 'Se generaron ' + str(contador) + ' facturas ')
+                    return HttpResponseRedirect(reverse('usuarios:estadoscuenta'))
 
                 else:
                     messages.add_message(request, messages.ERROR, 'No se puede generar facturas verifique nuevamente')
-                    return HttpResponseRedirect(reverse('usuarios:generadorfacturas'))
+                    return HttpResponseRedirect(reverse('usuarios:estadoscuenta'))
 
             else:
                 messages.add_message(request, messages.ERROR,
@@ -2033,11 +1761,6 @@ class Suspenciones(LoginRequiredMixin, View):
             ordenesreconexion = OrdenesReconexion.objects.filter(Estado=SP)
             contreeje = OrdenesReconexion.objects.filter(Estado=SJ).count()
             contrepen = OrdenesReconexion.objects.filter(Estado=SP).count()
-            drilistapqrs = Pqrs.objects.filter(Estado='Pendiente')
-            contqrs = Pqrs.objects.filter(Estado='Pendiente').count()
-            contsoli = SolicitudGastos.objects.filter(Estado=ESTADO1).count()
-            totalnoti = contqrs + contsoli
-            contadorpen = SolicitudGastos.objects.filter(Estado=ESTADO1)
             totales = OrdenesSuspencion.objects.all().count()
 
             tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='ASR').exists()
@@ -2051,9 +1774,6 @@ class Suspenciones(LoginRequiredMixin, View):
                     'ordrec': ordenesreconexion,
                     'rependientes': contrepen,
                     'reejecutadas': contreeje,
-                    'notificaciones': contadorpen,
-                    'listapqrs': drilistapqrs,
-                    'totalnoti': totalnoti,
                     'total': totales
 
                 })
@@ -2084,7 +1804,7 @@ class Suspenciones(LoginRequiredMixin, View):
                         orden.save()
 
             messages.add_message(request, messages.INFO, 'Se generaron las ordenes de suspencion correspondientes')
-            return HttpResponseRedirect(reverse('usuarios:suspenciones'))
+            return HttpResponseRedirect(reverse('usuarios:estadoscuenta'))
 
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
@@ -2384,10 +2104,10 @@ class DescargarFactura(LoginRequiredMixin, View):
                 ws['AI55'] = FechaExpe
                 ws['AI57'] = FechaLimite
 
-                if int(aporteporconsumo) >= 9000:
+                if int(facturasvencidas) >= 1:
                     fechalimite = FechaLimite + timedelta(days=8)
-                    ws['AI57'] = 'Inmediato'
-                    ws['AI59'] = fechalimite
+                    ws['A40'] = 'Inmediato'
+                    ws['A42'] = fechalimite
                 else:
                     ws['AI57'] = FechaLimite
 
@@ -2914,53 +2634,6 @@ class ReporteReconexion(LoginRequiredMixin, View):
         return response
 
 
-class ReporteCierresAno(LoginRequiredMixin, View):
-    login_url = '/'
-
-    def get(self, request):
-        ano = request.GET.get("ano")
-        pagos2 = Cierres.objects.filter(Ano=ano).exists()
-        if pagos2 is False:
-            messages.add_message(request, messages.ERROR, 'No existen reportes del año ingresado')
-            return HttpResponseRedirect(reverse('usuarios:reporte'))
-
-        else:
-            pagos = Cierres.objects.filter(Ano=ano)
-            sfecha = (datetime.today())
-            wb = Workbook()
-            ws = wb.active
-            ws.title = "ReporteCierres"
-            ws['A1'] = 'Id Cierre'
-            ws['B1'] = 'Ingresos'
-            ws['C1'] = 'Gastos'
-            ws['D1'] = 'Presupuesto'
-            ws['E1'] = 'Ciclo'
-            ws['F1'] = 'Año'
-            ws['G1'] = 'Fecha generacion'
-            ws['H1'] = 'Usuario'
-            ws['I1'] = '% recaudado'
-
-            cont = 2
-            for suspencion in pagos:
-                ws.cell(row=cont, column=1).value = suspencion.IdCierre
-                ws.cell(row=cont, column=2).value = suspencion.Ingresos
-                ws.cell(row=cont, column=3).value = suspencion.Gastos
-                ws.cell(row=cont, column=4).value = suspencion.Presupuesto
-                ws.cell(row=cont, column=5).value = suspencion.Ciclo
-                ws.cell(row=cont, column=6).value = suspencion.Ano
-                ws.cell(row=cont, column=7).value = suspencion.Fecha
-                ws.cell(row=cont, column=8).value = suspencion.NoRecaudo
-                ws.cell(row=cont, column=9).value = suspencion.Recaudado
-                cont += 1
-
-            archivo_predios = "ReporteCierres" + str(sfecha) + ".xlsx"
-            response = HttpResponse(content_type="application/ms-excel")
-            content = "attachment; filename = {0}".format(archivo_predios)
-            response['Content-Disposition'] = content
-            wb.save(response)
-            return response
-
-
 class PagarMatricula(LoginRequiredMixin, View):
     login_url = '/'
     template_name = 'usuarios/pagarmatricula.html'
@@ -3026,41 +2699,6 @@ class EnvioCorreo(LoginRequiredMixin):
         )
         email.attach_alternative(content, 'text/html')
         email.send()
-
-
-class ReporteEstadoCuenta(LoginRequiredMixin, View):
-    login_url = '/'
-
-    def get(self):
-        pagos = EstadoCuenta.objects.all()
-        wb = Workbook()
-        ws = wb.active
-        ws.title = "Reporte de estados cuenta"
-        ws['A1'] = 'Referencia'
-        ws['B1'] = 'Valor'
-        ws['C1'] = 'Vivienda'
-        ws['D1'] = 'Estado'
-        ws['E1'] = 'Fecha Actualizacion'
-        ws['F1'] = 'Descripcion'
-
-        sfecha = (datetime.today())
-        cont = 2
-
-        for pago in pagos:
-            ws.cell(row=cont, column=1).value = pago.IdEstadoCuenta
-            ws.cell(row=cont, column=2).value = pago.Valor
-            ws.cell(row=cont, column=3).value = str(pago.IdVivienda)
-            ws.cell(row=cont, column=4).value = pago.Estado
-            ws.cell(row=cont, column=5).value = pago.FechaActualizacion
-            ws.cell(row=cont, column=6).value = pago.Descripcion
-            cont += 1
-        archivo_propi = "ReporteEstadosCuenta" + str(sfecha) + ".xlsx"
-        response = HttpResponse(content_type="application/ms-excel")
-        content = "attachment; filename = {0}".format(archivo_propi)
-        response['Content-Disposition'] = content
-        wb.save(response)
-        return response
-
 
 class CambioTitular(LoginRequiredMixin, View):
     login_url = '/'
@@ -3654,7 +3292,7 @@ class CierreFinanciero(LoginRequiredMixin, View):
             gastossultimoano = SolicitudGastos.objects.filter(Fecha__gte=new_date, Fecha__lte=new_date2).all()
             lingresos = Pagos.objects.all()
             lgastos = SolicitudGastos.objects.filter(Estado='Aprobada')
-            pingregos = Cierres.objects.all()
+            pingregos = Cierres.objects.all().order_by("-IdCierre")
             credito = Credito.objects.filter(Estado='Vigente')
 
             suma8 = 0
@@ -3746,8 +3384,6 @@ class CierreFinanciero(LoginRequiredMixin, View):
             filtro = Cierres.objects.filter(Ciclo=periodo, Ano=ano).exists()
             usuario = auth.authenticate(username=username1, password=password1)
             if usuario is not None and usuario.is_active:
-                print(pago0, gasto4)
-                print(ingresos, egresos)
                 if filtro is False:
                     if pago0 == int(ingresos) and gasto4 == int(egresos):
                         cierre = Cierres(Ingresos=ingresos, Gastos=egresos, Presupuesto=presupuesto, Ciclo=periodo,
@@ -3859,19 +3495,6 @@ class ReporteGastos(LoginRequiredMixin, View):
             return render(request, "pages-404.html")
 
 
-class V3(LoginRequiredMixin, View):
-    login_url = '/'
-    template_name = 'usuarios/base_usuario2.html'
-
-    def get(self, request):
-        try:
-
-            return render(request, self.template_name
-                          )
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
-
 
 class PanelAdmin(LoginRequiredMixin, View):
     login_url = '/'
@@ -3879,31 +3502,40 @@ class PanelAdmin(LoginRequiredMixin, View):
 
     def get(self, request):
         try:
+            with connection.cursor() as cursor:
+                # Consulta SQL para obtener el tamaño total de la base de datos en bytes
+                cursor.execute(
+                    "SELECT SUM(data_length + index_length) AS total_size FROM information_schema.tables "
+                    "WHERE table_schema = DATABASE();")
+
+                # Obtener el tamaño total de la base de datos en bytes
+                result = cursor.fetchone()
+                total_size_in_bytes = result[0] if result else 0
+
+                # Convertir el tamaño total a megabytes
+                total_size_in_megabytes = total_size_in_bytes / (1024 * 1024)
+
             usuario = Usuario.objects.get(usuid=request.user.pk)
             nit = usuario.IdAcueducto
             ye = datetime.now()
             ano = ye.year
+            cantusu = Usuario.objects.all().count()
             usuarios = Usuario.objects.all()
             tarifas = Tarifa.objects.all().order_by('-IdTarifa')
+            tarifa = Tarifa.objects.filter(Ano=ano)
             poblaciones = Poblacion.objects.all()
             matriculas = ValorMatricula.objects.all()
             acueducto = Acueducto.objects.get(IdAcueducto=nit)
-            drilistapqrs = Pqrs.objects.filter(Estado='Pendiente')
-            contqrs = Pqrs.objects.filter(Estado='Pendiente').count()
-            contsoli = SolicitudGastos.objects.filter(Estado=ESTADO1).count()
-            totalnoti = contqrs + contsoli
-            contadorpen = SolicitudGastos.objects.filter(Estado=ESTADO1)
             usuario = Usuario.objects.get(usuid=request.user.pk)
 
             tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AccessPanel').exists()
             if tipousuario is True:
                 return render(request, self.template_name, {
-                    'notificaciones': contadorpen,
                     'ano': str(ano),
-                    'listapqrs': drilistapqrs,
-                    'totalnoti': totalnoti,
                     'logo': acueducto.logo,
                     'razonsocial': acueducto.Nombre,
+                     'rlegal': acueducto.Relegal,
+                    'sigla': acueducto.Sigla,
                     'nit': acueducto.IdAcueducto,
                     'direccion': acueducto.DirOficina,
                     'email': acueducto.Email,
@@ -3911,10 +3543,13 @@ class PanelAdmin(LoginRequiredMixin, View):
                     'telefono': acueducto.Telefono,
                     'estado': acueducto.Estado,
                     'tarifa': acueducto.IdTarifa.Valor,
+                    'cantusu': cantusu,
                     'usuarios': usuarios,
                     'tarifas': tarifas,
+                    'activa': tarifa,
                     'matriculas': matriculas,
-                    'poblacion': poblaciones
+                    'poblacion': poblaciones,
+                    'mb': int(total_size_in_megabytes)
 
                 }
                               )
@@ -3934,22 +3569,16 @@ class PerfilUsuario(LoginRequiredMixin, View):
         try:
             idusuario = IdUsuario
             usuario = Usuario.objects.get(usuid=request.user.pk)
-            drilistapqrs = Pqrs.objects.filter(Estado='Pendiente')
-            contqrs = Pqrs.objects.filter(Estado='Pendiente').count()
-            contsoli = SolicitudGastos.objects.filter(Estado=ESTADO1).count()
-            totalnoti = contqrs + contsoli
-            contadorpen = SolicitudGastos.objects.filter(Estado=ESTADO1)
             # inicio consultas
             infousuario = Usuario.objects.get(IdUsuario=idusuario)
             user = User.objects.get(username=infousuario.usuid)
+
+            consultaradmin = Permisos.objects.filter(usuid=infousuario, TipoPermiso='AccessPanel').exists()
             tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AccessPanel').exists()
             if tipousuario is True:
 
                 return render(request, self.template_name, {
                     'cedula': infousuario.usuid_id,
-                    'notificaciones': contadorpen,
-                    'listapqrs': drilistapqrs,
-                    'totalnoti': totalnoti,
                     'foto': infousuario.fotoUsuario,
                     'usuario': user.username,
                     'nombres': user.first_name,
@@ -3959,57 +3588,14 @@ class PerfilUsuario(LoginRequiredMixin, View):
                     'cargo': infousuario.TipoUsuario,
                     'fechac': infousuario.FechaCreacion,
                     'ultimo': user.last_login,
-                    'departamento': infousuario.Departamento
+                    'departamento': infousuario.Departamento,
+                    'tipousuario':consultaradmin
 
                 }
                               )
             else:
                 messages.add_message(request, messages.ERROR, 'Su usuario no tiene acceso a este modulo')
                 return HttpResponseRedirect(reverse('usuarios:inicio'))
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
-
-
-class AnularSuspenciones(LoginRequiredMixin, View):
-    login_url = '/'
-    template_name = 'usuarios/anularsuspenciones.html'
-
-    def get(self, request):
-        try:
-            usuario = Usuario.objects.get(usuid=request.user.pk)
-            ordenesuspencion = OrdenesSuspencion.objects.filter(Estado="Pendiente").count()
-            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AccessPanel').exists()
-            if tipousuario is True:
-                return render(request, self.template_name, {'cantidad': ordenesuspencion})
-            else:
-                messages.add_message(request, messages.ERROR, 'Su usuario no tiene acceso a este modulo')
-                return HttpResponseRedirect(reverse('usuarios:inicio'))
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
-
-    def post(self, request):
-        try:
-            ordensus = OrdenesSuspencion.objects.filter(Estado="Pendiente")
-            verificacion = OrdenesSuspencion.objects.filter(Estado="Pendiente").count()
-            facturas = Factura.objects.filter(Estado=FE).count()
-            if facturas >= 1:
-                messages.add_message(request, messages.ERROR, 'Toda la facturacion debe estar Anulada o Vencida')
-                return HttpResponseRedirect(reverse('usuarios:suspenciones'))
-
-            else:
-                if verificacion >= 1:
-                    for orden in ordensus:
-                        cambio = OrdenesSuspencion.objects.get(IdOrden=orden.pk)
-                        cambio.Estado = "Anulada"
-                        cambio.UsuarioEjecuta = "Sistema"
-                        cambio.save()
-                    messages.add_message(request, messages.INFO, 'Se cambio el estado de las ordenes')
-                    return HttpResponseRedirect(reverse('usuarios:suspenciones'))
-                else:
-                    messages.add_message(request, messages.ERROR, 'No hay ordenes disponibles para anular')
-                    return HttpResponseRedirect(reverse('usuarios:suspenciones'))
 
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
@@ -4347,7 +3933,7 @@ class CobroRecargo(LoginRequiredMixin, View):
             cont = 0
             for i in estadoscuenta:
                 valor = int(i.Valor)
-                if valor >= 14000:
+                if valor >= 17000:
                     cont += 1
 
             return render(request, self.template_name, {
@@ -4369,14 +3955,14 @@ class CobroRecargo(LoginRequiredMixin, View):
             cont = 0
             for i in estadoscuenta:
                 valor = i.Valor
-                if valor >= 14000:
+                if valor >= 17000:
                     cont += 1
                     estadoscu = EstadoCuenta.objects.get(IdEstadoCuenta=i.pk)
                     estadoscu.Valor += int(recargo)
                     estadoscu.save()
 
             messages.add_message(request, messages.INFO, 'Se genero el cobro de los recargos correctamente')
-            return HttpResponseRedirect(reverse('usuarios:facturacion'))
+            return HttpResponseRedirect(reverse('usuarios:estadoscuenta'))
 
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
@@ -4570,22 +4156,7 @@ class Matriculas(LoginRequiredMixin, View):
             bn = Vivienda.objects.filter(Direccion='Barrio Nuevo').count()
             vj = Vivienda.objects.filter(Direccion='20 de julio').count()
             hd = Vivienda.objects.filter(Direccion='Hacienda').count()
-
-            # contador de bloques
-            bpnv = AsignacionBloque.objects.filter(Bloque='PNV').count()
-            bcc = AsignacionBloque.objects.filter(Bloque='CC').count()
-            bpnd = AsignacionBloque.objects.filter(Bloque='PND').count()
-            bbn = AsignacionBloque.objects.filter(Bloque='BN').count()
-            bhd = AsignacionBloque.objects.filter(Bloque='HD').count()
-            bvj = AsignacionBloque.objects.filter(Bloque='VJ').count()
-
-            # calculos
-            cpnv = bpnv - pnv
-            cpnd = bpnd - pnd
-            ccc = bcc - cc
-            cbn = bbn - bn
-            chd = bhd - hd
-            cvj = bvj - vj
+            carb = Vivienda.objects.filter(Direccion='Carbonera').count()
 
             # disponible
             epnv = AsignacionBloque.objects.filter(Bloque='PNV', Estado='Sin asignar').count()
@@ -4594,6 +4165,7 @@ class Matriculas(LoginRequiredMixin, View):
             ebn = AsignacionBloque.objects.filter(Bloque='BN', Estado='Sin asignar').count()
             ehd = AsignacionBloque.objects.filter(Bloque='HD', Estado='Sin asignar').count()
             evj = AsignacionBloque.objects.filter(Bloque='VJ', Estado='Sin asignar').count()
+            car = AsignacionBloque.objects.filter(Bloque='CA', Estado='Sin asignar').count()
 
             # filtros
             fpnv = AsignacionBloque.objects.filter(Bloque='PNV', Estado='Sin asignar')
@@ -4602,15 +4174,15 @@ class Matriculas(LoginRequiredMixin, View):
             fbn = AsignacionBloque.objects.filter(Bloque='BN', Estado='Sin asignar')
             fhd = AsignacionBloque.objects.filter(Bloque='HD', Estado='Sin asignar')
             fvj = AsignacionBloque.objects.filter(Bloque='VJ', Estado='Sin asignar')
+            fcar = AsignacionBloque.objects.filter(Bloque='CA', Estado='Sin asignar')
 
             usuario = 0
             if usuario == 0:
                 return render(request, self.template_name,
                               {'pnv': pnv, 'pnd': pnd, 'cc': cc, 'bn': bn, 'vj': vj, 'hd': hd,
-                               'bpnv': bpnv, 'bcc': bcc, 'bpnd': bpnd, 'bbn': bbn, 'bhd': bhd, 'bvj': bvj,
-                               'cpnv': cpnv, 'cpnd': cpnd, 'ccc': ccc, 'cbn': cbn, 'chd': chd, 'cvj': cvj,
                                'epnv': epnv, 'epnd': epnd, 'ecc': ecc, 'ebn': ebn, 'ehd': ehd, 'evj': evj,
-                               'fhd': fhd, 'fpnv': fpnv, 'fpnd': fpnd, 'fvj': fvj, 'fbn': fbn, 'fcc': fcc
+                               'fhd': fhd, 'fpnv': fpnv, 'fpnd': fpnd, 'fvj': fvj, 'fbn': fbn, 'fcc': fcc,
+                               'car':car,'fcar':fcar, 'carb':carb
                                })
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")

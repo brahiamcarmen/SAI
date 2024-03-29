@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
-from SAAL.models import Vivienda, SolicitudGastos, Medidores, Poblacion
+from SAAL.models import Vivienda, SolicitudGastos, Medidores, Poblacion, RespuestasPqrs
 from SAAL.models import Propietario, CobroMatricula, ValorMatricula, Usuario
 from SAAL.models import Acueducto, Tarifa, Permisos, Pqrs, Credito, Proveedor, NovedadesRetiro
 
@@ -269,6 +269,7 @@ class TarifasForm(forms.ModelForm):
             'TarifaSuspencion',
             'bifamiliar',
             'multifamiliar',
+            'm3',
             'especial',
             'Ano',
         ]
@@ -281,6 +282,7 @@ class TarifasForm(forms.ModelForm):
             'TarifaSuspencion': _(u'Aporte por Suspencion'),
             'bifamiliar': _(u'Aporte bifamiliar'),
             'multifamiliar': _(u'Aporte multifamiliar'),
+            'm3': _(u'consumo maximo m3'),
             'especial': _(u'Aporte especial'),
             'Ano': _(u'Año de vigencia'),
         }
@@ -288,24 +290,6 @@ class TarifasForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(TarifasForm, self).__init__(*args, **kwargs)
         self.fields['Valor'].required = True
-
-        for field in self.fields:
-            self.fields[field].widget.attrs.update({'class': 'form-control'})
-
-
-class RespuestPqrForm(forms.ModelForm):
-    class Meta:
-        model = Pqrs
-        fields = [
-            'Estado'
-        ]
-        labels = {
-            'Estado': _(u'Cambio de estado'),
-        }
-
-    def __init__(self, *args, **kwargs):
-        super(RespuestPqrForm, self).__init__(*args, **kwargs)
-        self.fields['Estado'].required = True
 
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
@@ -524,6 +508,27 @@ class FormAgregarGasto(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(FormAgregarGasto, self).__init__(*args, **kwargs)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+class FormRespuestaPqrs(forms.ModelForm):
+    class Meta:
+        model = RespuestasPqrs
+        fields = [
+            'Descripcion',
+            'Soporte',
+        ]
+        labels = {
+            'Descripcion': _(u'Respuesta a la solicitud'),
+            'Soporte': _(u'Soportes'),
+        }
+        widgets = {
+            'Descripcion': forms.Textarea(),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(FormRespuestaPqrs, self).__init__(*args, **kwargs)
 
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})

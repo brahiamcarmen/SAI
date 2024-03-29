@@ -31,52 +31,6 @@
         	   <div class="col-lg-6 col-xl-5">
                     <div class="card">
                        <div class="card-body">
-                       	<div class="row">
-                       		<div class="col-lg-12">
-                       			<h3 class="card-title">Reportes disponibles</h3>                  	 
-			                  	 <div class="row">
-			                  	 	<div class="col-4 col-sm-4">
-			                        	<a href="{% url 'usuarios:reporteestadoscuenta' %}" class="btn btn-primary btn-sm w-100">
-			                          Estados cuenta
-			                        	</a>
-			                      	</div>
-			                      	<div class="col-4 col-sm-4">
-			                        	<a href="{% url 'usuarios:reportecierre' %}" class="btn btn-primary btn-sm w-100">
-			                          Cierres periodicos
-			                        	</a>
-			                      	</div>
-			                      	<div class="col-4 col-sm-4">
-			                        	<a href="{% url 'usuarios:reportegastos' %}" class="btn btn-primary btn-sm w-100">
-			                          Egresos
-			                        	</a>
-			                      	</div>
-			                  	 </div>
-			                  	 <div class="row" style="margin-top:1rem">
-			                  	 	<div class="col-4 col-sm-4">
-			                        	<a href="{% url 'usuarios:reportepagos' %}" class="btn btn-primary btn-sm w-100">
-			                          Ingresos
-			                        	</a>
-			                      	</div>
-			                      	<div class="col-4 col-sm-4">
-			                        	<a href="{% url 'usuarios:reportepdf' %}" class="btn btn-primary btn-sm w-100">
-			                          Titulares
-			                        	</a>
-			                      	</div>
-			                      	<div class="col-4 col-sm-4">
-			                        	<a href="{% url 'usuarios:reportepdfv' %}" class="btn btn-primary btn-sm w-100">
-			                          Predios
-			                        	</a>
-			                      	</div>
-			                  	 </div>
-			                  	 <div class="row" style="margin-top:1rem">
-			                  	 	<div class="col-12 col-sm-12">
-			                        	<a href="{% url 'usuarios:reportecompleto' %}" class="btn btn-primary btn-sm w-100">
-			                          Informe completo
-			                        	</a>
-			                      	</div>
-			                  	 </div> 
-                       		</div>
-                       	</div>
                        	<div class="row" style="margin-top:1rem">
                        		<h3 class="card-title">Estadisticas</h3>
                        		<div class="row text-center">
@@ -136,34 +90,7 @@
                 </div>
               </div>
    		</div>
-   		<div class="row" style="margin-top:1rem">
-                <div class="card">
-                  <div class="card-body">
-                  	<div class="row">
-                  		<div class="col-lg-3 col-xl-3">
-                  			<h3 class="card-title">Estado del servicio</h3>
-				            <form action="{% url 'usuarios:reporteestados' %}" method="get">
-								<select name="estado" class="form-control">
-									<option>Operativo</option>
-									<option>Suspendido</option>
-									<option>Retirado</option>
-									<option>Mantenimiento</option>
-								</select>
-								<button type="submit" class="btn btn-sm btn-primary" style="width: 100%; margin-top: 0.3rem;">Descargar</button>
-							</form>
-                  		</div>
-                  		<div class="col-lg-3 col-xl-3">
-                  			<h3 class="card-title">Cierres financieros por año</h3>
-				            <form action="{% url 'usuarios:reportecierresano' %}" method="get" class="form-inline">
-							{% csrf_token %}
-								<input type="text" style="width:100%" name="ano" class="form-control form-group-margin" placeholder="Ingrese el año para generar reporte">
-								<button style="margin-top: 0.3rem; width: 100%" type="submit" class="btn btn-sm btn-primary">Descargar</button>
-							</form>
-                  		</div>
-                  	</div>
-			      </div>
-                </div>
-   		</div>
+
 	</div>
 </div>
 <br>

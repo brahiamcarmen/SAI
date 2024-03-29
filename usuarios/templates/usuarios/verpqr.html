@@ -1,130 +1,108 @@
-{% extends 'usuarios/base_usuario2.html' %}
+{% extends 'usuarios/base_usuario3.html' %}
 {% load static %}
 {% block styles %}
 {% endblock %}
-{%block title %} <title>PQRS</title> {%endblock%}
+{%block title %} <title>PQRS #{{idsolicitud}}</title> {%endblock%}
+{% load humanize %}
 {% block content %}
 	{% include 'usuarios/alerts.html' %}
-	<div id="content-wrapper">
-			<div class="page-header text-center">
-				<h1><b>Pagina de verificacion de PQRS</b></h1>
-				 <div class="pull-right col-xs-12 col-sm-auto">
-	                        <button onclick="window.location='{% url 'usuarios:listapqrs'%}'" class="btn btn-primary">Volver</button>
-	                    </div>
-			</div> <!-- / .page-header -->
+      <div class="page-wrapper">
+        <div class="container-fluid">
+          <!-- Page title -->
+          <div class="page-header d-print-none">
+            <div class="row align-items-center">
+              <div class="col">
+                <!-- Page pre-title -->
+                <div class="page-pretitle">
+                  Modulo
+                </div>
+                <h2 class="page-title">
+                  Pagina de verificacion de PQRS
+                </h2>
+              </div>
+              <div class="col-auto ms-auto d-print-none">
+                <div class="btn-list">
+                    <div class="col-auto">
+                        <a href="{% url 'usuarios:listapqrs'%}" class="btn btn-sm btn-indigo btn-pill w-100">
+                                      Volver</a>
+                    </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+        	<div class="page-body">
+            <div class="container-xl">
+              <div class="row row-cards">
+              
+                      <div class="col-md-6 col-lg-7">
+                        <div class="card">
+                          <div class="card-body">
+                          	{% for pqr in pqr %}
+                              <dl class="row">
+                                <h3 class="subheader">Informacion de la solicitud</h3>
+                                  <dt class="col-5">No solicitud:</dt>
+                                  <dd class="col-7">{{ pqr.IdPqrs }}</dd>
+                                  <dt class="col-5">Nombre completo:</dt>
+                                  <dd class="col-7">{{ pqr.Nombre }}</dd>
+                                  <dt class="col-5">Fecha Radicado:</dt>
+                                  <dd class="col-7">{{ pqr.FechaRadicado }}<dd>
+								  <dt class="col-5">Telefono:</dt>
+                                  <dd class="col-7">{{ pqr.Telefono}}<dd>
+                                  <dt class="col-5">Correo:</dt>
+                                  <dd class="col-7">{{ pqr.Correo }}<dd>
+                                  <dt class="col-5">Direccion:</dt>
+                                  <dd class="col-7">{{ pqr.Direccion }}<dd>
+                                  <dt class="col-5">Tipo de solicitud:</dt>
+                                  <dd class="col-7">{{ pqr.TipoSolicitud }}</dd>
+                                  <dt class="col-5">Clasificacion</dt>
+                                  <dd class="col-7">{{ pqr.Clasificacion }}</dd>
+                                  <dt class="col-5">Usuario que registra</dt>
+                                  <dd class="col-7">{{ pqr.usuid }}</dd>
+                                  <dt class="col-5">Estado:</dt>
+                                  <dd class="col-7">{{ pqr.Estado }}<dd>
+                                  <dt class="col-5">Descripcion:</dt>
+                                  <dd class="col-7">{{ pqr.Descripcion }}<dd>
+                              </dl>
+              				{%endfor%}  
+                            </div>
+                          </div>
 
-			<div class="row">
-				<div style="margin-bottom: 1rem" class="row text-center">
-					<h4>Informacion de la solicitud</h4>
-				</div>
-				
-			
-					{% for pqr in pqr %}
-					<div class="row">
-						<div class="col-sm-3 text-center">
-							<label><b>Radicado</b></label>
-							<p >{{ pqr.IdPqrs }}</p>	
-						</div>
-
-						<div class="col-sm-2 text-center">
-							<label><b>Anonimo</b></label>
-							<p>{{ pqr.Anonimo }}</p>
-						</div>
-						<div class="col-sm-2 text-center">
-							<label><b>Tipo de solicitud</b></label>
-							<p>{{ pqr.TipoSolicitud }}</p>
-						</div>
-						<div class="col-sm-2 text-center">
-							<label><b>Estado</b></label>
-							<p>{{ pqr.Estado }}</p>
-						</div>
-						<div class="col-sm-3 text-center">
-							
-							<label><b><th>Fecha Radicado</th></b></label>
-							<p>{{ pqr.FechaRadicado }}</p>
-						</div>
-					</div>
-					<hr>
-					<div class="row">
-						<div class="col-sm-3 text-center">
-							<label><b>No. de Identidicacion o Nit</b></label>
-							<p >{{ pqr.CedulaNit }}</p>	
-						</div>
-
-						<div class="col-sm-3 text-center">
-							<label><b>Nombre completo</b></label>
-							<p>{{ pqr.NombreCompleto }}</p>
-						</div>
-						<div class="col-sm-3 text-center">
-							<label><b>Telefono/Celular</b></label>
-							<p>{{ pqr.Telefono }}</p>
-						</div>
-						<div class="col-sm-3 text-center">
-							<label><b>Correo Electronico</b></label>
-							<p>{{ pqr.Correo }}</p>
-						</div>
-					</div>
-					<hr>
-					<div class="row">
-							<div class="col-sm-3 text-center">
-								<label><b>Usuario</b></label>
-								<p >{{ pqr.usuid }}</p>	
+                        </div>
+                        <div class="col-md-6 col-lg-5">
+                          	<div class="card">
+	                            <div class="card-body">
+	                               <h3 class="subheader">Informacion de respuesta</h3>
+	                               <div class="row">
+	                               		{% for respuesta in respuestas %}
+											<div class="row">
+												<dl class="row">
+			                                <h3 class="subheader"></h3>
+			                                  <dt class="col-5">Identificador de respuesta:</dt>
+			                                  <dd class="col-7">{{ respuesta.IdRespuesta }}</dd>
+			                                  <dt class="col-5">Fecha respuesta:</dt>
+			                                  <dd class="col-7">{{ respuesta.Fecha}}</dd>
+			                                  <dt class="col-5">Soportes:</dt>
+			                                  <dd class="col-7"><a target="/" href="{{ respuesta.Soporte.url }}">Descargar</a><dd>
+											  <dt class="col-5">Descripcion:</dt>
+			                                  <dd class="col-7"><p style="height: 100px; overflow-y: scroll;">{{ respuesta.Descripcion }}</p><dd>
+			                              </dl>
+											</div>
+										{% empty %}
+												<button style="width: 100%" onclick="window.location='{% url 'usuarios:respuestapqr' idsolicitud %}'" class="btn btn-sm btn-indigo btn-pill w-100">Responder solicitud</button>
+										{% endfor %}
+	                               </div>
+	                               
+								</div>
 							</div>
-
-							<div class="col-sm-3 text-center">
-								<label><b>Soportes</b></label>
-								{% if pqr.Soporte == "" %}
-									<p>Sin soportes</p>
-								{% else %}
-									<p><a target="/" href="{{ pqr.Soporte.url }}">Descargar</a></p>
-								{%endif%}
-							</div>
-							<div class="col-sm-6 text-center" >
-								<label><b>Descripcion</b></label>
-								<p style="height: 100px; overflow-y: scroll;">{{ pqr.Descripcion }}</p>	
-							</div>	
-					</div>
-					<hr>
-					<div class="row">
-						
-					</div>
-				{% endfor %}
-			</div>
-			<div class="row">
-				<div class="row text-center">
-					<h4>Informacion de la respuesta</h4>
-				</div>
-				
-				{% for respuesta in respuestas %}
-					<div class="row">
-							<div class="col-sm-2 text-center">
-								<label><b>Identificador de respuesta</b></label>
-								<p >{{ respuesta.IdRespuesta }}</p>	
-							</div>
-
-							<div class="col-sm-2 text-center">
-								<label><b>Fecha respuesta</b></label>
-								<p>{{ respuesta.Fecha}} </p>
-							</div>
-							<div class="col-sm-2 text-center">
-								<label><b>Soportes</b></label>
-								<p><a target="/" href="{{ respuesta.Soporte.url }}">Descargar</a></p>
-							</div>
-							<div class="col-sm-6 text-center" >
-								<label><b>Descripcion</b></label>
-								<p style="height: 100px; overflow-y: scroll;">{{ respuesta.Descripcion }}</p>	
-							</div>	
-					</div>
-
-				{% empty %}
-						<button style="width: 100%" onclick="window.location='{% url 'usuarios:respuestapqr' idsolicitud %}'" class="btn btn-primary">Responder solicitud</button>
-				{% endfor %}
-
-			</div>
-			
-
-		
-				
+	                    </div>                                   
+            </div>
+            </div>
+          </div>
+        	
+        </div>
 {% endblock %}
 {% block scripts %}
 {% endblock %}
