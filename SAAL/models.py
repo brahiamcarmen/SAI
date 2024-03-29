@@ -265,37 +265,6 @@ DOC_CHOICES11 = (
 )
 
 
-class Certificaciones(models.Model):
-    IdCertificacion = models.AutoField(primary_key=True)
-    Nit = models.CharField(max_length=10, null=False)
-    NombreEmpresa = models.CharField(max_length=300, null=False)
-    Estado = models.CharField(max_length=25, null=False, choices=DOC_CHOICES10)
-    Soporte = models.CharField(max_length=2, choices=DOC_CHOICES11, null=True, blank=True)
-    Descripcion = models.CharField(max_length=500, null=True, blank=True)
-    IdVivienda = models.ForeignKey(Vivienda, on_delete=models.CASCADE)
-    objects = models.Manager()
-    def __str__(self):
-        return "%s" % self.Estado
-
-    class Meta:
-        verbose_name_plural = "Listado de certificaciones"
-        verbose_name = "Certificacion"
-
-
-class ConfirCerti(models.Model):
-    IdOrden = models.AutoField(primary_key=True)
-    IdUsuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    Fecha = models.DateTimeField(auto_now=True)
-    IdCertificacion = models.ForeignKey(Certificaciones, on_delete=models.CASCADE)
-    objects = models.Manager()
-    def __str__(self):
-        return "%s" % self.IdOrden
-
-    class Meta:
-        verbose_name_plural = "listado de confirmaciones"
-        verbose_name = "confirmacion"
-
-
 class Medidores(models.Model):
     IdMedidor = models.CharField(primary_key=True, max_length=10, null=False)
     Marca = models.CharField(max_length=100, null=False)

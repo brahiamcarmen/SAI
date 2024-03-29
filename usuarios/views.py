@@ -5,7 +5,7 @@ from django.db import connection
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic.base import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from SAAL.models import Usuario, Tarifa, CobroOrdenes, Credito, AsignacionBloque, PagoOrdenes, Certificaciones, NovedadesRetiro
+from SAAL.models import Usuario, Tarifa, CobroOrdenes, Credito, AsignacionBloque, PagoOrdenes, NovedadesRetiro
 from SAAL.models import OrdenesSuspencion, OrdenesReconexion, Poblacion, Factura, Ciclo, EstadoCuenta, NovedadVivienda
 from SAAL.models import Vivienda, SolicitudGastos, Propietario, NovedadesSistema, Medidores, Pqrs, RespuestasPqrs
 from SAAL.models import NovedadesGenerales, CobroMatricula, Permisos, Pagos, Cierres, Acueducto, ValorMatricula
