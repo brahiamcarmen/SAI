@@ -495,7 +495,7 @@ class FormAgregarGasto(forms.ModelForm):
             'Descripcion',
             'AreaResponsable',
             'NumeroFactura',
-            'proveedor'
+            'IdProveedor'
         ]
         labels = {
             'TipoSolicitud': _(u'Tipo de pago'),
@@ -503,7 +503,7 @@ class FormAgregarGasto(forms.ModelForm):
             'Valor': _(u'Valor del pago'),
             'Descripcion': _(u'Descripcion del pago'),
             'NumeroFactura': _(u'Numero de factura'),
-            'proveedor': _(u'Identificacion del proveedor'),
+            'IdProveedor': _(u'Proveedor')
         }
 
     def __init__(self, *args, **kwargs):

@@ -343,9 +343,30 @@ DOC_CHOICES21 = (
     ('Viaticos', _(u"Pago - viaticos")),
     ('Impuestos', _(u"Pago - impuestos")),
     ('Mantenimiento infrastructura', _(u"Pago - Mantenimiento de infraestructura")),
+    ('Compra de materiales', _(u"Pago - Compra de materiales")),
+    ('Compra de accesorios', _(u"Pago - Compra de accesorios")),
     ('Transporte', _(u"Pago - transporte")),
 )
 
+DOC_CHOICES16 = (
+    ('Persona natural', _(u"Persona natural")),
+    ('Personeria juridica', _(u"Personeria juridica")),
+)
+
+
+class Proveedor(models.Model):
+    IdProvedor = models.CharField(max_length=30, primary_key=True, null=False)
+    Nombrecompleto = models.CharField(max_length=100, null=False)
+    Personeria = models.CharField(max_length=100, null=True, choices=DOC_CHOICES16)
+    Direccion = models.CharField(max_length=100, null=False)
+    telefono = models.CharField(max_length=100, null=False)
+    objects = models.Manager()
+    def __str__(self):
+        return "%s %s" % (self.IdProvedor, self.Nombrecompleto)
+
+    class Meta:
+        verbose_name_plural = "Proveedores"
+        verbose_name = "Proveedor"
 
 class SolicitudGastos(models.Model):
     IdSoGa = models.AutoField(primary_key=True)
@@ -357,7 +378,7 @@ class SolicitudGastos(models.Model):
     Fecha = models.DateTimeField(auto_now=True, null=False)
     AreaResponsable = models.CharField(max_length=100, null=False, choices=DOC_CHOICES20)
     NumeroFactura = models.CharField(max_length=10, null=False)
-    proveedor = models.CharField(max_length=20, null=True)
+    IdProveedor= models.ForeignKey(Proveedor, on_delete=models.CASCADE, null=True)
     objects = models.Manager()
     def __str__(self):
         return "%s" % self.IdSoGa
@@ -626,26 +647,6 @@ class AsignacionBloque(models.Model):
         verbose_name_plural = "Bloques"
         verbose_name = "Bloque"
 
-
-DOC_CHOICES16 = (
-    ('Persona natural', _(u"Persona natural")),
-    ('Personeria juridica', _(u"Personeria juridica")),
-)
-
-
-class Proveedor(models.Model):
-    IdProvedor = models.CharField(max_length=30, primary_key=True, null=False)
-    Nombrecompleto = models.CharField(max_length=100, null=False)
-    Personeria = models.CharField(max_length=100, null=True, choices=DOC_CHOICES16)
-    Direccion = models.CharField(max_length=100, null=False)
-    telefono = models.CharField(max_length=100, null=False)
-    objects = models.Manager()
-    def __str__(self):
-        return "%s %s" % (self.IdProvedor, self.Nombrecompleto)
-
-    class Meta:
-        verbose_name_plural = "Proveedores"
-        verbose_name = "Proveedor"
 
 
 DOC_CHOICES17 = (

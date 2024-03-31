@@ -9,7 +9,7 @@ from SAAL.models import Usuario, Tarifa, CobroOrdenes, Credito, AsignacionBloque
 from SAAL.models import OrdenesSuspencion, OrdenesReconexion, Poblacion, Factura, Ciclo, EstadoCuenta, NovedadVivienda
 from SAAL.models import Vivienda, SolicitudGastos, Propietario, NovedadesSistema, Medidores, Pqrs, RespuestasPqrs
 from SAAL.models import NovedadesGenerales, CobroMatricula, Permisos, Pagos, Cierres, Acueducto, ValorMatricula
-from SAAL.models import DescargaFacturas
+from SAAL.models import DescargaFacturas, Proveedor
 from SAAL.forms import FormAgregarGasto, FormRegistroPqrs, RegistroUsuario, RegistroUsuario2, RegistroVivienda
 from SAAL.forms import AcueductoAForm, PermisosForm, CobroMatriculaForm, CostoMForm, FormRespuestaPqrs
 from SAAL.forms import RegistroPropietario, TarifasForm, ModificaPropietario, FormRegistroCredito, FormRegistroProveedor
@@ -153,15 +153,15 @@ class Inicio(LoginRequiredMixin, View):
                 pago0 += int(valor)
 
             predios = Vivienda.objects.filter(EstadoServicio=ESTADOS1).count()
-            recaudot = int(predios) * 8000
+            recaudot = int(predios) * 10000
 
             porcentaje = pago0 / recaudot * 100
             # mensualidades:
             ciclo2 = fechaexp.month - 1
             ano2 = fechaexp.year
             # Los argumentos serán: Año, Mes, Día, Hora, Minutos, Segundos, Milisegundos.
-            new_date3 = datetime(ano2, 1, 1, 1, 00, 00, 00000)
-            new_date4 = datetime(ano2, 1, 31, 23, 59, 59, 00000)
+            new_date3 = datetime(ano2, ciclo2, 1, 1, 00, 00, 00000)
+            new_date4 = datetime(ano2, ciclo2, 28, 23, 59, 59, 00000)
             factuasemi = Factura.objects.filter(FechaExpe__gte=new_date3, FechaExpe__lte=new_date4).count()
             pagos3 = Pagos.objects.filter(FechaPago__gte=new_date, FechaPago__lte=new_date2).count()
             contador = pagos3 / factuasemi * 100
@@ -1042,7 +1042,7 @@ class ControlPresupuestal(LoginRequiredMixin, View):
             ano1 = fechaexp.year
             # Los argumentos serán: Año, Mes, Día, Hora, Minutos, Segundos, Milisegundos.
             new_date = datetime(ano1, ciclo, 1, 1, 00, 00, 00000)
-            new_date2 = datetime(ano1, ciclo, 28, 23, 59, 59, 00000)
+            new_date2 = datetime(ano1, ciclo, 30, 23, 59, 59, 00000)
             pagos2 = Pagos.objects.filter(FechaPago__gte=new_date, FechaPago__lte=new_date2).all()
             pagosrys = PagoOrdenes.objects.filter(FechaPago__gte=new_date, FechaPago__lte=new_date2).all()
             gastosaprobados = SolicitudGastos.objects.filter(Fecha__gte=new_date, Fecha__lte=new_date2,
@@ -1111,14 +1111,15 @@ class GenerarGasto(LoginRequiredMixin, View):
             valor = request.POST.get("Valor")
             numerofactura = request.POST.get("NumeroFactura")
             descripcion = request.POST.get("Descripcion")
-            proveedor = request.POST.get("proveedor")
+            proveedor = request.POST.get("IdProveedor")
+            consulp = Proveedor.objects.get(IdProvedor=proveedor)
             usuario = Usuario.objects.get(usuid=request.user.pk)
 
             if area and numerofactura and tiposolicitud and valor and descripcion is not None:
                 solicitud = SolicitudGastos(IdUsuario=usuario, Descripcion=descripcion,
                                             TipoSolicitud=tiposolicitud, Valor=valor,
                                             Estado=ESTADO1, AreaResponsable=area, NumeroFactura=numerofactura,
-                                            proveedor=proveedor)
+                                            IdProveedor=consulp)
                 solicitud.save()
                 messages.add_message(request, messages.INFO, 'la solicitud se registro correctamente')
                 return HttpResponseRedirect(reverse('usuarios:controlpresupuestal'))
@@ -3100,8 +3101,8 @@ class CambiarContraUsuario(LoginRequiredMixin, View):
 
     def post(self, request, usuid):
         try:
-            contrasena = request.POST.get("contrasena")
-            recontrasena = request.POST.get("recontrasena")
+            contrasena = request.POST.get("contrasena","")
+            recontrasena = request.POST.get("recontrasena","")
 
             if contrasena == recontrasena:
                 user = User.objects.get(id=usuid)
@@ -3815,11 +3816,6 @@ class CertificadoGral(LoginRequiredMixin, View):
                 ws['Y49'] = 'Registrado'
                 ws['S51'] = idpago.FechaPago
                 ws['Y51'] = idpago.ValorPago
-
-                # certificado
-                certificacion = Certificaciones.objects.get(IdVivienda=matricula)
-                estado = certificacion.Estado
-                ws['S45'] = estado
 
                 # fechas de procedimiento
                 now = datetime.now()
