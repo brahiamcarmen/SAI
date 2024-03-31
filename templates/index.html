@@ -17,7 +17,20 @@
   <body  class=" border-top-wide border-primary d-flex flex-column">
     <div class="page page-center">
       <div class="container-tight py-4">
-        <div class="text-center mb-4">
+        <form class="card card-md" method="post" role="form">
+          <div class="card-header">
+                              <div class="row" style="margin:0rem;">
+                    <div class="col-md-12">
+                      <img src="{% static 'images/Prin.png' %}" style="">
+                    </div>
+                  </div>
+          </div>
+          {% csrf_token %}
+          {% block content %}
+          {% include 'usuarios/alerts.html' %}
+          {% endblock %}
+          <div class="card-body">
+                    <div class="text-center mb-4">
               <p class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
               <!-- Download SVG icon from http://tabler-icons.io/i/letter-s -->
               <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 8a4 4 0 0 0 -4 -4h-2a4 4 0 0 0 0 8h2a4 4 0 0 1 0 8h-2a4 4 0 0 1 -4 -4" /></svg>
@@ -27,16 +40,8 @@
               <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="12" y1="4" x2="12" y2="20" /></svg>
             <sup><svg style="color: green;" xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 21c.5 -4.5 2.5 -8 7 -10" /><path d="M9 18c6.218 0 10.5 -3.288 11 -12v-2h-4.014c-9 0 -11.986 4 -12 9c0 1 0 3 2 5h3z" /></svg></sup>
           </p>
-
         </div>
-        <form class="card card-md" method="post" role="form">
-          {% csrf_token %}
-          {% block content %}
-          {% include 'usuarios/alerts.html' %}
-          {% endblock %}
-          <div class="card-body">
-            <h2 class="card-title text-center mb-4">Ingrese a su cuenta</h2>
-            <div class="mb-3">
+            <div class="mb-2">
               <label class="form-label">Usuario</label>
               <input type="text" name="username" class="form-control">
             </div>
