@@ -118,13 +118,6 @@ DOC_CHOICES3 = (
     ('Co', _(u"Comercial (Co)")),
     ('Ins', _(u"Industrial (Ins)"))
 )
-DOC_CHOICES4 = (
-    ('Operativo', _(u"Operativo (OP)")),
-    ('Suspendido', _(u"Suspendido (SP)")),
-    ('Mantenimiento', _(u"Mantenimiento (MT)")),
-    ('Retirado', _(u"Retirado  (RD)")),
-    ('Conexion nueva', _(u"Conexion nueva (CN)"))
-)
 
 DOC_CHOICES5 = (
     ('Residencial', _(u"Instalacion Residencial (Res)")),
@@ -178,7 +171,7 @@ class Vivienda(models.Model):
     Ciclo = models.CharField(null=False, max_length=40, choices=DOC_CHOICES6)
     TipoInstalacion = models.CharField(max_length=60, null=False, choices=DOC_CHOICES5, default='Res')
     Estrato = models.CharField(max_length=60, null=False, choices=DOC_CHOICES3, default='1')
-    EstadoServicio = models.CharField(max_length=60, null=False, choices=DOC_CHOICES4, default='EC')
+    EstadoServicio = models.CharField(max_length=60, null=False, default='Operativo')
     IdPropietario = models.ForeignKey(Propietario, on_delete=models.CASCADE)
     IdAcueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
     usuid = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -274,16 +267,36 @@ class Medidores(models.Model):
     clase = models.CharField(max_length=100, null=False)
     Diametronominal = models.CharField(max_length=100, null=False)
     AnoFabricacion = models.CharField(max_length=4, null=False)
+    Estado = models.CharField(max_length=35, null=False, default='Sin asignar')
     Certificado = models.CharField(max_length=100, null=False, choices=DOC_CHOICES11)
-    IdVivienda = models.ForeignKey(Vivienda, on_delete=models.CASCADE)
     Fecha = models.DateTimeField(auto_now_add=True, null=True)
     objects = models.Manager()
     def __str__(self):
-        return "%s" % self.IdMedidor
+        return "%s" % (self.IdMedidor)
 
     class Meta:
         verbose_name_plural = "Listado de Medidores"
         verbose_name = "Medidor"
+
+
+DOC_C = (
+    ('Operativo', _(u"Operativo")),
+    ('Retirado', _(u"Retirado"))
+)
+
+class Asignacion(models.Model):
+    IdRegistro = models.AutoField(primary_key=True)
+    IdMedidor = models.ForeignKey(Medidores, on_delete=models.CASCADE)
+    IdVivienda = models.ForeignKey(Vivienda,on_delete=models.CASCADE)
+    Fecha = models.DateTimeField(auto_now_add=True)
+    Estado = models.CharField(max_length=40, null=False, choices=DOC_C, default='Operativo')
+    objects = models.Manager()
+    def __str__(self):
+        return "%s" % self.IdRegistro
+
+    class Meta:
+        verbose_name_plural = "Asignados"
+        verbose_name = "Asignar"
 
 
 class ValorMatricula(models.Model):
@@ -698,3 +711,24 @@ class NovedadesRetiro(models.Model):
     class Meta:
         verbose_name_plural = "Novedades de retiro"
         verbose_name = "Novedad de retiro"
+
+class Consumos(models.Model):
+    IdRegistro = models.AutoField(primary_key=True)
+    IdMedidor = models.ForeignKey(Medidores, on_delete=models.CASCADE)
+    IdVivienda = models.ForeignKey(Vivienda,on_delete=models.CASCADE)
+    Lecturaactual = models.IntegerField(null=False)
+    Lecturaanterior = models.IntegerField(null=False)
+    Consumo = models.IntegerField(null=False)
+    promedio = models.CharField(max_length=20, null=False)
+    observaciones = models.CharField(max_length=350, null=True)
+    diasconsumo = models.CharField(max_length=10,null=False)
+    ano = models.CharField(max_length=4, null=False)
+    mes = models.CharField(max_length=20, null=False)
+    Fecha = models.DateTimeField(auto_now_add=True)
+    objects = models.Manager()
+    def __str__(self):
+        return "%s" % self.IdRegistro
+
+    class Meta:
+        verbose_name_plural = "Consumos"
+        verbose_name = "Consumo"

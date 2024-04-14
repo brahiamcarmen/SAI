@@ -6,117 +6,293 @@
 {%block title %} <title>Modulo - VIP</title> {%endblock%}
 {% block content %}
 {% include 'usuarios/alerts.html' %}
-
 <div class="page-body">
-
-    <div class="container-fluid">
-      {% if novedadr is True %}
-      <div class="row">
-        <div class="card card-sm">
-          <div class="col-md-12">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-2">
+        <h3 class="subheader">Informacion del predio</h3>
+              <div class="col-auto" style="margin-top: 0.5rem">
+                <div class="card">
+                  <div class="card-body p-4 text-center">
+                    <span class="avatar avatar-xl mb-3 avatar-rounded" style="background-image: url({% static 'images/logo4.png' %})"></span>
+                    <h3 class="m-0 mb-1">{{ matricula }}</h3>
+                    <div class="text-muted"><a href="{% url 'usuarios:verpropietario' propietario.IdPropietario %}">{{ propietario }}</a></div>
+                    <div class="mt-3">
+                        <span class="badge bg-success-lt">{{ estado }}</span>&nbsp; 
+                        <span class="badge bg-purple-lt">{{ tipo }}</span>&nbsp; 
+                        <span class="badge bg-orange-lt">{{ tipop }}</span>
+                    </div>
+                  </div>
+                  <div class="d-flex">
+                    <a href="{% url 'usuarios:modificarvivienda' matricula %}" class="card-btn"> 
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" /><line x1="13.5" y1="6.5" x2="17.5" y2="10.5" /></svg>Modificar informacion</a>                     
+                  </div>
+                </div>
+              </div>
+              <div class="col-auto" style="margin-top: 0.5rem">
+                <div class="card card-sm">
                   <div class="card-body">
-                      <div class="row align-items-center">
-                        <div class="col-auto">
-                        <span class="bg-red text-white avatar">
-                        <!-- Download SVG icon from http://tabler-icons.io/i/alert-octagon -->
-  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8.7 3h6.6c.3 0 .5 .1 .7 .3l4.7 4.7c.2 .2 .3 .4 .3 .7v6.6c0 .3 -.1 .5 -.3 .7l-4.7 4.7c-.2 .2 -.4 .3 -.7 .3h-6.6c-.3 0 -.5 -.1 -.7 -.3l-4.7 -4.7c-.2 -.2 -.3 -.4 -.3 -.7v-6.6c0 -.3 .1 -.5 .3 -.7l4.7 -4.7c.2 -.2 .4 -.3 .7 -.3z" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <span class="bg-green text-white avatar">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><line x1="9" y1="7" x2="10" y2="7" /><line x1="9" y1="13" x2="15" y2="13" /><line x1="13" y1="17" x2="15" y2="17" /></svg>
                         </span>
                       </div>
                       <div class="col">
                         <div class="font-weight-medium">
-                          {%for nov in novretiro %}
-                          {{ nov.Descripcion}} <strong> Se registra en el sistema en la fecha: </strong>{{ nov.Fecha}}
-                          {%endfor%}
-                          </div>
+                          {{nofac}}
+                        </div>
+                        <div class="text-muted">
+                          Facturas
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-           </div>
-      </div>
-      <br>
-      {%endif%}
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                  <ul class="nav nav-tabs" data-bs-toggle="tabs">
-                    <li class="nav-item">
-                      <a href="#tabs-home-7" class="nav-link active" data-bs-toggle="tab">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="5 12 3 12 12 3 21 12 19 12" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>Inicio
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="#tabs-profile-7" class="nav-link" data-bs-toggle="tab">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><rect x="9" y="3" width="6" height="4" rx="2" /><path d="M9 14h.01" /><path d="M9 17h.01" /><path d="M12 16l1 1l3 -3" /></svg>&nbsp;Informacion detallada
-                    </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="#facturas" class="nav-link" data-bs-toggle="tab">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><line x1="9" y1="7" x2="10" y2="7" /><line x1="9" y1="13" x2="15" y2="13" /><line x1="13" y1="17" x2="15" y2="17" /></svg>&nbsp;Facturas
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="#suspenciones" class="nav-link" data-bs-toggle="tab">
-                      <!-- Download SVG icon from http://tabler-icons.io/i/wrecking-ball -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="19" cy="13" r="2" /><circle cx="4" cy="17" r="2" /><circle cx="13" cy="17" r="2" /><line x1="13" y1="19" x2="4" y2="19" /><line x1="4" y1="15" x2="13" y2="15" /><path d="M8 12v-5h2a3 3 0 0 1 3 3v5" /><path d="M5 15v-2a1 1 0 0 1 1 -1h7" /><path d="M19 11v-7l-6 7" /></svg>&nbsp;Ordenes de trabajo
-                    </a>
-                    </li>
-                    <li class="nav-item ms-auto">
-                      <a href="#tabs-settings-7" class="nav-link" title="Settings" data-bs-toggle="tab"><!-- Download SVG icon from http://tabler-icons.io/i/settings -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" /><circle cx="12" cy="12" r="3" /></svg>
-                      </a>
-                    </li>
-                  </ul>
+              </div>
+              <div class="col-auto" style="margin-top: 0.5rem">
+                <div class="card card-sm">
                   <div class="card-body">
-                    <div class="tab-content">
-                      <div class="tab-pane active show" id="tabs-home-7">
-                        <div>
-                            <div class="row">
-                                <div class="col-xl-12">
-                                    <div class="row">
-                                        <div class="col-md-4 col-lg-3">
-                                            <div class="card">
-                                              <div class="card-body p-4 text-center">
-                                                <span class="avatar avatar-xl mb-3 avatar-rounded" style="background-image: url({% static 'images/logo4.png' %})"></span>
-                                                <h3 class="m-0 mb-1">{{ matricula }}</h3>
-                                                <div class="text-muted"><a href="{% url 'usuarios:verpropietario' propietario.IdPropietario %}">{{ propietario }}</a></div>
-                                                <div class="mt-3">
-                                                    <span class="badge bg-purple-lt">{{ estado }}</span>&nbsp; 
-                                                    <span class="badge bg-purple-lt">{{ tipo }}</span>&nbsp; 
-                                                    <span class="badge bg-purple-lt">{{ tipop }}</span>
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <span class="bg-green text-white avatar">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><line x1="9" y1="7" x2="10" y2="7" /><line x1="9" y1="13" x2="15" y2="13" /><line x1="13" y1="17" x2="15" y2="17" /></svg>
+                        </span>
+                      </div>
+                      <div class="col">
+                        <div class="font-weight-medium">
+                         {{contpagos}}
+                        </div>
+                        <div class="text-muted">
+                          Pagos
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+      </div>
+      <div class="col-md-8">
+        <div class="row">
+           <div class="col-md-9">
+            <div class="row">
+              <div class="col-md-12">
+              <h3 class="subheader">Informacion adicional</h3>
+                <div class="card">
+                  <div class="card-body">
+                    {% for vivienda in viviendainfo %}
+                    <div class="row">
+                      <div class="col-md-6">
+                        <dl class="row">
+                              <dt class="col-5">Sector:</dt>
+                              <dd class="col-7">{{ vivienda.Direccion}}</dd>
+                              <dt class="col-5">Casa:</dt>
+                              <dd class="col-7">{{ vivienda.NumeroCasa}}</dd>
+                              <dt class="col-5">Piso:</dt>
+                              <dd class="col-7">{{ vivienda.Piso}}</dd>
+                              <dt class="col-5">Cant predios:</dt>
+                              <dd class="col-7">{{vivienda.CantPredios}}</dd>
+                              <dt class="col-5">Ciclo:</dt>
+                              <dd class="col-7">{{vivienda.Ciclo}}</dd>
+                              <dt class="col-5">Estrato:</dt>
+                              <dd class="col-7">{{vivienda.Estrato}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-md-6">
+                      <dl class="row">
+                          <dt class="col-5">Acometida:</dt>
+                          <dd class="col-7">{{ vivienda.ProfAcometida }}</dd>
+                          <dt class="col-5">Habitantes:</dt>
+                          <dd class="col-7">{{ vivienda.CantHabitantes}}</dd>
+                          <dt class="col-5">Ficha catastral:</dt>
+                          <dd class="col-7">{{ vivienda.FichaCastral}}</dd>
+                          <dt class="col-5">Diametro:</dt>
+                          <dd class="col-7">{{ vivienda.Diametro}}</dd>
+                          <dt class="col-5">ID anterior:</dt>
+                          <dd class="col-7">{{vivienda.MatriculaAnt}}</dd>
+                      </dl>
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+              </div>
+              
+            </div>
+            <br>
+            <div class="row">
+              {% if asignado is True %}
+               <h3 class="subheader">Comportamiento del consumo - ULTIMOS 6 MESES</h3>
+              <div class="col-md-12">
+                              <div class="card">
+                  <div class="card-body">
+                    <div id="chart-tasks-overview"></div>
+                  </div>
+                </div>
+                </div>
+                {%endif%}
+            </div>
+           </div>
+           <div class="col-md-3">
+             <h3 class="subheader">Ultima factura</h3>
+                {% for factura in facturasemi %}
+                <a class="card card-link" href="{% url 'usuarios:descargarfactura' factura.IdFactura %}">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-auto">
+                        <span class="avatar rounded">F</span>
+                      </div>
+                      <div class="col">
+                        <div class="font-weight-medium">{{ factura.IdFactura }}</div>
+                        <div class="text-muted">{{ factura.IdCiclo }}</div>
+                      </div>
+                      <div class="col">
+                        {% if factura.Estado == "Vencida" %}
+                            <span class="badge bg-warging-lt">Vencida</span>&nbsp;
+                            {% elif factura.Estado == "Paga" %}
+                             <span class="badge bg-success-lt">Paga</span>&nbsp;
+                             {% elif factura.Estado == "Anulada" %}
+                            <span class="badge bg-purple-lt">Anulada</span>&nbsp;
+                            {% else %}
+                            <span class="badge bg-info-lt">Emitida</span>
+                            {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </a>
+                {% endfor %}
+                <br>
+                <h3 class="subheader">Ultimo pago</h3>
+                {%for filtropago in ultimopago %}
+                  <a class="card card-link" href="{% url 'usuarios:imprimirpago' filtropago.IdPago %}">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-auto">
+                        <span class="avatar rounded">F</span>
+                      </div>
+                      <div class="col">
+                        <div class="font-weight-medium">{{ filtropago.IdPago }}</div>
+                        <div class="text-muted">{{filtropago.FechaPago}}</div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                          <span class="badge bg-warging-lt">{{ filtropago.IdFactura }}</span>&nbsp;
+                          <span class="badge bg-warging-lt">${{ filtropago.ValorPago|intcomma }}</span>&nbsp;
+                      </div>
+                    </div>
+                  </div>
+                </a>
+                {% endfor %}
+                <br>
+              <div class="row">
+                 <div class="col-md-12">
+                                             <div class="card card-sm">
+                                            <div class="card-body">
+                                              <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                  <span class="bg-green-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/currency-dollar -->
+                                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16.7 8a3 3 0 0 0 -2.7 -2h-4a3 3 0 0 0 0 6h4a3 3 0 0 1 0 6h-4a3 3 0 0 1 -2.7 -2" /><path d="M12 3v3m0 12v3" /></svg>
+                                                  </span>
                                                 </div>
-                                              </div>
-                                              <div class="d-flex">
-                                                <a href="{% url 'usuarios:modificarvivienda' matricula %}" class="card-btn"><!-- Download SVG icon from http://tabler-icons.io/i/pencil -->
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" /><line x1="13.5" y1="6.5" x2="17.5" y2="10.5" /></svg>
-                                                  Modificar informacion</a>
-                                                <a href="{% url 'usuarios:cambioestado' matricula %}" class="card-btn btn-groups"><!-- Download SVG icon from http://tabler-icons.io/i/power -->
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 6a7.75 7.75 0 1 0 10 0" /><line x1="12" y1="4" x2="12" y2="12" /></svg>
-                                                  Estado servicio</a>
+                                                <div class="col">
+                                                  <div class="font-weight-medium">
+                                                    ${{pagado|intcomma}}
+                                                    <span class="float-right font-weight-medium text-green">+0%</span>
+                                                  </div>
+                                                  <div class="text-muted">
+                                                    Total pagado
+                                                  </div>
+                                                </div>
                                               </div>
                                             </div>
                                           </div>
-                                          <div class="col-md-4 col-lg-6">
-                                            <div class="row" style="margin-top:0.5rem">
-                                                <div class="col-8">
-                                                    <h3 class="subheader">Ubicacion del predio</h3>
-                                                    <div class="row text-center">
-                                                        <div class="col-4 col-sm-4">
-                                                            <h4>Sector</h4>
-                                                            {{ direccion }}
-                                                        </div>
-                                                        <div class="col-4 col-sm-4">
-                                                            <h4>Casa</h4>
-                                                            {{ casa }}
-                                                        </div>
-                                                        <div class="col-4 col-sm-4">
-                                                            <h4>Piso</h4>
-                                                            {{ piso }}
-                                                        </div>
-                                                    </div>
+                                          </div>
+              </div>
+              <br>
+              <div class="row">
+                                                          <div class="col-md-12">
+                                            <div class="card card-sm">
+                                            <div class="card-body">
+                                              <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                  <span class="bg-green-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/currency-dollar -->
+                                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16.7 8a3 3 0 0 0 -2.7 -2h-4a3 3 0 0 0 0 6h4a3 3 0 0 1 0 6h-4a3 3 0 0 1 -2.7 -2" /><path d="M12 3v3m0 12v3" /></svg>
+                                                  </span>
                                                 </div>
-                                                <div class="col-4">
-                                                    <div class="row">
+                                                <div class="col">
+                                                  <div class="font-weight-medium">
+                                                    ${{total|intcomma}}
+                                                    <span class="float-right font-weight-medium text-green">+0%</span>
+                                                  </div>
+                                                  <div class="text-muted">
+                                                    Estado de cuenta
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          </div>
+
+              </div>
+              <br>
+              <div class="row">
+              <div class="col-md-12">
+                <a class="card card-link" href="{% url 'usuarios:pazysalvo' matricula %}">
+                                  <div class="card-body">
+                                    <div class="row">
+                                      <div class="col-auto">
+                                        <span class="bg-green-lt avatar">
+                                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 20h-6a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8" /><path d="M18 4v17" /><path d="M15 18l3 3l3 -3" /></svg>
+                                          </span>
+                                      </div>
+                                      <div class="col">
+                                        <div class="font-weight-medium">Paz y salvo</div>
+                                        <div class="text-muted">Descargar</div>
+                                      </div>
+                                    </div>
+                                  </div>
+                  </a>                
+                  </div>
+              </div>
+           </div>
+        </div>
+  
+        
+      </div>
+      <div class="col-md-2">
+          <h3 class="subheader">Opciones disponibles</h3>
+          <div class="row">
+            <div class="col-md-12" style="margin-top: 0.5rem">
+               <a href="{% url 'usuarios:cambiotitular' matricula %}" class="btn btn-sm btn-indigo btn-pill w-100">Cambiar propietario</a>
+            </div>
+            <div class="col-md-12" style="margin-top: 0.5rem">
+               <a href="{% url 'usuarios:facturaindividual' matricula %}" class="btn btn-sm btn-indigo btn-pill w-100">Generar Factura</a>
+            </div>
+            <div class="col-md-12" style="margin-top: 0.5rem">
+               <a href="{% url 'usuarios:pagarmatricula' matricula %}" class="btn btn-sm btn-indigo btn-pill w-100">Pago de matricula</a>
+            </div>
+            <div class="col-md-12" style="margin-top: 0.5rem">
+               <a href="{% url 'usuarios:novedadretiro' matricula %}" class="btn btn-sm btn-indigo btn-pill w-100">Generar retiro</a>
+            </div>
+            <div class="col-md-12" style="margin-top: 0.5rem">
+               <a href="" data-bs-toggle="modal" data-bs-target="#facturas3" class="btn btn-sm btn-indigo btn-pill w-100">Facturas</a>
+            </div>
+            <div class="col-md-12" style="margin-top: 0.5rem">
+               <a href="" data-bs-toggle="modal" data-bs-target="#cargos" class="btn btn-sm btn-indigo btn-pill w-100">Estados de cuenta</a>
+            </div>
+            <div class="col-md-12" style="margin-top: 0.5rem">
+               <a href="" data-bs-toggle="modal" data-bs-target="#ordenest" class="btn btn-sm btn-indigo btn-pill w-100">Ordenes de trabajo</a>
+            </div>
+            {% if asignado is True %}
+            <div class="col-md-12" style="margin-top: 0.5rem">
+               <a href="{% url 'usuarios:verconsumo' matricula %} " class="btn btn-sm btn-indigo btn-pill w-100">Consumos</a>
+            </div>
+            {%endif%}
+            <div class="col-md-12" style="margin-top: 0.5rem">
+              <h3 class="subheader">Estado de cuenta</h3>
+                <div class="row">
                                                         {% if filtro is True %}
                                                        <div class="card card-sm">
                                                           <div class="card-body">
@@ -154,86 +330,31 @@
                                                               </div>
                                                             </div>
                                                             {% else %}
-                                                                <div class="card card-sm">
-                                                                  <div class="card-body">
-                                                                    <div class="row align-items-center">
-                                                                      <div class="col-auto">
-                                                                        <span class="bg-orange text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/alert-octagon -->
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8.7 3h6.6c.3 0 .5 .1 .7 .3l4.7 4.7c.2 .2 .3 .4 .3 .7v6.6c0 .3 -.1 .5 -.3 .7l-4.7 4.7c-.2 .2 -.4 .3 -.7 .3h-6.6c-.3 0 -.5 -.1 -.7 -.3l-4.7 -4.7c-.2 -.2 -.3 -.4 -.3 -.7v-6.6c0 -.3 .1 -.5 .3 -.7l4.7 -4.7c.2 -.2 .4 -.3 .7 -.3z" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
-                                                                        </span>
-                                                                      </div>
-                                                                      <div class="col">
-                                                                        <div class="font-weight-medium">
-                                                                            Con pagos pendientes
-                                                                        </div>
-                                                                      </div>
-                                                                    </div>
-                                                                  </div>
-                                                                </div>
-                                                            {% endif %}
-                                                        {% endif %}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                    <hr>
-                                    <div class="row" style="margin-top:0.5rem">
-                                        <div class="col-6">
-                                            <h3 class="subheader">Ultima factura</h3>
-                                            {% for factura in facturasemi %}
-                                            <div class="card">
-                                              <div class="card-body p-4 text-center">
-                                                <h3 class="m-0 mb-1">{{ factura.IdFactura }}</h3>
-                                                <div class="text-muted">{{ factura.IdCiclo }}</div>
-                                                <div class="mt-3">
-                                                    {% if factura.Estado == "Vencida" %}
-                                                    <span class="badge bg-warging-lt">Vencida</span>&nbsp;
-                                                    {% elif factura.Estado == "Paga" %}
-                                                     <span class="badge bg-success-lt">Paga</span>&nbsp;
-                                                     {% elif factura.Estado == "Anulada" %}
-                                                    <span class="badge bg-purple-lt">Anulada</span>&nbsp;
-                                                    {% else %}
-                                                    <span class="badge bg-info-lt">Emitida</span>
-                                                    {% endif %}
-                                                </div>
-                                              </div>
-                                              <div class="d-flex">
-                                                <a href="{% url 'usuarios:descargarfactura' factura.IdFactura %}" class="card-btn">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" /><polyline points="7 11 12 16 17 11" /><line x1="12" y1="4" x2="12" y2="16" /></svg>&nbsp; Descargar
-                                                  </a>
-                                              </div>
-                                            </div>
-                                            {% endfor %}
-                                        </div>
-                                        <div class="col-6">
-                                            <h3 class="subheader">Ultimo pago</h3>
-                                            {%for filtropago in ultimopago %}
-                                            <div class="card">
-                                              <div class="card-body p-4 text-center">
-                                                <h3 class="m-0 mb-1">{{ filtropago.IdPago }}</h3>
-                                                <div class="text-muted"> {{filtropago.FechaPago}}  </div>
-                                                <div class="mt-3">
-                                                    <span class="badge bg-warging-lt">{{ filtropago.IdFactura }}</span>&nbsp;
-                                                    <span class="badge bg-warging-lt">${{ filtropago.ValorPago|intcomma }}</span>&nbsp;
-                                                </div>
-                                              </div>
-                                              <div class="d-flex">
-                                                <a href="{% url 'usuarios:imprimirpago' filtropago.IdPago %}" class="card-btn">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2" /><path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4" /><rect x="7" y="13" width="10" height="8" rx="2" /></svg>&nbsp; Imprimir
-                                                  </a>
-                                              </div>
-                                            </div>
-                                            {% endfor %}
-                                        </div>
-                                     </div>
-                                    <br>
-                                          </div>
-                                          <div class="col-md-4 col-lg-3">
-                                            <h3 class="subheader">Estado de cuenta</h3>
-                                             <table class="table table-transparent table-responsive">
+                          <div class="card card-sm">
+                            <div class="card-body">
+                              <div class="row align-items-center">
+                                <div class="col-auto">
+                                  <span class="bg-orange text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/alert-octagon -->
+                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8.7 3h6.6c.3 0 .5 .1 .7 .3l4.7 4.7c.2 .2 .3 .4 .3 .7v6.6c0 .3 -.1 .5 -.3 .7l-4.7 4.7c-.2 .2 -.4 .3 -.7 .3h-6.6c-.3 0 -.5 -.1 -.7 -.3l-4.7 -4.7c-.2 -.2 -.3 -.4 -.3 -.7v-6.6c0 -.3 .1 -.5 .3 -.7l4.7 -4.7c.2 -.2 .4 -.3 .7 -.3z" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
+                                  </span>
+                                </div>
+                                <div class="col">
+                                  <div class="font-weight-medium">
+                                    Con pagos pendientes
+                                  </div>
+                                </div>
+                              </div>
+                             </div>
+                          </div>
+                      {% endif %}
+                  {% endif %}
+              </div>
+              <br>
+              <div class="row">
+                <table class="table table-transparent table-responsive">
                                               <thead>
                                                 <tr>
                                                   <th>Descripción</th>
-                                                  <th class="text-end" style="width: 1%">Cuotas</th>
                                                   <th class="text-end" style="width: 1%">Valor</th>
                                                 </tr>
                                               </thead>
@@ -242,7 +363,6 @@
                                                   <p class="strong mb-1">Aportes</p>
                                                   <div class="text-muted">{{estadocuenta}}</div>
                                                 </td>
-                                                <td class="text-end">0</td>
                                                 <td class="text-end"> ${{ aportes|intcomma }}</td>
                                               </tr>
                                               <tr>
@@ -250,328 +370,75 @@
                                                   <p class="strong mb-1">Matricula</p>
                                                   <div class="text-muted">{{nocuenta}}</div>
                                                 </td>
-                                                <td class="text-end">0</td>
                                                 <td class="text-end"> ${{ cobromatricula1|intcomma }}</td>
                                               </tr>
                                               <tr>
                                                 <td>
                                                   <p class="strong mb-1">Suspención</p>
-                                                  <div class="text-muted">Auto</div>
                                                 </td>
-                                                <td class="text-end">0</td>
                                                 <td class="text-end"> ${{ suspenciones2|intcomma }}</td>
                                               </tr>
                                               <tr>
                                                 <td>
                                                   <p class="strong mb-1">Reconexión</p>
-                                                  <div class="text-muted">Auto</div>
                                                 </td>
-                                                <td class="text-end">0</td>
                                                 <td class="text-end"> ${{ reconexion2|intcomma }}</td>
                                               </tr>
                                               <tr>
-                                                <td>
-                                                  <p class="strong mb-1">Reparaciones</p>
-                                                  <div class="text-muted">Auto</div>
-                                                </td>
-                                                <td class="text-end">0</td>
-                                                <td class="text-end"> $0</td>
-
                                               <tr>
-                                                <td colspan="2" class="font-weight-bold text-uppercase text-end">Total</td>
+                                                <td colspan="1" class="font-weight-bold text-uppercase text-end">Total</td>
                                                 <td class="font-weight-bold text-end">${{total|intcomma}}</td>
                                               </tr>
                                             </table>
-                                          </div>
-                                        </div>
-                                </div>
-                            </div>
-                        </div>
-                      </div>
-                      <div class="tab-pane" id="tabs-profile-7">
-                        <div class="row">
-                            <div class="col-4">
-                              <div class="row">
-                                <div class="card">
-                                <div class="card-header">
-                                  <h3 class="card-title">
-                                    Informacion detallada
-                                  </h3>
-                                </div>
-                                <div class="card-body">
-                                  {% for vivienda in viviendainfo %}
-                                  <dl class="row">
-                                            <dt class="col-5">Matricula:</dt>
-                                            <dd class="col-7">{{ vivienda.IdVivienda }}</dd>
-                                            <dt class="col-5">Sector:</dt>
-                                            <dd class="col-7">{{ vivienda.Direccion}}</dd>
-                                            <dt class="col-5">Casa:</dt>
-                                            <dd class="col-7">{{ vivienda.NumeroCasa}}</dd>
-                                            <dt class="col-5">Piso:</dt>
-                                            <dd class="col-7">{{ vivienda.Piso}}</dd>
-                                            <dt class="col-5">Cant predios:</dt>
-                                            <dd class="col-7">{{vivienda.CantPredios}}</dd>
-                                            <dt class="col-5">Ciclo:</dt>
-                                            <dd class="col-7">{{vivienda.Ciclo}}</dd>
-                                            <dt class="col-5">Instalación:</dt>
-                                            <dd class="col-7">{{vivienda.TipoInstalacion}}</dd>
-                                            <dt class="col-5">Estrato:</dt>
-                                            <dd class="col-7">{{vivienda.Estrato}}</dd>
-                                            <dt class="col-5">Acometida:</dt>
-                                            <dd class="col-7">{{ vivienda.ProfAcometida }}</dd>
-                                            <dt class="col-5">Habitantes:</dt>
-                                            <dd class="col-7">{{ vivienda.CantHabitantes}}</dd>
-                                            <dt class="col-5">Ficha catastral:</dt>
-                                            <dd class="col-7">{{ vivienda.FichaCastral}}</dd>
-                                            <dt class="col-5">Diametro:</dt>
-                                            <dd class="col-7">{{ vivienda.Diametro}}</dd>
-                                            <dt class="col-5">Estado servicio:</dt>
-                                            <dd class="col-7">{{vivienda.EstadoServicio}}</dd>
-                                            <dt class="col-5">ID anterior:</dt>
-                                            <dd class="col-7">{{vivienda.MatriculaAnt}}</dd>
-                                            <dt class="col-5">Clase:</dt>
-                                            <dd class="col-7">{{vivienda.InfoInstalacion}}</dd>
-                                            <dt class="col-5">Propietario:</dt>
-                                            <dd class="col-7">{{vivienda.IdPropietario}}</dd>
-                                  </dl>
-                                  {% endfor %}
-                                </div>
-                              </div>
-                              </div>
-                              <br>
-                              <div class="row">
-                                {% for novedad in novedades %}
-                                      <div class="card">
-                                        <div class="card-header">
-                                          <h3 class="card-title">
-                                            Novedad de registro
-                                          </h3>
-                                        </div>
-                                        <div class="card-body">
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+    <br>
+  </div>
+</div>
+</div>
 
-                                      <dl class="row">
-                                          <dt class="col-5">Numero de novedad:</dt>
-                                          <dd class="col-7">{{ novedad.IdNovedad  }}</dd>
-                                          <dt class="col-5">Tipo de novedad:</dt>
-                                          <dd class="col-7">{{ novedad.TipoNovedad  }} </dd>
-                                          <dt class="col-5">Usuario:</dt>
-                                          <dd class="col-7">{{ novedad.usuid }} </dd>
-                                          <dt class="col-5">Valor registrado:</dt>
-                                          <dd class="col-7">${{ novedad.Valor|intcomma }}</dd>
-                                          <dt class="col-5">Descripcion:</dt>
-                                          <dd class="col-7">{{ novedad.Descripcion }}</dd>
-                                      </dl>
-                                    </div>
-                                  </div>
-                            {% endfor %}
-                              </div>
-                               
-                            </div>
-                            <div class="col-5">
-                              <div class="row">
-                                 <div class="col-12">
-                                     <div class="card">
-                                        <div class="card-body p-4 py-5 text-center">
-                                          <div class="row">
-                                            <div class="col-6">
-                                              <span class="avatar avatar-xl mb-4 avatar-rounded">
-                                            <!-- Download SVG icon from http://tabler-icons.io/i/stars -->
-                                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17.8 19.817l-2.172 1.138a0.392 .392 0 0 1 -.568 -.41l.415 -2.411l-1.757 -1.707a0.389 .389 0 0 1 .217 -.665l2.428 -.352l1.086 -2.193a0.392 .392 0 0 1 .702 0l1.086 2.193l2.428 .352a0.39 .39 0 0 1 .217 .665l-1.757 1.707l.414 2.41a0.39 .39 0 0 1 -.567 .411l-2.172 -1.138z" /><path d="M6.2 19.817l-2.172 1.138a0.392 .392 0 0 1 -.568 -.41l.415 -2.411l-1.757 -1.707a0.389 .389 0 0 1 .217 -.665l2.428 -.352l1.086 -2.193a0.392 .392 0 0 1 .702 0l1.086 2.193l2.428 .352a0.39 .39 0 0 1 .217 .665l-1.757 1.707l.414 2.41a0.39 .39 0 0 1 -.567 .411l-2.172 -1.138z" /><path d="M12 9.817l-2.172 1.138a0.392 .392 0 0 1 -.568 -.41l.415 -2.411l-1.757 -1.707a0.389 .389 0 0 1 .217 -.665l2.428 -.352l1.086 -2.193a0.392 .392 0 0 1 .702 0l1.086 2.193l2.428 .352a0.39 .39 0 0 1 .217 .665l-1.757 1.707l.414 2.41a0.39 .39 0 0 1 -.567 .411l-2.172 -1.138z" /></svg>
-                                          </span>
-                                          <h3 class="mb-0">Calificación</h3>
-                                          <p class="text-muted">Due to: 28 Aug 2019</p>
-                                          <p class="mb-3">
-                                            <span class="badge bg-red-lt">Automatico</span>
-                                          </p>
-                                            </div>
-                                            <div class="col-6">
-                                              <div class="row">
-                                                  <div class="card card-sm">
-                                                    <div class="card-body">
-                                                      <div class="row align-items-center">
-                                                        <div class="col-auto">
-                                                          <span class="bg-green text-white avatar">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><line x1="9" y1="7" x2="10" y2="7" /><line x1="9" y1="13" x2="15" y2="13" /><line x1="13" y1="17" x2="15" y2="17" /></svg>
-                                                          </span>
-                                                        </div>
-                                                        <div class="col">
-                                                          <div class="font-weight-medium">
-                                                            {{nofac}}
-                                                          </div>
-                                                          <div class="text-muted">
-                                                            Facturas registradas
-                                                          </div>
-                                                        </div>
-                                                      </div>
-                                                    </div>
-                                                  </div>
-                                              </div>
-                                              <br>
-                                              <div class="row">
-                                                  <div class="card card-sm">
-                                                    <div class="card-body">
-                                                      <div class="row align-items-center">
-                                                        <div class="col-auto">
-                                                          <span class="bg-green text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/report-money -->
-                                                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><rect x="9" y="3" width="6" height="4" rx="2" /><path d="M14 11h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5" /><path d="M12 17v1m0 -8v1" /></svg>
-                                                          </span>
-                                                        </div>
-                                                        <div class="col">
-                                                          <div class="font-weight-medium">
-                                                            {{contpagos}}
-                                                          </div>
-                                                          <div class="text-muted">
-                                                            Pagos registrados
-                                                          </div>
-                                                        </div>
-                                                      </div>
-                                                    </div>
-                                                  </div>
-                                              </div>
-                                              
-                                            </div>
-                                          </div>
-                                          
-                                          <div class="row">
-                                          <div class="col-6">
-                                             <div class="card card-sm">
-                                            <div class="card-body">
-                                              <div class="row align-items-center">
-                                                <div class="col-auto">
-                                                  <span class="bg-green-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/currency-dollar -->
-                                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16.7 8a3 3 0 0 0 -2.7 -2h-4a3 3 0 0 0 0 6h4a3 3 0 0 1 0 6h-4a3 3 0 0 1 -2.7 -2" /><path d="M12 3v3m0 12v3" /></svg>
-                                                  </span>
-                                                </div>
-                                                <div class="col">
-                                                  <div class="font-weight-medium">
-                                                    ${{pagado|intcomma}}
-                                                    <span class="float-right font-weight-medium text-green">+0%</span>
-                                                  </div>
-                                                  <div class="text-muted">
-                                                    Total pagado
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                          </div>
-                                          <div class="col-6">
-                                            <div class="card card-sm">
-                                            <div class="card-body">
-                                              <div class="row align-items-center">
-                                                <div class="col-auto">
-                                                  <span class="bg-green-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/currency-dollar -->
-                                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16.7 8a3 3 0 0 0 -2.7 -2h-4a3 3 0 0 0 0 6h4a3 3 0 0 1 0 6h-4a3 3 0 0 1 -2.7 -2" /><path d="M12 3v3m0 12v3" /></svg>
-                                                  </span>
-                                                </div>
-                                                <div class="col">
-                                                  <div class="font-weight-medium">
-                                                    ${{total|intcomma}}
-                                                    <span class="float-right font-weight-medium text-green">+0%</span>
-                                                  </div>
-                                                  <div class="text-muted">
-                                                    Estado de cuenta
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                          </div>
 
-                                          </div>
-                                        </div>
-                                        <div class="progress card-progress">
-                                          <div class="progress-bar" style="width: 38%" role="progressbar" aria-valuenow="38" aria-valuemin="0" aria-valuemax="100">
-                                            <span class="visually-hidden">38% Complete</span>
-                                          </div>
-                                        </div>
-                                      </div>
-                                 </div>
-                              </div>
-                              <br>
-                              <div class="row">
-                                <div class="col-6">
-                                    <a class="card card-link" href="">
-                                      <div class="card-body">
-                                        <div class="row">
-                                          <div class="col-auto">
-                                            <span class="bg-green-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/currency-dollar -->
-                                              <!-- Download SVG icon from http://tabler-icons.io/i/arrow-autofit-down -->
-                                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 20h-6a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8" /><path d="M18 4v17" /><path d="M15 18l3 3l3 -3" /></svg>
-                                              </span>
-                                          </div>
-                                          <div class="col">
-                                            <div class="font-weight-medium">Informacion</div>
-                                            <div class="text-muted">Descargar</div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </a>
-                                </div>
-                                <div class="col-6">
-                                  <a class="card card-link" href="{% url 'usuarios:pazysalvo' matricula %}">
-                                  <div class="card-body">
-                                    <div class="row">
-                                      <div class="col-auto">
-                                        <span class="bg-green-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/currency-dollar -->
-                                          <!-- Download SVG icon from http://tabler-icons.io/i/arrow-autofit-down -->
-                                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 20h-6a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8" /><path d="M18 4v17" /><path d="M15 18l3 3l3 -3" /></svg>
-                                          </span>
-                                      </div>
-                                      <div class="col">
-                                        <div class="font-weight-medium">Paz y salvo</div>
-                                        <div class="text-muted">Descargar</div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </a>
-                                  
-                                </div>
-                                
-                              </div>
 
-                            </div>
-
-                            <div class="col-3">
-                              <div class="row">
-                                <div class="card">
-                                <div class="card-header">
-                                  <h3 class="card-title">
-                                  Cuenta de aportes
-                                  </h3>
-                                </div>
-                                <div class="card-body">
-                                  {% for estados in estados %}
-                                  <dl class="row">
-                                            <dt class="col-5">No cuenta:</dt>
-                                            <dd class="col-7">{{ estados.IdEstadoCuenta }}</dd>
-                                            <dt class="col-5">Descripción:</dt>
-                                            <dd class="col-7">{{ estados.Descripcion }}</dd>
-                                            <dt class="col-5">Estado:</dt>
-                                            <dd class="col-7">
-                                                    {% if estados.Estado == "Operativo" %}
-                                                    <span class="badge bg-success-lt">Operativo</span>
-                                                    {% else %}
-                                                    {{estados.Estado}}
-                                                    {% endif %}
-                                            </dd>
-                                            <dt class="col-5">Saldo:</dt>
-                                            <dd class="col-7">${{ estados.Valor|intcomma }}</dd>
-                                            <dt class="col-5">Actualizacion:</dt>
-                                            <dd class="col-7">{{estados.FechaActualizacion}}</dd>
-                                  </dl>
-                                  {% endfor %}
-                                </div>
-                              </div>
-                              </div>
-                              <br>
-                              <div class="row">
-                                <div class="card">
-                                <div class="card-header">
-                                  <h3 class="card-title">
-                                  Cargo por conexión
-                                  </h3>
-                                </div>
+<div class="modal modal-blur fade" id="cargos" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="row">
+                         <div class="col-md-12">
+            <div class="row">
+                           <h3 class="subheader">Estado de cuenta</h3>
+             <div class="card">
+                <div class="card-body">
+                    {% for estados in estados %}
+                    <dl class="row">
+                              <dt class="col-5">No cuenta:</dt>
+                              <dd class="col-7">{{ estados.IdEstadoCuenta }}</dd>
+                              <dt class="col-5">Descripción:</dt>
+                              <dd class="col-7">{{ estados.Descripcion }}</dd>
+                              <dt class="col-5">Estado:</dt>
+                              <dd class="col-7">
+                              {% if estados.Estado == "Operativo" %}
+                              <span class="badge bg-success-lt">Operativo</span>
+                              {% else %}
+                              {{estados.Estado}}
+                              {% endif %}
+                              </dd>
+                              <dt class="col-5">Saldo:</dt>
+                              <dd class="col-7">${{ estados.Valor|intcomma }}</dd>
+                              <dt class="col-5">Actualizacion:</dt>
+                              <dd class="col-7">{{estados.FechaActualizacion}}</dd>
+                    </dl>
+                    {% endfor %}
+                  </div>
+              </div>
+            </div>
+            <br>
+            <div class="row">
+             <h3 class="subheader">Cargo por conexion</h3>
+             <div class="card">
                                 <div class="card-body">
                                   {% if vmatri is True %}
                                    {% for matricula in matriculas %}
@@ -614,42 +481,47 @@
                                   </div>
                                   {% endif %}
                                 </div>
-                              </div>
-                              </div>
-                            </div>
-                        </div>
+              </div>
+            </div>
 
-                      </div>
+           </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn me-auto" data-bs-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-                      <div class="tab-pane" id="facturas">
-                        <div>
-                            <div class="page-header d-print-none">
-                                <div class="row align-items-center">
-                                  <div class="col">
-                                    <h2 class="page-title">
-                                    Facturas registradas
-                                    </h2>
-                                    <div class="text-muted mt-1">{{nofac}}</div>
-                                  </div>
-                                  <!-- Page title actions -->
-                                </div>
-                              </div>
-                            <div class="page-body">
-                                  <div class="container-xl">
-                                    <div class="row row-cards">
-                                    {% for factura in facturas %}
-                                    <div class="col-md-6 col-lg-4">
-                                      <div class="card" >
-                                        <div class="card-body">
-                                            <dl class="row">
-                                              <h3 class="subheader">Informacion de la factura</h3>
-                                                <dt class="col-5">No factura:</dt>
-                                                <dd class="col-7"><a href="{% url 'usuarios:descargarfactura' factura.IdFactura %}">{{ factura.IdFactura }}</a></dd>
-                                                <dt class="col-5">Periodo:</dt>
-                                                <dd class="col-7">{{ factura.IdCiclo }}</dd>
-                                                <dt class="col-5">Estado:</dt>
-                                                <dd class="col-7">
-                                                    {% if factura.Estado == "Vencida" %}
+        <div class="modal modal-blur fade" id="facturas3" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-full-width modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Facturas registradas</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+             <div class="text-center table-responsive" style="height:20rem ">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                                    <tr>
+                                        <th>No factura</th>
+                                        <th>Periodo</th>
+                                        <th>Estado</th>
+                                        <th>Vencidas</th>
+                                        <th>Fecha expedición</th>
+                                         <th>Total a pagar</th>
+                                         <th>Observaciones</th>
+                                    </tr>
+                        </thead>
+                        <tbody>
+                            {% for factura in facturas %}
+                                <tr class="odd gradeX">
+                                            <td><a href="{% url 'usuarios:descargarfactura' factura.IdFactura %}">{{ factura.IdFactura }}</a></td>
+                                            <td>{{ factura.IdCiclo }}</td>
+                                            <td>
+                                              {% if factura.Estado == "Vencida" %}
                                                     <span class="badge bg-danger-lt">Vencida</span>
                                                     {% elif factura.Estado == "Paga" %}
                                                     <span class="badge bg-success-lt">Paga</span>
@@ -658,55 +530,59 @@
                                                     {% else %}
                                                     <span class="badge bg-info-lt">Emitida</span>
                                                     {% endif %}
-                                                </dd>
-                                                <dt class="col-5">Vencidas:</dt>
-                                                <dd class="col-7">{{ factura.facturasvencidas }}</dd>
-                                                <dt class="col-5">Fecha expedición:</dt>
-                                                <dd class="col-7">{{ factura.FechaExpe }}</dd>
-                                                <dt class="col-5">Total a pagar:</dt>
-                                                <dd class="col-7">${{ factura.Total|intcomma }}</dd>
-                                            </dl>
-                                            <br>
-                                            <dl class="row">
-                                              <h3 class="subheader">Informacion del pago</h3>
+                                            </td>
+                                            <td>{{ factura.facturasvencidas }}</td>
+                                           <td>{{ factura.FechaExpe }}</td>
+                                           <td>${{ factura.Total|intcomma }}</td>
+                                           <td>
+                                            <div class="row">
                                                 {% for pago in pagos %}  
                                                 {% if factura.IdFactura == pago.IdFactura.pk %}
-                                                <dt class="col-5">No pago:</dt>
-                                                <dd class="col-7"><a href="{% url 'usuarios:imprimirpago' pago.IdPago %}">{{ pago.IdPago }}</a></dd>
-                                                <dt class="col-5">Fecha de pago:</dt>
-                                                <dd class="col-7">{{ pago.FechaPago }}</dd>
-                                                <dt class="col-5">Valor pago:</dt>
-                                                <dd class="col-7">{{ pago.ValorPago }}</dd>
-                                                <dt class="col-5">Resta:</dt>
-                                                <dd class="col-7">{{ pago.resta }}</dd>
+                                                <dt class="col-2">No pago:</dt>
+                                                <dd class="col-2"><a href="{% url 'usuarios:imprimirpago' pago.IdPago %}">{{ pago.IdPago }}</a></dd>
+                                                <dt class="col-3">Fecha de pago:</dt>
+                                                <dd class="col-3">{{ pago.FechaPago }}</dd>
+                                                <dt class="col-1">Valor pago:</dt>
+                                                <dd class="col-1">{{ pago.ValorPago }}</dd>
                                                 {% else %}
                                                 <!-- pagos registrados por factura -->
                                                 {% endif %}
                                             {% endfor %}
-                                            </dl>
+                                            </div>
+                                            </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn me-auto" data-bs-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-                                        </div>
-                                      </div>
-                                    </div>
-
-                                    {%endfor%}                                    
-                                  </div>
-                                  </div>
-                                </div>
-                        </div>
-                      </div>
+        <div class="modal modal-blur fade" id="ordenest" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-full-width modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Full width modal</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
                         <div class="tab-pane" id="suspenciones">
                             <div class="row">
                                   <ul class="nav nav-tabs" data-bs-toggle="tabs">
                                     <li class="nav-item">
                                       <a href="#tabs-home-9" class="nav-link active" data-bs-toggle="tab">
                                           <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="6" cy="7" r="3" /><circle cx="6" cy="17" r="3" /><line x1="8.6" y1="8.6" x2="19" y2="19" /><line x1="8.6" y1="15.4" x2="19" y2="5" /></svg>
-                                        Suspenciones</a>
+                                        Suspenciones - {{nosus}}</a>
                                     </li>
                                     <li class="nav-item">
                                       <a href="#tabs-profile-9" class="nav-link" data-bs-toggle="tab">
                                           <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.95 11a8 8 0 1 0 -.5 4m.5 5v-5h-5" /></svg>
-                                        Reconexión</a>
+                                        Reconexión - {{nore}}</a>
                                     </li>
                                     <li class="nav-item">
                                       <a href="#otros" class="nav-link" data-bs-toggle="tab">
@@ -719,160 +595,124 @@
                                     <div class="tab-content">
                                       <div class="tab-pane active show" id="tabs-home-9">
                                         <div class="row">
-                                          <div class="page-header d-print-none">
-                                                <div class="row align-items-center">
-                                                  <div class="col">
-                                                    <h2 class="page-title">
-                                                    Ordenes registradas
-                                                    </h2>
-                                                    <div class="text-muted mt-1">{{nosus}}</div>
-                                                  </div>
-                                                  <!-- Page title actions -->
-                                                </div>
-                                              </div>
                                             <div class="page-body">
-                                                  <div class="container-xl">
                                                     <div class="row row-cards">
-                                                    {% for ord in suspenciones %}
-                                                            <div class="col-md-6 col-lg-4">
-                                                              <div class="card">
-                                                                <div class="card-body">
-                                                                    <dl class="row">
-                                                                      <h3 class="subheader">Informacion de la orden</h3>
-                                                                        <dt class="col-5">No orden:</dt>
-                                                                        <dd class="col-7">{{ ord.IdOrden }}</dd>
-                                                                        <dt class="col-5">Valor:</dt>
-                                                                        <dd class="col-7">${{ ord.Deuda|intcomma }}</dd>
-                                                                        <dt class="col-5">Estado:</dt>
-                                                                        <dd class="col-7">
-                                                                            {% if ord.Estado == "Pendiente" %}
+                                            <div class="text-center table-responsive" style="height:15rem">
+                                              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                  <thead>
+                                                              <tr>
+                                                                  <th>No orden</th>
+                                                                  <th>Valor</th>
+                                                                  <th>Estado</th>
+                                                                  <th>Generador</th>
+                                                                  <th>Fecha expedicion</th>
+                                                                  <th>Ejecutado</th>
+                                                                  <th>Fecha ejecucion</th>
+                                                              </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                      {% for ord in suspenciones %}
+                                                          <tr class="odd gradeX">
+                                                                      <td>{{ ord.IdOrden }}</td>
+                                                                      <td>${{ ord.Deuda|intcomma }}</td>
+                                                                      <td>{% if ord.Estado == "Pendiente" %}
                                                                             <span class="badge bg-danger-lt">Pendiente</span>
                                                                             {% elif ord.Estado == "Ejecutada" %}
                                                                             <span class="badge bg-success-lt">Ejecutada</span>
                                                                             {% else %}
                                                                             <span class="badge bg-info-lt">Anulada</span>
-                                                                            {% endif %}
-                                                                        </dd>
-                                                                        <dt class="col-5">Generador:</dt>
-                                                                        <dd class="col-7">{{ ord.UsuarioEjecuta }}</dd>
-                                                                        <dt class="col-5">Fecha expedición:</dt>
-                                                                        <dd class="col-7">{{ ord.FechaExpe }}<dd>
-                                                                        <dt class="col-5">Generado:</dt>
-                                                                        <dd class="col-7">{{ ord.Generado }}</dd>
-                                                                        <dt class="col-5">Fecha de ejecucion:</dt>
-                                                                        <dd class="col-7">{{ ord.FechaEjecucion }}</dd>
-                                                                    </dl>
-                                                                </div>
-                                                              </div>
-                                                            </div>
-                                                    {%endfor%}                                     
-                                                  </div>
+                                                                            {% endif %}</td>
+                                                                      <td>{{ ord.UsuarioEjecuta }}</td>
+                                                                      <td>{{ ord.FechaExpe }}</td>
+                                                                      <td>{{ ord.Generado }}</td>
+                                                                      <td>{{ ord.FechaEjecucion }}</td>
+                                                          </tr>
+                                                      {% endfor %}
+                                                  </tbody>
+                                              </table>
+                                          </div>                           
                                                   </div>
                                                 </div>
                                         </div>
                                       </div>
                                       <div class="tab-pane" id="tabs-profile-9">
                                         <div class="row">
-                                          <div class="page-header d-print-none">
-                                                <div class="row align-items-center">
-                                                  <div class="col">
-                                                    <h2 class="page-title">
-                                                    Ordenes registradas
-                                                    </h2>
-                                                    <div class="text-muted mt-1">{{nore}}</div>
-                                                  </div>
-                                                  <!-- Page title actions -->
-                                                </div>
-                                              </div>
                                             <div class="page-body">
-                                                  <div class="container-xl">
                                                     <div class="row row-cards">
-                                                    {% for ord in reconexion %}
-                                                            <div class="col-md-6 col-lg-4">
-                                                              <div class="card">
-                                                                <div class="card-body">
-                                                                    <dl class="row">
-                                                                      <h3 class="subheader">Informacion de la orden/h3>
-                                                                        <dt class="col-5">No orden:</dt>
-                                                                        <dd class="col-7">{{ ord.IdOrden }}</dd>
-                                                                        <dt class="col-5">Valor:</dt>
-                                                                        <dd class="col-7">${{ ord.Deuda|intcomma }}</dd>
-                                                                        <dt class="col-5">Estado:</dt>
-                                                                        <dd class="col-7">
-                                                                            {% if ord.Estado == "Pendiente" %}
+                                                            <div class="text-center table-responsive" style="height:15rem">
+                                              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                  <thead>
+                                                              <tr>
+                                                                  <th>No orden</th>
+                                                                  <th>Valor</th>
+                                                                  <th>Estado</th>
+                                                                  <th>Generador</th>
+                                                                  <th>Fecha expedicion</th>
+                                                                  <th>Ejecutado</th>
+                                                                  <th>Fecha ejecucion</th>
+                                                              </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                      {% for ord in reconexion %}
+                                                          <tr class="odd gradeX">
+                                                                      <td>{{ ord.IdOrden }}</td>
+                                                                      <td>${{ ord.Deuda|intcomma }}</td>
+                                                                      <td>{% if ord.Estado == "Pendiente" %}
                                                                             <span class="badge bg-danger-lt">Pendiente</span>
                                                                             {% elif ord.Estado == "Ejecutada" %}
                                                                             <span class="badge bg-success-lt">Ejecutada</span>
                                                                             {% else %}
                                                                             <span class="badge bg-info-lt">Anulada</span>
-                                                                            {% endif %}
-                                                                        </dd>
-                                                                        <dt class="col-5">Generador:</dt>
-                                                                        <dd class="col-7">{{ ord.UsuarioEjecuta }}</dd>
-                                                                        <dt class="col-5">Fecha expedición:</dt>
-                                                                        <dd class="col-7">{{ ord.FechaExpe }}<dd>
-                                                                        <dt class="col-5">Generado:</dt>
-                                                                        <dd class="col-7">{{ ord.Generado }}</dd>
-                                                                        <dt class="col-5">Fecha de ejecucion:</dt>
-                                                                        <dd class="col-7">{{ ord.FechaEjecucion }}</dd>
-                                                                    </dl>
-                                                                </div>
-                                                              </div>
-                                                            </div>
-                                                    {%endfor%}                                     
-                                                  </div>
+                                                                            {% endif %}</td>
+                                                                      <td>{{ ord.UsuarioEjecuta }}</td>
+                                                                      <td>{{ ord.FechaExpe }}</td>
+                                                                      <td>{{ ord.Generado }}</td>
+                                                                      <td>{{ ord.FechaEjecucion }}</td>
+                                                          </tr>
+                                                      {% endfor %}
+                                                  </tbody>
+                                              </table>
+                                          </div>                             
                                                   </div>
                                                 </div>
                                         </div>
                                       </div>
                                       <div class="tab-pane" id="otros">
-                                            <div class="page-header d-print-none">
-                                              <div class="row align-items-center">
-                                                <div class="col">
-                                                  <h2 class="page-title">
-                                                  Ordenes de cobro registradas
-                                                  </h2>
-                                                  <div class="text-muted mt-1">{{noors}}</div>
-                                                </div>
-                                                <!-- Page title actions -->
-                                              </div>
-                                            </div>
                                           <div class="page-body">
-                                            <div class="container-xl">
                                               <div class="row row-cards">
-                                              {% for ord in ordenesrs %}
-                                              <div class="col-md-6 col-lg-4">
-                                                <div class="card" >
-                                                  <div class="card-body">
-                                                      <dl class="row">
-                                                        <h3 class="subheader">Informacion de orden de cobro</h3>
-                                                          <dt class="col-5">No orden:</dt>
-                                                          <dd class="col-7">{{ ord.IdOrden }}</dd>
-                                                          <dt class="col-5">Orden de trabajo:</dt>
-                                                          <dd class="col-7">{{ ord.IdOrdenT }}</dd>
-                                                          <dt class="col-5">Estado:</dt>
-                                                          <dd class="col-7">
-                                                              {% if ord.Estado == "Paga" %}
-                                                              <span class="badge bg-success-lt">Paga</span>
-                                                              {% elif factura.Estado == "Anulada" %}
-                                                              <span class="badge bg-warging-lt">Anulada</span>
-                                                              {% else %}
-                                                              <span class="badge bg-info-lt">Pendiente</span>
-                                                              {% endif %}
-                                                          </dd>
-                                                          <dt class="col-5">Fecha expedición:</dt>
-                                                          <dd class="col-7">{{ ord.Fecha }}</dd>
-                                                          <dt class="col-5">Tipo de orden:</dt>
-                                                          <dd class="col-7">{{ ord.TipoOrden }}</dd>
-                                                          <dt class="col-5">Valor:</dt>
-                                                          <dd class="col-7">{{ ord.Valor}}</dd>
-                                                      </dl>
-                                                      <br>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                              {%endfor%}                                    
-                                            </div>
+                                              <div class="text-center table-responsive" style="height:15rem">
+                                              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                  <thead>
+                                                              <tr>
+                                                                  <th>No orden</th>
+                                                                  <th>Orden de trabajo</th>
+                                                                  <th>Estado</th>
+                                                                  <th>Fecha expedicion</th>
+                                                                  <th>Tipo de orden</th>
+                                                                  <th>Valor</th>
+                                                              </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                      {% for ord in ordenesrs %}
+                                                          <tr class="odd gradeX">
+                                                                      <td>{{ ord.IdOrden }}</td>
+                                                                      <td>{{ ord.IdOrdenT }}</td>
+                                                                      <td>{% if ord.Estado == "Paga" %}
+                                                                        <span class="badge bg-success-lt">Paga</span>
+                                                                        {% elif factura.Estado == "Anulada" %}
+                                                                        <span class="badge bg-warging-lt">Anulada</span>
+                                                                        {% else %}
+                                                                        <span class="badge bg-info-lt">Pendiente</span>
+                                                                        {% endif %}
+                                                                      </td>
+                                                                      <td>{{ ord.Fecha }}</td>
+                                                                      <td>{{ ord.TipoOrden }}</td>
+                                                                      <td>${{ ord.Valor|intcomma}}</td>
+                                                          </tr>
+                                                      {% endfor %}
+                                                  </tbody>
+                                              </table>
+                                          </div>                                  
                                             </div>
                                           </div>
                                       </div>
@@ -880,25 +720,79 @@
                                   </div>
                             </div> 
                         </div>
-                      <div class="tab-pane" id="tabs-settings-7">
-                        <div>
-                            <div class="btn-group" role="group" style="margin-top:0.3rem;">
-                                  <a class="btn btn-primary" href="{% url 'usuarios:cambiotitular' matricula %}">Cambiar propietario</a>&nbsp;
-                                    <a class="btn btn-primary" href="{% url 'usuarios:facturaindividual' matricula %}">Generar factura</a>&nbsp;
-                                    <a class="btn btn-primary" href="{% url 'usuarios:pagarmatricula' matricula %}">Pago matricula</a>&nbsp;
-                                    <a class="btn btn-primary" href="{% url 'usuarios:novedadretiro' matricula %}">Generar retiro</a>
-                                </div>
-                            </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn me-auto" data-bs-dismiss="modal">Cerrar</button>
+          </div>
         </div>
+      </div>
     </div>
-</div>
 
 {% endblock %}
 {% block scripts %}
+    <script>
+      // @formatter:off
+      document.addEventListener("DOMContentLoaded", function () {
+        window.ApexCharts && (new ApexCharts(document.getElementById('chart-tasks-overview'), {
+          chart: {
+            type: "bar",
+            fontFamily: 'inherit',
+            height: 320,
+            parentHeightOffset: 0,
+            toolbar: {
+              show: false,
+            },
+            animations: {
+              enabled: false
+            },
+          },
+          plotOptions: {
+            bar: {
+              columnWidth: '50%',
+            }
+          },
+          dataLabels: {
+            enabled: false,
+          },
+          fill: {
+            opacity: 1,
+          },
+          series: [{
+            name: "A",
+            data: [{{uno}},{{dos}},{{tres}},{{cuatro}},{{cinco}},{{seis}}]
+          }],
+          grid: {
+            padding: {
+              top: -20,
+              right: 0,
+              left: -4,
+              bottom: -4
+            },
+            strokeDashArray: 4,
+          },
+          xaxis: {
+            labels: {
+              padding: 0,
+            },
+            tooltip: {
+              enabled: false
+            },
+            axisBorder: {
+              show: false,
+            },
+            categories: ['{{uuno}}','{{udos}}','{{utres}}','{{ucuatro}}','{{ucinco}}','{{useis}}'],
+          },
+          yaxis: {
+            labels: {
+              padding: 4
+            },
+          },
+          colors: ["#1EB1A8"],
+          legend: {
+            show: false,
+          },
+        })).render();
+      });
+      // @formatter:on
+    </script>
 {% endblock %}

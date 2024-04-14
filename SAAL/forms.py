@@ -1,9 +1,9 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
-from SAAL.models import Vivienda, SolicitudGastos, Medidores, Poblacion, RespuestasPqrs
-from SAAL.models import Propietario, CobroMatricula, ValorMatricula, Usuario
-from SAAL.models import Acueducto, Tarifa, Permisos, Pqrs, Credito, Proveedor, NovedadesRetiro
+from SAAL.models import Vivienda, SolicitudGastos, Poblacion, RespuestasPqrs
+from SAAL.models import Propietario, CobroMatricula, ValorMatricula, Usuario, Medidores
+from SAAL.models import Acueducto, Tarifa, Permisos, Pqrs, Credito, Proveedor, Asignacion
 
 
 class RegistroVivienda(forms.ModelForm):
@@ -181,14 +181,14 @@ class MedidoresForm(forms.ModelForm):
         fields = "__all__"
         labels = {
             'IdMedidor': _(u'Numero del medidor'),
-            'Marca': _(u'Marca o referencia'),
+            'Marca': _(u'Marca'),
+            'Modelo': _(u'Modelo'),
             'Tipo': _(u'Tipo de medidor'),
-            'LecturaInicial': _(u'Lectura inicial'),
+            'Designacion': _(u'Designacion'),
+            'clase': _(u'Clase'),
+            'Diametronominal': _(u'Diametro nominal'),
             'AnoFabricacion': _(u'Año de fabricacion'),
-            'IdVivienda': _(u''),
-        }
-        widgets = {
-            'IdVivienda': forms.HiddenInput(),
+            'Certificado': _(u'Esta certificado?'),
         }
 
     def __init__(self, *args, **kwargs):
@@ -529,6 +529,29 @@ class FormRespuestaPqrs(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(FormRespuestaPqrs, self).__init__(*args, **kwargs)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+
+class FormAsignarMedidor(forms.ModelForm):
+    class Meta:
+        model = Asignacion
+        fields = [
+            'IdMedidor',
+            'IdVivienda',
+            'Estado'
+        ]
+        labels = {
+            'IdMedidor': _(u'Medidor'),
+            'IdVivienda': _(u'Predio'),
+            'Estado': _(u'Estado'),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(FormAsignarMedidor, self).__init__(*args, **kwargs)
+        self.fields['IdMedidor'].widget.attrs['disabled'] = True
+        self.fields['Estado'].widget.attrs['disabled'] = True
 
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})

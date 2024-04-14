@@ -20,11 +20,12 @@
   <body >
     <div class="wrapper">
 
-      <header class="navbar navbar-expand-md navbar-light d-print-none">
+      <header class="navbar navbar-expand-xl navbar-light d-print-none">
         <div class="container-xl">
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
             <span class="navbar-toggler-icon"></span>
           </button>
+
           <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
               <!-- Download SVG icon from http://tabler-icons.io/i/letter-s -->
               <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 8a4 4 0 0 0 -4 -4h-2a4 4 0 0 0 0 8h2a4 4 0 0 1 0 8h-2a4 4 0 0 1 -4 -4" /></svg>
@@ -128,6 +129,9 @@
                       <a class="dropdown-item" href="{% url 'usuarios:estadoscuenta' %}" >
                         Estados de cuenta
                       </a>
+                      <a class="dropdown-item" href="{% url 'usuarios:consumos' %}" >
+                        Consumos
+                      </a>
                       <a class="dropdown-item" href="{% url 'usuarios:anularfactura' %}" >
                         Anular factura
                       </a>
@@ -158,9 +162,6 @@
                       </a>
                       <a class="dropdown-item" href="{% url 'usuarios:reconexiones' %}" >
                         Reconexiones
-                      </a>
-                      <a class="dropdown-item" href="" >
-                        Consumos
                       </a>
                     </div>
                   </div>

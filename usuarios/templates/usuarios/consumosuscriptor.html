@@ -1,0 +1,99 @@
+{% extends 'usuarios/base_usuario3.html' %}
+{% load static %}
+{% block styles %}
+{% endblock %}
+{%block title %} <title>Consumos suscriptor</title> {%endblock%}
+{% block content %}
+{% load humanize %}
+{% include 'usuarios/alerts.html' %}
+<div class="page-body">
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2">
+          <h3 class="subheader">Informacion del medidor</h3>
+             <div class="col-auto" style="margin-top: 0.5rem">
+                <div class="card">
+                  <div class="card-body p-4 text-center">
+                    <span class="avatar avatar-xl mb-3 avatar-rounded" style="background-image: url({% static 'images/medidor.jpg' %})"></span>
+                    <h3 class="m-0 mb-1">{{ medidor }}</h3>
+                    <div class="text-muted"><a href="{% url 'usuarios:vervivienda' matricula %}"> {{matricula}}</a></div>
+                    <div class="mt-3">
+                        <span class="badge bg-success-lt">{{ estado }}</span>&nbsp;
+                        <span class="badge bg-orange-lt">{{ estado2 }}</span>&nbsp;
+                    </div>
+                  </div>
+                  <div class="d-flex">
+                    <a href="{% url 'usuarios:consumos' %}" class="card-btn"> 
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" /><line x1="13.5" y1="6.5" x2="17.5" y2="10.5" /></svg>Volver a consumos</a>                     
+                  </div>
+                </div>
+              </div>
+              <div class="col-auto" style="margin-top: 0.5rem">
+                <div class="card card-sm">
+                  <div class="card-body">
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <span class="bg-green text-white avatar">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="1" /><line x1="13.41" y1="10.59" x2="16" y2="8" /><path d="M7 12a5 5 0 0 1 5 -5" /></svg>
+                        </span>
+                      </div>
+                      <div class="col">
+                        <div class="font-weight-medium">
+                          0
+                        </div>
+                        <div class="text-muted">
+                          Consumo actual
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+  
+        </div>
+        <div class="col-md-10">
+          <h3 class="subheader">Consumos registrados</h3>
+                       <div class="text-center table-responsive" style="height:20rem ">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                                    <tr>
+                                        <th>Registro</th>
+                                        <th>Medidor</th>
+                                        <th>Lectura actual</th>
+                                        <th>Lectura anterior</th>
+                                        <th>Consumo</th>
+                                         <th>Promedio</th>
+                                         <th>Dias</th>
+                                         <th>Periodo</th>
+                                         <th>Año</th>
+                                         <th>Fecha</th>
+                                         <th>Observaciones</th>
+                                    </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in consumos %}
+                                <tr class="odd gradeX">
+                                            <td>{{i.IdRegistro}}</td>
+                                            <td>{{ i.IdMedidor }}</td>
+                                            <td>{{ i.Lecturaactual}}</td>
+                                            <td>{{ i.Lecturaanterior }}</td>
+                                           <td>{{ i.Consumo }}</td>
+                                           <td>{{ i.promerio}}</td>
+                                           <td>{{i.diasconsumo}}</td>
+                                           <td>{{i.mes}}</td>
+                                           <td>{{i.ano}}</td>
+                                           <td>{{i.Fecha}}</td>
+                                           <td>{{i.observaciones}}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+{% endblock %}

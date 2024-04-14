@@ -2,7 +2,7 @@ from django.conf.urls import url
 from usuarios.views import Inicio, Busquedas, CobroRecargo, ControlPresupuestal, VerFactura, PagarMatricula
 from usuarios.views import ImprimirSoporteP, PagarRyS, AnularPago, AsignarCargo, Bloque, VerCredito
 from usuarios.views import ListaViviendas, ListaPropietarios, ReportePdfPagos, Creditos, RegistroCredito
-from usuarios.views import RegistroProveedor
+from usuarios.views import RegistroProveedor, Consumo,AsignarMedidor, RegistrarConsumo
 from usuarios.views import PazSalvo, CertificadoGral, Matriculas
 from usuarios.views import AgregarVivienda, AgregarPropietario, PerfilUsuario, ReporteCompleto
 from usuarios.views import ReporteSuspenciones, ReporteReconexion, ModificarPropietario, ModificarVivienda
@@ -10,7 +10,7 @@ from usuarios.views import EliminarPermisos, ReporteCiclo, Mapa, EliminarPoblaci
 from usuarios.views import VisualizarPropietario, CambioEstado, Estadoscuenta, AgregarUsuarios, RegistroCostoM
 from usuarios.views import RegistroTarifa,ReporteGastos, ListasGastos
 from usuarios.views import Suspenciones, VerOrdenSuspencion, VerOrdenReconexion, CambioTitular
-from usuarios.views import CierreFinanciero
+from usuarios.views import CierreFinanciero, VerConsumo
 from usuarios.views import ReportesCiclo, CambiosMasivos, CambioEstadoFacturas, GenerarGasto
 from usuarios.views import GeneradorFacturas, DesactivarUsuarios, AnularFactura, PagoParcial
 from usuarios.views import DescargarFactura, DescargaMasivaFacturas, VisualizarVivienda, BuscarSolicitud
@@ -40,7 +40,7 @@ urlpatterns = [
     url(r'^generargasto/', GenerarGasto.as_view(), name='generargasto'),
     url(r'^cambio/(?P<IdSoGa>\w+)', BuscarSolicitud.as_view(), name='cambio'),
     url(r'^listadogastos/', ListasGastos.as_view(), name='listadogastos'),
-    url(r'^registromedidor/(?P<IdVivienda>\w+)', RegistroMedidor.as_view(), name='registromedidor'),
+    url(r'^registromedidor/', RegistroMedidor.as_view(), name='registromedidor'),
     url(r'^perfil/', Perfil.as_view(), name='perfil'),
     url(r'^registropoblacion/', RegistroPoblacion.as_view(), name='registropoblacion'),
     url(r'^registrocostomatricula/', RegistroCostoM.as_view(), name='registrocostomatricula'),
@@ -95,5 +95,9 @@ urlpatterns = [
     url(r'^registroproveedor', RegistroProveedor.as_view(), name='registroproveedor'),
     url(r'^vercredito/(?P<idcredito>\w+)', VerCredito.as_view(), name='vercredito'),
     url(r'^pagoparcial', PagoParcial.as_view(), name='pagoparcial'),
-    url(r'^novedadretiro/(?P<matricula>\w+)', ReporteRetiro.as_view(), name='novedadretiro')
+    url(r'^novedadretiro/(?P<matricula>\w+)', ReporteRetiro.as_view(), name='novedadretiro'),
+    url(r'^consumos', Consumo.as_view(), name='consumos'),
+    url(r'^asignarmedidor/(?P<IdMedidor>\w+)', AsignarMedidor.as_view(), name='asignarmedidor'),
+    url(r'^registrarconsumo', RegistrarConsumo.as_view(), name='registrarconsumo'),
+    url(r'^verconsumo/(?P<matricula>\w+)', VerConsumo.as_view(), name='verconsumo'),
 ]

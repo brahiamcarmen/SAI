@@ -1,104 +1,188 @@
-{% extends 'usuarios/base_usuario2.html' %}
+{% extends 'usuarios/base_usuario3.html' %}
 {% load static %}
 {% block styles %}
-{% load humanize %}
+<link href="{% static 'stylesheets/diseno.css' %}" rel="stylesheet" type="text/css">
 {% endblock %}
-{%block title %} <title>Modulo - PC</title> {%endblock%}
+{%block title %} <title>Consumos</title> {%endblock%}
 {% block content %}
+{% load humanize %}
 {% include 'usuarios/alerts.html' %}
-<div class="row">
-    <div class="col-sm-6">
-        <h1 class="h3 text-gray-800">Panel de consumos</h1>
-    </div>
-     <div class="col-sm-6">
-        <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" onclick="window.location=''">Asignar medidor</button>    
-        <button class="btn btn-primary btn-sm ml-auto float-right" style="margin-right: 0.5rem;" onclick="window.location=''">Registrar consumo</button>    
-    </div>
-</div>
-<div class="row">
-    <div class="col-sm-6">
-        <div class="row">
-                <div class="col-xl-6 col-md-6 mb-4">
-                    <div class="card border-left-primary shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                            Medidores registrados</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ medidoresregistrados }}</div>
-                                </div>
-                                <div class="col-auto">
-                                    <i class="fas fa-clock fa-2x text-gray-300"></i>
-                                </div>
-                            </div>
+<div class="page-body">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-2">
+        <h3 class="subheader">Estadisticas</h3>
+              <div class="col-auto" style="margin-top: 0.5rem">
+                <div class="card card-sm">
+                  <div class="card-body">
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <span class="bg-indigo text-white avatar">
+                              <!-- Download SVG icon from http://tabler-icons.io/i/gauge -->
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="1" /><line x1="13.41" y1="10.59" x2="16" y2="8" /><path d="M7 12a5 5 0 0 1 5 -5" /></svg>
+                        </span>
+                      </div>
+                      <div class="col">
+                        <div class="font-weight-medium">
+                          {{contar}}
                         </div>
+                        <div class="text-muted">
+                          Medidores activos
+                        </div>
+                      </div>
                     </div>
+                  </div>
                 </div>
-                <div class="col-xl-6 col-md-6 mb-4">
-                    <div class="card border-left-success shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                            Predios sin medidor</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ sinmedidor }}</div>
-                                    </div>
-                                <div class="col-auto">
-                                    <i class="fas fa-home fa-2x text-gray-300"></i>
-                                </div>
-                            </div>
+              </div>
+              <div class="col-auto" style="margin-top: 0.5rem">
+                <div class="card card-sm">
+                  <div class="card-body">
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <span class="bg-success text-white avatar">
+                              <!-- Download SVG icon from http://tabler-icons.io/i/chart-bar -->
+  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><rect x="3" y="12" width="6" height="8" rx="1" /><rect x="9" y="8" width="6" height="12" rx="1" /><rect x="15" y="4" width="6" height="16" rx="1" /><line x1="4" y1="20" x2="18" y2="20" /></svg>
+                        </span>
+                      </div>
+                      <div class="col">
+                        <div class="font-weight-medium">
+                          {{suma|intcomma}} m3
                         </div>
+                        <div class="text-muted">
+                          Consumo
+                        </div>
+                      </div>
                     </div>
+                  </div>
+                </div>
+              </div>
+          <br>
+          <div class="row">
+            <h3 class="subheader">Opciones disponibles</h3>
+            <div class="col-md-12" style="margin-top: 0.5rem">
+               <a href="{% url 'usuarios:registromedidor' %}" class="btn btn-sm btn-indigo btn-pill w-100">Registrar medidor</a>
+            </div>
+            <div class="col-md-12" style="margin-top: 0.5rem">
+               <a href="" data-bs-toggle="modal" data-bs-target="#modal-full-width" class="btn btn-sm btn-indigo btn-pill w-100">Medidores sin asignar</a>
+            </div>
+            <div class="col-md-12" style="margin-top: 0.5rem">
+               <a href="" data-bs-toggle="modal" data-bs-target="#registroconsumo" class="btn btn-sm btn-indigo btn-pill w-100">Registrar consumo</a>
+            </div>
+          </div>
+      </div>
+      <div class="col-md-10">
+        <div class="row">
+            <h3 class="subheader">Medidores activos</h3>
+                            <div class="text-center table-responsive" style="height:15rem">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                                    <tr>
+                                        <th>No medidor</th>
+                                        <th>Estado</th>
+                                        <th>Predio</th>
+                                        <th>Fecha de asignacion</th>
+                                        <th>Opciones</th>
+                                    </tr>
+                        </thead>
+                        <tbody>
+                            {% for cierre in asignado %}
+                                <tr class="odd gradeX">
+                                            <td>{{ cierre.IdMedidor }}</td>
+                                            <td>{{ cierre.Estado }}</td>
+                                            <td>{{ cierre.IdVivienda }}</td>
+                                            <td>{{ cierre.Fecha }}</td>
+                                          
+                                            <td><a href="{% url 'usuarios:verconsumo' cierre.IdVivienda %}" class="btn btn-sm btn-indigo btn-pill w-100">+</a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
         </div>
-    </div>
-    <div class="col-sm-6">
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-1 text-center">
-                            <h6 style="font-size: 1rem;" class="m-1 font-weight-bold text-primary">Sistema tarifario</h6>
-                        </div>
-                        <div class="card-body text-center">
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <div class="col mr-1">
-                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                             Tarifa fija</div>
-                                        <div class="h6 mb-0 font-weight-bold text-gray-800">${{tarifa|intcomma}}<sup class="text-primary" style="font-size:0.6rem">${{valormetro}}</sup></div>
-                                        <p style="font-size:0.8rem;" class="mb-0"><{{consumomin}}<sup>m3</sup></p>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="col mr-1">
-                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                            Tarifa Tipo 1</div>
-                                        <div class="h6 mb-0 font-weight-bold text-gray-800">${{portipo1}}<sup class="text-primary" style="font-size:0.6rem">{{porcentipo1}}%</sup></div>
-                                        <p style="font-size:0.8rem;" class="mb-0">{{contipo1}} a {{consumotipo1}}<sup>m3</sup></p>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="col mr-1">
-                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                            Tarifa Tipo 2</div>
-                                        <div class="h6 mb-0 font-weight-bold text-gray-800">${{portipo2}}<sup class="text-primary" style="font-size:0.6rem">{{porcentipo2}}%</sup></div>
-                                        <p style="font-size:0.8rem;" class="mb-0">{{contipo2}} a {{consumotipo2}}<sup>m3</sup></p>
-                                    </div>
-                                </div> 
-                                <div class="col-sm-3">
-                                    <div class="col mr-1">
-                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                            Tarifa Tipo 3</div>
-                                        <div class="h6 mb-0 font-weight-bold text-gray-800">${{portipo3}}<sup class="text-primary" style="font-size:0.6rem">{{porcentipo3}}%</sup></div>
-                                        <p style="font-size:0.8rem;" class="mb-0">>{{consumotipo3}}<sup>m3</sup></p>
-                                    </div>
-                                </div>                                
-                            </div>
+ 
+      </div>
 
-                        </div>
-                    </div>
     </div>
+    <br>
+  </div>
 </div>
+      </div>
+    </div>
+    <div class="modal modal-blur fade" id="modal-full-width" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-full-width modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Medidores sin asignar</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+                   <div class="row">
+                <div class="text-center table-responsive" style="height:15rem">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                                    <tr>
+                                        <th>No medidor</th>
+                                        <th>Marca</th>
+                                        <th>Modelo</th>
+                                        <th>Tipo</th>
+                                        <th>Designacion</th>
+                                        <th>Clase</th>
+                                        <th>Diametro (mm)</th>
+                                        <th>Año (f)</th>
+                                        <th>Certificado</th>
+                                        <th>Fecha</th>
+                                        <th>Asignar</th>
+                                    </tr>
+                        </thead>
+                        <tbody>
+                            {% for cierre in sinasignar %}
+                                <tr class="odd gradeX">
+                                            <td>{{ cierre.IdMedidor }}</td>
+                                            <td>{{ cierre.Marca }}</td>
+                                            <td>{{ cierre.Modelo }}</td>
+                                            <td>{{ cierre.Tipo }}</td>
+                                            <td>{{ cierre.Designacion }}</td>
+                                            <td>{{ cierre.clase }}</td>
+                                            <td>{{ cierre.Diametronominal }}</td>
+                                            <td>{{ cierre.AnoFabricacion}}</td>
+                                            <td>{{ cierre.Certificado}}</td>
+                                            <td>{{ cierre.Fecha}}</td>
+                                            <td><a href="{% url 'usuarios:asignarmedidor' cierre.IdMedidor %}" class="btn btn-sm btn-indigo btn-pill w-100">+</a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn me-auto" data-bs-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
+        <div class="modal modal-blur fade" id="registroconsumo" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Registrar consumo</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+                                            <form action="{% url 'usuarios:registrarconsumo' %}" method="get" class="form-inline">
+                                  {% csrf_token %}
+                                  <div class="row">
+                                      <div class="col-sm-12">
+                                          <input style="width: 100%" type="text" name="matricula" class="form-control" placeholder="Matricula" id="miInput" oninput="verificarTexto()">
+                                      </div>
+                                          <button style="margin-top: 1rem; width: 100%;" type="submit" class="btn btn-primary">Validar</button>
+                                  </div>
+                                </form>
+          </div>
+        </div>
+      </div>
+    </div>
 {% endblock %}
 {% block scripts %}
-
 {% endblock %}

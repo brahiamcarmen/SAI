@@ -9,9 +9,9 @@ from SAAL.models import Usuario, Tarifa, CobroOrdenes, Credito, AsignacionBloque
 from SAAL.models import OrdenesSuspencion, OrdenesReconexion, Poblacion, Factura, Ciclo, EstadoCuenta, NovedadVivienda
 from SAAL.models import Vivienda, SolicitudGastos, Propietario, NovedadesSistema, Medidores, Pqrs, RespuestasPqrs
 from SAAL.models import NovedadesGenerales, CobroMatricula, Permisos, Pagos, Cierres, Acueducto, ValorMatricula
-from SAAL.models import DescargaFacturas, Proveedor
+from SAAL.models import DescargaFacturas, Proveedor,Asignacion, Consumos
 from SAAL.forms import FormAgregarGasto, FormRegistroPqrs, RegistroUsuario, RegistroUsuario2, RegistroVivienda
-from SAAL.forms import AcueductoAForm, PermisosForm, CobroMatriculaForm, CostoMForm, FormRespuestaPqrs
+from SAAL.forms import AcueductoAForm, PermisosForm, CobroMatriculaForm, CostoMForm, FormRespuestaPqrs,FormAsignarMedidor
 from SAAL.forms import RegistroPropietario, TarifasForm, ModificaPropietario, FormRegistroCredito, FormRegistroProveedor
 from SAAL.forms import CambioFormEstado, AcueductoForm, GastosForm, MedidoresForm, PoblacionForm, ModificaVivienda
 from django.contrib import messages
@@ -166,8 +166,13 @@ class Inicio(LoginRequiredMixin, View):
             pagos3 = Pagos.objects.filter(FechaPago__gte=new_date, FechaPago__lte=new_date2).count()
             contador = pagos3 / factuasemi * 100
 
-            promedio = pago0 / pagos3
-            promtarifa = promedio / 10000 * 100
+            if pagos3 ==0:
+                promedio = 0
+                promtarifa = 0
+
+            else:
+                promedio = pago0 / pagos3
+                promtarifa = promedio / 10000 * 100
 
             viviendas = Vivienda.objects.filter(EstadoServicio=ESTADOS1) | Vivienda.objects.filter(EstadoServicio=ESTADOS3)| Vivienda.objects.filter(EstadoServicio=ESTADOS2)
             personas = 0
@@ -219,6 +224,10 @@ class Inicio(LoginRequiredMixin, View):
             casu = Vivienda.objects.filter(Direccion=SECTOR6, EstadoServicio=ESTADOS2).count()
             ca = caop + cama + casu
 
+            contarasig = Asignacion.objects.filter(Estado='Operativo').count()
+            vapo = Consumos.objects.all().aggregate(Consumo=Sum('Consumo'))
+            suma8 = vapo['Consumo']
+
             return render(request,
                           self.template_name, {'tipousuario': tipousuario, 'nombreproyecto': nombreproyecto,
                                                'nombreproyectol': nombreproyectol, 'acueducto': nombreacueducto,
@@ -227,7 +236,7 @@ class Inicio(LoginRequiredMixin, View):
                                                'porcentaje': int(porcentaje), 'contador': int(contador),
                                                'facturaspagas': pagos3, 'promedio': int(promedio),
                                                'promtarifa': int(promtarifa),
-                                               'pn':pn, 'vj':vj, 'cc':cc, 'bn':bn, 'ha':ha,'ca':ca})
+                                               'pn':pn, 'vj':vj, 'cc':cc, 'bn':bn, 'ha':ha,'ca':ca, 'contarasig': contarasig, 'suma8': suma8})
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
 
@@ -492,7 +501,6 @@ class VisualizarVivienda(LoginRequiredMixin, View):
             vafacemi = Factura.objects.filter(IdEstadoCuenta=idestado, Estado=FE).exists()
             matriculas = CobroMatricula.objects.filter(IdVivienda=idvivienda)
             matriculas2 = CobroMatricula.objects.filter(IdVivienda=idvivienda).exists()
-            medidores = Medidores.objects.filter(IdVivienda=idvivienda)
             novedades = NovedadVivienda.objects.filter(IdVivienda=idvivienda)
             reconexion = OrdenesReconexion.objects.filter(IdEstadoCuenta=idestado).order_by("-IdOrden")
             suspenciones = OrdenesSuspencion.objects.filter(IdEstadoCuenta=idestado).order_by("-IdOrden")
@@ -535,10 +543,106 @@ class VisualizarVivienda(LoginRequiredMixin, View):
                 valor = int(g.ValorPago)
                 pagado += valor
 
+            seis = 0
+            useis = None
+            cinco = 0
+            ucinco = None
+            cuatro = 0
+            ucuatro = None
+            tres = 0
+            utres = None
+            dos = 0
+            udos = None
+            uno = 0
+            uuno = None
+            contarconsumo = Consumos.objects.filter(IdVivienda=idvivienda).count()
+            if contarconsumo == 1:
+                consultarconsumo = Consumos.objects.filter(IdVivienda=idvivienda).order_by("-IdRegistro")[:3]
+                primerobjeto = consultarconsumo[0]
+                seis = primerobjeto.Consumo
+                useis = primerobjeto.mes
+
+            elif contarconsumo == 2:
+                consultarconsumo = Consumos.objects.filter(IdVivienda=idvivienda).order_by("-IdRegistro")[:3]
+                primerobjeto = consultarconsumo[0]
+                seis = primerobjeto.Consumo
+                useis = primerobjeto.mes
+                segundoobjeto = consultarconsumo[1]
+                cinco = segundoobjeto.Consumo
+                ucinco = segundoobjeto.mes
+
+            elif contarconsumo == 3:
+                consultarconsumo = Consumos.objects.filter(IdVivienda=idvivienda).order_by("-IdRegistro")[:3]
+                primerobjeto = consultarconsumo[0]
+                seis = primerobjeto.Consumo
+                useis = primerobjeto.mes
+                segundoobjeto = consultarconsumo[1]
+                cinco = segundoobjeto.Consumo
+                ucinco = segundoobjeto.mes
+                tercerobjeto = consultarconsumo[2]
+                cuatro = tercerobjeto.Consumo
+                ucuatro = tercerobjeto.mes
+
+            elif contarconsumo == 4:
+                consultarconsumo = Consumos.objects.filter(IdVivienda=idvivienda).order_by("-IdRegistro")[:4]
+                primerobjeto = consultarconsumo[0]
+                seis = primerobjeto.Consumo
+                useis = primerobjeto.mes
+                segundoobjeto = consultarconsumo[1]
+                cinco = segundoobjeto.Consumo
+                ucinco = segundoobjeto.mes
+                tercerobjeto = consultarconsumo[2]
+                cuatro = tercerobjeto.Consumo
+                ucuatro = tercerobjeto.mes
+                cuartoobjeto = consultarconsumo[3]
+                tres = cuartoobjeto.Consumo
+                utres = cuartoobjeto.mes
+
+            elif contarconsumo == 5:
+                consultarconsumo = Consumos.objects.filter(IdVivienda=idvivienda).order_by("-IdRegistro")[:5]
+                primerobjeto = consultarconsumo[0]
+                seis = primerobjeto.Consumo
+                useis = primerobjeto.mes
+                segundoobjeto = consultarconsumo[1]
+                cinco = segundoobjeto.Consumo
+                ucinco = segundoobjeto.mes
+                tercerobjeto = consultarconsumo[2]
+                cuatro = tercerobjeto.Consumo
+                ucuatro = tercerobjeto.mes
+                cuartoobjeto = consultarconsumo[3]
+                tres = cuartoobjeto.Consumo
+                utres = cuartoobjeto.mes
+                quintoobjeto = consultarconsumo[4]
+                dos = quintoobjeto.Consumo
+                udos = quintoobjeto.mes
+
+            elif contarconsumo >= 6:
+                consultarconsumo = Consumos.objects.filter(IdVivienda=idvivienda).order_by("-IdRegistro")[:6]
+                primerobjeto = consultarconsumo[0]
+                seis = primerobjeto.Consumo
+                useis = primerobjeto.mes
+                segundoobjeto = consultarconsumo[1]
+                cinco = segundoobjeto.Consumo
+                ucinco = segundoobjeto.mes
+                tercerobjeto = consultarconsumo[2]
+                cuatro = tercerobjeto.Consumo
+                ucuatro = tercerobjeto.mes
+                cuartoobjeto = consultarconsumo[3]
+                tres = cuartoobjeto.Consumo
+                utres = cuartoobjeto.mes
+                quintoobjeto = consultarconsumo[4]
+                dos = quintoobjeto.Consumo
+                udos = quintoobjeto.mes
+                sextoobjeto = consultarconsumo[5]
+                uno = sextoobjeto.Consumo
+                uuno = segundoobjeto.mes
+
+            asignado = Asignacion.objects.filter(IdVivienda=idvivienda, Estado='Operativo').exists()
+
             return render(request, self.template_name, {
-                'noors': contor, 'nore': contre, 'nosus': contsus, 'pagado': pagado, 'nofac': nofacturas,
+                'noors': contor, 'nore': contre, 'nosus': contsus, 'pagado': pagado, 'nofac': nofacturas, 'asignado': asignado,
                 'lista': lista, 'facturas': facturas, 'cobromatricula': cobromatricula, 'suspenciones': suspenciones,
-                'reconexion': reconexion, 'facturasemi': facturasemi, 'medidores': medidores, 'matriculas': matriculas,
+                'reconexion': reconexion, 'facturasemi': facturasemi, 'matriculas': matriculas,
                 'direccion': vivienda.Direccion, 'casa': vivienda.NumeroCasa, 'piso': vivienda.Piso,
                 'matricula': vivienda.IdVivienda, 'tipo': vivienda.TipoInstalacion,
                 'estrato': vivienda.Estrato, 'tipop': vivienda.InfoInstalacion, 'estado': vivienda.EstadoServicio,
@@ -548,7 +652,8 @@ class VisualizarVivienda(LoginRequiredMixin, View):
                 'reconexion2': cor, 'suspenciones2': cos, 'aportes': resultado, 'cobromatricula1': matri,
                 'repaciones': reparaciones, 'total': resultado + cor + cos + matri + reparaciones,
                 'filtro': filtrosuspenciones, 'contpagos': contpagos, 'vmatri': matriculas2,'novedadr': validarretiro,
-                'novretiro':novretiro
+                'novretiro':novretiro,'seis': int(seis),'useis': useis,'cinco': cinco,'ucinco':ucinco, 'cuatro':cuatro,'ucuatro':ucuatro,
+                'tres': tres, 'utres': utres, 'dos': dos, 'udos':udos, 'uno': uno, 'uuno':uuno
             })
 
         except ObjectDoesNotExist:
@@ -1200,50 +1305,73 @@ class RegistroMedidor(LoginRequiredMixin, View):
     login_url = '/'
     template_name = 'usuarios/registromedidor.html'
     form_class = MedidoresForm
-    vervivienda = VisualizarVivienda
 
-    def get(self, request, IdVivienda):
+    def get(self, request):
         try:
 
-            matricula = Vivienda.objects.get(IdVivienda=IdVivienda)
-            form = self.form_class(instance=matricula)
+            form = self.form_class()
             return render(request, self.template_name, {
-                'form': form,
-                'matricula': matricula
+                'form': form
             })
 
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
 
-    def post(self, request, IdVivienda):
+    def post(self, request):
+        form = self.form_class(request.POST)
         try:
-            idmedidor = request.POST.get("IdMedidor")
-            marca = request.POST.get("Marca")
-            tipo = request.POST.get("Tipo")
-            lectura = request.POST.get("LecturaInicial")
-            anof = request.POST.get("AnoFabricacion")
-
-            buscarmedidor = Medidores.objects.filter(IdMedidor=idmedidor).exists()
-            vivienda = Vivienda.objects.get(IdVivienda=IdVivienda)
-            idvivienda = vivienda.IdVivienda
-
-            if buscarmedidor is False:
-                registro = Medidores(IdMedidor=idmedidor, Marca=marca, Tipo=tipo, LecturaInicial=lectura,
-                                     AnoFabricacion=anof,
-                                     IdVivienda=vivienda)
-                registro.save()
-                messages.add_message(request, messages.INFO, 'el medidor se asigno correctamente')
-                ver = self.vervivienda()
-                ejercutar = ver.get(request, idvivienda)
-                return ejercutar
+            if form.is_valid():
+                form.save()
+                messages.add_message(request, messages.INFO, 'El medidor se asigno correctamente')
+                return HttpResponseRedirect(reverse('usuarios:consumos'))
 
             else:
-                messages.add_message(request, messages.INFO, 'el medidor ya esta asignado')
-                return HttpResponseRedirect(reverse('usuarios:listaviviendas'))
+                messages.add_message(request, messages.ERROR, 'El predio ya tiene medidor asignado')
+                return HttpResponseRedirect(reverse('usuarios:consumos'))
 
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
 
+
+class AsignarMedidor(LoginRequiredMixin, View):
+    login_url = '/'
+    template_name = 'usuarios/asignacionmedidor.html'
+    form_class = FormAsignarMedidor
+
+    def get(self, request, IdMedidor):
+        try:
+            consulta1 = Medidores.objects.get(IdMedidor=IdMedidor)
+            form = self.form_class(instance=consulta1)
+            return render(request, self.template_name, {
+                'form': form
+            })
+
+        except ObjectDoesNotExist:
+            return render(request, "pages-404.html")
+
+    def post(self, request, IdMedidor):
+        try:
+            idmedidor = IdMedidor
+            idvivienda = request.POST.get("IdVivienda")
+            estado = request.POST.get("Estado")
+            consultarpredio = Asignacion.objects.filter(IdVivienda=idvivienda, Estado='Operativo').exists()
+
+            if consultarpredio is False:
+                vivienda = Vivienda.objects.get(IdVivienda=idvivienda)
+                medidor = Medidores.objects.get(IdMedidor=idmedidor)
+                medidor.Estado ='Asignado'
+                medidor.save()
+                asignacion = Asignacion(IdMedidor=medidor, IdVivienda=vivienda, Estado='Operativo')
+                asignacion.save()
+                messages.add_message(request, messages.INFO, 'El medidor se asigno correctamente')
+                return HttpResponseRedirect(reverse('usuarios:consumos'))
+
+            else:
+                messages.add_message(request, messages.ERROR, 'El predio ya tiene un medidor asignado y operativo')
+                return HttpResponseRedirect(reverse('usuarios:consumos'))
+
+        except ObjectDoesNotExist:
+            return render(request, "pages-404.html")
 
 class Perfil(LoginRequiredMixin, View):
     login_url = '/'
@@ -4450,6 +4578,120 @@ class ReporteRetiro(LoginRequiredMixin, View):
                 messages.add_message(request, messages.INFO, 'La novedad se registro correctamente')
                 return HttpResponseRedirect(reverse('usuarios:inicio'))
 
+
+        except ObjectDoesNotExist:
+            return render(request, "pages-404.html")
+
+
+class Consumo(LoginRequiredMixin, View):
+    login_url = '/'
+    template_name = 'usuarios/Consumos.html'
+
+    def get(self, request):
+        try:
+            usuario = 0
+            sinasignar = Medidores.objects.filter(Estado='Sin asignar')
+            asignado = Asignacion.objects.filter(Estado='Operativo')
+            contar = Asignacion.objects.filter(Estado='Operativo').count()
+            vapo = Consumos.objects.all().aggregate(Consumo=Sum('Consumo'))
+            suma = vapo['Consumo']
+
+            if usuario == 0:
+                return render(request, self.template_name,{
+                    'sinasignar':sinasignar, 'asignado':asignado, 'contar': contar,'suma':suma
+                })
+
+        except ObjectDoesNotExist:
+            return render(request, "pages-404.html")
+
+
+class RegistrarConsumo(LoginRequiredMixin, View):
+    login_url = '/'
+    template_name = 'usuarios/Registrarconsumos.html'
+
+    def get(self, request):
+        try:
+            matricula = request.GET.get('matricula')
+            vivienda = Vivienda.objects.get(IdVivienda=matricula)
+            asignado = Asignacion.objects.filter(IdVivienda=matricula,Estado='Operativo').exists()
+
+            if asignado == True:
+                return render(request, self.template_name,{'matricula': matricula})
+            else:
+                messages.add_message(request, messages.ERROR, 'El predio no tiene micromedidor asignado')
+                return HttpResponseRedirect(reverse('usuarios:consumos'))
+
+        except ObjectDoesNotExist:
+            return render(request, "pages-404.html")
+
+    def post(self, request):
+        try:
+            usuario = Usuario.objects.get(usuid=request.user.pk)
+            lecturaactual = request.POST.get("lectura")
+            observacion = request.POST.get("observacion")
+            matricula = request.POST.get("matricula")
+            medidor = Asignacion.objects.get(IdVivienda=matricula)
+            idmedidor = medidor.IdMedidor
+            vivienda = Vivienda.objects.get(IdVivienda=matricula)
+            consultarconsumo = Consumos.objects.filter(IdVivienda=matricula).exists()
+
+            fechaexp = (datetime.today())
+            mes1 = fechaexp.month
+            ciclos = Ciclo.objects.get(IdCiclo=mes1)
+            mes = ciclos.Nombre
+            ano = fechaexp.year
+
+            if consultarconsumo == False:
+                consumo1 = Consumos(IdMedidor=idmedidor, IdVivienda=vivienda, Lecturaactual=lecturaactual,Lecturaanterior=0,Consumo=lecturaactual,promedio=lecturaactual,
+                                    observaciones=observacion,diasconsumo=30, ano=ano, mes=mes)
+                consumo1.save()
+                messages.add_message(request, messages.INFO, 'La informacion se ha guardado correctamente')
+                return HttpResponseRedirect(reverse('usuarios:consumos'))
+
+            else:
+                vapo = Consumos.objects.filter(IdVivienda=matricula).aggregate(Consumo=Sum('Consumo'))
+                suma = vapo['Consumo']
+                cantidadregistros = Consumos.objects.filter(IdVivienda=matricula).count()
+                consultarconsumo = Consumos.objects.filter(IdVivienda=matricula).order_by("-IdRegistro")[:1]
+                primerobjeto = consultarconsumo[0]
+
+                lecturaanterior = primerobjeto.Lecturaactual
+                consumo = int(lecturaactual) - int(lecturaanterior)
+                suma2 = consumo + suma
+                promedio = suma2 / (cantidadregistros + 1)
+                consumo1 = Consumos(IdMedidor=idmedidor, IdVivienda=vivienda, Lecturaactual=lecturaactual,
+                                    Lecturaanterior=lecturaanterior, Consumo=consumo, promedio=int(promedio),
+                                    observaciones=observacion, diasconsumo=30, ano=ano, mes=mes)
+                consumo1.save()
+
+                messages.add_message(request, messages.INFO, 'PRUEBA 1 EXISITOSA')
+                return HttpResponseRedirect(reverse('usuarios:consumos'))
+
+        except ObjectDoesNotExist:
+            return render(request, "pages-404.html")
+
+class VerConsumo(LoginRequiredMixin, View):
+    login_url = '/'
+    template_name = 'usuarios/consumosuscriptor.html'
+
+    def get(self, request, matricula):
+        try:
+
+            usuario = Usuario.objects.get(usuid=request.user.pk)
+            tipousuario = True
+            vivienda = Vivienda.objects.get(IdVivienda=matricula)
+            asignado = Asignacion.objects.get(IdVivienda=matricula,Estado='Operativo')
+            idmedidor = asignado.IdMedidor
+            medidor = Medidores.objects.get(IdMedidor=idmedidor)
+            consumos = Consumos.objects.filter(IdVivienda=matricula).order_by("-IdRegistro")
+
+            if tipousuario is True:
+                return render(request, self.template_name, {'medidor': medidor.IdMedidor, 'estado':medidor.Estado,'estado2': asignado.Estado,
+                                                            'matricula': matricula, 'consumos': consumos})
+            else:
+                messages.add_message(request, messages.ERROR, 'Su usuario no tiene los permisos de acceso a esta '
+                                                              'seccion')
+                return HttpResponseRedirect(reverse('usuarios:inicio'))
 
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")

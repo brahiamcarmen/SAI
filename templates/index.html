@@ -19,17 +19,17 @@
       <div class="container-tight py-4">
         <form class="card card-md" method="post" role="form">
           <div class="card-header">
-                              <div class="row" style="margin:0rem;">
+                <div class="row" style="margin:0rem;">
                     <div class="col-md-12">
                       <img src="{% static 'images/Prin.png' %}" style="">
                     </div>
-                  </div>
+                </div>
           </div>
           {% csrf_token %}
           {% block content %}
           {% include 'usuarios/alerts.html' %}
           {% endblock %}
-          <div class="card-body">
+          <div class="card-body" style="margin-top: -0.5rem;">
                     <div class="text-center mb-4">
               <p class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
               <!-- Download SVG icon from http://tabler-icons.io/i/letter-s -->
