@@ -10,7 +10,7 @@ from usuarios.views import EliminarPermisos, ReporteCiclo, Mapa, EliminarPoblaci
 from usuarios.views import VisualizarPropietario, CambioEstado, Estadoscuenta, AgregarUsuarios, RegistroCostoM
 from usuarios.views import RegistroTarifa,ReporteGastos, ListasGastos
 from usuarios.views import Suspenciones, VerOrdenSuspencion, VerOrdenReconexion, CambioTitular
-from usuarios.views import CierreFinanciero, VerConsumo
+from usuarios.views import CierreFinanciero, VerConsumo, GenerarConceptos
 from usuarios.views import ReportesCiclo, CambiosMasivos, CambioEstadoFacturas, GenerarGasto
 from usuarios.views import GeneradorFacturas, DesactivarUsuarios, AnularFactura, PagoParcial
 from usuarios.views import DescargarFactura, DescargaMasivaFacturas, VisualizarVivienda, BuscarSolicitud
@@ -100,4 +100,5 @@ urlpatterns = [
     url(r'^asignarmedidor/(?P<IdMedidor>\w+)', AsignarMedidor.as_view(), name='asignarmedidor'),
     url(r'^registrarconsumo', RegistrarConsumo.as_view(), name='registrarconsumo'),
     url(r'^verconsumo/(?P<matricula>\w+)', VerConsumo.as_view(), name='verconsumo'),
+    url(r'^generarconceptos/', GenerarConceptos.as_view(), name='generarconceptos'),
 ]

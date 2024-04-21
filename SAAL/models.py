@@ -19,9 +19,11 @@ class Tarifa(models.Model):
     Recargo = models.CharField(max_length=5, null=False)
     TarifaReconexion = models.CharField(max_length=5, null=True)
     TarifaSuspencion = models.CharField(max_length=5, null=True)
-    bifamiliar = models.CharField(max_length=5, null=True)
+    comercial = models.CharField(max_length=5, null=True)
+    industrial = models.CharField(max_length=5, null=True)
+    oficial = models.CharField(max_length=5, null=True)
     especial = models.CharField(max_length=5, null=True)
-    multifamiliar = models.CharField(max_length=5, null=True)
+    valormetro = models.CharField(max_length=10, null=True)
     m3 = models.CharField(max_length=4, null=True)
     FechaInicial = models.DateTimeField(auto_now=True)
     Ano = models.CharField(max_length=4, null=True)
@@ -732,3 +734,41 @@ class Consumos(models.Model):
     class Meta:
         verbose_name_plural = "Consumos"
         verbose_name = "Consumo"
+
+class Conceptos(models.Model):
+    IdRegistro = models.AutoField(primary_key=True)
+    Tipo = models.CharField(max_length=350, null=True)
+    Observacion = models.CharField(max_length=350, null=True)
+    IdVivienda = models.ForeignKey(Vivienda, on_delete=models.CASCADE)
+    Estado = models.CharField(max_length=350, null=True)
+    Fecha = models.DateTimeField(auto_now_add=True)
+    Valor = models.IntegerField(null=True)
+    objects = models.Manager()
+    def __str__(self):
+        return "%s" % self.IdRegistro
+
+    class Meta:
+        verbose_name_plural = "Conceptos de cobro"
+        verbose_name = "Concepto de cobro"
+
+
+class ConceptosFacturados(models.Model):
+    IdRegistro = models.AutoField(primary_key=True)
+    AporteFijo = models.IntegerField(null=True)
+    CuotaMatricula = models.IntegerField(null=True)
+    Suspencion = models.IntegerField(null=True)
+    Reconexion = models.IntegerField(null=True)
+    AcuerdoPago = models.IntegerField(null=True)
+    Subsidio = models.IntegerField(null=True)
+    Fecha = models.DateTimeField(auto_now_add=True)
+    Total = models.IntegerField(null=True)
+    Estado = models.CharField(max_length=10, null=True)
+    Periodo = models.CharField(max_length=10, null=True)
+    IdVivienda = models.ForeignKey(Vivienda, on_delete=models.CASCADE)
+    objects = models.Manager()
+    def __str__(self):
+        return "%s" % self.IdRegistro
+
+    class Meta:
+        verbose_name_plural = "Conceptos de cobro"
+        verbose_name = "Concepto de cobro"

@@ -267,10 +267,12 @@ class TarifasForm(forms.ModelForm):
             'Recargo',
             'TarifaReconexion',
             'TarifaSuspencion',
-            'bifamiliar',
-            'multifamiliar',
-            'm3',
+            'comercial',
+            'industrial',
+            'oficial',
             'especial',
+            'valormetro',
+            'm3',
             'Ano',
         ]
         labels = {
@@ -280,10 +282,12 @@ class TarifasForm(forms.ModelForm):
             'Recargo': _(u'Aporte por mora'),
             'TarifaReconexion': _(u'Aporte por reconexion'),
             'TarifaSuspencion': _(u'Aporte por Suspencion'),
-            'bifamiliar': _(u'Aporte bifamiliar'),
-            'multifamiliar': _(u'Aporte multifamiliar'),
-            'm3': _(u'consumo maximo m3'),
+            'comercial': _(u'Aporte comercial'),
+            'industrial': _(u'Aporte industrial'),
+            'oficial': _(u'Aporte oficial'),
             'especial': _(u'Aporte especial'),
+            'valormetro': _(u'Valor del metro cubico'),
+            'm3': _(u'consumo maximo m3 - por predio'),
             'Ano': _(u'Año de vigencia'),
         }
 

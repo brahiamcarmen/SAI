@@ -93,18 +93,20 @@
                                                 <div class="col-md-6">
                                                     <div class="row">
                                                         <h3 class="subheader">Aportes fijos</h3>
-                                                        <dt class="col-5">Unifamiliar:</dt>
+                                                        <dt class="col-5">Aporte:</dt>
                                                         <dd class="col-7">${{ tarifa.Valor|intcomma }}</dd>
-                                                        <dt class="col-5">Manteniento:</dt>
+                                                        <dt class="col-5">Mantenimiento:</dt>
                                                         <dd class="col-7">${{ tarifa.Mantenimiento|intcomma }}</dd>
                                                         <dt class="col-5">Recargo:</dt>
                                                         <dd class="col-7">${{ tarifa.Recargo|intcomma }}</dd>
                                                         <dt class="col-5">Especial:</dt>
                                                         <dd class="col-7">${{ tarifa.especial|intcomma }}</dd>
-                                                        <dt class="col-5">Bifamiliar:</dt>
-                                                        <dd class="col-7">${{ tarifa.bifamiliar|intcomma }}</dd>
-                                                        <dt class="col-5">Multifamiliar:</dt>
-                                                        <dd class="col-7">${{ tarifa.multifamiliar|intcomma }}</dd>
+                                                        <dt class="col-5">Comercial:</dt>
+                                                        <dd class="col-7">${{ tarifa.comercial|intcomma }}</dd>
+                                                        <dt class="col-5">Industrial:</dt>
+                                                        <dd class="col-7">${{ tarifa.industrial|intcomma }}</dd>
+                                                        <dt class="col-5">Oficial:</dt>
+                                                        <dd class="col-7">${{ tarifa.oficial|intcomma }}</dd>
                                                         <dt class="col-5">Año:</dt>
                                                         <dd class="col-7">{{ tarifa.Ano }}</dd>
                                                     </div>
@@ -117,8 +119,10 @@
                                                         <dt class="col-5">Reconexion:</dt>
                                                         <dd class="col-7">${{ tarifa.TarifaReconexion|intcomma }}</dd>
                                                         <h3 class="subheader">Consumo</h3>
-                                                        <dt class="col-5">M3:</dt>
+                                                        <dt class="col-5">Consumo maximo M3:</dt>
                                                         <dd class="col-7">{{ tarifa.m3 }}</dd>
+                                                        <dt class="col-5">Valor M3:</dt>
+                                                        <dd class="col-7">${{ tarifa.valormetro|intcomma }}</dd>
                                                         <h3 class="subheader">Vigencia</h3>
                                                         <dt class="col-5">Registro:</dt>
                                                         <dd class="col-7">{{ tarifa.FechaInicial }}</dd>
@@ -341,16 +345,18 @@
                         <thead>
                             <tr>
                                 <th>Identificador</th>
-                                <th>Unifamiliar</th>
-                                <th>Bifamiliar</th>
-                                <th>Multifamiliar</th>
-                                <th>Especial</th>
+                                <th>Aporte fijo</th>
                                 <th>Mantenimiento</th>
                                 <th>Recargo</th>
-                                <th>Suspencion</th>
                                 <th>Reconexion</th>
-                                <th>Consumumo m3</th>
-                                <th>Vigencia</th>
+                                <th>Suspencion</th>
+                                <th>Comercial</th>
+                                <th>Industrial</th>
+                                <th>oficial</th>
+                                <th>Especial</th>
+                                <th>Valor M3</th>
+                                <th>Max m3</th>
+                                <th>Año</th>
                                 <th>Fecha de registro</th>
                             </tr>
                         </thead>
@@ -359,14 +365,16 @@
                             <tr>
                                 <td>{{ tarifa.IdTarifa }}</td>
                                 <td>${{ tarifa.Valor|intcomma }}</td>
-                                <td>${{ tarifa.bifamiliar|intcomma }}</td>
-                                <td>${{ tarifa.multifamiliar|intcomma }} <p>* predio</p></td>
-                                <td>${{ tarifa.especial|intcomma }}</td>
                                 <td>${{ tarifa.Mantenimiento|intcomma }}</td>
                                 <td>${{ tarifa.Recargo|intcomma }}</td>
-                                <td>${{ tarifa.TarifaSuspencion|intcomma }}</td>
                                 <td>${{ tarifa.TarifaReconexion|intcomma }}</td>
-                                 <td>{{ tarifa.m3 }}</td>
+                                <td>${{ tarifa.TarifaSuspencion|intcomma }}</td>
+                                <td>${{ tarifa.comercial|intcomma }}</td>
+                                <td>${{ tarifa.industrial|intcomma }}</td>
+                                <td>${{ tarifa.oficial|intcomma }}</td>
+                                <td>${{ tarifa.especial|intcomma }}</td>
+                                <td>${{ tarifa.valormetro|intcomma }}</td>
+                                <td>{{ tarifa.m3 }}</td>
                                 <td>{{ tarifa.Ano }}</td>
                                 <td>{{ tarifa.FechaInicial }}</td>
                             </tr>

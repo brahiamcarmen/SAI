@@ -9,7 +9,7 @@ from SAAL.models import Usuario, Tarifa, CobroOrdenes, Credito, AsignacionBloque
 from SAAL.models import OrdenesSuspencion, OrdenesReconexion, Poblacion, Factura, Ciclo, EstadoCuenta, NovedadVivienda
 from SAAL.models import Vivienda, SolicitudGastos, Propietario, NovedadesSistema, Medidores, Pqrs, RespuestasPqrs
 from SAAL.models import NovedadesGenerales, CobroMatricula, Permisos, Pagos, Cierres, Acueducto, ValorMatricula
-from SAAL.models import DescargaFacturas, Proveedor,Asignacion, Consumos
+from SAAL.models import DescargaFacturas, Proveedor,Asignacion, Consumos, Conceptos
 from SAAL.forms import FormAgregarGasto, FormRegistroPqrs, RegistroUsuario, RegistroUsuario2, RegistroVivienda
 from SAAL.forms import AcueductoAForm, PermisosForm, CobroMatriculaForm, CostoMForm, FormRespuestaPqrs,FormAsignarMedidor
 from SAAL.forms import RegistroPropietario, TarifasForm, ModificaPropietario, FormRegistroCredito, FormRegistroProveedor
@@ -2152,116 +2152,12 @@ class DescargarFactura(LoginRequiredMixin, View):
             imga = qr.make_image(fill_color="black", back_color="white")
             imga.save('static/ModeloFactura/output.png')
             # libro excel
-            if int(IdFactura) <= 11537:
-                wb = openpyxl.load_workbook('static/ModeloFactura/001-044-78055.xlsx')
-                ws = wb.active
-                img = openpyxl.drawing.image.Image('static/ModeloFactura/output.png')
-                ws.add_image(img, 'Y2')
-                if int(aporteporconsumo) >= 9000:
-                    imagen = openpyxl.drawing.image.Image('static/ModeloFactura/corte2.png')
-                    ws.add_image(imagen, 'B23')
-                else:
-                    pass
-                # factura matricula estado
-                ws['AW4'] = noaporte
-                ws['AW6'] = idmatricula
-                ws['AW8'] = estado
-                # suscriptor
-                ws['A15'] = str(idestadocuenta)
-                ws['I15'] = nombrecompleto
-                ws['S17'] = sector
-                ws['AG17'] = casa
-                ws['AL17'] = piso
-                ws['L17'] = diametro
-                ws['A17'] = 'No aplica'
-                ws['AG15'] = estrato
-                ws['AT15'] = tipoinstalacion
-                ws['AL15'] = tipodepredio
-                ws['AS13'] = estadoservicio
-                ws['AB15'] = ciclo
-                ws['P11'] = cantpredios
-                # Periodo facturado
-                ws['AM20'] = periodofacturado
-                # ultimo pago
-                consultarpago = Pagos.objects.filter(IdVivienda=matricula).exists()
-                if consultarpago is True:
-                    filtropagos = Pagos.objects.filter(IdVivienda=matricula).order_by("-IdPago")[:1]
-                    consultarp = Pagos.objects.get(IdPago=filtropagos)
-                    ws['AM25'] = consultarp.IdPago
-                    ws['AR25'] = consultarp.FechaPago
-                    ws['AY25'] = int(consultarp.ValorPago)
-                else:
-                    mensaje = "No Registra"
-                    ws['AM25'] = mensaje
-                    ws['AR25'] = mensaje
-                    ws['AR25'] = mensaje
-
-                # Periodo facturado
-                if int(aporteporconsumo) > 0:
-                    ws['A21'] = 'Aportes'
-                    ws['N21'] = int(aporteporconsumo)
-                    ws['W21'] = facturasvencidas
-                    ws['AC21'] = int(aporteporconsumo)
-
-                if int(suspencion) > 0:
-                    ws['A22'] = 'Orden de suspensión'
-                    ws['N22'] = suspencion
-                    ws['W22'] = ''
-                    ws['AC22'] = suspencion
-
-                if int(reconexion) > 0:
-                    ws['A23'] = 'Orden de reconexón'
-                    ws['N23'] = reconexion
-                    ws['W23'] = ''
-                    ws['AC23'] = reconexion
-
-                if int(cuotamatricula) > 0:
-                    cobromatri = CobroMatricula.objects.get(IdVivienda=matricula)
-                    saldo = cobromatri.ValorPendiente
-                    cuotasp = cobromatri.CuotasPendientes
-                    ws['A24'] = 'Derecho de conexión'
-                    ws['N24'] = int(saldo)
-                    ws['W24'] = cuotasp
-                    ws['AC24'] = int(cuotamatricula)
-
-                # total concepto de acueducto
-                ws['AC27'] = int(Total)
-                # facturas vencidas
-                ws['W54'] = facturasvencidas
-
-                # fechas de procedimiento
-                ws['AI55'] = FechaExpe
-                ws['AI57'] = FechaLimite
-
-                if int(facturasvencidas) >= 1:
-                    fechalimite = FechaLimite + timedelta(days=8)
-                    ws['A40'] = 'Inmediato'
-                    ws['A42'] = fechalimite
-                else:
-                    ws['AI57'] = FechaLimite
-
-                # total a pagar condional 0
-                if int(Total) <= 0:
-                    ws['AU61'] = 0
-                else:
-                    ws['AU61'] = int(Total)
-
-                ws.title = IdFactura
-                archivo_predios = str(IdFactura) + ".xlsx"
-                response = HttpResponse(content_type="application/ms-excel")
-                content = "attachment; filename = {0}".format(archivo_predios)
-                response['Content-Disposition'] = content
-                wb.save(response)
-                orden = DescargaFacturas(IdFactura=factura)
-                orden.save()
-                return response
-
-            else:
-                # codigoqr
+            condicion=0
+            if condicion == 0:
                 qr = qrcode.QRCode(
-                    version=5,
+                    version=6,
                     error_correction=qrcode.constants.ERROR_CORRECT_L,
-                    box_size=3,
+                    box_size=4,
                     border=0,
                 )
                 qr.add_data(noaporte)
@@ -2271,95 +2167,84 @@ class DescargarFactura(LoginRequiredMixin, View):
                 wb = openpyxl.load_workbook('static/ModeloFactura/002-0-230723.xlsx')
                 ws = wb.active
                 img = openpyxl.drawing.image.Image('static/ModeloFactura/output.png')
-                ws.add_image(img, 'd25')
+                ws.add_image(img, 'B16')
                 if int(facturasvencidas) >= 1:
                     imagen = openpyxl.drawing.image.Image('static/ModeloFactura/corte1.png')
-                    ws.add_image(imagen, 'O14')
+                    ws.add_image(imagen, 'AV26')
                 else:
                     pass
                 # factura matricula estado
-                ws['A17'] = noaporte
-                ws['A20'] = idmatricula
-                ws['A23'] = estado
+                ws['A11'] = noaporte
+                ws['O12'] = idmatricula
+                ws['A14'] = estado
                 # suscriptor
-                ws['O5'] = str(idestadocuenta)
-                ws['U5'] = nombrecompleto
-                ws['Y7'] = sector
-                ws['AJ7'] = casa
-                ws['AO7'] = piso
-                ws['V7'] = diametro
-                ws['O7'] = 'No aplica'
-                ws['AM5'] = estrato
-                ws['AY5'] = tipoinstalacion
-                ws['AQ5'] = tipodepredio
-                ws['AZ3'] = estadoservicio
-                ws['AJ5'] = ciclo
-                ws['BH4'] = cantpredios
+                ws['Y12'] = nombrecompleto
+                ws['O6'] = sector + ' Cs ' + casa + ' Ps ' + piso
+                ws['AN9'] = diametro
+                ws['AG6'] = estrato
+                ws['AK6'] = tipoinstalacion
+                ws['AG9'] = tipodepredio
+                ws['AH4'] = estadoservicio
                 # Periodo facturado
-                ws['A33'] = periodofacturado
+                ws['A26'] = periodofacturado
                 # ultimo pago
                 consultarpago = Pagos.objects.filter(IdVivienda=matricula).exists()
                 if consultarpago is True:
                     filtropagos = Pagos.objects.filter(IdVivienda=matricula).order_by("-IdPago")[:1]
                     consultarp = Pagos.objects.get(IdPago=filtropagos)
-                    ws['AR21'] = consultarp.IdPago
-                    ws['AW21'] = consultarp.FechaPago
-                    ws['BD21'] = int(consultarp.ValorPago)
+                    ws['Z17'] = consultarp.IdPago
+                    ws['AE17'] = consultarp.FechaPago
+                    ws['AL17'] = int(consultarp.ValorPago)
                 else:
                     mensaje = "No Registra"
-                    ws['AR21'] = mensaje
-                    ws['AW21'] = mensaje
-                    ws['BD21'] = mensaje
+                    ws['Z17'] = mensaje
+                    ws['AE17'] = mensaje
+                    ws['AL17'] = mensaje
 
                 # Periodo facturado
                 if int(aporteporconsumo) > 0:
-                    ws['O11'] = 'Aportes'
-                    ws['AB11'] = int(aporteporconsumo)
-                    ws['AG11'] = facturasvencidas
-                    ws['AK11'] = int(aporteporconsumo)
+                    ws['AR19'] = 'Aportes - < 20M3'
+                    ws['BJ19'] = facturasvencidas
+                    ws['BM19'] = int(aporteporconsumo)
 
                 if int(suspencion) > 0:
-                    ws['o12'] = 'Orden de suspensión'
-                    ws['AB12'] = suspencion
-                    ws['AG12'] = ''
-                    ws['AK12'] = suspencion
+                    ws['AR21'] = 'Aporte por suspensión'
+                    ws['BM21'] = suspencion
 
                 if int(reconexion) > 0:
-                    ws['O13'] = 'Orden de reconexón'
-                    ws['AB13'] = reconexion
-                    ws['AG13'] = ''
-                    ws['AK13'] = reconexion
+                    ws['AR22'] = 'Orden de reconexón'
+                    ws['BM22'] = reconexion
 
                 if int(cuotamatricula) > 0:
                     cobromatri = CobroMatricula.objects.get(IdVivienda=matricula)
                     saldo = cobromatri.ValorPendiente
                     cuotasp = cobromatri.CuotasPendientes
-                    ws['O14'] = 'Derecho de conexión'
-                    ws['AB14'] = int(saldo)
-                    ws['AG14'] = cuotasp
-                    ws['AK14'] = int(cuotamatricula)
+                    ws['AR23'] = 'Derecho de conexión'
+                    ws['BF23'] = int(saldo)
+                    ws['BJ23'] = cuotasp
+                    ws['BM23'] = int(cuotamatricula)
 
                 # total concepto de acueducto
-                ws['AK17'] = int(Total)
+                ws['BM26'] = int(Total)
                 # facturas vencidas
-                ws['BJ20'] = facturasvencidas
+                ws['O16'] = facturasvencidas
 
                 # fechas de procedimiento
-                ws['A38'] = FechaExpe
-                ws['A40'] = FechaLimite
+                ws['A31'] = FechaExpe
+                ws['A33'] = FechaLimite
 
                 if int(facturasvencidas) >= 1:
                     fechalimite = FechaLimite + timedelta(days=8)
-                    ws['A40'] = 'Inmediato'
-                    ws['A42'] = fechalimite
+                    ws['A33'] = 'Inmediato'
+                    ws['A35'] = fechalimite
                 else:
-                    ws['A40'] = FechaLimite
+                    ws['A33'] = FechaLimite
 
                 # total a pagar condional 0
                 if int(Total) <= 0:
-                    ws['A46'] = 0
+                    ws['A39'] = 0
                 else:
-                    ws['A46'] = int(Total)
+                    ws['A39'] = int(Total)
 
                 ws.title = IdFactura
                 archivo_predios = str(IdFactura) + ".xlsx"
@@ -4688,6 +4573,38 @@ class VerConsumo(LoginRequiredMixin, View):
             if tipousuario is True:
                 return render(request, self.template_name, {'medidor': medidor.IdMedidor, 'estado':medidor.Estado,'estado2': asignado.Estado,
                                                             'matricula': matricula, 'consumos': consumos})
+            else:
+                messages.add_message(request, messages.ERROR, 'Su usuario no tiene los permisos de acceso a esta '
+                                                              'seccion')
+                return HttpResponseRedirect(reverse('usuarios:inicio'))
+
+        except ObjectDoesNotExist:
+            return render(request, "pages-404.html")
+
+class GenerarConceptos(LoginRequiredMixin, View):
+    login_url = '/'
+    template_name = 'usuarios/consumosuscriptor.html'
+
+    def get(self, request):
+        try:
+
+            usuario = Usuario.objects.get(usuid=request.user.pk)
+            tipousuario = True
+            vivienda = Vivienda.objects.all()
+            estados = EstadoCuenta.objects.filter(Estado='Operativo')|EstadoCuenta.objects.filter(Estado='Suspendido')
+
+            if tipousuario is True:
+                for i in estados:
+                    if i.Valor <=0:
+                        concepto = Conceptos(Tipo='Aporte fijo',Observacion='Marzo',Estado='Facturado',Valor=i.Valor,IdVivienda=i.IdVivienda)
+                        concepto.save()
+
+                    else:
+                        concepto = Conceptos(Tipo='Aporte fijo', Observacion='Marzo', Estado='Sin facturar', Valor=i.Valor, IdVivienda=i.IdVivienda)
+                        concepto.save()
+
+                messages.add_message(request, messages.INFO, 'La operacion se realizo correctamente')
+                return HttpResponseRedirect(reverse('usuarios:inicio'))
             else:
                 messages.add_message(request, messages.ERROR, 'Su usuario no tiene los permisos de acceso a esta '
                                                               'seccion')
