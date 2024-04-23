@@ -3,8 +3,7 @@ from SAAL.models import Usuario, ValorMatricula
 from SAAL.models import Acueducto
 from SAAL.models import Propietario
 from SAAL.models import Vivienda
-from SAAL.models import NovedadVivienda
-from SAAL.models import Ciclo, DescargaFacturas
+from SAAL.models import Ciclo
 from SAAL.models import Factura
 from SAAL.models import EstadoCuenta, Pagos
 from SAAL.models import Tarifa, Pqrs
@@ -14,7 +13,6 @@ from SAAL.models import Poblacion, SolicitudGastos, Permisos, RespuestasPqrs
 admin.site.register(Acueducto)
 admin.site.register(Propietario)
 admin.site.register(Vivienda)
-admin.site.register(NovedadVivienda)
 admin.site.register(Ciclo)
 admin.site.register(Factura)
 admin.site.register(EstadoCuenta)
@@ -29,4 +27,3 @@ admin.site.register(RespuestasPqrs)
 admin.site.register(Pagos)
 admin.site.register(CobroMatricula)
 admin.site.register(Usuario)
-admin.site.register(DescargaFacturas)

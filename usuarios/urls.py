@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from usuarios.views import Inicio, Busquedas, CobroRecargo, ControlPresupuestal, VerFactura, PagarMatricula
-from usuarios.views import ImprimirSoporteP, PagarRyS, AnularPago, AsignarCargo, Bloque, VerCredito
+from usuarios.views import ImprimirSoporteP, AnularPago, AsignarCargo, Bloque, VerCredito
 from usuarios.views import ListaViviendas, ListaPropietarios, ReportePdfPagos, Creditos, RegistroCredito
 from usuarios.views import RegistroProveedor, Consumo,AsignarMedidor, RegistrarConsumo
 from usuarios.views import PazSalvo, CertificadoGral, Matriculas
@@ -10,7 +10,7 @@ from usuarios.views import EliminarPermisos, ReporteCiclo, Mapa, EliminarPoblaci
 from usuarios.views import VisualizarPropietario, CambioEstado, Estadoscuenta, AgregarUsuarios, RegistroCostoM
 from usuarios.views import RegistroTarifa,ReporteGastos, ListasGastos
 from usuarios.views import Suspenciones, VerOrdenSuspencion, VerOrdenReconexion, CambioTitular
-from usuarios.views import CierreFinanciero, VerConsumo, GenerarConceptos
+from usuarios.views import CierreFinanciero, VerConsumo, GenerarConceptos, GeneradorConceptos, FacturadorConceptos
 from usuarios.views import ReportesCiclo, CambiosMasivos, CambioEstadoFacturas, GenerarGasto
 from usuarios.views import GeneradorFacturas, DesactivarUsuarios, AnularFactura, PagoParcial
 from usuarios.views import DescargarFactura, DescargaMasivaFacturas, VisualizarVivienda, BuscarSolicitud
@@ -84,7 +84,6 @@ urlpatterns = [
     url(r'^imprimirpago/(?P<IdPago>\w+)', ImprimirSoporteP.as_view(), name='imprimirpago'),
     url(r'^pazysalvo/(?P<matricula>\w+)', PazSalvo.as_view(), name='pazysalvo'),
     url(r'^certificadogral', CertificadoGral.as_view(), name='certificadogral'),
-    url(r'^pagarrys', PagarRyS.as_view(), name='pagarrys'),
     url(r'^cobrorecargo', CobroRecargo.as_view(), name='cobrorecargo'),
     url(r'^anularpago', AnularPago.as_view(), name='anularpago'),
     url(r'^asignarcargo/(?P<matricula>\w+)', AsignarCargo.as_view(), name='asignarcargo'),
@@ -100,5 +99,5 @@ urlpatterns = [
     url(r'^asignarmedidor/(?P<IdMedidor>\w+)', AsignarMedidor.as_view(), name='asignarmedidor'),
     url(r'^registrarconsumo', RegistrarConsumo.as_view(), name='registrarconsumo'),
     url(r'^verconsumo/(?P<matricula>\w+)', VerConsumo.as_view(), name='verconsumo'),
-    url(r'^generarconceptos/', GenerarConceptos.as_view(), name='generarconceptos'),
+    url(r'^generarconceptos/', FacturadorConceptos.as_view(), name='generarconceptos'),
 ]

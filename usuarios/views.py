@@ -5,11 +5,11 @@ from django.db import connection
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic.base import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from SAAL.models import Usuario, Tarifa, CobroOrdenes, Credito, AsignacionBloque, PagoOrdenes, NovedadesRetiro
-from SAAL.models import OrdenesSuspencion, OrdenesReconexion, Poblacion, Factura, Ciclo, EstadoCuenta, NovedadVivienda
-from SAAL.models import Vivienda, SolicitudGastos, Propietario, NovedadesSistema, Medidores, Pqrs, RespuestasPqrs
-from SAAL.models import NovedadesGenerales, CobroMatricula, Permisos, Pagos, Cierres, Acueducto, ValorMatricula
-from SAAL.models import DescargaFacturas, Proveedor,Asignacion, Consumos, Conceptos
+from SAAL.models import Usuario, Tarifa, Credito, AsignacionBloque, Novedades
+from SAAL.models import OrdenesSuspencion, OrdenesReconexion, Poblacion, Factura, Ciclo, EstadoCuenta
+from SAAL.models import Vivienda, SolicitudGastos, Propietario, Medidores, Pqrs, RespuestasPqrs
+from SAAL.models import CobroMatricula, Permisos, Pagos, Cierres, Acueducto, ValorMatricula
+from SAAL.models import Proveedor,Asignacion, Consumos, Conceptos
 from SAAL.forms import FormAgregarGasto, FormRegistroPqrs, RegistroUsuario, RegistroUsuario2, RegistroVivienda
 from SAAL.forms import AcueductoAForm, PermisosForm, CobroMatriculaForm, CostoMForm, FormRespuestaPqrs,FormAsignarMedidor
 from SAAL.forms import RegistroPropietario, TarifasForm, ModificaPropietario, FormRegistroCredito, FormRegistroProveedor
@@ -138,7 +138,7 @@ class Inicio(LoginRequiredMixin, View):
             tipousuario = datos.TipoUsuario
             acueducto = Acueducto.objects.get(IdAcueducto=dr.pk)
             nombreacueducto = acueducto.Nombre
-            novedades = NovedadesSistema.objects.all().order_by("-IdNovedad")[:3]
+            novedades = Novedades.objects.all().order_by("-IdNovedad")[:3]
             # mensualidades:
             fechaexp = (datetime.today())
             ciclo = fechaexp.month
@@ -485,7 +485,6 @@ class VisualizarVivienda(LoginRequiredMixin, View):
             vivienda = Vivienda.objects.get(IdVivienda=idvivienda)
             viviendainfo = Vivienda.objects.filter(IdVivienda=idvivienda)
             estados = EstadoCuenta.objects.filter(IdVivienda=idvivienda)
-            pagosrys = PagoOrdenes.objects.filter(IdVivienda=idvivienda)
             cobromatricula = CobroMatricula.objects.filter(IdVivienda=idvivienda, Estado=ESTCOBRO)
             pagos = Pagos.objects.filter(IdVivienda=idvivienda)
             contpagos = Pagos.objects.filter(IdVivienda=idvivienda).count()
@@ -493,7 +492,6 @@ class VisualizarVivienda(LoginRequiredMixin, View):
             fecha = datetime.today()
             verificarestado = EstadoCuenta.objects.get(IdVivienda=idvivienda)
             idestado = verificarestado.IdEstadoCuenta
-            ordenesrs = CobroOrdenes.objects.filter(IdEstadoCuenta=idestado)
             resultado = verificarestado.Valor
             facturas = Factura.objects.filter(IdEstadoCuenta=idestado).order_by("-IdFactura")
             nofacturas = Factura.objects.filter(IdEstadoCuenta=idestado).count()
@@ -501,35 +499,19 @@ class VisualizarVivienda(LoginRequiredMixin, View):
             vafacemi = Factura.objects.filter(IdEstadoCuenta=idestado, Estado=FE).exists()
             matriculas = CobroMatricula.objects.filter(IdVivienda=idvivienda)
             matriculas2 = CobroMatricula.objects.filter(IdVivienda=idvivienda).exists()
-            novedades = NovedadVivienda.objects.filter(IdVivienda=idvivienda)
             reconexion = OrdenesReconexion.objects.filter(IdEstadoCuenta=idestado).order_by("-IdOrden")
             suspenciones = OrdenesSuspencion.objects.filter(IdEstadoCuenta=idestado).order_by("-IdOrden")
             contsus = OrdenesSuspencion.objects.filter(IdEstadoCuenta=idestado).count()
             contre = OrdenesReconexion.objects.filter(IdEstadoCuenta=idestado).count()
-            contor = PagoOrdenes.objects.filter(IdVivienda=idvivienda).count()
             filtrosuspenciones = OrdenesSuspencion.objects.filter(IdEstadoCuenta=idestado, Estado='Pendiente').exists()
-            ordenessuspencion = CobroOrdenes.objects.filter(IdEstadoCuenta=idestado, Estado=ESTADO1,
-                                                            TipoOrden='Cobro por suspencion')
-            ordenesreconexion = CobroOrdenes.objects.filter(IdEstadoCuenta=idestado, Estado=ESTADO1,
-                                                            TipoOrden='Cobro por reconexión')
             validarcobro = CobroMatricula.objects.filter(IdVivienda=idvivienda, Estado=ESTCOBRO)
-            validarretiro = NovedadesRetiro.objects.filter(IdVivienda=idvivienda).exists()
-            novretiro = NovedadesRetiro.objects.filter(IdVivienda=idvivienda)
+            validarretiro = Novedades.objects.filter(matricula=idvivienda, TipoNovedad='Retiro').exists()
+            novretiro = Novedades.objects.filter(matricula=idvivienda, TipoNovedad='Retiro')
             reparaciones = 0
             matri = 0
             for i in validarcobro:
                 valor = i.Cuota
                 matri += int(valor)
-
-            cor = 0
-            for i in ordenesreconexion:
-                valor = i.Valor
-                cor += int(valor)
-
-            cos = 0
-            for i in ordenessuspencion:
-                valor = i.Valor
-                cos += int(valor)
 
             lista = []
             for k in facturas:
@@ -640,17 +622,17 @@ class VisualizarVivienda(LoginRequiredMixin, View):
             asignado = Asignacion.objects.filter(IdVivienda=idvivienda, Estado='Operativo').exists()
 
             return render(request, self.template_name, {
-                'noors': contor, 'nore': contre, 'nosus': contsus, 'pagado': pagado, 'nofac': nofacturas, 'asignado': asignado,
+                'nore': contre, 'nosus': contsus, 'pagado': pagado, 'nofac': nofacturas, 'asignado': asignado,
                 'lista': lista, 'facturas': facturas, 'cobromatricula': cobromatricula, 'suspenciones': suspenciones,
                 'reconexion': reconexion, 'facturasemi': facturasemi, 'matriculas': matriculas,
                 'direccion': vivienda.Direccion, 'casa': vivienda.NumeroCasa, 'piso': vivienda.Piso,
                 'matricula': vivienda.IdVivienda, 'tipo': vivienda.TipoInstalacion,
                 'estrato': vivienda.Estrato, 'tipop': vivienda.InfoInstalacion, 'estado': vivienda.EstadoServicio,
                 'propietario': vivienda.IdPropietario, 'fichacatastral': vivienda.FichaCastral,
-                'estados': estados, 'pagos': pagos, 'fecha': fecha, 'novedades': novedades, 'ultimopago': filtropagos,
-                'vafacemi': vafacemi, 'viviendainfo': viviendainfo, 'ordenesrs': ordenesrs, 'pagosrys': pagosrys,
-                'reconexion2': cor, 'suspenciones2': cos, 'aportes': resultado, 'cobromatricula1': matri,
-                'repaciones': reparaciones, 'total': resultado + cor + cos + matri + reparaciones,
+                'estados': estados, 'pagos': pagos, 'fecha': fecha, 'ultimopago': filtropagos,
+                'vafacemi': vafacemi, 'viviendainfo': viviendainfo,
+                'aportes': resultado, 'cobromatricula1': matri,
+                'repaciones': reparaciones,
                 'filtro': filtrosuspenciones, 'contpagos': contpagos, 'vmatri': matriculas2,'novedadr': validarretiro,
                 'novretiro':novretiro,'seis': int(seis),'useis': useis,'cinco': cinco,'ucinco':ucinco, 'cuatro':cuatro,'ucuatro':ucuatro,
                 'tres': tres, 'utres': utres, 'dos': dos, 'udos':udos, 'uno': uno, 'uuno':uuno
@@ -1149,13 +1131,8 @@ class ControlPresupuestal(LoginRequiredMixin, View):
             new_date = datetime(ano1, ciclo, 1, 1, 00, 00, 00000)
             new_date2 = datetime(ano1, ciclo, 30, 23, 59, 59, 00000)
             pagos2 = Pagos.objects.filter(FechaPago__gte=new_date, FechaPago__lte=new_date2).all()
-            pagosrys = PagoOrdenes.objects.filter(FechaPago__gte=new_date, FechaPago__lte=new_date2).all()
             gastosaprobados = SolicitudGastos.objects.filter(Fecha__gte=new_date, Fecha__lte=new_date2,
                                                              Estado=ESTADO2).all()
-            rys = 0
-            for i in pagosrys:
-                valor = int(i.Valor)
-                rys += valor
 
             gasto4 = 0
             for i in gastosaprobados:
@@ -1820,20 +1797,7 @@ class GeneradorFacturas(LoginRequiredMixin, View):
                         estadoc = EstadoCuenta.objects.get(IdEstadoCuenta=i.pk)
                         consumo = estadoc.Valor
                         idestadocuenta = estadoc.IdEstadoCuenta
-                        # consulta cobro suspencion
-                        ordensuspencion = CobroOrdenes.objects.filter(IdEstadoCuenta=idestadocuenta, Estado='Pendiente',
-                                                                      TipoOrden='Cobro por suspencion')
-                        valorsuspencion = 0
-                        for K in ordensuspencion:
-                            valor = K.Valor
-                            valorsuspencion += int(valor)
-                        # consulta cobro rexonecion
-                        cobroreconexion = CobroOrdenes.objects.filter(IdEstadoCuenta=idestadocuenta, Estado=ESTADO1,
-                                                                      TipoOrden='Cobro por reconexión')
-                        valorreconexion = 0
-                        for d in cobroreconexion:
-                            valor = d.Valor
-                            valorreconexion += int(valor)
+
                         # consulta cuota matricula
                         idvivienda = estadoc.IdVivienda
                         verificacion = CobroMatricula.objects.filter(IdVivienda=idvivienda, Estado='Pendiente')
@@ -1850,11 +1814,11 @@ class GeneradorFacturas(LoginRequiredMixin, View):
                                 vencidas += 1
 
                         # total valor factura
-                        totalfactura = int(cuotamatricula) + int(valorreconexion) + int(valorsuspencion) + int(consumo)
+                        totalfactura = int(cuotamatricula) + int(consumo)
                         factura = Factura(Matricula=idvivienda, Estado='Emitida', IdEstadoCuenta=estadoc,
                                           periodofacturado=mes, aporteporconsumo=consumo,
-                                          cuotamatricula=cuotamatricula, reconexion=valorreconexion,
-                                          suspencion=valorsuspencion, TotalConsumo=consumo,
+                                          cuotamatricula=cuotamatricula, reconexion=0,
+                                          suspencion=0, TotalConsumo=consumo,
                                           facturasvencidas=vencidas, FechaExpe=fechaexp, FechaLimite=fechalimite,
                                           IdCiclo=ciclos, Total=totalfactura)
                         factura.save()
@@ -2026,7 +1990,7 @@ class VerOrdenSuspencion(LoginRequiredMixin, View):
             orden = OrdenesSuspencion.objects.filter(IdOrden=IdOrden).exists()
             otra = OrdenesSuspencion.objects.get(IdOrden=IdOrden)
             idestadocuenta = otra.IdEstadoCuenta
-            descripcion = 'Cobro por suspención'
+            descripcion = 'Suspención'
             estado = ESTADO1
             s = (datetime.today())
             if orden is True:
@@ -2043,9 +2007,9 @@ class VerOrdenSuspencion(LoginRequiredMixin, View):
                 vivienda = Vivienda.objects.get(IdVivienda=idvivienda.pk)
                 vivienda.EstadoServicio = E2
                 vivienda.save()
-                cobroorden = CobroOrdenes(IdEstadoCuenta=idestadocuenta, Estado=estado, Valor=valorsuspencion,
-                                          IdOrdenT=idorden, TipoOrden=descripcion)
-                cobroorden.save()
+                concepto = Conceptos(Tipo=descripcion, Observacion='OTS: '+idorden, Estado='Sin facturar',
+                                     Valor=valorsuspencion, IdVivienda=idvivienda.pk)
+                concepto.save()
                 messages.add_message(request, messages.INFO, 'La orden se cerro correctamente')
                 return HttpResponseRedirect(reverse('usuarios:suspenciones'))
 
@@ -2252,8 +2216,6 @@ class DescargarFactura(LoginRequiredMixin, View):
                 content = "attachment; filename = {0}".format(archivo_predios)
                 response['Content-Disposition'] = content
                 wb.save(response)
-                orden = DescargaFacturas(IdFactura=factura)
-                orden.save()
                 return response
 
         except ObjectDoesNotExist:
@@ -2291,7 +2253,7 @@ class VerOrdenReconexion(LoginRequiredMixin, View):
             tarifa = Tarifa.objects.get(IdTarifa=idtarifa)
             valorreconexion = tarifa.TarifaReconexion
             estado = ESTADO1
-            descripcion = 'Cobro por reconexión'
+            descripcion = 'Reconexion'
             otra = OrdenesReconexion.objects.get(IdOrden=IdOrden)
             idestadocuenta = otra.IdEstadoCuenta
             orden = OrdenesReconexion.objects.filter(IdOrden=IdOrden).exists()
@@ -2305,15 +2267,15 @@ class VerOrdenReconexion(LoginRequiredMixin, View):
                 ordensuspencion.save()
                 estadocuent = ordensuspencion.IdEstadoCuenta
                 estadoscuenta = EstadoCuenta.objects.get(IdEstadoCuenta=estadocuent.pk)
-                estadoscuenta.Estado = EC
+                estadoscuenta.Estado = E1
                 estadoscuenta.save()
                 idvivienda = estadoscuenta.IdVivienda
                 vivienda = Vivienda.objects.get(IdVivienda=idvivienda.pk)
                 vivienda.EstadoServicio = E1
                 vivienda.save()
-                cobroorden = CobroOrdenes(IdEstadoCuenta=idestadocuenta, Estado=estado, Valor=valorreconexion,
-                                          IdOrdenT=idorden, TipoOrden=descripcion)
-                cobroorden.save()
+                concepto = Conceptos(Tipo=descripcion, Observacion='OTS: ' + idorden, Estado='Sin facturar',
+                                     Valor=valorreconexion, IdVivienda=idvivienda.pk)
+                concepto.save()
                 messages.add_message(request, messages.INFO,
                                      'La orden se cerro correctamente y el predio '
                                      'cambio de estado suspendido a operativo')
@@ -2387,11 +2349,9 @@ class DescargaMasivaFacturas(LoginRequiredMixin, View):
         try:
             total = Factura.objects.filter(Estado='Emitida').count()
             facturas = Factura.objects.filter(Estado=EF).order_by('IdFactura')
-            descarga = DescargaFacturas.objects.all()
             return render(request, self.template_name, {
                 'facturas': facturas,
                 'total': total,
-                'descargas': descarga
             })
 
         except ObjectDoesNotExist:
@@ -2761,10 +2721,10 @@ class CambioTitular(LoginRequiredMixin, View):
                     vivienda.IdPropietario = propie
                     vivienda.save()
                     tiponovedad = 'Cambio titular'
-                    descripcion = 'se cambia titular de la matricula' + str(IdVivienda) + ' de ' + str(
+                    descripcion = 'se cambia titular de la matricula ' + str(IdVivienda) + ' de ' + str(
                         propie2) + ' por ' + str(propie) + ' por solicitud del interesado '
-                    novedad = NovedadesGenerales(Descripcion=descripcion, TipoNovedad=tiponovedad, usuario=usuario,
-                                                 matricula=str(vivienda.pk))
+                    novedad = Novedades(Descripcion=descripcion, TipoNovedad=tiponovedad, usuario=usuario,
+                                                 matricula=vivienda)
                     novedad.save()
                     ver = self.predio()
                     messages.add_message(request, messages.INFO, 'Se modifica el titular correctamente')
@@ -3847,91 +3807,6 @@ class CertificadoGral(LoginRequiredMixin, View):
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
 
-
-class ImprimirSoRyS(LoginRequiredMixin, View):
-    login_url = '/'
-
-    def get(self, request, IdOrden):
-        try:
-            orden = PagoOrdenes.objects.get(IdOrden=IdOrden)
-            cobro = CobroOrdenes.objects.get(IdOrden=IdOrden)
-            tipoorden = cobro.TipoOrden
-            fecha = orden.FechaPago
-            valorpago = orden.Valor
-            referencia1 = orden.IdVivienda
-            respuesta = True
-            if respuesta is True:
-                messages.add_message(request, messages.INFO, 'El pago registro correctamente')
-                return HttpResponseRedirect(reverse('usuarios:inicio'))
-            else:
-                messages.add_message(request, messages.INFO, 'No se pudo imprimri correctamente el soporte')
-                return HttpResponseRedirect(reverse('usuarios:inicio'))
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
-
-
-class PagarRyS(LoginRequiredMixin, View):
-    login_url = '/'
-    template_name = 'usuarios/pagarorden.html'
-    imprimirtiquet = ImprimirSoRyS
-
-    def get(self, request):
-        try:
-            usuario = Usuario.objects.get(usuid=request.user.pk)
-            idorden = request.GET.get("orden")
-            cobroordenes = CobroOrdenes.objects.get(IdOrden=idorden)
-            ordenes = CobroOrdenes.objects.filter(IdOrden=idorden)
-            verificacion = CobroOrdenes.objects.filter(IdOrden=idorden, Estado=FP).exists()
-            idestadocuenta = EstadoCuenta.objects.get(IdEstadoCuenta=cobroordenes.IdEstadoCuenta.pk)
-            vivienda = Vivienda.objects.get(IdVivienda=idestadocuenta.IdVivienda.pk)
-            matricula = vivienda.IdVivienda
-            sector = vivienda.Direccion
-            casa = vivienda.NumeroCasa
-            piso = vivienda.Piso
-            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AccessVFac').exists()
-            if tipousuario is True:
-                return render(request, self.template_name,
-                              {'orden': idorden, 'fecha': cobroordenes.Fecha, 'estado': cobroordenes.Estado,
-                               'ordenes': ordenes, 'total': cobroordenes.Valor,
-                               'sector': sector, 'casa': casa, 'piso': piso, 'matricula': matricula,
-                               'ciclo': cobroordenes.TipoOrden,
-                               'verificacion': verificacion})
-            else:
-                messages.add_message(request, messages.ERROR,
-                                     'Su usuario no tiene los permiso de acceso a esta seccion')
-                return HttpResponseRedirect(reverse('usuarios:inicio'))
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
-
-    def post(self, request):
-        try:
-            idorden = request.POST.get("orden", "")
-            valorpagar = request.POST.get("valorp", "")
-            orden = CobroOrdenes.objects.get(IdOrden=idorden)
-            idestadocuenta = EstadoCuenta.objects.get(IdEstadoCuenta=orden.IdEstadoCuenta.pk)
-            vivienda = Vivienda.objects.get(IdVivienda=idestadocuenta.IdVivienda.pk)
-            valor = orden.Valor
-            if valorpagar == valor:
-                orden = CobroOrdenes.objects.get(IdOrden=idorden)
-                orden.Estado = FP
-                orden.save()
-                ordensave = PagoOrdenes(Valor=valorpagar, IdVivienda=vivienda, IdOrden=orden)
-                ordensave.save()
-                tiquet2 = self.imprimirtiquet()
-                ejecutar = tiquet2.get(request, idorden)
-                return ejecutar
-
-            else:
-                messages.add_message(request, messages.ERROR,
-                                     'No fue posible registrar el pago, verifique el valor digitado')
-                return HttpResponseRedirect(reverse('usuarios:inicio'))
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
-
-
 class CobroRecargo(LoginRequiredMixin, View):
     login_url = '/'
     template_name = 'usuarios/cobrorecargo.html'
@@ -4095,7 +3970,7 @@ class VerFactura(LoginRequiredMixin, View):
                         orden.save()
                 descripcion = 'Se registra pago: ' + str(idpago) + ' Factura: ' + str(
                     numerofactura) + ' Matricula: ' + str(idvivienda) + ' Valor: $' + str(valorpagar)
-                novedad = NovedadesSistema(Descripcion=descripcion)
+                novedad = Novedades(Descripcion=descripcion, TipoNovedad='Pago', usuario=usuario, matricula=idvivienda)
                 novedad.save()
                 tiquet2 = self.imptiquet()
                 ejecutar = tiquet2.get(request, idpago)
@@ -4123,6 +3998,7 @@ class AnularPago(LoginRequiredMixin, View):
 
     def post(self, request):
         try:
+            usuario = Usuario.objects.get(usuid=request.user.pk)
             comprobante = request.POST.get("Numero")
             pago = Pagos.objects.get(IdPago=comprobante)
             matricula = pago.IdVivienda
@@ -4137,7 +4013,7 @@ class AnularPago(LoginRequiredMixin, View):
                 estadocuenta.save()
                 descripcion = 'Se anula pago no: ' + str(comprobante) + ' Matricula: ' + str(
                     pago.IdVivienda) + ' valor: ' + str(pago.ValorPago)
-                novedad = NovedadesSistema(Descripcion=descripcion)
+                novedad = Novedades(Descripcion=descripcion, matricula=matricula, usuario=usuario, TipoNovedad='Pago anulado')
                 novedad.save()
                 pago1 = Pagos.objects.get(IdPago=comprobante)
                 pago1.delete()
@@ -4449,16 +4325,14 @@ class ReporteRetiro(LoginRequiredMixin, View):
 
     def post(self, request, matricula):
         try:
+            usuarios = Usuario.objects.get(usuid=request.user.pk)
             Descripcion = request.POST.get("descripcion")
             usuario =0
             if usuario == 0:
                 vivienda = Vivienda.objects.get(IdVivienda=matricula)
-                registrarnovedad = NovedadesRetiro(IdVivienda=vivienda,Descripcion=Descripcion)
+                registrarnovedad = Novedades(IdVivienda=vivienda,Descripcion=Descripcion, TipoNovedad='Retiro',usuario=usuarios)
                 vivienda.EstadoServicio = 'Retirado'
                 vivienda.save()
-                estadodecuenta = EstadoCuenta.objects.get(IdVivienda=vivienda)
-                estadodecuenta.Estado='Retirado'
-                estadodecuenta.save()
                 registrarnovedad.save()
                 messages.add_message(request, messages.INFO, 'La novedad se registro correctamente')
                 return HttpResponseRedirect(reverse('usuarios:inicio'))
@@ -4605,6 +4479,103 @@ class GenerarConceptos(LoginRequiredMixin, View):
 
                 messages.add_message(request, messages.INFO, 'La operacion se realizo correctamente')
                 return HttpResponseRedirect(reverse('usuarios:inicio'))
+            else:
+                messages.add_message(request, messages.ERROR, 'Su usuario no tiene los permisos de acceso a esta '
+                                                              'seccion')
+                return HttpResponseRedirect(reverse('usuarios:inicio'))
+
+        except ObjectDoesNotExist:
+            return render(request, "pages-404.html")
+
+class GeneradorConceptos(LoginRequiredMixin, View):
+    login_url = '/'
+    template_name = 'usuarios/consumosuscriptor.html'
+
+    def get(self, request):
+        try:
+
+            usuario = Usuario.objects.get(usuid=request.user.pk)
+            acueducto = Acueducto.objects.get(IdAcueducto=usuario.IdAcueducto)
+            idtarifa = acueducto.IdTarifa
+            tarifa = Tarifa.objects.get(IdTarifa=idtarifa.pk)
+            aportefijo = tarifa.Valor
+            m3 = tarifa.m3
+            valormetro = tarifa.valormetro
+            fechaexp = (datetime.today())
+            mes1 = fechaexp.month
+            ciclos = Ciclo.objects.get(IdCiclo=mes1)
+            mes = ciclos.Nombre
+            ano = fechaexp.year
+            tipousuario = True
+            viviendas = Vivienda.objects.all()
+            consumos = Consumos.objects.filter(mes=mes)
+            matriculas = CobroMatricula.objects.filter(Estado='Pendiente')
+            if tipousuario is True:
+                for i in viviendas:
+                    if i.EstadoServicio == 'Operativo':
+                        vivienda = Vivienda.objects.get(IdVivienda=i.IdVivienda)
+                        concepto = Conceptos(Tipo='Aporte fijo', Observacion=mes, Estado='Sin facturar',
+                                             Valor=aportefijo, IdVivienda=vivienda)
+                        concepto.save()
+
+                for i in consumos:
+                    if int(i.Consumo) > int(m3):
+                        resta = int(i.Consumo) - int(m3)
+                        resultado = int(valormetro) * resta
+                        concepto = Conceptos(Tipo='Consumo complementario', Observacion=mes + ' - Consumo m3: ' + str(resta),
+                                             Estado='Sin facturar', Valor=resultado, IdVivienda=i.IdVivienda)
+                        concepto.save()
+
+                for i in matriculas:
+                    if int(i.CuotasPendientes) >=2:
+                        editarcobro = CobroMatricula.objects.get(IdVivienda=i.IdVivienda)
+                        editarcobro.CuotasPendientes = int(i.CuotasPendientes) - 1
+                        editarcobro.ValorPendiente = int(i.ValorPendiente) - int(i.Cuota)
+                        editarcobro.save()
+                        concepto = Conceptos(Tipo='Aporte matricula', Observacion=mes + ' - Cuota No: ' + i.CuotasPendientes,
+                                             Estado='Sin facturar', Valor=i.Cuota, IdVivienda=i.IdVivienda)
+                        concepto.save()
+
+                    else:
+                        editarcobro = CobroMatricula.objects.get(IdVivienda=i.IdVivienda)
+                        editarcobro.CuotasPendientes = int(i.CuotasPendientes) - 1
+                        editarcobro.ValorPendiente = int(i.ValorPendiente) - int(i.Cuota)
+                        editarcobro.Estado = 'Pago'
+                        editarcobro.save()
+                        concepto = Conceptos(Tipo='Aporte matricula', Observacion=mes + ' - Cuota No: ' + i.CuotasPendientes,
+                                                 Estado='Sin facturar', Valor=i.Cuota, IdVivienda=i.IdVivienda)
+                        concepto.save()
+
+                messages.add_message(request, messages.INFO, 'La operacion se realizo correctamente')
+                return HttpResponseRedirect(reverse('usuarios:inicio'))
+
+            else:
+                messages.add_message(request, messages.ERROR, 'Su usuario no tiene los permisos de acceso a esta '
+                                                              'seccion')
+                return HttpResponseRedirect(reverse('usuarios:inicio'))
+
+        except ObjectDoesNotExist:
+            return render(request, "pages-404.html")
+
+class FacturadorConceptos(LoginRequiredMixin, View):
+    login_url = '/'
+    template_name = 'usuarios/consumosuscriptor.html'
+
+    def get(self, request):
+        try:
+            usuario = Usuario.objects.get(usuid=request.user.pk)
+            tipousuario = True
+            retiro = Novedades.objects.all()
+
+            if tipousuario is True:
+                for i in retiro:
+                    concepto = Novedades(Descripcion=i.Descripcion, TipoNovedad='Adicion', usuario=usuario,
+                                             matricula=i.IdVivienda)
+                    concepto.save()
+
+                messages.add_message(request, messages.INFO, 'La operacion se realizo correctamente')
+                return HttpResponseRedirect(reverse('usuarios:inicio'))
+
             else:
                 messages.add_message(request, messages.ERROR, 'Su usuario no tiene los permisos de acceso a esta '
                                                               'seccion')

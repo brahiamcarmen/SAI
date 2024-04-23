@@ -548,25 +548,6 @@ class OrdenesReconexion(models.Model):
         verbose_name_plural = "Ordenes de Reconexion"
         verbose_name = "Orden de Reconexion"
 
-
-class NovedadVivienda(models.Model):
-    IdNovedad = models.AutoField(primary_key=True)
-    TipoNovedad = models.CharField(max_length=100, null=False)
-    Descripcion = models.CharField(max_length=5000, null=False)
-    Valor = models.CharField(max_length=100, null=False)
-    usuid = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    IdVivienda = models.ForeignKey(Vivienda, on_delete=models.CASCADE)
-    Fecha = models.DateTimeField(auto_now_add=True)
-    EstadoCuenta = models.ForeignKey(EstadoCuenta, on_delete=models.CASCADE)
-    objects = models.Manager()
-    def __str__(self):
-        return "%s" % self.TipoNovedad
-
-    class Meta:
-        verbose_name_plural = "Lista de Novedades Viviendas"
-        verbose_name = "lista de Novedades"
-
-
 class Cierres(models.Model):
     IdCierre = models.AutoField(primary_key=True)
     Ingresos = models.CharField(max_length=100, null=False)
@@ -584,68 +565,6 @@ class Cierres(models.Model):
     class Meta:
         verbose_name_plural = "Lista de cierres mensuales"
         verbose_name = "Cierre mensual"
-
-
-class NovedadesGenerales(models.Model):
-    IdNovedad = models.AutoField(primary_key=True)
-    Descripcion = models.CharField(max_length=5000, null=False)
-    TipoNovedad = models.CharField(max_length=100, null=False)
-    Fecha = models.DateTimeField(auto_now_add=True)
-    usuario = models.CharField(max_length=30, null=False)
-    matricula = models.CharField(max_length=30, null=False)
-    objects = models.Manager()
-    def __str__(self):
-        return "%s %s" % (self.IdNovedad, self.TipoNovedad)
-
-    class Meta:
-        verbose_name_plural = "Novedades generales"
-        verbose_name = "Novedad general"
-
-
-class CobroOrdenes(models.Model):
-    IdOrden = models.AutoField(primary_key=True)
-    Fecha = models.DateTimeField(auto_now=True, null=False)
-    IdEstadoCuenta = models.ForeignKey(EstadoCuenta, on_delete=models.CASCADE)
-    Estado = models.CharField(max_length=30, null=False)
-    Valor = models.CharField(max_length=30, null=False)
-    IdOrdenT = models.CharField(max_length=30, null=False)
-    TipoOrden = models.CharField(max_length=30, null=False)
-    objects = models.Manager()
-    def __str__(self):
-        return "%s %s" % (self.IdOrden, self.TipoOrden)
-
-    class Meta:
-        verbose_name_plural = "Cobro ordenes SR"
-        verbose_name = "Cobro orden"
-
-
-class PagoOrdenes(models.Model):
-    IdPagoSR = models.AutoField(primary_key=True)
-    FechaPago = models.DateTimeField(auto_now=True, null=False)
-    Valor = models.CharField(max_length=30, null=False)
-    IdVivienda = models.ForeignKey(Vivienda, on_delete=models.CASCADE)
-    IdOrden = models.ForeignKey(CobroOrdenes, on_delete=models.CASCADE)
-    objects = models.Manager()
-    def __str__(self):
-        return "%s" % self.IdPagoSR
-
-    class Meta:
-        verbose_name_plural = "PagoOrdenes"
-        verbose_name = "Pago orden"
-
-
-class NovedadesSistema(models.Model):
-    IdNovedad = models.AutoField(primary_key=True)
-    Descripcion = models.CharField(max_length=150, null=False)
-    Fecha = models.DateTimeField(auto_now=True)
-    objects = models.Manager()
-    def __str__(self):
-        return "%s" % self.IdNovedad
-
-    class Meta:
-        verbose_name_plural = "Novedades"
-        verbose_name = "Novedad"
-
 
 class AsignacionBloque(models.Model):
     IdBloque = models.AutoField(primary_key=True)
@@ -687,32 +606,6 @@ class Credito(models.Model):
     class Meta:
         verbose_name_plural = "Creditos"
         verbose_name = "Credito"
-
-class DescargaFacturas(models.Model):
-    IdDescarga = models.AutoField(primary_key=True)
-    IdFactura = models.ForeignKey(Factura, on_delete=models.CASCADE)
-    Fecha = models.DateTimeField(auto_now_add=True, null=False)
-    objects = models.Manager()
-    def __str__(self):
-        return "%s" % self.IdDescarga
-
-    class Meta:
-        verbose_name_plural = "Descargas"
-        verbose_name = "Descarga"
-
-
-class NovedadesRetiro(models.Model):
-    IdNovedad = models.AutoField(primary_key=True)
-    IdVivienda = models.ForeignKey(Vivienda, on_delete=models.CASCADE)
-    Fecha = models.DateTimeField(auto_now_add=True, null=False)
-    Descripcion = models.CharField(max_length=1000, null=False)
-    objects = models.Manager()
-    def __str__(self):
-        return "%s" % self.IdNovedad
-
-    class Meta:
-        verbose_name_plural = "Novedades de retiro"
-        verbose_name = "Novedad de retiro"
 
 class Consumos(models.Model):
     IdRegistro = models.AutoField(primary_key=True)
@@ -772,3 +665,18 @@ class ConceptosFacturados(models.Model):
     class Meta:
         verbose_name_plural = "Conceptos de cobro"
         verbose_name = "Concepto de cobro"
+
+class Novedades(models.Model):
+    IdNovedad = models.AutoField(primary_key=True)
+    Descripcion = models.CharField(max_length=5000, null=False)
+    TipoNovedad = models.CharField(max_length=100, null=False)
+    Fecha = models.DateTimeField(auto_now_add=True)
+    usuario = models.CharField(max_length=30, null=False)
+    matricula = models.ForeignKey(Vivienda, on_delete=models.CASCADE)
+    objects = models.Manager()
+    def __str__(self):
+        return "%s %s" % (self.IdNovedad, self.TipoNovedad)
+
+    class Meta:
+        verbose_name_plural = "Novedades"
+        verbose_name = "Novedad"
