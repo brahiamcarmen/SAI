@@ -6,6 +6,7 @@
 {%block title %} <title>Modulo - VIP</title> {%endblock%}
 {% block content %}
 {% include 'usuarios/alerts.html' %}
+
 <div class="page-body">
   <div class="container-fluid">
     <div class="row">
@@ -29,136 +30,124 @@
                   </div>
                 </div>
               </div>
-              <div class="col-auto" style="margin-top: 0.5rem">
-                <div class="card card-sm">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="bg-green text-white avatar">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><line x1="9" y1="7" x2="10" y2="7" /><line x1="9" y1="13" x2="15" y2="13" /><line x1="13" y1="17" x2="15" y2="17" /></svg>
-                        </span>
-                      </div>
-                      <div class="col">
-                        <div class="font-weight-medium">
-                          {{nofac}}
-                        </div>
-                        <div class="text-muted">
-                          Facturas
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-auto" style="margin-top: 0.5rem">
-                <div class="card card-sm">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="bg-green text-white avatar">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><line x1="9" y1="7" x2="10" y2="7" /><line x1="9" y1="13" x2="15" y2="13" /><line x1="13" y1="17" x2="15" y2="17" /></svg>
-                        </span>
-                      </div>
-                      <div class="col">
-                        <div class="font-weight-medium">
-                         {{contpagos}}
-                        </div>
-                        <div class="text-muted">
-                          Pagos
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-auto" style="margin-top: 0.5rem">
-                                             <div class="card card-sm">
-                                            <div class="card-body">
-                                              <div class="row align-items-center">
-                                                <div class="col-auto">
-                                                  <span class="bg-green-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/currency-dollar -->
-                                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16.7 8a3 3 0 0 0 -2.7 -2h-4a3 3 0 0 0 0 6h4a3 3 0 0 1 0 6h-4a3 3 0 0 1 -2.7 -2" /><path d="M12 3v3m0 12v3" /></svg>
-                                                  </span>
-                                                </div>
-                                                <div class="col">
-                                                  <div class="font-weight-medium">
-                                                    ${{pagado|intcomma}}
-                                                    <span class="float-right font-weight-medium text-green">+0%</span>
-                                                  </div>
-                                                  <div class="text-muted">
-                                                    Total pagado
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                          </div>
+              <br>
+          <h3 class="subheader">Opciones disponibles</h3>
 
+          <div class="row">
+            <div class="col-md-12">
+               <a href="{% url 'usuarios:cambiotitular' matricula %}" class="btn btn-sm btn-indigo btn-pill w-100">Cambiar propietario</a>
+            </div>
+            <div class="col-md-12" style="margin-top: 0.5rem">
+               <a href="{% url 'usuarios:pagarmatricula' matricula %}" class="btn btn-sm btn-indigo btn-pill w-100">Pago de matricula</a>
+            </div>
+            <div class="col-md-12" style="margin-top: 0.5rem">
+               <a href="{% url 'usuarios:novedadretiro' matricula %}" class="btn btn-sm btn-indigo btn-pill w-100">Generar retiro</a>
+            </div>
+            <div class="col-md-12" style="margin-top: 0.5rem">
+               <a href="" data-bs-toggle="modal" data-bs-target="#facturas3" class="btn btn-sm btn-indigo btn-pill w-100">Facturas</a>
+            </div>
+            <div class="col-md-12" style="margin-top: 0.5rem">
+               <a href="" data-bs-toggle="modal" data-bs-target="#cargos" class="btn btn-sm btn-indigo btn-pill w-100">Cargo por conexión</a>
+            </div>
+            <div class="col-md-12" style="margin-top: 0.5rem">
+               <a href="" data-bs-toggle="modal" data-bs-target="#ordenest" class="btn btn-sm btn-indigo btn-pill w-100">Ordenes de trabajo</a>
+            </div>
+            {% if asignado is True %}
+            <div class="col-md-12" style="margin-top: 0.5rem">
+               <a href="{% url 'usuarios:verconsumo' matricula %} " class="btn btn-sm btn-indigo btn-pill w-100">Consumos</a>
+            </div>
+            {%endif%}
+
+          </div>
       </div>
-      <div class="col-md-8">
+      <div class="col-md-10">
         <div class="row">
-           <div class="col-md-9">
-            <div class="row">
-              <div class="col-md-12">
-              <h3 class="subheader">Informacion adicional</h3>
-                <div class="card">
+           <div class="col-md-12">
+                  <div class="card">
+                  <ul class="nav nav-tabs" data-bs-toggle="tabs">
+                    <li class="nav-item">
+                      <a href="#tabs-home-9" class="nav-link active" data-bs-toggle="tab"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="5 12 3 12 12 3 21 12 19 12" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
+                        Inicio</a>
+                    </li>
+                     <li class="nav-item">
+                      <a href="#facturas" class="nav-link" data-bs-toggle="tab"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="5 12 3 12 12 3 21 12 19 12" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
+                        Facturas</a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#ordenes" class="nav-link" data-bs-toggle="tab"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="5 12 3 12 12 3 21 12 19 12" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
+                        Ordenes</a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#tabs-profile-11" class="nav-link" data-bs-toggle="tab"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="5 12 3 12 12 3 21 12 19 12" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
+                        Consumos</a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#tabs-profile-9" class="nav-link" data-bs-toggle="tab"><!-- Download SVG icon from http://tabler-icons.io/i/user -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="7" r="4" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /></svg>
+                        Conceptos</a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#tabs-profile-10" class="nav-link" data-bs-toggle="tab"><!-- Download SVG icon from http://tabler-icons.io/i/user -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="7" r="4" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /></svg>
+                        Conceptos facturados</a>
+                    </li>
+                  </ul>
                   <div class="card-body">
-                    {% for vivienda in viviendainfo %}
-                    <div class="row">
-                      <div class="col-md-6">
-                        <dl class="row">
-                              <dt class="col-5">Sector:</dt>
-                              <dd class="col-7">{{ vivienda.Direccion}}</dd>
-                              <dt class="col-5">Casa:</dt>
-                              <dd class="col-7">{{ vivienda.NumeroCasa}}</dd>
-                              <dt class="col-5">Piso:</dt>
-                              <dd class="col-7">{{ vivienda.Piso}}</dd>
-                              <dt class="col-5">Cant predios:</dt>
-                              <dd class="col-7">{{vivienda.CantPredios}}</dd>
-                              <dt class="col-5">Ciclo:</dt>
-                              <dd class="col-7">{{vivienda.Ciclo}}</dd>
-                              <dt class="col-5">Estrato:</dt>
-                              <dd class="col-7">{{vivienda.Estrato}}</dd>
-                        </dl>
-                    </div>
-                    <div class="col-md-6">
-                      <dl class="row">
-                          <dt class="col-5">Acometida:</dt>
-                          <dd class="col-7">{{ vivienda.ProfAcometida }}</dd>
-                          <dt class="col-5">Habitantes:</dt>
-                          <dd class="col-7">{{ vivienda.CantHabitantes}}</dd>
-                          <dt class="col-5">Ficha catastral:</dt>
-                          <dd class="col-7">{{ vivienda.FichaCastral}}</dd>
-                          <dt class="col-5">Diametro:</dt>
-                          <dd class="col-7">{{ vivienda.Diametro}}</dd>
-                          <dt class="col-5">ID anterior:</dt>
-                          <dd class="col-7">{{vivienda.MatriculaAnt}}</dd>
-                      </dl>
-                    </div>
-                  </div>
-                  {% endfor %}
-                </div>
-              </div>
-              </div>
-              
-            </div>
-            <br>
-            <div class="row">
-              {% if asignado is True %}
-               <h3 class="subheader">Comportamiento del consumo - ULTIMOS 6 MESES</h3>
-              <div class="col-md-12">
+                    <div class="tab-content">
+                      <div class="tab-pane active show" id="tabs-home-9">
+                        <div>
+                          <div class="row">
+                            <div class="col-md-6">
+                              <div class="row">
+                              <h3 class="subheader">Informacion adicional</h3>
                               <div class="card">
-                  <div class="card-body">
-                    <div id="chart-tasks-overview"></div>
-                  </div>
-                </div>
-                </div>
-                {%endif%}
-            </div>
-           </div>
-           <div class="col-md-3">
-            <h3 class="subheader">Estado de cuenta</h3>
-                            <div class="row">
+                                <div class="card-body">
+                                  {% for vivienda in viviendainfo %}
+                                  <div class="row">
+                                    <div class="col-md-6">
+                                      <dl class="row">
+                                            <dt class="col-5">Sector:</dt>
+                                            <dd class="col-7">{{ vivienda.Direccion}}</dd>
+                                            <dt class="col-5">Casa:</dt>
+                                            <dd class="col-7">{{ vivienda.NumeroCasa}}</dd>
+                                            <dt class="col-5">Piso:</dt>
+                                            <dd class="col-7">{{ vivienda.Piso}}</dd>
+                                            <dt class="col-5">Cant predios:</dt>
+                                            <dd class="col-7">{{vivienda.CantPredios}}</dd>
+                                            <dt class="col-5">Ciclo:</dt>
+                                            <dd class="col-7">{{vivienda.Ciclo}}</dd>
+                                            <dt class="col-5">Estrato:</dt>
+                                            <dd class="col-7">{{vivienda.Estrato}}</dd>
+                                      </dl>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <dl class="row">
+                                        <dt class="col-5">Acometida:</dt>
+                                        <dd class="col-7">{{ vivienda.ProfAcometida }}</dd>
+                                        <dt class="col-5">Habitantes:</dt>
+                                        <dd class="col-7">{{ vivienda.CantHabitantes}}</dd>
+                                        <dt class="col-5">Ficha catastral:</dt>
+                                        <dd class="col-7">{{ vivienda.FichaCastral}}</dd>
+                                        <dt class="col-5">Diametro:</dt>
+                                        <dd class="col-7">{{ vivienda.Diametro}}</dd>
+                                        <dt class="col-5">ID anterior:</dt>
+                                        <dd class="col-7">{{vivienda.MatriculaAnt}}</dd>
+                                    </dl>
+                                  </div>
+                                </div>
+                                {% endfor %}
+                              </div>
+                            </div>
+                              </div>
+                              <br>
+                              <div class="row">
+                                <div class="col-md-6">
+                                            <h3 class="subheader">Estado de cuenta</h3>
+                                  <div class="row">
                                                         {% if filtro is True %}
                                                        <div class="card card-sm">
                                                           <div class="card-body">
@@ -221,54 +210,23 @@
                 <table class="table table-transparent table-responsive">
                                               <thead>
                                                 <tr>
-                                                  <th>Conceptos de cobro</th>
+                                                  <th>Estado de cuenta</th>
                                                   <th class="text-end" style="width: 1%">Valor</th>
                                                 </tr>
                                               </thead>
                                               <tr>
+                                                <tr>
                                                 <td>
-                                                  <p class="strong mb-1">Cargo fijo - Aportes</p>
+                                                  <p class="strong mb-1">Facturado</p>
                                                 </td>
                                                 <td class="text-end"> ${{ aportes|intcomma }}</td>
                                               </tr>
                                               <tr>
                                                 <tr>
                                                 <td>
-                                                  <p class="strong mb-1">Complementario</p>
+                                                  <p class="strong mb-1">Sin facturar</p>
                                                 </td>
-                                                <td class="text-end"> $0</td>
-                                              </tr>
-                                              <tr>
-                                                <td>
-                                                  <p class="strong mb-1">Matricula</p>
-                                                </td>
-                                                <td class="text-end"> ${{ cobromatricula1|intcomma }}</td>
-                                              </tr>
-                                              <tr>
-                                                <td>
-                                                  <p class="strong mb-1">Suspención</p>
-                                                </td>
-                                                <td class="text-end"> ${{ suspenciones2|intcomma }}</td>
-                                              </tr>
-                                              <tr>
-                                                <td>
-                                                  <p class="strong mb-1">Reconexión</p>
-                                                </td>
-                                                <td class="text-end"> ${{ reconexion2|intcomma }}</td>
-                                              </tr>
-                                              <tr>
-                                                 <tr>
-                                                <td>
-                                                  <p class="strong mb-1">Acuerdos de pago</p>
-                                                </td>
-                                                <td class="text-end"> $0</td>
-                                              </tr>
-                                              <tr>
-                                              <tr>
-                                                <td>
-                                                  <p class="strong mb-1">Otros</p>
-                                                </td>
-                                                <td class="text-end"> $0</td>
+                                                <td class="text-end"> ${{ aportes2|intcomma }}</td>
                                               </tr>
                                               <tr>
                                               <tr>
@@ -276,117 +234,311 @@
                                                 <td class="font-weight-bold text-end">${{total|intcomma}}</td>
                                               </tr>
                                             </table>
-                    </div>
-                  </div>
+                                        </div>
+                                      </div>
 
-              </div>
-           </div>
-        </div>
-  
-        
-      </div>
-      <div class="col-md-2">
-          <h3 class="subheader">Opciones disponibles</h3>
-          <div class="row">
-            <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:cambiotitular' matricula %}" class="btn btn-sm btn-indigo btn-pill w-100">Cambiar propietario</a>
-            </div>
-            <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:facturaindividual' matricula %}" class="btn btn-sm btn-indigo btn-pill w-100">Generar Factura</a>
-            </div>
-            <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:pagarmatricula' matricula %}" class="btn btn-sm btn-indigo btn-pill w-100">Pago de matricula</a>
-            </div>
-            <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:novedadretiro' matricula %}" class="btn btn-sm btn-indigo btn-pill w-100">Generar retiro</a>
-            </div>
-            <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="" data-bs-toggle="modal" data-bs-target="#facturas3" class="btn btn-sm btn-indigo btn-pill w-100">Facturas</a>
-            </div>
-            <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="" data-bs-toggle="modal" data-bs-target="#cargos" class="btn btn-sm btn-indigo btn-pill w-100">Estados de cuenta</a>
-            </div>
-            <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="" data-bs-toggle="modal" data-bs-target="#ordenest" class="btn btn-sm btn-indigo btn-pill w-100">Ordenes de trabajo</a>
-            </div>
-            {% if asignado is True %}
-            <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:verconsumo' matricula %} " class="btn btn-sm btn-indigo btn-pill w-100">Consumos</a>
-            </div>
-            {%endif%}
-            <div class="col-md-12" style="margin-top: 0.5rem">
-              <div class="col-md-12">
-                <a class="card card-link" href="{% url 'usuarios:pazysalvo' matricula %}">
+                                  </div>
+                            </div>
+                            <div class="col-md-6">
+                              <h3 class="subheader">Ultima factura</h3>
+                                {% for factura in facturasemi %}
+                                <a class="card card-link" href="{% url 'usuarios:descargarfactura' factura.IdFactura %}">
                                   <div class="card-body">
                                     <div class="row">
                                       <div class="col-auto">
-                                        <span class="bg-green-lt avatar">
-                                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 20h-6a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8" /><path d="M18 4v17" /><path d="M15 18l3 3l3 -3" /></svg>
-                                          </span>
+                                        <span class="avatar rounded">F</span>
                                       </div>
                                       <div class="col">
-                                        <div class="font-weight-medium">Paz y salvo</div>
-                                        <div class="text-muted">Descargar</div>
+                                        <div class="font-weight-medium">{{ factura.IdFactura }}</div>
+                                        <div class="text-muted">{{ factura.IdCiclo }}</div>
+                                      </div>
+                                      <div class="col">
+                                        {% if factura.Estado == "Vencida" %}
+                                            <span class="badge bg-warging-lt">Vencida</span>&nbsp;
+                                            {% elif factura.Estado == "Paga" %}
+                                             <span class="badge bg-success-lt">Paga</span>&nbsp;
+                                             {% elif factura.Estado == "Anulada" %}
+                                            <span class="badge bg-purple-lt">Anulada</span>&nbsp;
+                                            {% else %}
+                                            <span class="badge bg-info-lt">Emitida</span>
+                                            {% endif %}
                                       </div>
                                     </div>
                                   </div>
-                  </a>                
-                  </div>
-            </div>
-            <div class="col-md-12" style="margin-top: 0.5rem">
-              <h3 class="subheader">Ultima factura</h3>
-                {% for factura in facturasemi %}
-                <a class="card card-link" href="{% url 'usuarios:descargarfactura' factura.IdFactura %}">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-auto">
-                        <span class="avatar rounded">F</span>
+                                </a>
+                                {% endfor %}
+                                <br>
+                                <h3 class="subheader">Ultimo pago</h3>
+                                {%for filtropago in ultimopago %}
+                                  <a class="card card-link" href="{% url 'usuarios:imprimirpago' filtropago.IdPago %}">
+                                  <div class="card-body">
+                                    <div class="row">
+                                      <div class="col-auto">
+                                        <span class="avatar rounded">F</span>
+                                      </div>
+                                      <div class="col">
+                                        <div class="font-weight-medium">{{ filtropago.IdPago }}</div>
+                                        <div class="text-muted">{{filtropago.FechaPago}}</div>
+                                      </div>
+                                    </div>
+                                    <div class="row">
+                                      <div class="col">
+                                          <span class="badge bg-warging-lt">{{ filtropago.IdFactura }}</span>&nbsp;
+                                          <span class="badge bg-warging-lt">${{ filtropago.ValorPago|intcomma }}</span>&nbsp;
+                                      </div>
+                                    </div>
+                                  </div>
+                                </a>
+                                {% endfor %}
+                            </div>
+                              </div>
+
+                            </div>
+                            <div class="col-md-6">
+                              <div class="row">
+                                {% if asignado is True %}
+                                 <h3 class="subheader">Comportamiento del consumo - ULTIMOS 6 MESES</h3>
+                                <div class="col-md-12">
+                                                <div class="card">
+                                    <div class="card-body">
+                                      <div id="chart-tasks-overview"></div>
+                                    </div>
+                                  </div>
+                                  </div>
+                                  {%endif%}
+                              </div>
+                              <br>
+                            <div class="row">
+                              <h3 class="subheader">Estadisticas</h3>
+                               <div class="col-md-4">
+                                          <div class="card card-sm">
+                                            <div class="card-body">
+                                              <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                  <span class="bg-green text-white avatar">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><line x1="9" y1="7" x2="10" y2="7" /><line x1="9" y1="13" x2="15" y2="13" /><line x1="13" y1="17" x2="15" y2="17" /></svg>
+                                                  </span>
+                                                </div>
+                                                <div class="col">
+                                                  <div class="font-weight-medium">
+                                                    {{nofac}}
+                                                  </div>
+                                                  <div class="text-muted">
+                                                    Facturas
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                          <div class="card card-sm">
+                                            <div class="card-body">
+                                              <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                  <span class="bg-green text-white avatar">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><line x1="9" y1="7" x2="10" y2="7" /><line x1="9" y1="13" x2="15" y2="13" /><line x1="13" y1="17" x2="15" y2="17" /></svg>
+                                                  </span>
+                                                </div>
+                                                <div class="col">
+                                                  <div class="font-weight-medium">
+                                                   {{contpagos}}
+                                                  </div>
+                                                  <div class="text-muted">
+                                                    Pagos
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                             <div class="card card-sm">
+                                            <div class="card-body">
+                                              <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                  <span class="bg-green-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/currency-dollar -->
+                                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16.7 8a3 3 0 0 0 -2.7 -2h-4a3 3 0 0 0 0 6h4a3 3 0 0 1 0 6h-4a3 3 0 0 1 -2.7 -2" /><path d="M12 3v3m0 12v3" /></svg>
+                                                  </span>
+                                                </div>
+                                                <div class="col">
+                                                  <div class="font-weight-medium">
+                                                    ${{pagado|intcomma}}
+                                                    <span class="float-right font-weight-medium text-green">+0%</span>
+                                                  </div>
+                                                  <div class="text-muted">
+                                                    Total pagado
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          </div>
+                          </div>
+                            </div>
+                          </div>
+                          <br>
+
+                        </div>
                       </div>
-                      <div class="col">
-                        <div class="font-weight-medium">{{ factura.IdFactura }}</div>
-                        <div class="text-muted">{{ factura.IdCiclo }}</div>
+                      <div class="tab-pane" id="facturas">
+                        <div>
+                          
+                        </div>
                       </div>
-                      <div class="col">
-                        {% if factura.Estado == "Vencida" %}
-                            <span class="badge bg-warging-lt">Vencida</span>&nbsp;
-                            {% elif factura.Estado == "Paga" %}
-                             <span class="badge bg-success-lt">Paga</span>&nbsp;
-                             {% elif factura.Estado == "Anulada" %}
-                            <span class="badge bg-purple-lt">Anulada</span>&nbsp;
-                            {% else %}
-                            <span class="badge bg-info-lt">Emitida</span>
-                            {% endif %}
+                      <div class="tab-pane" id="ordenes">
+                        <div>
+                                                                      <div class="text-center table-responsive" style="height:30rem">
+                                              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                  <thead>
+                                                              <tr>
+                                                                  <th>No orden</th>
+                                                                  <th>Valor</th>
+                                                                  <th>Estado</th>
+                                                                  <th>Tipo de orden</th>
+                                                                  <th>Fecha expedicion</th>
+                                                                  <th>Fecha ejecucion</th>
+                                                              </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                      {% for ord in suspenciones %}
+                                                          <tr class="odd gradeX">
+                                                                      <td>{{ ord.IdOrden }}</td>
+                                                                      <td>${{ ord.Deuda|intcomma }}</td>
+                                                                      <td>{% if ord.Estado == "Pendiente" %}
+                                                                            <span class="badge bg-danger-lt">Pendiente</span>
+                                                                            {% elif ord.Estado == "Ejecutada" %}
+                                                                            <span class="badge bg-success-lt">Ejecutada</span>
+                                                                            {% else %}
+                                                                            <span class="badge bg-info-lt">Anulada</span>
+                                                                            {% endif %}</td>
+                                                                      <td>{{ ord.TipoNovedad }}</td>
+                                                                      <td>{{ ord.FechaExpe }}</td>
+                                                                      <td>{{ ord.FechaEjecucion }}</td>
+                                                          </tr>
+                                                      {% endfor %}
+                                                  </tbody>
+                                              </table>
+                                          </div>  
+                        </div>
+                      </div>
+                      <div class="tab-pane" id="tabs-profile-11">
+                        <div>
+                            <div class="text-center table-responsive" style="height:15rem">
+                                              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                  <thead>
+                                                              <tr>
+                                                                  <th>No registro</th>
+                                                                  <th>Medidor</th>
+                                                                  <th>Lectura actual</th>
+                                                                  <th>Lectura anterior</th>
+                                                                  <th>Consumo</th>
+                                                                  <th>Promedio</th>
+                                                                  <th>Observaciones</th>
+                                                                  <th>Dias consumo</th>
+                                                                  <th>Año</th>
+                                                                  <th>Mes</th>
+                                                                  <th>Fecha registro</th>
+                                                              </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                      {% for i in consumos %}
+                                                          <tr class="odd gradeX">
+                                                                      <td>{{ i.IdRegistro }}</td>
+                                                                      <td>{{ i.IdMedidor }}</td>
+                                                                      <td>{{ i.Lecturaactual }}</td>
+                                                                      <td>{{ i.Lecturaanterior }}</td>
+                                                                      <td>{{ i.Consumo }}</td>
+                                                                      <td>{{ i.promedio}}</td>
+                                                                      <td>{{ i.observaciones}}</td>
+                                                                      <td>{{ i.diasconsumo}}</td>
+                                                                      <td>{{ i.ano}}</td>
+                                                                      <td>{{ i.mes}}</td>
+                                                                      <td>{{ i.Fecha}}</td>
+                                                          </tr>
+                                                      {% endfor %}
+                                                  </tbody>
+                                              </table>
+                                          </div> 
+                        </div>
+                      </div>
+                      <div class="tab-pane" id="tabs-profile-9">
+
+                            <div class="text-center table-responsive" style="height:15rem">
+                                              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                  <thead>
+                                                              <tr>
+                                                                  <th>No registro</th>
+                                                                  <th>Tipo</th>
+                                                                  <th>Observacion</th>
+                                                                  <th>Estado</th>
+                                                                  <th>Fecha</th>
+                                                                  <th>Valor</th>
+                                                              </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                      {% for i in conceptos %}
+                                                          <tr class="odd gradeX">
+                                                                      <td>{{ i.IdRegistro }}</td>
+                                                                      <td>{{ i.Tipo }}</td>
+                                                                      <td>{{ i.Observacion }}</td>
+                                                                      <td>{{ i.Estado }}</td>
+                                                                      <td>{{ i.Fecha }}</td>
+                                                                      <td>${{ i.Valor|intcomma}}</td>
+                                                          </tr>
+                                                      {% endfor %}
+                                                  </tbody>
+                                              </table>
+                                          </div> 
+                      </div>
+                      <div class="tab-pane" id="tabs-profile-10">
+                        <div class="text-center table-responsive" style="height:15rem">
+                                              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                  <thead>
+                                                              <tr>
+                                                                  <th>No registro</th>
+                                                                  <th>Aporte Fijo</th>
+                                                                  <th>Complementario</th>
+                                                                  <th>Cuota matricula</th>
+                                                                  <th>Suspencion</th>
+                                                                  <th>Reconexion</th>
+                                                                  <th>Recargo</th>
+                                                                  <th>Acuerdo pago</th>
+                                                                  <th>Subsidio</th>
+                                                                  <th>Total</th>
+                                                                  <th>Fecha</th>
+                                                                  <th>Estado</th>
+                                                                  <th>Periodo</th>
+
+                                                              </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                      {% for i in conceptosfacturados %}
+                                                          <tr class="odd gradeX">
+                                                                      <td>{{ i.IdRegistro }}</td>
+                                                                      <td>${{ i.AporteFijo|intcomma }}</td>
+                                                                      <td>${{ i.Complementario|intcomma }}</td>
+                                                                      <td>${{ i.CuotaMatricula|intcomma }}</td>
+                                                                      <td>${{ i.Suspencion|intcomma }}</td>
+                                                                      <td>${{ i.Reconexion|intcomma }}</td>
+                                                                      <td>${{ i.Recargo|intcomma }}</td>
+                                                                      <td>${{ i.AcuerdoPago|intcomma}}</td>
+                                                                      <td>$-{{ i.Subsidio|intcomma }}</td>
+                                                                      <td>${{ i.Total|intcomma }}</td>
+                                                                      <td>{{ i.Fecha }}</td>
+                                                                      <td>{{ i.Estado }}</td>
+                                                                      <td>{{ i.Periodo }}</td>
+                                                          </tr>
+                                                      {% endfor %}
+                                                  </tbody>
+                                              </table>
+                                          </div> 
                       </div>
                     </div>
                   </div>
-                </a>
-                {% endfor %}
-                <br>
-                <h3 class="subheader">Ultimo pago</h3>
-                {%for filtropago in ultimopago %}
-                  <a class="card card-link" href="{% url 'usuarios:imprimirpago' filtropago.IdPago %}">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-auto">
-                        <span class="avatar rounded">F</span>
-                      </div>
-                      <div class="col">
-                        <div class="font-weight-medium">{{ filtropago.IdPago }}</div>
-                        <div class="text-muted">{{filtropago.FechaPago}}</div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col">
-                          <span class="badge bg-warging-lt">{{ filtropago.IdFactura }}</span>&nbsp;
-                          <span class="badge bg-warging-lt">${{ filtropago.ValorPago|intcomma }}</span>&nbsp;
-                      </div>
-                    </div>
-                  </div>
-                </a>
-                {% endfor %}
-                <br>
-            </div>
+                </div>
           </div>
+        </div>
       </div>
     </div>
     <br>
@@ -402,34 +554,6 @@
           <div class="modal-body">
             <div class="row">
                          <div class="col-md-12">
-            <div class="row">
-                           <h3 class="subheader">Estado de cuenta</h3>
-             <div class="card">
-                <div class="card-body">
-                    {% for estados in estados %}
-                    <dl class="row">
-                              <dt class="col-5">No cuenta:</dt>
-                              <dd class="col-7">{{ estados.IdEstadoCuenta }}</dd>
-                              <dt class="col-5">Descripción:</dt>
-                              <dd class="col-7">{{ estados.Descripcion }}</dd>
-                              <dt class="col-5">Estado:</dt>
-                              <dd class="col-7">
-                              {% if estados.Estado == "Operativo" %}
-                              <span class="badge bg-success-lt">Operativo</span>
-                              {% else %}
-                              {{estados.Estado}}
-                              {% endif %}
-                              </dd>
-                              <dt class="col-5">Saldo:</dt>
-                              <dd class="col-7">${{ estados.Valor|intcomma }}</dd>
-                              <dt class="col-5">Actualizacion:</dt>
-                              <dd class="col-7">{{estados.FechaActualizacion}}</dd>
-                    </dl>
-                    {% endfor %}
-                  </div>
-              </div>
-            </div>
-            <br>
             <div class="row">
              <h3 class="subheader">Cargo por conexion</h3>
              <div class="card">
@@ -591,40 +715,7 @@
                                         <div class="row">
                                             <div class="page-body">
                                                     <div class="row row-cards">
-                                            <div class="text-center table-responsive" style="height:15rem">
-                                              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                                  <thead>
-                                                              <tr>
-                                                                  <th>No orden</th>
-                                                                  <th>Valor</th>
-                                                                  <th>Estado</th>
-                                                                  <th>Generador</th>
-                                                                  <th>Fecha expedicion</th>
-                                                                  <th>Ejecutado</th>
-                                                                  <th>Fecha ejecucion</th>
-                                                              </tr>
-                                                  </thead>
-                                                  <tbody>
-                                                      {% for ord in suspenciones %}
-                                                          <tr class="odd gradeX">
-                                                                      <td>{{ ord.IdOrden }}</td>
-                                                                      <td>${{ ord.Deuda|intcomma }}</td>
-                                                                      <td>{% if ord.Estado == "Pendiente" %}
-                                                                            <span class="badge bg-danger-lt">Pendiente</span>
-                                                                            {% elif ord.Estado == "Ejecutada" %}
-                                                                            <span class="badge bg-success-lt">Ejecutada</span>
-                                                                            {% else %}
-                                                                            <span class="badge bg-info-lt">Anulada</span>
-                                                                            {% endif %}</td>
-                                                                      <td>{{ ord.UsuarioEjecuta }}</td>
-                                                                      <td>{{ ord.FechaExpe }}</td>
-                                                                      <td>{{ ord.Generado }}</td>
-                                                                      <td>{{ ord.FechaEjecucion }}</td>
-                                                          </tr>
-                                                      {% endfor %}
-                                                  </tbody>
-                                              </table>
-                                          </div>                           
+                         
                                                   </div>
                                                 </div>
                                         </div>

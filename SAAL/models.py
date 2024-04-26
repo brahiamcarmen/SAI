@@ -222,33 +222,6 @@ class EstadoCuenta(models.Model):
         verbose_name = "Estado de cuenta"
 
 
-class Factura(models.Model):
-    IdFactura = models.AutoField(primary_key=True)
-    Matricula = models.CharField(max_length=100, null=True)
-    Estado = models.CharField(max_length=100, null=False)
-    IdEstadoCuenta = models.ForeignKey(EstadoCuenta, on_delete=models.CASCADE)
-    direccionentrega = models.CharField(max_length=100, null=True)
-    periodofacturado = models.CharField(max_length=50, null=True)
-    aporteporconsumo = models.CharField(max_length=100, null=True)
-    cuotamatricula = models.CharField(max_length=100, null=True)
-    reconexion = models.CharField(max_length=100, null=True)
-    suspencion = models.CharField(max_length=100, null=True)
-    TotalConsumo = models.CharField(max_length=100, null=True)
-    facturasvencidas = models.CharField(max_length=100, null=True)
-    FechaExpe = models.DateTimeField(auto_now_add=True)
-    FechaLimite = models.DateTimeField(null=True)
-    IdCiclo = models.ForeignKey(Ciclo, on_delete=models.CASCADE)
-    OtrosCobros = models.CharField(max_length=100, null=False)
-    Total = models.CharField(max_length=100, null=False)
-    objects = models.Manager()
-    def __str__(self):
-        return "%s" % self.IdFactura
-
-    class Meta:
-        verbose_name_plural = "Lista de facturas"
-        verbose_name = "Generar factura"
-
-
 DOC_CHOICES10 = (
     ('No certificada', _(u"No certificada")),
     ('Certificada', _(u"Certificada"))
@@ -491,63 +464,6 @@ class RespuestasPqrs(models.Model):
         verbose_name_plural = "Respuestas"
         verbose_name = "Respuestas"
 
-
-class Pagos(models.Model):
-    IdPago = models.AutoField(primary_key=True)
-    FechaPago = models.DateTimeField(auto_now=True, null=False)
-    IdFactura = models.ForeignKey(Factura, on_delete=models.CASCADE)
-    Ano = models.CharField(max_length=4, null=False)
-    Descripcion = models.CharField(max_length=20, null=False)
-    ValorPago = models.CharField(max_length=10, null=False)
-    Efectivo = models.CharField(max_length=10, null=False)
-    Devuelta = models.CharField(max_length=10, null=False)
-    resta = models.CharField(max_length=10, null=True)
-    IdUsuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    IdVivienda = models.ForeignKey(Vivienda, on_delete=models.CASCADE)
-    objects = models.Manager()
-    def __str__(self):
-        return "%s" % self.IdPago
-
-    class Meta:
-        verbose_name_plural = "Pagos"
-        verbose_name = "Pago"
-
-
-class OrdenesSuspencion(models.Model):
-    IdOrden = models.AutoField(primary_key=True)
-    Deuda = models.CharField(max_length=10, null=False)
-    FechaExpe = models.DateTimeField(auto_now_add=True)
-    FechaEjecucion = models.DateTimeField(null=False)
-    Generado = models.CharField(max_length=60, null=False)
-    Estado = models.CharField(max_length=40, null=False)
-    UsuarioEjecuta = models.CharField(max_length=100, null=False)
-    IdEstadoCuenta = models.ForeignKey(EstadoCuenta, on_delete=models.CASCADE)
-    objects = models.Manager()
-    def __str__(self):
-        return "%s" % self.IdOrden
-
-    class Meta:
-        verbose_name_plural = "Ordenes de suspencion"
-        verbose_name = "Orden de suspencion"
-
-
-class OrdenesReconexion(models.Model):
-    IdOrden = models.AutoField(primary_key=True)
-    Deuda = models.CharField(max_length=10, null=False)
-    FechaExpe = models.DateTimeField(auto_now_add=True)
-    FechaEjecucion = models.DateTimeField(null=False)
-    Generado = models.CharField(max_length=20, null=False)
-    Estado = models.CharField(max_length=40, null=False)
-    UsuarioEjecuta = models.CharField(max_length=30, null=False)
-    IdEstadoCuenta = models.ForeignKey(EstadoCuenta, on_delete=models.CASCADE)
-    objects = models.Manager()
-    def __str__(self):
-        return "%s" % self.IdOrden
-
-    class Meta:
-        verbose_name_plural = "Ordenes de Reconexion"
-        verbose_name = "Orden de Reconexion"
-
 class Cierres(models.Model):
     IdCierre = models.AutoField(primary_key=True)
     Ingresos = models.CharField(max_length=100, null=False)
@@ -648,9 +564,11 @@ class Conceptos(models.Model):
 class ConceptosFacturados(models.Model):
     IdRegistro = models.AutoField(primary_key=True)
     AporteFijo = models.IntegerField(null=True)
+    Complementario = models.IntegerField(null=True)
     CuotaMatricula = models.IntegerField(null=True)
     Suspencion = models.IntegerField(null=True)
     Reconexion = models.IntegerField(null=True)
+    Recargo = models.IntegerField(null=True)
     AcuerdoPago = models.IntegerField(null=True)
     Subsidio = models.IntegerField(null=True)
     Fecha = models.DateTimeField(auto_now_add=True)
@@ -680,3 +598,58 @@ class Novedades(models.Model):
     class Meta:
         verbose_name_plural = "Novedades"
         verbose_name = "Novedad"
+
+class OrdenesTrabajo(models.Model):
+    IdOrden = models.AutoField(primary_key=True)
+    Deuda = models.CharField(max_length=10, null=False)
+    Estado = models.CharField(max_length=10, null=False)
+    TipoNovedad = models.CharField(max_length=100, null=False)
+    FechaExpe = models.DateTimeField(auto_now_add=True)
+    FechaEjecucion = models.DateTimeField(null=False)
+    usuario = models.CharField(max_length=30, null=False)
+    IdVivienda = models.ForeignKey(Vivienda, on_delete=models.CASCADE)
+    objects = models.Manager()
+    def __str__(self):
+        return "%s %s" % (self.IdOrden, self.TipoNovedad)
+
+    class Meta:
+        verbose_name_plural = "Novedades"
+        verbose_name = "Novedad"
+
+class Facturas(models.Model):
+    IdFactura = models.CharField(primary_key=True, max_length=10)
+    Estado = models.CharField(max_length=100, null=False)
+    IdVivienda = models.ForeignKey(Vivienda, on_delete=models.CASCADE,null=True)
+    periodofacturado = models.CharField(max_length=50, null=True)
+    facturasvencidas = models.CharField(max_length=100, null=True)
+    FechaLimite = models.CharField(max_length=100)
+    FechaExpe = models.DateTimeField(auto_now_add=True)
+    IdCiclo = models.ForeignKey(Ciclo, on_delete=models.CASCADE)
+    Total = models.CharField(max_length=100, null=False)
+    objects = models.Manager()
+    def __str__(self):
+        return "%s" % self.IdFactura
+
+    class Meta:
+        verbose_name_plural = "Lista de facturas"
+        verbose_name = "Generar factura"
+
+class Pagos(models.Model):
+    IdPago = models.AutoField(primary_key=True)
+    FechaPago = models.DateTimeField(auto_now=True, null=False)
+    IdFactura = models.ForeignKey(Facturas, on_delete=models.CASCADE)
+    Ano = models.CharField(max_length=4, null=False)
+    Descripcion = models.CharField(max_length=20, null=False)
+    ValorPago = models.CharField(max_length=10, null=False)
+    Efectivo = models.CharField(max_length=10, null=False)
+    Devuelta = models.CharField(max_length=10, null=False)
+    resta = models.CharField(max_length=10, null=True)
+    IdUsuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    IdVivienda = models.ForeignKey(Vivienda, on_delete=models.CASCADE)
+    objects = models.Manager()
+    def __str__(self):
+        return "%s" % self.IdPago
+
+    class Meta:
+        verbose_name_plural = "Pagos"
+        verbose_name = "Pago"

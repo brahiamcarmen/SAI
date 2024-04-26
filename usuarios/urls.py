@@ -10,14 +10,14 @@ from usuarios.views import EliminarPermisos, ReporteCiclo, Mapa, EliminarPoblaci
 from usuarios.views import VisualizarPropietario, CambioEstado, Estadoscuenta, AgregarUsuarios, RegistroCostoM
 from usuarios.views import RegistroTarifa,ReporteGastos, ListasGastos
 from usuarios.views import Suspenciones, VerOrdenSuspencion, VerOrdenReconexion, CambioTitular
-from usuarios.views import CierreFinanciero, VerConsumo, GenerarConceptos, GeneradorConceptos, FacturadorConceptos
-from usuarios.views import ReportesCiclo, CambiosMasivos, CambioEstadoFacturas, GenerarGasto
+from usuarios.views import CierreFinanciero, VerConsumo, GeneradorConceptos, FacturadorConceptos, Varias
+from usuarios.views import ReportesCiclo, CambiosMasivos, GenerarGasto
 from usuarios.views import GeneradorFacturas, DesactivarUsuarios, AnularFactura, PagoParcial
 from usuarios.views import DescargarFactura, DescargaMasivaFacturas, VisualizarVivienda, BuscarSolicitud
 from usuarios.views import Reconexiones, Perfil, ModificarAcueducto, ListaPqrs, RegistroPqr, VerPqr
-from usuarios.views import RespuestaPqrs, PanelAdmin, ReporteCierre, GenerarCobros
+from usuarios.views import RespuestaPqrs, PanelAdmin, ReporteCierre
 from usuarios.views import RegistroMedidor, ReporteCobroMatricula, AsignarPermisos
-from usuarios.views import RegistroPoblacion, CambiarContraUsuario, ListasOrdenes, GeneradorFacturasIndividual,ReporteRetiro
+from usuarios.views import RegistroPoblacion, CambiarContraUsuario, GeneradorFacturasIndividual,ReporteRetiro
 
 urlpatterns = [
     url(r'^inicio/', Inicio.as_view(), name='inicio'),
@@ -29,7 +29,6 @@ urlpatterns = [
     url(r'^modificarvivienda/(?P<idvivienda>\w+)', ModificarVivienda.as_view(), name='modificarvivienda'),
     url(r'^verpropiedario/(?P<idpropietario>\w+)', VisualizarPropietario.as_view(), name='verpropietario'),
     url(r'^estadoscuenta/', Estadoscuenta.as_view(), name='estadoscuenta'),
-    url(r'^anularfacturas/', CambioEstadoFacturas.as_view(), name='anularfacturas'),
     url(r'^reportecompleto/', ReporteCompleto.as_view(), name='reportecompleto'),
     url(r'^vervivienda/(?P<idvivienda>\w+)', VisualizarVivienda.as_view(), name='vervivienda'),
     url(r'^reporteciclo/', ReportesCiclo.as_view(), name='reporteciclo'),
@@ -50,11 +49,9 @@ urlpatterns = [
     url(r'^listapqrs/', ListaPqrs.as_view(), name='listapqrs'),
     url(r'^verpqr/(?P<idpqr>\w+)', VerPqr.as_view(), name='verpqr'),
     url(r'^generadorfacturas/', GeneradorFacturas.as_view(), name='generadorfacturas'),
-    url(r'^generarcobros/', GenerarCobros.as_view(), name='generarcobros'),
     url(r'^suspenciones/', Suspenciones.as_view(), name='suspenciones'),
     url(r'^anularfactura/', AnularFactura.as_view(), name='anularfactura'),
     url(r'^respuestapqr/(?P<idsolicitud>\w+)', RespuestaPqrs.as_view(), name='respuestapqr'),
-    url(r'^listasordenes/', ListasOrdenes.as_view(), name='listasordenes'),
     url(r'^verordensus/(?P<IdOrden>\w+)', VerOrdenSuspencion.as_view(), name='verordensus'),
     url(r'^verordenre/(?P<IdOrden>\w+)', VerOrdenReconexion.as_view(), name='verordenre'),
     url(r'^descargarfactura/(?P<IdFactura>\w+)', DescargarFactura.as_view(), name='descargarfactura'),
@@ -99,5 +96,6 @@ urlpatterns = [
     url(r'^asignarmedidor/(?P<IdMedidor>\w+)', AsignarMedidor.as_view(), name='asignarmedidor'),
     url(r'^registrarconsumo', RegistrarConsumo.as_view(), name='registrarconsumo'),
     url(r'^verconsumo/(?P<matricula>\w+)', VerConsumo.as_view(), name='verconsumo'),
-    url(r'^generarconceptos/', FacturadorConceptos.as_view(), name='generarconceptos'),
+    url(r'^crearconceptos', GeneradorConceptos.as_view(), name='crearconceptos'),
+    url(r'^generarconceptos/', Varias.as_view(), name='generarconceptos'),
 ]

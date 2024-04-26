@@ -24,10 +24,10 @@
                       </div>
                       <div class="col">
                         <div class="font-weight-medium">
-                          ${{contoperativos|intcomma}}
+                          ${{vapo|intcomma}}
                         </div>
                         <div class="text-muted">
-                          Operativos
+                          Cuentas por cobrar
                         </div>
                       </div>
                     </div>
@@ -257,16 +257,13 @@
           <h3 class="subheader">Opciones disponibles</h3>
           <div class="row">
             <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:anularfacturas' %}" class="btn btn-sm btn-indigo btn-pill w-100">Anular facturas/suspenciones</a>
+
             </div>
             <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:generarcobros' %}" class="btn btn-sm btn-indigo btn-pill w-100">Generar cobro de aportes</a>
+
             </div>
             <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:cobrorecargo' %}" class="btn btn-sm btn-indigo btn-pill w-100">Generar cobro de aportes mora</a>
-            </div>
-            <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:suspenciones' %}" class="btn btn-sm btn-indigo btn-pill w-100">Generar suspenciones</a>
+               <a href="{% url 'usuarios:crearconceptos' %}" class="btn btn-sm btn-indigo btn-pill w-100">Facturar conceptos</a>
             </div>
             <div class="col-md-12" style="margin-top: 0.5rem">
                <a href="{% url 'usuarios:generadorfacturas' %}" class="btn btn-sm btn-indigo btn-pill w-100">Generar facturacion</a>
