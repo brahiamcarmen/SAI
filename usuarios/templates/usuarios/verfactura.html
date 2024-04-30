@@ -1,5 +1,19 @@
 {% extends 'usuarios/base_usuario3.html' %}
 {% load static %}
+<style>
+    /* Estilos opcionales para hacer el div visible */
+    #miDiv {
+        display: none;
+        margin-top: 10px;
+        padding: 10px;
+        background-color: lightblue;
+    }
+    
+    /* Mostrar el div cuando la opción 1 está seleccionada */
+    #opcion1:checked ~ #miDiv {
+        display: block;
+    }
+</style>
 {% block styles %}
 {% load humanize %}
 {% endblock %}
@@ -11,7 +25,7 @@
 <div class="page-body">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-3">
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="card">
@@ -74,65 +88,69 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-9">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class=" md-0 card-title">Conceptos de cobro</h3>
+                        <h3 class=" md-0 card-title">Conceptos facturados</h3>
                     </div>
                     <div class="card-body">
                         <div class="row text-center">
-                            <table class="table table-borderless table-sm">
-                                  <thead class="thead-light table-bordered">
-                                    <tr>
-                                      <th  class="text-left" scope="col">Descripcion</th>
-                                      <th scope="col">Valor</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {% if aportes > 0 %}
-                                       <tr>
-                                          <td class="text-left">
-                                            Aportes por administracion
-                                          </td>
-                                          <td>${{aportes|intcomma}}</td>
-                                        </tr>
-                                    {% endif %}
-                                    {% if cuotam > 0 %}
-                                       <tr>
-                                          <td class="text-left">
-                                            Derecho de conexión
-                                          </td>
-                                          <td>${{cuotam|intcomma}}</td>
-                                        </tr>
-                                    {% endif %}
-                                    {% if suspencion > 0 %}
-                                       <tr>
-                                          <td class="text-left">
-                                            Orden de suspencion
-                                          </td>
-                                          <td>${{suspencion|intcomma}}</td>
-                                        </tr>
-                                    {% endif %}
-                                    {% if reconexion > 0 %}
-                                       <tr>
-                                          <td class="text-left">
-                                            Orden de reconexion
-                                          </td>
-                                          <td>${{cuotam|intcomma}}</td>
-                                        </tr>
-                                    {% endif %}
-                                  </tbody>
-                                </table>
+<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                  <thead>
+                                                              <tr>
+                                                                  <th>No registro</th>
+                                                                  <th>Aporte Fijo</th>
+                                                                  <th>Complementario</th>
+                                                                  <th>Cuota matricula</th>
+                                                                  <th>Suspencion</th>
+                                                                  <th>Reconexion</th>
+                                                                  <th>Recargo</th>
+                                                                  <th>Acuerdo pago</th>
+                                                                  <th>Subsidio</th>
+                                                                  <th>Otros cobros</th>
+                                                                  <th>Periodo</th>
+                                                                  <th>Estado</th>
+                                                                  <th>Total por periodo</th>
+
+                                                              </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                      {% for i in conceptos %}
+                                                            {% for j in conceptosfac %}
+                                                            {% if i.IdConcepto.pk == j.IdRegistro %}
+                                                              <tr class="odd gradeX">
+                                                                          <td>{{ j.IdRegistro }}</td>
+                                                                          <td>${{ j.AporteFijo|intcomma }}</td>
+                                                                          <td>${{ j.Complementario|intcomma }}</td>
+                                                                          <td>${{ j.CuotaMatricula|intcomma }}</td>
+                                                                          <td>${{ j.Suspencion|intcomma }}</td>
+                                                                          <td>${{ j.Reconexion|intcomma }}</td>
+                                                                          <td>${{ j.Recargo|intcomma }}</td>
+                                                                          <td>${{ j.AcuerdoPago|intcomma}}</td>
+                                                                          <td>$-{{ j.Subsidio|intcomma }}</td>
+                                                                          <td>${{ j.Otroscobros|intcomma }}</td>
+                                                                           <td>{{ j.Periodo }}</td>
+                                                                           <td>{{ j.Estado }}</td>
+                                                                          <td style="color:rgba(250, 0, 53); font-size: 1rem;">${{ j.Total|intcomma }}</td>
+                                                                         
+                                                              </tr>
+                                                              {% else %}
+                                                              <!-- pagos registrados por factura -->
+                                                              {% endif %}
+                                                          {% endfor %}
+                                                      {% endfor %}
+                                                  </tbody>
+                                              </table>
                         </div>
                     </div>
                     <div class="card mb-2">
                             <div class="card-body">
                                 <div class="">
                                     <div class="row">
-                                        <div class="col-sm-8">
+                                        <div class="col-sm-10">
                                             
                                         </div>
-                                        <div class="col-sm-4">
+                                        <div class="col-sm-2">
                                             Total a pagar: <p style="color:rgba(65,160,39); font-size: 1.5rem;n"><b>${{total|intcomma}}</b></p>
                                         </div>
                                     </div>
@@ -151,72 +169,86 @@
                     {% if anulada or paga or vencida == True %}
                     <p></p>
                     {%else%}
-                    <a href="#" style="width:100%; margin-top: 0.2rem;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-simple">Pagar
+                    <a href="#" style="width:100%; margin-top: 0.2rem;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#none">Pagar
                     </a>
                     {%endif%}
             </div>
         </div>        
     </div>
-
-    <div class="modal modal-blur fade" id="modal-simple" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+</div>
+    <div class="modal modal-blur fade" id="none" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
         <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Modulo de transacción</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
           <div class="modal-body">
-                <form method="post" enctype="multipart/form-data" oninput="resultado.value=parseInt(valor2.value)-parseInt(valor1.value)">
+            <div class="modal-title">Desea confirmar la transaccion?</div>
+            <div>                <form method="post" enctype="multipart/form-data" oninput="resultado.value=parseInt(valor2.value)-parseInt(valor1.value)">
                     {% csrf_token %}
                     <div class="row text-center">
-                        <div class="col-12 col-sm-6">
+                        <div class="col-12">
                             <div class="row">
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label class="form-label">Numero factura</label>
-                                            <p style="color:rgba(65,160,39); font-size: 1.3rem;n">{{factura}}</p>
-                                        <input type ="hidden" name="factura" value="{{factura}}" class="form-control">
+                                <div class="form-group">
+                                    <label class="form-label">Numero factura</label>
+                                    <p style="color:rgba(65,160,39); font-size: 1.3rem;">{{factura}}</p>
+                                    <input type ="hidden" name="factura" value="{{factura}}" class="form-control">
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-4">
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group text-center">
+                                        <label class="form-label">Tipo de pago</label>
+                                        <select class="form-select" id="select" name="tipo">
+                                            <option value="Total">Total</option>
+                                            <option value="Parcial">Parcial</option>
+                                      </select>
                                     </div>
                                 </div>
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label class="form-label">Total Facturado</label>
-                                        <p style="font-size: 1.3rem">${{total|intcomma}}</p>
-                                    </div> 
+                                <div class="col-4">
+                                    
                                 </div>
                             </div>
-                             
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="row">
-                                <label class="form-label">Total a pagar</label>
-                                <input type="number" name="valorp" id="valor1" value="0" class="form-control">
-                            </div>
                             <br>
                             <div class="row">
-                                <label class="form-label">Efectivo</label>
-                                <input type="number"name="efectivo" id="valor2" value="0" class="form-control">
-                            </div>
-                            <br>
-                            <div  class="row">
-                                <label class="form-label">Cambio</label><br>
-                                <output style="color:rgba(227, 24, 24); font-size: 1.3rem;" name="resultado" for="valor1 valor2">$</output>         
+                                <div id="miDiv" style="display:none;">
+                                <label class="form-label">Ingrese el concepto que desea pagar</label>
+                                <input type="text" class="form-control" name="concepto" placeholder="Requerido..." >
+                                </div>
                             </div>
                         </div>
                     </div>
                     <br>
                     <div class="row">
                         <div class="col-sm-12">
-                            <button class="btn btn-primary" style="width:100%" type="submit">Confirmar transacción</button>
+                            <button class="btn btn-danger" style="width:100%" type="submit">Confirmar transacción</button>
                         </div>  
                     </div>
-                    </form>
+                    </form></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-indigo me-auto" data-bs-dismiss="modal" style="width:100%">Cancel</button>
           </div>
         </div>
       </div>
     </div>
-</div>
-
 {% endblock %}
 {% block scripts %}
+<script>
+    // Obtener referencia al select y al div
+    var select = document.getElementById("select");
+    var div = document.getElementById("miDiv");
+
+    // Agregar un listener para el evento change del select
+    select.addEventListener("change", function() {
+        // Verificar si se ha seleccionado una opción válida
+        if (select.value !== "") {
+            // Mostrar el div
+            div.style.display = "block";
+        } else {
+            // Ocultar el div si no se ha seleccionado ninguna opción válida
+            div.style.display = "none";
+        }
+    });
+</script>
 {% endblock %}

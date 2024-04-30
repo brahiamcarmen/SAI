@@ -59,6 +59,8 @@
                                             <span class="badge bg-success-lt">{{ viviendas.EstadoServicio }}</span>
                                             {% elif viviendas.EstadoServicio == 'Suspendido' %}
                                             <span class="badge bg-warning-lt">{{ viviendas.EstadoServicio }}</span>
+                                            {% elif viviendas.EstadoServicio == 'Mantenimiento' %}
+                                            <span class="badge bg-info-lt">{{ viviendas.EstadoServicio }}</span>
 
                                             {%else%}
                                             <span class="badge bg-danger-lt">Retirado</span>

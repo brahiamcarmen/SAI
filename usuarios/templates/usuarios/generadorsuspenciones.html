@@ -152,12 +152,6 @@
       <div class="col-md-2">
           <h3 class="subheader">Reportes disponibles</h3>
           <div class="row">
-            <div class="col-md-12">
-               <form method="post" role="form" enctype="multipart/form-data" onsubmit="return valida(this)">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-sm btn-indigo btn-pill w-100" style="float: right; margin: 0.1rem;">Generar ordenes</button>
-                </form>
-            </div>
             <div class="col-md-12" style="margin-top: 0.5rem">
                <a href="{% url 'usuarios:reportesuspenciones' %}" class="btn btn-sm btn-indigo btn-pill w-100">Descargar OT
                     </a>

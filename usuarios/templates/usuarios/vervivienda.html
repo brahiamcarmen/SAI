@@ -49,9 +49,6 @@
             <div class="col-md-12" style="margin-top: 0.5rem">
                <a href="" data-bs-toggle="modal" data-bs-target="#cargos" class="btn btn-sm btn-indigo btn-pill w-100">Cargo por conexión</a>
             </div>
-            <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="" data-bs-toggle="modal" data-bs-target="#ordenest" class="btn btn-sm btn-indigo btn-pill w-100">Ordenes de trabajo</a>
-            </div>
             {% if asignado is True %}
             <div class="col-md-12" style="margin-top: 0.5rem">
                <a href="{% url 'usuarios:verconsumo' matricula %} " class="btn btn-sm btn-indigo btn-pill w-100">Consumos</a>
@@ -492,7 +489,7 @@
                                           </div> 
                       </div>
                       <div class="tab-pane" id="tabs-profile-10">
-                        <div class="text-center table-responsive" style="height:15rem">
+                        <div class="text-center table-responsive" style="height:35rem">
                                               <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                                   <thead>
                                                               <tr>
@@ -505,6 +502,7 @@
                                                                   <th>Recargo</th>
                                                                   <th>Acuerdo pago</th>
                                                                   <th>Subsidio</th>
+                                                                  <th>Otros cobros</th>
                                                                   <th>Total</th>
                                                                   <th>Fecha</th>
                                                                   <th>Estado</th>
@@ -524,6 +522,7 @@
                                                                       <td>${{ i.Recargo|intcomma }}</td>
                                                                       <td>${{ i.AcuerdoPago|intcomma}}</td>
                                                                       <td>$-{{ i.Subsidio|intcomma }}</td>
+                                                                      <td>${{ i.Otroscobros|intcomma }}</td>
                                                                       <td>${{ i.Total|intcomma }}</td>
                                                                       <td>{{ i.Fecha }}</td>
                                                                       <td>{{ i.Estado }}</td>
@@ -680,139 +679,6 @@
         </div>
       </div>
     </div>
-
-        <div class="modal modal-blur fade" id="ordenest" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-full-width modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Full width modal</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-                        <div class="tab-pane" id="suspenciones">
-                            <div class="row">
-                                  <ul class="nav nav-tabs" data-bs-toggle="tabs">
-                                    <li class="nav-item">
-                                      <a href="#tabs-home-9" class="nav-link active" data-bs-toggle="tab">
-                                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="6" cy="7" r="3" /><circle cx="6" cy="17" r="3" /><line x1="8.6" y1="8.6" x2="19" y2="19" /><line x1="8.6" y1="15.4" x2="19" y2="5" /></svg>
-                                        Suspenciones - {{nosus}}</a>
-                                    </li>
-                                    <li class="nav-item">
-                                      <a href="#tabs-profile-9" class="nav-link" data-bs-toggle="tab">
-                                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.95 11a8 8 0 1 0 -.5 4m.5 5v-5h-5" /></svg>
-                                        Reconexión - {{nore}}</a>
-                                    </li>
-                                    <li class="nav-item">
-                                      <a href="#otros" class="nav-link" data-bs-toggle="tab">
-                                          <!-- Download SVG icon from http://tabler-icons.io/i/currency-dollar -->
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16.7 8a3 3 0 0 0 -2.7 -2h-4a3 3 0 0 0 0 6h4a3 3 0 0 1 0 6h-4a3 3 0 0 1 -2.7 -2" /><path d="M12 3v3m0 12v3" /></svg>
-                                          Cobro ordenes</a>
-                                    </li>
-                                  </ul>
-                                  <div class="card-body">
-                                    <div class="tab-content">
-                                      <div class="tab-pane active show" id="tabs-home-9">
-                                        <div class="row">
-                                            <div class="page-body">
-                                                    <div class="row row-cards">
-                         
-                                                  </div>
-                                                </div>
-                                        </div>
-                                      </div>
-                                      <div class="tab-pane" id="tabs-profile-9">
-                                        <div class="row">
-                                            <div class="page-body">
-                                                    <div class="row row-cards">
-                                                            <div class="text-center table-responsive" style="height:15rem">
-                                              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                                  <thead>
-                                                              <tr>
-                                                                  <th>No orden</th>
-                                                                  <th>Valor</th>
-                                                                  <th>Estado</th>
-                                                                  <th>Generador</th>
-                                                                  <th>Fecha expedicion</th>
-                                                                  <th>Ejecutado</th>
-                                                                  <th>Fecha ejecucion</th>
-                                                              </tr>
-                                                  </thead>
-                                                  <tbody>
-                                                      {% for ord in reconexion %}
-                                                          <tr class="odd gradeX">
-                                                                      <td>{{ ord.IdOrden }}</td>
-                                                                      <td>${{ ord.Deuda|intcomma }}</td>
-                                                                      <td>{% if ord.Estado == "Pendiente" %}
-                                                                            <span class="badge bg-danger-lt">Pendiente</span>
-                                                                            {% elif ord.Estado == "Ejecutada" %}
-                                                                            <span class="badge bg-success-lt">Ejecutada</span>
-                                                                            {% else %}
-                                                                            <span class="badge bg-info-lt">Anulada</span>
-                                                                            {% endif %}</td>
-                                                                      <td>{{ ord.UsuarioEjecuta }}</td>
-                                                                      <td>{{ ord.FechaExpe }}</td>
-                                                                      <td>{{ ord.Generado }}</td>
-                                                                      <td>{{ ord.FechaEjecucion }}</td>
-                                                          </tr>
-                                                      {% endfor %}
-                                                  </tbody>
-                                              </table>
-                                          </div>                             
-                                                  </div>
-                                                </div>
-                                        </div>
-                                      </div>
-                                      <div class="tab-pane" id="otros">
-                                          <div class="page-body">
-                                              <div class="row row-cards">
-                                              <div class="text-center table-responsive" style="height:15rem">
-                                              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                                  <thead>
-                                                              <tr>
-                                                                  <th>No orden</th>
-                                                                  <th>Orden de trabajo</th>
-                                                                  <th>Estado</th>
-                                                                  <th>Fecha expedicion</th>
-                                                                  <th>Tipo de orden</th>
-                                                                  <th>Valor</th>
-                                                              </tr>
-                                                  </thead>
-                                                  <tbody>
-                                                      {% for ord in ordenesrs %}
-                                                          <tr class="odd gradeX">
-                                                                      <td>{{ ord.IdOrden }}</td>
-                                                                      <td>{{ ord.IdOrdenT }}</td>
-                                                                      <td>{% if ord.Estado == "Paga" %}
-                                                                        <span class="badge bg-success-lt">Paga</span>
-                                                                        {% elif factura.Estado == "Anulada" %}
-                                                                        <span class="badge bg-warging-lt">Anulada</span>
-                                                                        {% else %}
-                                                                        <span class="badge bg-info-lt">Pendiente</span>
-                                                                        {% endif %}
-                                                                      </td>
-                                                                      <td>{{ ord.Fecha }}</td>
-                                                                      <td>{{ ord.TipoOrden }}</td>
-                                                                      <td>${{ ord.Valor|intcomma}}</td>
-                                                          </tr>
-                                                      {% endfor %}
-                                                  </tbody>
-                                              </table>
-                                          </div>                                  
-                                            </div>
-                                          </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                            </div> 
-                        </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn me-auto" data-bs-dismiss="modal">Cerrar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
 {% endblock %}
 {% block scripts %}
     <script>

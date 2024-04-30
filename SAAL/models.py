@@ -570,6 +570,7 @@ class ConceptosFacturados(models.Model):
     Reconexion = models.IntegerField(null=True)
     Recargo = models.IntegerField(null=True)
     AcuerdoPago = models.IntegerField(null=True)
+    Otroscobros = models.IntegerField(null=True)
     Subsidio = models.IntegerField(null=True)
     Fecha = models.DateTimeField(auto_now_add=True)
     Total = models.IntegerField(null=True)
@@ -617,12 +618,12 @@ class OrdenesTrabajo(models.Model):
         verbose_name = "Novedad"
 
 class Facturas(models.Model):
-    IdFactura = models.CharField(primary_key=True, max_length=10)
+    IdFactura = models.AutoField(primary_key=True)
     Estado = models.CharField(max_length=100, null=False)
     IdVivienda = models.ForeignKey(Vivienda, on_delete=models.CASCADE,null=True)
     periodofacturado = models.CharField(max_length=50, null=True)
     facturasvencidas = models.CharField(max_length=100, null=True)
-    FechaLimite = models.CharField(max_length=100)
+    FechaLimite = models.DateTimeField(auto_now=True)
     FechaExpe = models.DateTimeField(auto_now_add=True)
     IdCiclo = models.ForeignKey(Ciclo, on_delete=models.CASCADE)
     Total = models.CharField(max_length=100, null=False)
@@ -653,3 +654,41 @@ class Pagos(models.Model):
     class Meta:
         verbose_name_plural = "Pagos"
         verbose_name = "Pago"
+
+class FechasFacturacion(models.Model):
+    IdRegistro = models.CharField(max_length=5, primary_key=True)
+    Nombre = models.CharField(max_length=15)
+    FechaFacturacion = models.DateTimeField(null=False)
+    Ano = models.CharField(max_length=4)
+    Periodo = models.CharField(max_length=20)
+    objects = models.Manager()
+    def __str__(self):
+        return "%s" % self.Nombre
+
+    class Meta:
+        verbose_name_plural = "Lista de Ciclos"
+        verbose_name = "Listado de ciclos"
+
+class AcuerdosPago(models.Model):
+    IdAcuerdo = models.AutoField(primary_key=True)
+    Tipo = models.CharField(max_length=20, null=False)
+    Descripcion = models.CharField(max_length=250, null=False)
+    IdVivienda = models.ForeignKey(Vivienda, on_delete=models.CASCADE)
+    Estado = models.CharField(max_length=15, null=False)
+    Valor = models.IntegerField(null=True)
+    CantCuotas = models.CharField(max_length=10, null=False, choices=DOC_CHOICES12)
+    CuotasPendientes = models.CharField(max_length=10, null=False)
+    ValorPendiente = models.CharField(max_length=50, null=False)
+    Cuota = models.CharField(max_length=50, null=False)
+    FechaExpe = models.DateTimeField(auto_now_add=True)
+    objects = models.Manager()
+    def __str__(self):
+        return "%s %s" % (self.IdAcuerdo, self.Descripcion)
+
+class FacturasConceptos(models.Model):
+    IdRegistro = models.AutoField(primary_key=True)
+    IdFactura = models.ForeignKey(Facturas, on_delete=models.CASCADE)
+    IdConcepto = models.ForeignKey(ConceptosFacturados, on_delete=models.CASCADE)
+    objects = models.Manager()
+    def __str__(self):
+        return "%s" % (self.IdRegistro)
