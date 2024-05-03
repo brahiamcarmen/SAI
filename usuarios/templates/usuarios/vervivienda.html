@@ -38,13 +38,7 @@
                <a href="{% url 'usuarios:cambiotitular' matricula %}" class="btn btn-sm btn-indigo btn-pill w-100">Cambiar propietario</a>
             </div>
             <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:pagarmatricula' matricula %}" class="btn btn-sm btn-indigo btn-pill w-100">Pago de matricula</a>
-            </div>
-            <div class="col-md-12" style="margin-top: 0.5rem">
                <a href="{% url 'usuarios:novedadretiro' matricula %}" class="btn btn-sm btn-indigo btn-pill w-100">Generar retiro</a>
-            </div>
-            <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="" data-bs-toggle="modal" data-bs-target="#facturas3" class="btn btn-sm btn-indigo btn-pill w-100">Facturas</a>
             </div>
             <div class="col-md-12" style="margin-top: 0.5rem">
                <a href="" data-bs-toggle="modal" data-bs-target="#cargos" class="btn btn-sm btn-indigo btn-pill w-100">Cargo por conexión</a>
@@ -380,12 +374,70 @@
                       </div>
                       <div class="tab-pane" id="facturas">
                         <div>
-                          
+                                       <div class="text-center table-responsive" style="height:40rem ">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                                    <tr>
+                                        <th>No factura</th>
+                                        <th>Periodo</th>
+                                        <th>Estado</th>
+                                        <th>Vencidas</th>
+                                        <th>Fecha expedición</th>
+                                         <th>Total a pagar</th>
+                                         <th>Observaciones</th>
+                                    </tr>
+                        </thead>
+                        <tbody>
+                            {% for factura in facturas %}
+                                <tr class="odd gradeX">
+                                            <td><a href="{% url 'usuarios:descargarfactura' factura.IdFactura %}">{{ factura.IdFactura }}</a></td>
+                                            <td>{{ factura.IdCiclo }}</td>
+                                            <td>
+                                              {% if factura.Estado == "Vencida" %}
+                                                    <span class="badge bg-danger-lt">Vencida</span>
+                                                    {% elif factura.Estado == "Paga" %}
+                                                    <span class="badge bg-success-lt">Paga</span>
+                                                    {% elif factura.Estado == "Anulada" %}
+                                                    <span class="badge bg-warging-lt">Paga</span>
+                                                    {% else %}
+                                                    <span class="badge bg-info-lt">Emitida</span>
+                                                    {% endif %}
+                                            </td>
+                                            <td>{{ factura.facturasvencidas }}</td>
+                                           <td>{{ factura.FechaExpe }}</td>
+                                           <td>${{ factura.Total|intcomma }}</td>
+                                           <td>
+                                            {% for pago in pagos %}
+                                            {% if factura.IdFactura == pago.IdFactura.pk %}
+                                              <div class="dropdown">
+                                                  <button class="btn btn-sm btn-indigo btn-pill w-100 dropdown-toggle align-text-top" data-bs-toggle="dropdown">
+                                                    Pago
+                                                  </button>
+                                                  <div class="dropdown-menu dropdown-menu-end">
+                                                    <a class="dropdown-item" href="{% url 'usuarios:imprimirpago' pago.IdPago %}">
+                                                      {{ pago.IdPago }}
+                                                      <div class="row text-center">
+                                                      <dt class="col-12">Fecha de pago:</dt>
+                                                      <dd class="col-12">{{ pago.FechaPago }}</dd>
+                                                      <dt class="col-12">Valor pago:</dt>
+                                                      <dd class="col-12">{{ pago.ValorPago }}</dd>
+                                                      </div>
+                                                    </a>
+                                                  </div>
+                                                </div>
+                                              {% endif %}
+                                              {% endfor %}
+                                            </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
                         </div>
                       </div>
                       <div class="tab-pane" id="ordenes">
                         <div>
-                                                                      <div class="text-center table-responsive" style="height:30rem">
+                          <div class="text-center table-responsive" style="height:40rem">
                                               <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                                   <thead>
                                                               <tr>
@@ -395,6 +447,7 @@
                                                                   <th>Tipo de orden</th>
                                                                   <th>Fecha expedicion</th>
                                                                   <th>Fecha ejecucion</th>
+                                                                  <th>Opciones</th>
                                                               </tr>
                                                   </thead>
                                                   <tbody>
@@ -412,6 +465,8 @@
                                                                       <td>{{ ord.TipoNovedad }}</td>
                                                                       <td>{{ ord.FechaExpe }}</td>
                                                                       <td>{{ ord.FechaEjecucion }}</td>
+                                                                      <td><a class="btn btn-sm btn-indigo btn-pill w-100" href="{% url 'usuarios:verordensus' ord.IdOrden %}">
+                                                              Ver</a></td>
                                                           </tr>
                                                       {% endfor %}
                                                   </tbody>
@@ -603,75 +658,6 @@
 
            </div>
             </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn me-auto" data-bs-dismiss="modal">Cerrar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-        <div class="modal modal-blur fade" id="facturas3" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-full-width modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Facturas registradas</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-             <div class="text-center table-responsive" style="height:20rem ">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        <thead>
-                                    <tr>
-                                        <th>No factura</th>
-                                        <th>Periodo</th>
-                                        <th>Estado</th>
-                                        <th>Vencidas</th>
-                                        <th>Fecha expedición</th>
-                                         <th>Total a pagar</th>
-                                         <th>Observaciones</th>
-                                    </tr>
-                        </thead>
-                        <tbody>
-                            {% for factura in facturas %}
-                                <tr class="odd gradeX">
-                                            <td><a href="{% url 'usuarios:descargarfactura' factura.IdFactura %}">{{ factura.IdFactura }}</a></td>
-                                            <td>{{ factura.IdCiclo }}</td>
-                                            <td>
-                                              {% if factura.Estado == "Vencida" %}
-                                                    <span class="badge bg-danger-lt">Vencida</span>
-                                                    {% elif factura.Estado == "Paga" %}
-                                                    <span class="badge bg-success-lt">Paga</span>
-                                                    {% elif factura.Estado == "Anulada" %}
-                                                    <span class="badge bg-warging-lt">Paga</span>
-                                                    {% else %}
-                                                    <span class="badge bg-info-lt">Emitida</span>
-                                                    {% endif %}
-                                            </td>
-                                            <td>{{ factura.facturasvencidas }}</td>
-                                           <td>{{ factura.FechaExpe }}</td>
-                                           <td>${{ factura.Total|intcomma }}</td>
-                                           <td>
-                                            <div class="row">
-                                                {% for pago in pagos %}  
-                                                {% if factura.IdFactura == pago.IdFactura.pk %}
-                                                <dt class="col-2">No pago:</dt>
-                                                <dd class="col-2"><a href="{% url 'usuarios:imprimirpago' pago.IdPago %}">{{ pago.IdPago }}</a></dd>
-                                                <dt class="col-3">Fecha de pago:</dt>
-                                                <dd class="col-3">{{ pago.FechaPago }}</dd>
-                                                <dt class="col-1">Valor pago:</dt>
-                                                <dd class="col-1">{{ pago.ValorPago }}</dd>
-                                                {% else %}
-                                                <!-- pagos registrados por factura -->
-                                                {% endif %}
-                                            {% endfor %}
-                                            </div>
-                                            </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn me-auto" data-bs-dismiss="modal">Cerrar</button>

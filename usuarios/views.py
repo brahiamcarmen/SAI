@@ -810,67 +810,6 @@ class Estadoscuenta(LoginRequiredMixin, View):
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
 
-
-class ReportesCiclo(LoginRequiredMixin, View):
-    login_url = '/'
-
-    def get(self, request):
-        try:
-            sector = request.GET.get("ciclo")
-            centro = str(sector)
-            viviendas = Vivienda.objects.filter(Ciclo=centro)
-            wb = Workbook()
-            ws = wb.active
-            ws['A1'] = "Reporte de predios"
-            ws.merge_cells('A1:B1')
-            ws['A2'] = 'Matricula'
-            ws['B2'] = 'Dirección'
-            ws['C2'] = 'NumeroCasa'
-            ws['D2'] = 'Piso'
-            ws['E2'] = 'Ciclo'
-            ws['F2'] = 'TipoInstalación'
-            ws['G2'] = 'Estrato'
-            ws['H2'] = 'EstadoServicio'
-            ws['I2'] = 'Propietario'
-            ws['J2'] = 'Acueducto'
-            ws['K2'] = 'Usuario'
-            ws['L2'] = 'MatriculaAnt'
-            ws['M2'] = 'InfoInstalación'
-            ws['N2'] = 'ProfAcometida'
-            ws['O2'] = 'CantHabitantes'
-
-            cont = 3
-
-            for vivienda in viviendas:
-                ws.cell(row=cont, column=1).value = vivienda.IdVivienda
-                ws.cell(row=cont, column=2).value = vivienda.Direccion
-                ws.cell(row=cont, column=3).value = vivienda.NumeroCasa
-                ws.cell(row=cont, column=4).value = vivienda.Piso
-                ws.cell(row=cont, column=5).value = vivienda.Ciclo
-                ws.cell(row=cont, column=6).value = vivienda.TipoInstalacion
-                ws.cell(row=cont, column=7).value = vivienda.Estrato
-                ws.cell(row=cont, column=8).value = vivienda.EstadoServicio
-                ws.cell(row=cont, column=9).value = str(vivienda.IdPropietario)
-                ws.cell(row=cont, column=10).value = str(vivienda.IdAcueducto)
-                ws.cell(row=cont, column=11).value = str(vivienda.usuid)
-                ws.cell(row=cont, column=12).value = vivienda.MatriculaAnt
-                ws.cell(row=cont, column=13).value = vivienda.InfoInstalacion
-                ws.cell(row=cont, column=14).value = vivienda.ProfAcometida
-                ws.cell(row=cont, column=15).value = vivienda.CantHabitantes
-
-                cont += 1
-
-            archivo_predios = "ReportePorCiclo.xlsx"
-            response = HttpResponse(content_type="application/ms-excel")
-            content = "attachment; filename = {0}".format(archivo_predios)
-            response['Content-Disposition'] = content
-            wb.save(response)
-            return response
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
-
-
 class Busquedas(LoginRequiredMixin, View):
     login_url = '/'
     template_name = 'usuarios/busquedas.html'
@@ -947,80 +886,6 @@ class Busquedas(LoginRequiredMixin, View):
             else:
                 messages.add_message(request, messages.WARNING, 'Informacion incompleta')
                 return HttpResponseRedirect(reverse('usuarios:busquedas'))
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
-
-
-class ReporteCiclo(LoginRequiredMixin, View):
-    login_url = '/'
-
-    def get(self, request):
-        try:
-            tipo = request.GET.get("tipo")
-            ano = request.GET.get("Ano")
-
-            if tipo and ano == 'Todo':
-                estadocuenta = EstadoCuenta.objects.all()
-                wb = Workbook()
-                ws = wb.active
-                ws['A1'] = "Reporte de ciclos"
-                ws.merge_cells('A1:B1')
-                ws['A2'] = 'Id Estado'
-                ws['B2'] = 'Valor'
-                ws['C2'] = 'Predio'
-                ws['D2'] = 'Periodo'
-                ws['E2'] = 'Estado'
-                ws['F2'] = 'Año'
-                cont = 3
-
-                for estado in estadocuenta:
-                    ws.cell(row=cont, column=1).value = estado.IdEstadoCuenta
-                    ws.cell(row=cont, column=2).value = estado.Valor
-                    ws.cell(row=cont, column=3).value = str(estado.IdVivienda)
-                    ws.cell(row=cont, column=4).value = str(estado.IdCiclo)
-                    ws.cell(row=cont, column=5).value = estado.Estado
-                    ws.cell(row=cont, column=6).value = estado.ano
-
-                    cont += 1
-
-                archivo_propi = "ReporteCiclos.xlsx"
-                response = HttpResponse(content_type="application/ms-excel")
-                content = "attachment; filename = {0}".format(archivo_propi)
-                response['Content-Disposition'] = content
-                wb.save(response)
-                return response
-
-            else:
-                estadocuenta = EstadoCuenta.objects.filter(Estado=tipo, ano=ano)
-                wb = Workbook()
-                ws = wb.active
-                ws['A1'] = "Reporte de ciclos"
-                ws.merge_cells('A1:B1')
-                ws['A2'] = 'Id Estado'
-                ws['B2'] = 'Valor'
-                ws['C2'] = 'Predio'
-                ws['D2'] = 'Periodo'
-                ws['E2'] = 'Estado'
-                ws['F2'] = 'Año'
-                cont = 3
-
-                for estado in estadocuenta:
-                    ws.cell(row=cont, column=1).value = estado.IdEstadoCuenta
-                    ws.cell(row=cont, column=2).value = estado.Valor
-                    ws.cell(row=cont, column=3).value = str(estado.IdVivienda)
-                    ws.cell(row=cont, column=4).value = str(estado.IdCiclo)
-                    ws.cell(row=cont, column=5).value = estado.Estado
-                    ws.cell(row=cont, column=6).value = estado.ano
-
-                    cont += 1
-
-                archivo_propi = "ReporteCiclos.xlsx"
-                response = HttpResponse(content_type="application/ms-excel")
-                content = "attachment; filename = {0}".format(archivo_propi)
-                response['Content-Disposition'] = content
-                wb.save(response)
-                return response
 
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
@@ -2378,54 +2243,6 @@ class ReporteReconexion(LoginRequiredMixin, View):
         return response
 
 
-class PagarMatricula(LoginRequiredMixin, View):
-    login_url = '/'
-    template_name = 'usuarios/pagarmatricula.html'
-    vervivienda = VisualizarVivienda
-
-    def get(self, request, IdVivienda):
-        try:
-            matricula = CobroMatricula.objects.filter(IdVivienda=IdVivienda, Estado=ESTCOBRO)
-
-            return render(request, self.template_name, {
-                'matriculas': matricula
-            })
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
-
-    def post(self, request, IdVivienda):
-        try:
-            nuevascuotas = request.POST.get("pagomatricula")
-
-            validacionmatricula = CobroMatricula.objects.get(IdVivienda=IdVivienda)
-            vivienda = Vivienda.objects.get(IdVivienda=IdVivienda)
-            idvivienda = vivienda.IdVivienda
-            cantcuotas = validacionmatricula.CuotasPendientes
-            valorpendiente = validacionmatricula.ValorPendiente
-            resultado = int(valorpendiente) / int(nuevascuotas)
-
-            if cantcuotas != nuevascuotas:
-                validacionmatricula = CobroMatricula.objects.get(IdVivienda=IdVivienda)
-                validacionmatricula.CuotasPendientes = nuevascuotas
-                validacionmatricula.Cuota = int(resultado)
-                validacionmatricula.save()
-                messages.add_message(request, messages.INFO, 'El valor se refinancio correctamente')
-                ver = self.vervivienda()
-                ejercutar = ver.get(request, idvivienda)
-                return ejercutar
-
-            else:
-                messages.add_message(request, messages.INFO,
-                                     'Las cuotas deben ser diferentes a las asignadad inicialmente')
-                ver = self.vervivienda()
-                ejercutar = ver.get(request, idvivienda)
-                return ejercutar
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
-
-
 class EnvioCorreo(LoginRequiredMixin):
     login_url = '/'
 
@@ -2860,76 +2677,6 @@ class CambiarContraUsuario(LoginRequiredMixin, View):
 
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
-
-
-class ReporteCobroMatricula(LoginRequiredMixin, View):
-    login_url = '/'
-
-    def get(self):
-        matriculas = CobroMatricula.objects.all()
-        sfecha = (datetime.today())
-        wb = Workbook()
-        ws = wb.active
-        ws.title = "ReporteCobroMatricula"
-        ws['A1'] = 'Referencia'
-        ws['B1'] = 'Descripcion'
-        ws['C1'] = 'Vivienda'
-        ws['D1'] = 'Estado'
-        ws['E1'] = 'Valor'
-        ws['F1'] = 'Cant cuotas'
-        ws['G1'] = 'Cuotas pendientes'
-        ws['H1'] = 'Valor pendiente'
-        ws['I1'] = 'Cuota mensual'
-
-        cont = 2
-        for suspencion in matriculas:
-            ws.cell(row=cont, column=1).value = suspencion.IdCobroM
-            ws.cell(row=cont, column=2).value = suspencion.Descripcion
-            ws.cell(row=cont, column=3).value = str(suspencion.IdVivienda)
-            ws.cell(row=cont, column=4).value = suspencion.Estado
-            ws.cell(row=cont, column=5).value = str(suspencion.IdValor)
-            ws.cell(row=cont, column=6).value = suspencion.CantCuotas
-            ws.cell(row=cont, column=7).value = suspencion.CuotasPendientes
-            ws.cell(row=cont, column=8).value = suspencion.ValorPendiente
-            ws.cell(row=cont, column=9).value = suspencion.Cuota
-            cont += 1
-
-            archivo_predios = "ReporteCobroMatricula" + str(sfecha) + ".xlsx"
-            response = HttpResponse(content_type="application/ms-excel")
-            content = "attachment; filename = {0}".format(archivo_predios)
-            response['Content-Disposition'] = content
-            wb.save(response)
-            return response
-
-
-class CambiosMasivos(LoginRequiredMixin, View):
-    login_url = '/'
-
-    def get(self, request):
-        try:
-            estado = "Pago"
-            cuotaspendientes = 0
-            valorpendiente = 0
-
-            cobromatricula = CobroMatricula.objects.all()
-            if cobromatricula is not None:
-                for i in cobromatricula:
-                    cobro = CobroMatricula.objects.get(IdCobroM=i.IdCobroM)
-                    cobro.Estado = estado
-                    cobro.CuotasPendientes = cuotaspendientes
-                    cobro.ValorPendiente = valorpendiente
-                    cobro.save()
-                messages.add_message(request, messages.ERROR, 'se modificaron los estados correctamente')
-                return HttpResponseRedirect(reverse('usuarios:inicio'))
-
-            else:
-                messages.add_message(request, messages.ERROR,
-                                     'Su usuario no tiene los permiso de acceso a esta seccion')
-                return HttpResponseRedirect(reverse('usuarios:inicio'))
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
-
 
 class CambioEstado(LoginRequiredMixin, View):
     login_url = '/'
@@ -3409,11 +3156,12 @@ class ImprimirSoporteP(LoginRequiredMixin, View):
             conector.Pulso(48, 60, 120)
             respuesta = conector.imprimirEn(nombreImpresora)
             if respuesta is True:
-                messages.add_message(request, messages.INFO, 'impreso correctamente')
+                messages.add_message(request, messages.INFO, 'Comprobante de pago, se genero correctamente')
                 return HttpResponseRedirect(reverse('usuarios:inicio'))
             else:
                 messages.add_message(request, messages.ERROR, respuesta)
                 return HttpResponseRedirect(reverse('usuarios:inicio'))
+
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
 
@@ -3471,85 +3219,6 @@ class PazSalvo(LoginRequiredMixin, View):
                     ver = self.vervivienda()
                     ejercutar = ver.get(request, idvivienda)
                     return ejercutar
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
-
-
-class CertificadoGral(LoginRequiredMixin, View):
-    login_url = '/'
-    vervivienda = VisualizarVivienda
-
-    def get(self, request):
-        try:
-            matricula = request.GET.get("matricula")
-            vivienda = Vivienda.objects.get(IdVivienda=matricula)
-            idpropietario = vivienda.IdPropietario
-            propietario = Propietario.objects.get(IdPropietario=idpropietario.pk)
-            estadocuenta = EstadoCuenta.objects.get(IdVivienda=matricula)
-            idestadocuenta = estadocuenta.IdEstadoCuenta
-            conceptomatricula = CobroMatricula.objects.get(IdVivienda=matricula)
-
-            if vivienda is not None:
-                wb = openpyxl.load_workbook('static/Formatos/R4C.xlsx')
-                ws = wb.active
-                # titular
-                ws['W2'] = matricula
-                ws['A7'] = propietario.Nombres
-                ws['H7'] = propietario.Apellidos
-                ws['W7'] = propietario.IdPropietario
-                ws['A9'] = propietario.NoTelefono
-                ws['H9'] = propietario.IdPoblacion.Descripcion
-                ws['R9'] = propietario.Email
-                # predio
-                ws['A13'] = vivienda.Direccion
-                ws['H13'] = vivienda.NumeroCasa
-                ws['O13'] = vivienda.Piso
-                ws['S13'] = vivienda.Ciclo
-                ws['x13'] = vivienda.MatriculaAnt
-                ws['A15'] = vivienda.InfoInstalacion
-                ws['R15'] = vivienda.CantHabitantes
-                ws['W15'] = vivienda.Estrato
-                ws['A17'] = vivienda.TipoInstalacion
-                ws['K15'] = vivienda.EstadoServicio
-                ws['K17'] = vivienda.FichaCastral
-
-                # Estado de cuenta
-                ws['S35'] = estadocuenta.IdEstadoCuenta
-                ws['Y35'] = estadocuenta.Estado
-                ws['S37'] = estadocuenta.FechaActualizacion
-                ws['Y37'] = estadocuenta.Valor
-
-                # Estado de matricula
-                ws['S27'] = conceptomatricula.IdCobroM
-                ws['Y27'] = conceptomatricula.Estado
-                ws['S29'] = conceptomatricula.CantCuotas
-                ws['Y29'] = conceptomatricula.IdValor.Valor
-                ws['S31'] = conceptomatricula.CuotasPendientes
-                ws['W31'] = conceptomatricula.ValorPendiente
-                ws['AA31'] = conceptomatricula.Cuota
-
-                # ultimo pago
-                filtropagos = Pagos.objects.filter(IdVivienda=matricula).order_by("-IdPago")[:1]
-                idpago = Pagos.objects.get(IdPago=filtropagos)
-                ws['S49'] = str(idpago)
-                ws['Y49'] = 'Registrado'
-                ws['S51'] = idpago.FechaPago
-                ws['Y51'] = idpago.ValorPago
-
-                # fechas de procedimiento
-                now = datetime.now()
-                new_date = now + timedelta(days=30)
-                ws['A54'] = now
-                ws['A56'] = new_date
-
-                ws.title = matricula
-                archivo_predios = "Certificado " + str(matricula) + ".xlsx"
-                response = HttpResponse(content_type="application/ms-excel")
-                content = "attachment; filename = {0}".format(archivo_predios)
-                response['Content-Disposition'] = content
-                wb.save(response)
-                return response
 
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
@@ -4056,19 +3725,6 @@ class VerCredito(LoginRequiredMixin, View):
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
 
-
-class PagoParcial(LoginRequiredMixin, View):
-    login_url = '/'
-    template_name = 'usuarios/pagoparcial.html'
-
-    def get(self, request):
-        try:
-            usuario = 0
-            if usuario == 0:
-                return render(request, self.template_name)
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
 
 class ReporteRetiro(LoginRequiredMixin, View):
     login_url = '/'

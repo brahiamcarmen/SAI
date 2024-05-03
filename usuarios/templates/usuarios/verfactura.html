@@ -34,19 +34,21 @@
                             </div>
                             <div class="card-body">
                                 <div class="row text-center">
-                                    <div class="col-4 col-sm-3">
+                                    <div class="col-6">
                                         <b class="text-primary">Matricula</b><br>
                                         <p style="color:rgba(38, 35, 197 ); font-size: 1rem;n"><b><a href="{% url 'usuarios:vervivienda' matricula %}"> {{matricula}}</a></b></p>
                                     </div>
-                                    <div class="col-4 col-sm-3">
+                                    <div class="col-6">
                                         <b>Sector</b><br>
                                         <p>{{ sector }}</p>
                                     </div>
-                                    <div class="col-4 col-sm-3">
+                                </div>
+                                <div class="row text-center">
+                                    <div class="col-6">
                                         <b>Casa</b><br>
                                         <p>{{casa}}</p>
                                     </div>
-                                    <div class="col-4 col-sm-3">
+                                    <div class="col-6">
                                         <b>Piso</b><br>
                                         <p><b>{{piso}}</b></p>
                                     </div>
@@ -105,7 +107,6 @@
                                                                   <th>Suspencion</th>
                                                                   <th>Reconexion</th>
                                                                   <th>Recargo</th>
-                                                                  <th>Acuerdo pago</th>
                                                                   <th>Subsidio</th>
                                                                   <th>Otros cobros</th>
                                                                   <th>Periodo</th>
@@ -126,7 +127,6 @@
                                                                           <td>${{ j.Suspencion|intcomma }}</td>
                                                                           <td>${{ j.Reconexion|intcomma }}</td>
                                                                           <td>${{ j.Recargo|intcomma }}</td>
-                                                                          <td>${{ j.AcuerdoPago|intcomma}}</td>
                                                                           <td>$-{{ j.Subsidio|intcomma }}</td>
                                                                           <td>${{ j.Otroscobros|intcomma }}</td>
                                                                            <td>{{ j.Periodo }}</td>
