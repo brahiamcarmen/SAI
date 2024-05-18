@@ -3755,7 +3755,6 @@ class ReporteRetiro(LoginRequiredMixin, View):
                 messages.add_message(request, messages.INFO, 'La novedad se registro correctamente')
                 return HttpResponseRedirect(reverse('usuarios:inicio'))
 
-
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
 
@@ -3933,6 +3932,11 @@ class FacturadorConceptos(LoginRequiredMixin, View):
 
                             if j.Tipo == 'Recargo':
                                 recargo = j.Valor
+                                j.Estado = 'Facturado'
+                                j.save()
+
+                            if j.Tipo == 'Financiacion':
+                                acuerdopago = j.Valor
                                 j.Estado = 'Facturado'
                                 j.save()
 
