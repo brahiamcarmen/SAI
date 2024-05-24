@@ -10,94 +10,40 @@
 <div class="page-body">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-md-2">
-        <h3 class="subheader">Estadisticas</h3>
-          <div class="col-auto">
-                <div class="card card-sm">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="bg-orange text-white avatar">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="9" cy="7" r="4" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /><path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></svg>
-                        </span>
-                      </div>
-                      <div class="col">
-                        <div class="font-weight-medium">
-                          {{personas}}
-                        </div>
-                        <div class="text-muted">
-                          Usuarios
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+       <div class="col-md-2">
+        <div class="row">
+          <div class="col-md-12">
+            <h3 class="subheader">Empresa</h3>
               <div class="col-auto" style="margin-top: 0.5rem">
-                <div class="card card-sm">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="bg-indigo text-white avatar">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="5 12 3 12 12 3 21 12 19 12" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
-                        </span>
-                      </div>
-                      <div class="col">
-                        <div class="font-weight-medium">
-                          {{suscriptores}}
-                        </div>
-                        <div class="text-muted">
-                          Suscriptores activos
-                        </div>
-                      </div>
-                    </div>
+                <div class="card">
+                  <div class="card-body p-4 text-center">
+                    <span class="avatar avatar-xl mb-1" style="background-image: url({{ logo.url }})"></span>
+                    <h3 class="m-0 mb-1">{{ nit }}</h3>
+                    <div class="text-muted">{{ acueducto }}</div>
                   </div>
-                </div>
-              </div>
-              <div class="col-auto" style="margin-top: 0.5rem">
-                <div class="card card-sm">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="bg-indigo text-white avatar">
-                              <!-- Download SVG icon from http://tabler-icons.io/i/gauge -->
-                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="1" /><line x1="13.41" y1="10.59" x2="16" y2="8" /><path d="M7 12a5 5 0 0 1 5 -5" /></svg>
-                        </span>
-                      </div>
-                      <div class="col">
-                        <div class="font-weight-medium">
-                          {{contarasig}}
-                        </div>
-                        <div class="text-muted">
-                          Medidores activos
-                        </div>
-                      </div>
-                    </div>
+                  <div class="d-flex">
+                                        
                   </div>
-                </div>
-              </div>
-              <div class="col-auto" style="margin-top: 0.5rem">
-                <div class="card card-sm">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="bg-success text-white avatar">
-                              <!-- Download SVG icon from http://tabler-icons.io/i/chart-bar -->
-  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><rect x="3" y="12" width="6" height="8" rx="1" /><rect x="9" y="8" width="6" height="12" rx="1" /><rect x="15" y="4" width="6" height="16" rx="1" /><line x1="4" y1="20" x2="18" y2="20" /></svg>
-                        </span>
-                      </div>
-                      <div class="col">
-                        <div class="font-weight-medium">
-                          {{suma8|intcomma}} m3
-                        </div>
-                        <div class="text-muted">
-                          Consumo
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+          <br>
+        <div class="row">
+          <h3 class="subheader">Reportes disponibles</h3>
+          <div class="col-md-12" style="margin-top: 0.5rem">
+               <a href="{% url 'usuarios:reportecompleto' %}" class="btn btn-sm btn-dark btn-pill w-100">Informe completo</a>
+            </div>
+            <div class="col-md-12" style="margin-top: 0.5rem">
+               <a href="{% url 'usuarios:reportepagos' %}" class="btn btn-sm btn-dark btn-pill w-100">Ingresos</a>
+            </div>
+            <div class="col-md-12" style="margin-top: 0.5rem">
+               <a href="{% url 'usuarios:reportegastos' %}" class="btn btn-sm btn-dark btn-pill w-100">Egresos</a>
+            </div>
+            <div class="col-md-12" style="margin-top: 0.5rem">
+               <a href="{% url 'usuarios:reportecierre' %}" class="btn btn-sm btn-dark btn-pill w-100">Cierres mensuales</a>
+            </div>
+        </div>
       </div>
       <div class="col-md-8">
         <div class="row">
@@ -172,8 +118,99 @@
         <br>
         <div class="row">
             <div class="col-md-6">
-              <h3 class="subheader">Comparacion grafica</h3>
-              <div id="chart-demo-pie"></div>
+              <h3 class="subheader">Estadisticas</h3>
+              <div class="row">
+                  <div class="col-md-6">
+                      <div class="card card-sm">
+                        <div class="card-body">
+                          <div class="row align-items-center">
+                            <div class="col-auto">
+                              <span class="bg-orange text-white avatar">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="9" cy="7" r="4" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /><path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></svg>
+                              </span>
+                            </div>
+                            <div class="col">
+                              <div class="font-weight-medium">
+                                {{personas}}
+                              </div>
+                              <div class="text-muted">
+                                Usuarios
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-auto">
+                          <div class="card card-sm">
+                            <div class="card-body">
+                              <div class="row align-items-center">
+                                <div class="col-auto">
+                                  <span class="bg-indigo text-white avatar">
+                                      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="5 12 3 12 12 3 21 12 19 12" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
+                                  </span>
+                                </div>
+                                <div class="col">
+                                  <div class="font-weight-medium">
+                                    {{suscriptores}}
+                                  </div>
+                                  <div class="text-muted">
+                                    Suscriptores activos
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6" style="margin-top: 0.5rem">
+                  <div class="card card-sm">
+                    <div class="card-body">
+                      <div class="row align-items-center">
+                        <div class="col-auto">
+                          <span class="bg-indigo text-white avatar">
+                                <!-- Download SVG icon from http://tabler-icons.io/i/gauge -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="1" /><line x1="13.41" y1="10.59" x2="16" y2="8" /><path d="M7 12a5 5 0 0 1 5 -5" /></svg>
+                          </span>
+                        </div>
+                        <div class="col">
+                          <div class="font-weight-medium">
+                            {{contarasig}}
+                          </div>
+                          <div class="text-muted">
+                            Medidores activos
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6" style="margin-top: 0.5rem">
+                  <div class="card card-sm">
+                    <div class="card-body">
+                      <div class="row align-items-center">
+                        <div class="col-auto">
+                          <span class="bg-success text-white avatar">
+                                <!-- Download SVG icon from http://tabler-icons.io/i/chart-bar -->
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><rect x="3" y="12" width="6" height="8" rx="1" /><rect x="9" y="8" width="6" height="12" rx="1" /><rect x="15" y="4" width="6" height="16" rx="1" /><line x1="4" y1="20" x2="18" y2="20" /></svg>
+                          </span>
+                        </div>
+                        <div class="col">
+                          <div class="font-weight-medium">
+                            {{suma8|intcomma}} m3
+                          </div>
+                          <div class="text-muted">
+                            Consumo
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="col-md-6">
               <h3 class="subheader">Ultimos registros</h3>
@@ -198,23 +235,7 @@
         
       </div>
       <div class="col-md-2">
-          <h3 class="subheader">Reportes disponibles</h3>
           <div class="row">
-            <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:reportecompleto' %}" class="btn btn-sm btn-dark btn-pill w-100">Informe completo</a>
-            </div>
-            <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:reportepagos' %}" class="btn btn-sm btn-dark btn-pill w-100">Ingresos</a>
-            </div>
-            <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:reportegastos' %}" class="btn btn-sm btn-dark btn-pill w-100">Egresos</a>
-            </div>
-            <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:reportecierre' %}" class="btn btn-sm btn-dark btn-pill w-100">Cierres mensuales</a>
-            </div>
-            <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:varias' %}" class="btn btn-sm btn-dark btn-pill w-100">Conceptos</a>
-            </div>
             <div class="col-md-12" style="margin-top: 0.5rem">
               <h3 class="subheader">Modulo de recaudo</h3>
                 <div class="card-body">
@@ -290,49 +311,4 @@
       }
     }
   </script>
-  <script>
-      // @formatter:off
-      document.addEventListener("DOMContentLoaded", function () {
-        window.ApexCharts && (new ApexCharts(document.getElementById('chart-demo-pie'), {
-          chart: {
-            type: "donut",
-            fontFamily: 'inherit',
-            height: 270,
-            sparkline: {
-              enabled: true
-            },
-            animations: {
-              enabled: false
-            },
-          },
-          fill: {
-            opacity: 1,
-          },
-          series: [{{cc}}, {{pn}}, {{bn}}, {{vj}},{{ca}}, {{ha}}],
-          labels: ["Centro", "Paso nivel", "Barrio nuevo", "V Julio","Carbonera","Hacienda"],
-          grid: {
-            strokeDashArray: 6,
-          },
-          colors: ["#406bc5", "#78a5dc", "#d3e1f3", "#e9ccf1","#B8F5A4","#739668"],
-          legend: {
-            show: true,
-            position: 'bottom',
-            offsetY: 12,
-            markers: {
-              width: 10,
-              height: 10,
-              radius: 100,
-            },
-            itemMargin: {
-              horizontal: 9,
-              vertical: 9
-            },
-          },
-          tooltip: {
-            fillSeriesColor: false
-          },
-        })).render();
-      });
-      // @formatter:on
-    </script>
 {% endblock %}

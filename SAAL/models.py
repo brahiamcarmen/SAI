@@ -41,7 +41,7 @@ class Acueducto(models.Model):
     Nombre = models.CharField(max_length=150, null=False)
     Sigla = models.CharField(max_length=20, null=True)
     DirOficina = models.CharField(max_length=100, null=False)
-    logo = models.ImageField(upload_to='usuarios', default='usuarios/usuario.png')
+    logo = models.ImageField(upload_to='usuarios')
     Relegal = models.CharField(max_length=60, null=False)
     Telefono = models.CharField(max_length=11, null=False)
     Estado = models.CharField(max_length=30, null=True, choices=DOC_CHOICES, default='ES')
@@ -246,6 +246,7 @@ class Medidores(models.Model):
     Estado = models.CharField(max_length=35, null=False, default='Sin asignar')
     Certificado = models.CharField(max_length=100, null=False, choices=DOC_CHOICES11)
     Fecha = models.DateTimeField(auto_now_add=True, null=True)
+    IdAcueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
     objects = models.Manager()
     def __str__(self):
         return "%s" % (self.IdMedidor)
@@ -266,6 +267,7 @@ class Asignacion(models.Model):
     IdVivienda = models.ForeignKey(Vivienda,on_delete=models.CASCADE)
     Fecha = models.DateTimeField(auto_now_add=True)
     Estado = models.CharField(max_length=40, null=False, choices=DOC_C, default='Operativo')
+    IdAcueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
     objects = models.Manager()
     def __str__(self):
         return "%s" % self.IdRegistro
@@ -308,6 +310,7 @@ class CobroMatricula(models.Model):
     CuotasPendientes = models.CharField(max_length=10, null=False)
     ValorPendiente = models.CharField(max_length=50, null=False)
     Cuota = models.CharField(max_length=50, null=False)
+    IdAcueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
     objects = models.Manager()
     def __str__(self):
         return "%s %s" % (self.IdCobroM, self.Descripcion)
@@ -443,6 +446,7 @@ class Pqrs(models.Model):
     Descripcion = models.TextField(max_length=10000, null=True)
     usuid = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     Estado = models.CharField(max_length=40, null=False)
+    IdAcueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
     objects = models.Manager()
     def __str__(self):
         return "%s %s" % (self.IdPqrs, self.TipoSolicitud)
@@ -458,6 +462,7 @@ class RespuestasPqrs(models.Model):
     Fecha = models.DateTimeField(auto_now_add=True)
     Descripcion = models.CharField(max_length=5000, null=False)
     Soporte = models.FileField(upload_to='respuestaspqr/', null=True)
+    IdAcueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
     objects = models.Manager()
     def __str__(self):
         return "%s" % self.IdRespuesta
@@ -539,6 +544,7 @@ class Consumos(models.Model):
     ano = models.CharField(max_length=4, null=False)
     mes = models.CharField(max_length=20, null=False)
     Fecha = models.DateTimeField(auto_now_add=True)
+    IdAcueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
     objects = models.Manager()
     def __str__(self):
         return "%s" % self.IdRegistro
@@ -580,6 +586,7 @@ class ConceptosFacturados(models.Model):
     Estado = models.CharField(max_length=10, null=True)
     Periodo = models.CharField(max_length=10, null=True)
     IdVivienda = models.ForeignKey(Vivienda, on_delete=models.CASCADE)
+    IdAcueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
     objects = models.Manager()
     def __str__(self):
         return "%s" % self.IdRegistro
@@ -595,6 +602,7 @@ class Novedades(models.Model):
     Fecha = models.DateTimeField(auto_now_add=True)
     usuario = models.CharField(max_length=30, null=False)
     matricula = models.ForeignKey(Vivienda, on_delete=models.CASCADE)
+    IdAcueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
     objects = models.Manager()
     def __str__(self):
         return "%s %s" % (self.IdNovedad, self.TipoNovedad)
@@ -612,6 +620,7 @@ class OrdenesTrabajo(models.Model):
     FechaEjecucion = models.DateTimeField(null=False)
     usuario = models.CharField(max_length=30, null=False)
     IdVivienda = models.ForeignKey(Vivienda, on_delete=models.CASCADE)
+    IdAcueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
     objects = models.Manager()
     def __str__(self):
         return "%s %s" % (self.IdOrden, self.TipoNovedad)
@@ -629,6 +638,7 @@ class Facturas(models.Model):
     FechaLimite = models.DateTimeField(auto_now=True)
     FechaExpe = models.DateTimeField(auto_now_add=True)
     IdCiclo = models.ForeignKey(Ciclo, on_delete=models.CASCADE)
+    IdAcueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
     Total = models.CharField(max_length=100, null=False)
 
     objects = models.Manager()
@@ -651,6 +661,7 @@ class Pagos(models.Model):
     resta = models.CharField(max_length=10, null=True)
     IdUsuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     IdVivienda = models.ForeignKey(Vivienda, on_delete=models.CASCADE)
+    IdAcueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
     objects = models.Manager()
     def __str__(self):
         return "%s" % self.IdPago
@@ -685,6 +696,7 @@ class AcuerdosPago(models.Model):
     ValorPendiente = models.CharField(max_length=50, null=False)
     Cuota = models.CharField(max_length=50, null=False)
     FechaExpe = models.DateTimeField(auto_now_add=True)
+    IdAcueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
     objects = models.Manager()
     def __str__(self):
         return "%s %s" % (self.IdAcuerdo, self.Descripcion)

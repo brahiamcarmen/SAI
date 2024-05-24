@@ -103,6 +103,11 @@ class RegistroPropietario(forms.ModelForm):
             'Email': _(u'Correo electronico'),
             'Direccion': _(u'Direccion'),
             'IdPoblacion': _(u'Tipo de población'),
+            'IdAcueducto': _(u''),
+        }
+
+        widgets = {
+            'IdAcueducto': forms.HiddenInput()
         }
 
     def __init__(self, propietario=None, *args, **kwargs):
@@ -440,10 +445,12 @@ class FormRegistroPqrs(forms.ModelForm):
             'Descripcion': _(u'Descripcion de la solicitud'),
             'usuid': _(u''),
             'Estado': _(u''),
+            'IdAcueducto': _(u''),
         }
         widgets = {
             'usuid': forms.HiddenInput(),
             'Estado': forms.HiddenInput(),
+            'IdAcueducto': forms.HiddenInput(),
         }
 
     def __init__(self, propietario=None, *args, **kwargs):
