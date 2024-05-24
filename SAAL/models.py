@@ -104,6 +104,7 @@ class Propietario(models.Model):
     NoTelefono = models.CharField(max_length=60, null=False)
     Email = models.EmailField(max_length=150, null=True)
     IdPoblacion = models.ForeignKey(Poblacion, on_delete=models.CASCADE)
+    IdAcueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
     objects = models.Manager()
     def __str__(self):
         return "%s %s" % (self.Nombres, self.Apellidos)
@@ -278,6 +279,7 @@ class ValorMatricula(models.Model):
     IdValor = models.AutoField(primary_key=True)
     Valor = models.CharField(max_length=10, null=False)
     Fecha = models.DateTimeField(auto_now=True)
+    IdAcueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
     objects = models.Manager()
     def __str__(self):
         return "%s" % self.Valor
@@ -474,6 +476,7 @@ class Cierres(models.Model):
     Fecha = models.DateTimeField(auto_now_add=True)
     NoRecaudo = models.CharField(max_length=100, null=False)
     Recaudado = models.CharField(max_length=100, null=False)
+    IdAcueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
     objects = models.Manager()
     def __str__(self):
         return "%s %s" % (self.IdCierre, self.Ciclo)
@@ -570,7 +573,7 @@ class ConceptosFacturados(models.Model):
     Reconexion = models.IntegerField(null=True)
     Recargo = models.IntegerField(null=True)
     AcuerdoPago = models.IntegerField(null=True)
-    Otroscobros = models.IntegerField(null=True)
+    SaldoAnterior = models.IntegerField(null=True)
     Subsidio = models.IntegerField(null=True)
     Fecha = models.DateTimeField(auto_now_add=True)
     Total = models.IntegerField(null=True)
@@ -627,6 +630,7 @@ class Facturas(models.Model):
     FechaExpe = models.DateTimeField(auto_now_add=True)
     IdCiclo = models.ForeignKey(Ciclo, on_delete=models.CASCADE)
     Total = models.CharField(max_length=100, null=False)
+
     objects = models.Manager()
     def __str__(self):
         return "%s" % self.IdFactura

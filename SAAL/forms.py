@@ -124,9 +124,12 @@ class ModificaPropietario(forms.ModelForm):
             'Apellidos': _(u'Apellidos'),
             'NoTelefono': _('Telefono o Celular'),
             'Email': _(u'Correo electronico'),
+            'IdPoblacion': _(u'Poblacion'),
+            'IdAcueducto': _(u''),
         }
         widgets = {
             'IdPropietario': forms.HiddenInput(),
+            'IdAcueducto': forms.HiddenInput()
         }
 
     def __init__(self, propietario=None, *args, **kwargs):

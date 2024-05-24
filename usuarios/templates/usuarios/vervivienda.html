@@ -557,7 +557,7 @@
                                                                   <th>Recargo</th>
                                                                   <th>Acuerdo pago</th>
                                                                   <th>Subsidio</th>
-                                                                  <th>Otros cobros</th>
+                                                                  <th>Saldo anterior</th>
                                                                   <th>Total</th>
                                                                   <th>Fecha</th>
                                                                   <th>Estado</th>
@@ -577,10 +577,21 @@
                                                                       <td>${{ i.Recargo|intcomma }}</td>
                                                                       <td>${{ i.AcuerdoPago|intcomma}}</td>
                                                                       <td>$-{{ i.Subsidio|intcomma }}</td>
-                                                                      <td>${{ i.Otroscobros|intcomma }}</td>
+                                                                      <td>${{ i.SaldoAnterior|intcomma }}</td>
                                                                       <td>${{ i.Total|intcomma }}</td>
                                                                       <td>{{ i.Fecha }}</td>
-                                                                      <td>{{ i.Estado }}</td>
+                                                                      <td>
+                                                                        {% if i.Estado == "Vencido" %}
+                                                                            <span class="badge bg-warging-lt">Vencido</span>&nbsp;
+                                                                            {% elif i.Estado == "Pago" %}
+                                                                             <span class="badge bg-success-lt">Pago</span>&nbsp;
+                                                                            {% elif i.Estado == "Abono" %}
+                                                                            <span class="badge bg-purple-lt">Abono</span>&nbsp;
+                                                                            {%else%}
+                                                                            <span class="badge bg-indigo-lt">Pendiente</span>&nbsp;
+                                                                            {% endif %}
+
+                                                                      </td>
                                                                       <td>{{ i.Periodo }}</td>
                                                           </tr>
                                                       {% endfor %}

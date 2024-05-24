@@ -73,7 +73,7 @@ ADI = 'Adicion'
 SA = 'Anulada'
 SP = 'Pendiente'
 SJ = 'Ejecutada'
-TARIFASUSPENCION = 15000
+TARIFASUSPENCION = 5000
 # estados ciclos
 EC = 'SIN PAGAR'
 EC2 = 'PAGO'
@@ -247,23 +247,16 @@ class ListaViviendas(LoginRequiredMixin, View):
 
     def get(self, request):
         try:
-            listapqrs = Pqrs.objects.filter(Estado='Pendiente')
-            contqrs = Pqrs.objects.filter(Estado='Pendiente').count()
-            contsoli = SolicitudGastos.objects.filter(Estado=ESTADO1).count()
-            totalnoti = contqrs + contsoli
-            contadorpen = SolicitudGastos.objects.filter(Estado=ESTADO1)
+
             datos = Usuario.objects.get(usuid=request.user.pk)
             dr = datos.IdAcueducto
             acueducto = Acueducto.objects.get(IdAcueducto=dr.pk)
             listaviviendas = Vivienda.objects.filter(IdAcueducto=acueducto.pk)
-            tipousuario = Permisos.objects.filter(usuid=datos, TipoPermiso='ALP').exists()
+            tipousuario = True
             if tipousuario is True:
                 return render(request, self.template_name,
                               {
                                   'viviendas': listaviviendas,
-                                  'notificaciones': contadorpen,
-                                  'listapqrs': listapqrs,
-                                  'totalnoti': totalnoti
                               })
             else:
                 messages.add_message(request, messages.ERROR, 'Su usuario no tiene los permiso de '
@@ -289,7 +282,7 @@ class ListaPropietarios(LoginRequiredMixin, View):
             dr = datos.IdAcueducto
             listavivienda = Vivienda.objects.filter(IdAcueducto=dr.pk)
             usuarios = Propietario.objects.all()
-            tipousuario = Permisos.objects.filter(usuid=datos, TipoPermiso='ALS').exists()
+            tipousuario = True
             if tipousuario is True:
                 return render(request, self.template_name, {'usuarios': usuarios, 'viviendas': listavivienda,
                                                             'notificaciones': contadorpen, 'listapqrs': listapqrs,
@@ -310,12 +303,6 @@ class AgregarPropietario(LoginRequiredMixin, View):
 
     def get(self, request):
         try:
-            listapqrs = Pqrs.objects.filter(Estado='Pendiente')
-            contqrs = Pqrs.objects.filter(Estado='Pendiente').count()
-            contsoli = SolicitudGastos.objects.filter(Estado=ESTADO1).count()
-            totalnoti = contqrs + contsoli
-            contadorpen = SolicitudGastos.objects.filter(Estado=ESTADO1)
-
             form = self.form_class()
             usuario = Usuario.objects.get(usuid=request.user.pk)
             tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AIS').exists()
@@ -323,9 +310,6 @@ class AgregarPropietario(LoginRequiredMixin, View):
                 return render(request, self.template_name,
                               {
                                   'form': form,
-                                  'notificaciones': contadorpen,
-                                  'listapqrs': listapqrs,
-                                  'totalnoti': totalnoti
                               })
             else:
                 messages.add_message(request, messages.ERROR, 'Su usuario no tiene los permisos de acceso a '
@@ -337,6 +321,9 @@ class AgregarPropietario(LoginRequiredMixin, View):
 
     def post(self, request):
         try:
+            usuario = Usuario.objects.get(usuid=request.user.pk)
+            idacueducto = usuario.IdAcueducto
+            acueducto = Acueducto.objects.get(IdAcueducto=idacueducto)
             idpropietario = request.POST.get("IdPropietario")
             nombres = request.POST.get("Nombres")
             apellidos = request.POST.get("Apellidos")
@@ -352,13 +339,12 @@ class AgregarPropietario(LoginRequiredMixin, View):
 
             else:
                 if int(idpropietario) <= 400000:
-                    messages.add_message(request, messages.ERROR, 'El numero de identificacion del '
-                                                                  'propietario no es valido')
+                    messages.add_message(request, messages.ERROR, 'El numero de identificacion del propietario no es valido')
                     return HttpResponseRedirect(reverse('usuarios:agregarpropietario'))
 
                 else:
                     propietario = Propietario(IdPropietario=idpropietario, Nombres=nombres, Apellidos=apellidos,
-                                              NoTelefono=notelefono, Email=email, IdPoblacion=poblacion)
+                                              NoTelefono=notelefono, Email=email, IdPoblacion=poblacion, IdAcueducto=acueducto)
 
                     if propietario is not None:
                         propietario.save()
@@ -378,9 +364,9 @@ class ModificarPropietario(LoginRequiredMixin, View):
     form_class = ModificaPropietario
     template_name = 'usuarios/modificarpropietario.html'
 
-    def get(self, request, idpropietario):
+    def get(self, request, IdPropietario):
         try:
-            datospropietario = Propietario.objects.get(IdPropietario=idpropietario)
+            datospropietario = Propietario.objects.get(IdPropietario=IdPropietario)
             form = self.form_class(instance=datospropietario)
             usuario = Usuario.objects.get(usuid=request.user.pk)
             tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='NOACMT').exists()
@@ -394,9 +380,9 @@ class ModificarPropietario(LoginRequiredMixin, View):
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
 
-    def post(self, request, idpropietario):
+    def post(self, request, IdPropietario):
         try:
-            datospropietario = Propietario.objects.get(IdPropietario=idpropietario)
+            datospropietario = Propietario.objects.get(IdPropietario=IdPropietario)
             form = self.form_class(request.user, request.POST, instance=datospropietario)
 
             if form.is_valid():
@@ -3332,8 +3318,7 @@ class VerFactura(LoginRequiredMixin, View):
             usuario = Usuario.objects.get(usuid=request.user.pk)
             numerofactura = request.POST.get("factura", "")
             tipo = request.POST.get("tipo")
-            idconcepto = request.POST.get("concepto")
-            print(tipo)
+            abono = request.POST.get("concepto")
             factura = Facturas.objects.get(IdFactura=numerofactura)
             idvivienda = factura.IdVivienda
             mensualidad = factura.periodofacturado
@@ -3344,19 +3329,19 @@ class VerFactura(LoginRequiredMixin, View):
             fecha = s + timedelta(days=2)
 
             if tipo == 'Total':
-                conceptos = ConceptosFacturados.objects.filter(IdVivienda=idvivienda,Estado='Pendiente')
-                suma = 0
-                for i in conceptos:
-                    concepto = ConceptosFacturados.objects.get(IdRegistro=i.IdRegistro)
-                    suma += concepto.Total
-                    concepto.Estado = 'Pago'
-                    concepto.save()
+                relacion = FacturasConceptos.objects.get(IdFactura=numerofactura)
+                idconcepto = relacion.IdConcepto
+                concepto = ConceptosFacturados.objects.get(IdRegistro=idconcepto.pk)
+                suma = concepto.Total
+                concepto.Estado = 'Pago'
+                concepto.save()
 
                 pago = Pagos(IdFactura=factura, Ano=ano, ValorPago=suma, Descripcion=mensualidad,
-                             Efectivo=0, Devuelta=0,
-                             IdUsuario=usuario, IdVivienda=idvivienda, resta=0)
+                             Efectivo=0, Devuelta=0, IdUsuario=usuario, IdVivienda=idvivienda, resta=0)
                 pago.save()
+
                 idpago = pago.IdPago
+
                 suspencion = OrdenesTrabajo.objects.filter(IdVivienda=idvivienda, Estado='Pendiente').exists()
                 if suspencion is True:
                     suspencion2 = OrdenesTrabajo.objects.get(IdVivienda=idvivienda, Estado='Pendiente')
@@ -3366,28 +3351,33 @@ class VerFactura(LoginRequiredMixin, View):
                 cambiofactura = Facturas.objects.get(IdFactura=numerofactura)
                 cambiofactura.Estado = FP
                 cambiofactura.save()
+
                 descripcion = 'Se registra pago: ' + str(idpago) + ' Factura: ' + str(
                     numerofactura) + ' Matricula: ' + str(idvivienda) + ' Valor: $' + str(suma)
+
                 novedad = Novedades(Descripcion=descripcion, TipoNovedad='Pago', usuario=usuario, matricula=idvivienda)
                 novedad.save()
                 tiquet2 = self.imptiquet()
                 ejecutar = tiquet2.get(request, idpago)
                 return ejecutar
 
-            elif tipo == 'Parcial':
-                conceptos = ConceptosFacturados.objects.filter(IdRegistro=idconcepto, Estado='Pendiente')
-                suma = 0
-                for i in conceptos:
-                    concepto = ConceptosFacturados.objects.get(IdRegistro=i.IdRegistro)
-                    suma += concepto.Total
-                    concepto.Estado = 'Pago'
-                    concepto.save()
+            elif tipo == 'Abono':
+                relacion = FacturasConceptos.objects.get(IdFactura=numerofactura)
+                idconcepto = relacion.IdConcepto
+                concepto = ConceptosFacturados.objects.get(IdRegistro=idconcepto.pk)
+                total = concepto.Total
+                concepto.Estado = 'Abono'
+                concepto.save()
+                periodo = concepto.Periodo
 
-                pago = Pagos(IdFactura=factura, Ano=ano, ValorPago=suma, Descripcion=mensualidad,
+                resta = int(total) - int(abono)
+
+                pago = Pagos(IdFactura=factura, Ano=ano, ValorPago=abono, Descripcion=mensualidad,
                              Efectivo=0, Devuelta=0,
-                             IdUsuario=usuario, IdVivienda=idvivienda, resta=0)
+                             IdUsuario=usuario, IdVivienda=idvivienda, resta=resta)
                 pago.save()
                 idpago = pago.IdPago
+
                 suspencion = OrdenesTrabajo.objects.filter(IdVivienda=idvivienda, Estado='Pendiente').exists()
                 if suspencion is True:
                     suspencion2 = OrdenesTrabajo.objects.get(IdVivienda=idvivienda, Estado='Pendiente')
@@ -3398,16 +3388,21 @@ class VerFactura(LoginRequiredMixin, View):
                 cambiofactura.Estado = FP
                 cambiofactura.save()
 
+                concepto1 = Conceptos(Tipo='Saldo P', Observacion=str(idconcepto) + ' - ' + str(periodo) + ' - Saldo pendiente: - $' + str(resta),
+                                      Estado='Sin facturar', Valor=resta, IdVivienda=idvivienda)
+                concepto1.save()
+
                 descripcion = 'Se registra pago: ' + str(idpago) + ' Factura: ' + str(
-                    numerofactura) + ' Matricula: ' + str(idvivienda) + ' Valor: $' + str(suma)
+                    numerofactura) + ' Matricula: ' + str(idvivienda) + ' Valor: $' + str(abono)
                 novedad = Novedades(Descripcion=descripcion, TipoNovedad='Pago', usuario=usuario, matricula=idvivienda)
                 novedad.save()
+
                 tiquet2 = self.imptiquet()
                 ejecutar = tiquet2.get(request, idpago)
                 return ejecutar
 
             else:
-                messages.add_message(request, messages.INFO, 'el valor a pagar debe ser superior a $2000')
+                messages.add_message(request, messages.INFO, 'No se puede realizar la transaccion')
                 return HttpResponseRedirect(reverse('usuarios:inicio'))
 
         except ObjectDoesNotExist:
@@ -3880,6 +3875,7 @@ class FacturadorConceptos(LoginRequiredMixin, View):
         try:
             usuario = Usuario.objects.get(usuid=request.user.pk)
             fechaexp = (datetime.today())
+            fechalimite = fechaexp + timedelta(days=DIASPARASUSPENCION)
             mes1 = fechaexp.month
             ciclos = Ciclo.objects.get(IdCiclo=mes1)
             mes = ciclos.Nombre
@@ -3899,6 +3895,7 @@ class FacturadorConceptos(LoginRequiredMixin, View):
                         complemen = 0
                         recargo = 0
                         acuerdopago = 0
+                        saldopen = 0
                         for j in concepto:
                             if j.Tipo == 'Aporte fijo':
                                 aportefijo = j.Valor
@@ -3940,20 +3937,25 @@ class FacturadorConceptos(LoginRequiredMixin, View):
                                 j.Estado = 'Facturado'
                                 j.save()
 
-                        valortotal = acuerdopago + aportefijo + complemen + aportematricula + suspencion + reconexion + recargo - subsidio
+                            if j.Tipo == 'Saldo P':
+                                saldopen = j.Valor
+                                j.Estado = 'Facturado'
+                                j.save()
+
+                        valortotal = acuerdopago + saldopen + aportefijo + complemen + aportematricula + suspencion + reconexion + recargo - subsidio
                         facturarconcepto = ConceptosFacturados(AporteFijo=aportefijo, CuotaMatricula=aportematricula, Suspencion=suspencion,Reconexion=reconexion,
                                           Subsidio=subsidio,Estado='Pendiente', Periodo=mes, Complementario= complemen,
-                                          Recargo=recargo,AcuerdoPago=acuerdopago,Total=valortotal, IdVivienda=vivienda)
+                                          Recargo=recargo,AcuerdoPago=acuerdopago,SaldoAnterior=saldopen,Total=valortotal, IdVivienda=vivienda)
                         facturarconcepto.save()
 
                     #generador de suspenciones
                 for i in viviendas:
-                    conceptosfacpen = ConceptosFacturados.objects.filter(Estado='Pendiente', IdVivienda=i.IdVivienda).count()
-                    if conceptosfacpen >=2:
-                        deuda = ConceptosFacturados.objects.filter(Estado='Pendiente', IdVivienda=i.IdVivienda).aggregate(Total=Sum('Total'))
-                        suma = deuda['Total']
+                    conceptosfacpen = ConceptosFacturados.objects.filter(Estado='Pendiente', IdVivienda=i.IdVivienda)
+                    saldoanterior = conceptosfacpen.SaldoAnterior
+                    suma = conceptosfacpen.Total
+                    if saldoanterior >=50:
                         vivienda = Vivienda.objects.get(IdVivienda=i.IdVivienda)
-                        orden = OrdenesTrabajo(Deuda=suma, TipoNovedad='Suspension',Estado='Pendiente',usuario=usuario,IdVivienda=vivienda, FechaEjecucion=fechaexp)
+                        orden = OrdenesTrabajo(Deuda=suma, TipoNovedad='Suspension',Estado='Pendiente',usuario=usuario,IdVivienda=vivienda, FechaEjecucion=fechalimite)
                         orden.save()
 
                 messages.add_message(request, messages.INFO, 'La operacion se realizo correctamente')
@@ -4012,6 +4014,15 @@ class GeneradorConceptos(LoginRequiredMixin, View):
                                              Valor=recargo, IdVivienda=i.IdVivienda)
                         concepto.save()
 
+                for i in conceptosfacturados:
+                    if i.Total >= 1:
+                        concepto1 = Conceptos(Tipo='Saldo P', Observacion=str(i.IdRegistro+' - '+i.Periodo) + ' - Saldo pendiente: - $' + str(i.Total),
+                                             Estado='Sin facturar',Valor=i.Total, IdVivienda=i.IdVivienda)
+                        concepto1.save()
+                        conceptofac = ConceptosFacturados.objects.get(IdRegistro=i.IdRegistro)
+                        conceptofac.Estado = 'Vencido'
+                        conceptofac.save()
+
                 for i in viviendas:
                     if i.EstadoServicio == 'Operativo':
                         vivienda = Vivienda.objects.get(IdVivienda=i.IdVivienda)
@@ -4059,35 +4070,6 @@ class GeneradorConceptos(LoginRequiredMixin, View):
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
 
-class Varias(LoginRequiredMixin, View):
-    login_url = '/'
-    template_name = 'usuarios/consumosuscriptor.html'
-
-    def get(self, request):
-        try:
-
-            usuario = Usuario.objects.get(usuid=request.user.pk)
-            tipousuario = True
-            reconexiones = Facturas.objects.all()
-            if tipousuario is True:
-                for i in reconexiones:
-                    estadocuenta = EstadoCuenta.objects.get(IdEstadoCuenta=i.IdEstadoCuenta.pk)
-                    idvivienda = estadocuenta.IdVivienda
-                    ordenes = Facturas(IdFactura=i.IdFactura,Estado=i.Estado,periodofacturado=i.periodofacturado,FechaExpe=i.FechaExpe,FechaLimite=i.FechaLimite,
-                                       facturasvencidas=i.facturasvencidas,IdCiclo=i.IdCiclo,Total=i.Total,IdVivienda=idvivienda)
-                    ordenes.save()
-
-                messages.add_message(request, messages.INFO, 'La operacion se realizo correctamente')
-                return HttpResponseRedirect(reverse('usuarios:inicio'))
-            else:
-                messages.add_message(request, messages.ERROR, 'Su usuario no tiene los permisos de acceso a esta '
-                                                              'seccion')
-                return HttpResponseRedirect(reverse('usuarios:inicio'))
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
-
-
 class GeneradorFacturas(LoginRequiredMixin, View):
     login_url = '/'
     template_name = 'usuarios/generadorfacturas.html'
@@ -4117,25 +4099,36 @@ class GeneradorFacturas(LoginRequiredMixin, View):
                         relacion = FacturasConceptos(IdConcepto=conceptos2,IdFactura=factura)
                         relacion.save()
 
-                    else:
-                        vivienda = Vivienda.objects.get(IdVivienda=i.IdVivienda)
-                        vapo = ConceptosFacturados.objects.filter(Estado='Pendiente', IdVivienda=i.IdVivienda).aggregate(Total=Sum('Total'))
-                        suma8 = vapo['Total']
-                        conceptos3 = ConceptosFacturados.objects.filter(Estado='Pendiente', IdVivienda=i.IdVivienda)
-                        factura = Facturas(Estado='Emitida', IdVivienda=vivienda, periodofacturado=mes,
-                                           FechaExpe=fechaexp,
-                                           FechaLimite=fechaexp, IdCiclo=ciclos, Total=suma8)
-                        factura.save()
-                        for i in conceptos3:
-                            conceptos4 = ConceptosFacturados.objects.get(IdRegistro=i.IdRegistro)
-                            relacion = FacturasConceptos(IdConcepto=conceptos4, IdFactura=factura)
-                            relacion.save()
-
                 messages.add_message(request, messages.ERROR, 'No se pudo generar la facturacion')
                 return HttpResponseRedirect(reverse('usuarios:inicio'))
 
             else:
                 messages.add_message(request, messages.ERROR,'No se pudo generar la facturacion')
+                return HttpResponseRedirect(reverse('usuarios:inicio'))
+
+        except ObjectDoesNotExist:
+            return render(request, "pages-404.html")
+
+class Varias(LoginRequiredMixin, View):
+    login_url = '/'
+    template_name = 'usuarios/consumosuscriptor.html'
+
+    def get(self, request):
+        try:
+
+            usuario = Usuario.objects.get(usuid=request.user.pk)
+            tipousuario = True
+            reconexiones = ConceptosFacturados.objects.filter(Estado='Pendiente')
+            if tipousuario is True:
+                for i in reconexiones:
+                    vivienda = Vivienda.objects.get(IdVivienda=i.IdVivienda)
+                    pass
+
+                messages.add_message(request, messages.INFO, 'La operacion se realizo correctamente')
+                return HttpResponseRedirect(reverse('usuarios:inicio'))
+            else:
+                messages.add_message(request, messages.ERROR, 'Su usuario no tiene los permisos de acceso a esta '
+                                                              'seccion')
                 return HttpResponseRedirect(reverse('usuarios:inicio'))
 
         except ObjectDoesNotExist:

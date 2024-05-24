@@ -109,6 +109,7 @@
                                                                   <th>Recargo</th>
                                                                   <th>Subsidio</th>
                                                                   <th>Acuerdo pago</th>
+                                                                  <th>Saldo Anterior</th>
                                                                   <th>Periodo</th>
                                                                   <th>Estado</th>
                                                                   <th>Total por periodo</th>
@@ -129,8 +130,21 @@
                                                                           <td>${{ j.Recargo|intcomma }}</td>
                                                                           <td>$-{{ j.Subsidio|intcomma }}</td>
                                                                           <td>${{ j.AcuerdoPago|intcomma }}</td>
+                                                                          <td>${{ j.SaldoAnterior|intcomma }}</td>
                                                                            <td>{{ j.Periodo }}</td>
-                                                                           <td>{{ j.Estado }}</td>
+                                                                          <td>
+                                                                            {% if j.Estado == "Vencido" %}
+                                                                            <span class="badge bg-warging-lt">Vencido</span>&nbsp;
+                                                                            {% elif j.Estado == "Pago" %}
+                                                                             <span class="badge bg-success-lt">Pago</span>&nbsp;
+                                                                            {% elif j.Estado == "Abono" %}
+                                                                            <span class="badge bg-purple-lt">Anulada</span>&nbsp;
+                                                                            {%else%}
+                                                                            <span class="badge bg-indigo-lt">Pendiente</span>&nbsp;
+                                                                            {% endif %}
+
+
+                                                                          </td>
                                                                           <td style="color:rgba(250, 0, 53); font-size: 1rem;">${{ j.Total|intcomma }}</td>
                                                                          
                                                               </tr>
@@ -201,7 +215,7 @@
                                         <label class="form-label">Tipo de pago</label>
                                         <select class="form-select" id="select" name="tipo">
                                             <option value="Total">Total</option>
-                                            <option value="Parcial">Parcial</option>
+                                            <option value="Abono">Abono</option>
                                       </select>
                                     </div>
                                 </div>
@@ -212,7 +226,7 @@
                             <br>
                             <div class="row">
                                 <div id="miDiv" style="display:none;">
-                                <label class="form-label">Ingrese el concepto que desea pagar</label>
+                                <label class="form-label">Ingrese el valor que desea pagar</label>
                                 <input type="text" class="form-control" name="concepto" placeholder="Requerido..." >
                                 </div>
                             </div>
