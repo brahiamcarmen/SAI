@@ -35,6 +35,16 @@ class Tarifa(models.Model):
         verbose_name_plural = "Listado de Tarifas"
         verbose_name = "Tarifa"
 
+class Sectores(models.Model):
+    IdSector= models.AutoField(primary_key=True)
+    Nombre = models.CharField(max_length=10)
+    objects = models.Manager()
+    def __str__(self):
+        return "%s" % self.Nombre
+
+    class Meta:
+        verbose_name_plural = "Lista de sectores"
+        verbose_name = "Listado de sectores"
 
 class Acueducto(models.Model):
     IdAcueducto = models.CharField(primary_key=True, max_length=9, null=False)
@@ -58,21 +68,29 @@ class Acueducto(models.Model):
 
 DOC_CHOICES2 = (
     ('Presidente', _(u"Presidente")),
-    ('Vicepresidente', _(u"Vicepresidente")),
     ('Operario', _(u"Operario)")),
     ('Secretario/a', _(u"Secretario/a")),
-    ('Tesorero', _(u"Tesorero")),
+    ('Tesorero/a', _(u"Tesorero/a")),
     ('Auxiliar', _(u"Auxiliar")),
-    ('Administrador de sistemas', _(u"Administrador de sistemas(Dir)")),
 )
 
+DOC_CHOICES22 = (
+    ('Nivel 1', _(u"Nivel 1")),
+    ('Nivel 2', _(u"Nivel 2")),
+    ('Nivel 3', _(u"Nivel 3")),
+)
 
+DOC_CHOICES23 = (
+    ('Area administrativa', _(u"Area administrativa")),
+    ('Area operativa', _(u"Area operativa)")),
+)
 class Usuario(models.Model):
-    IdUsuario = models.AutoField(primary_key=True)
+    IdUsuario = models.CharField(primary_key=True,max_length=25, null=False)
     fotoUsuario = models.ImageField(upload_to='usuarios', default='usuarios/usuario.png')
-    TipoUsuario = models.CharField(max_length=100, blank=True, null=True, choices=DOC_CHOICES2, default='Auxiliar')
+    TipoUsuario = models.CharField(max_length=100, null=True, choices=DOC_CHOICES22)
     FechaCreacion = models.DateTimeField(auto_now_add=True)
-    Departamento = models.CharField(max_length=50, null=False)
+    Cargo = models.CharField(max_length=50, null=False,choices=DOC_CHOICES2)
+    Departamento = models.CharField(max_length=50, null=False, choices=DOC_CHOICES23)
     celular = models.CharField(max_length=10, null=False)
     usuid = models.OneToOneField(User, on_delete=models.CASCADE)
     IdAcueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
@@ -372,6 +390,7 @@ class SolicitudGastos(models.Model):
     AreaResponsable = models.CharField(max_length=100, null=False, choices=DOC_CHOICES20)
     NumeroFactura = models.CharField(max_length=10, null=False)
     IdProveedor= models.ForeignKey(Proveedor, on_delete=models.CASCADE, null=True)
+    IdAcueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
     objects = models.Manager()
     def __str__(self):
         return "%s" % self.IdSoGa
@@ -523,6 +542,7 @@ class Credito(models.Model):
     CuotasPendiente = models.CharField(max_length=10, null=False)
     Fecha = models.DateTimeField(auto_now_add=True, null=False)
     Estado = models.CharField(max_length=10, null=False, choices=DOC_CHOICES17)
+    IdAcueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
     objects = models.Manager()
     def __str__(self):
         return "%s" % self.IdCredito

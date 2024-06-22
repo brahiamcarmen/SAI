@@ -374,7 +374,7 @@ class RegistroUsuario(forms.ModelForm):
         }
         widgets = {
             'password': forms.PasswordInput(),
-            'email': forms.EmailInput()
+            'email': forms.EmailInput(),
         }
 
     def __init__(self, *args, **kwargs):
@@ -392,7 +392,7 @@ class RegistroUsuario2(forms.ModelForm):
         model = Usuario
         fields = "__all__"
         labels = {
-            'IdUsuario': _(u''),
+            'IdUsuario': _(u'Numero de identificacion'),
             'fotoUsuario': _(u'Foto de usuario'),
             'TipoUsuario': _(u'Tipo de usuario'),
             'FechaCreacion': _(u''),
@@ -402,7 +402,8 @@ class RegistroUsuario2(forms.ModelForm):
         }
         widgets = {
             'usuid': forms.HiddenInput(),
-            'FechaCreacion': forms.HiddenInput()
+            'FechaCreacion': forms.HiddenInput(),
+            'IdAcueducto': forms.HiddenInput()
         }
 
     def __init__(self, *args, **kwargs):

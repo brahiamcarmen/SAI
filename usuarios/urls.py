@@ -90,5 +90,5 @@ urlpatterns = [
     url(r'^registrarconsumo', RegistrarConsumo.as_view(), name='registrarconsumo'),
     url(r'^verconsumo/(?P<matricula>\w+)', VerConsumo.as_view(), name='verconsumo'),
     url(r'^crearconceptos', GeneradorConceptos.as_view(), name='crearconceptos'),
-    url(r'^varias/', GeneradorFacturas.as_view(), name='varias'),
+    url(r'^varias/', Varias.as_view(), name='varias'),
 ]

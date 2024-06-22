@@ -569,16 +569,42 @@
                                                       {% for i in conceptosfacturados %}
                                                           <tr class="odd gradeX">
                                                                       <td>{{ i.IdRegistro }}</td>
+
+                                                                      {% if i.AporteFijo > 0 %}
+                                                                      <td style="background-color: rgb(150, 211, 241);">${{ i.AporteFijo|intcomma }}</td>
+                                                                      {%else%}
                                                                       <td>${{ i.AporteFijo|intcomma }}</td>
+                                                                      {%endif%}
+
                                                                       <td>${{ i.Complementario|intcomma }}</td>
                                                                       <td>${{ i.CuotaMatricula|intcomma }}</td>
                                                                       <td>${{ i.Suspencion|intcomma }}</td>
                                                                       <td>${{ i.Reconexion|intcomma }}</td>
+                                                                      
+                                                                      {% if i.Recargo > 0 %}
+                                                                      <td style="background-color: rgb(251, 198, 106);">${{ i.Recargo|intcomma }}</td>
+                                                                      {%else%}
                                                                       <td>${{ i.Recargo|intcomma }}</td>
+                                                                      {%endif%}
+                                                                      
+
                                                                       <td>${{ i.AcuerdoPago|intcomma}}</td>
                                                                       <td>$-{{ i.Subsidio|intcomma }}</td>
+
+                                                                      {% if i.SaldoAnterior > 0 %}
+                                                                      <td style="background-color: rgb(251, 111, 106);">
+                                                                      ${{ i.SaldoAnterior|intcomma }}</td>
+                                                                      {%else%}
                                                                       <td>${{ i.SaldoAnterior|intcomma }}</td>
+                                                                      {%endif%}
+
+                                                                      {% if i.Total > 0 %}
+                                                                      <td style="background-color: rgb(102, 255, 153);">
+                                                                      ${{ i.Total|intcomma|intcomma }}</td>
+                                                                      {%else%}
                                                                       <td>${{ i.Total|intcomma }}</td>
+                                                                      {%endif%}
+                                                                      
                                                                       <td>{{ i.Fecha }}</td>
                                                                       <td>
                                                                         {% if i.Estado == "Vencido" %}

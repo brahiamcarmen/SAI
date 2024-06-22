@@ -122,15 +122,66 @@
                                                             {% if i.IdConcepto.pk == j.IdRegistro %}
                                                               <tr class="odd gradeX">
                                                                           <td>{{ j.IdRegistro }}</td>
+
+                                                                          {% if j.AporteFijo > 0 %}
+                                                                          <td style="background-color: rgb(150, 211, 241);">${{ j.AporteFijo|intcomma }}</td>
+                                                                          {%else%}
                                                                           <td>${{ j.AporteFijo|intcomma }}</td>
+                                                                          {%endif%}
+
+                                                                          {% if j.Complementario > 0 %}
+                                                                          <td style="background-color: rgb(150, 241, 230);">
+                                                                          ${{ j.Complementario|intcomma|intcomma }}</td>
+                                                                          {%else%}
                                                                           <td>${{ j.Complementario|intcomma }}</td>
+                                                                          {%endif%}
+
+                                                                          {% if j.CuotaMatricula > 0 %}
+                                                                          <td style="background-color: rgb(150, 191, 241);">
+                                                                          ${{ j.CuotaMatricula|intcomma|intcomma }}</td>
+                                                                          {%else%}
                                                                           <td>${{ j.CuotaMatricula|intcomma }}</td>
+                                                                          {%endif%}
+
+                                                                          {% if j.Suspencion > 0 %}
+                                                                          <td style="background-color: rgb(238, 241, 150);">${{ j.Suspencion|intcomma }}</td>
+                                                                          {%else%}
                                                                           <td>${{ j.Suspencion|intcomma }}</td>
+                                                                          {%endif%}
+
+                                                                          {% if j.Reconexion > 0 %}
+                                                                          <td style="background-color: rgb(238, 241, 150);">${{ j.Reconexion|intcomma }}</td>
+                                                                          {%else%}
                                                                           <td>${{ j.Reconexion|intcomma }}</td>
+                                                                          {%endif%}
+
+                                                                          {% if j.Recargo > 0 %}
+                                                                          <td style="background-color: rgb(251, 198, 106);">${{ j.Recargo|intcomma }}</td>
+                                                                          {%else%}
                                                                           <td>${{ j.Recargo|intcomma }}</td>
-                                                                          <td>$-{{ j.Subsidio|intcomma }}</td>
+                                                                          {%endif%}
+
+                                                                          {% if j.Subsidio > 0 %}
+                                                                          <td style="background-color: rgb(211, 195, 255);">
+                                                                          ${{ j.Subsidio|intcomma|intcomma }}</td>
+                                                                          {%else%}
+                                                                          <td>${{ j.Subsidio|intcomma }}</td>
+                                                                          {%endif%}
+
+                                                                          {% if j.AcuerdoPago > 0 %}
+                                                                          <td style="background-color: rgb(102, 255, 153);">
+                                                                          ${{ j.AcuerdoPago|intcomma|intcomma }}</td>
+                                                                          {%else%}
                                                                           <td>${{ j.AcuerdoPago|intcomma }}</td>
+                                                                          {%endif%}
+
+                                                                          {% if j.SaldoAnterior > 0 %}
+                                                                          <td style="background-color: rgb(251, 111, 106);">
+                                                                          ${{ j.SaldoAnterior|intcomma }}</td>
+                                                                          {%else%}
                                                                           <td>${{ j.SaldoAnterior|intcomma }}</td>
+                                                                          {%endif%}
+
                                                                            <td>{{ j.Periodo }}</td>
                                                                           <td>
                                                                             {% if j.Estado == "Vencido" %}
