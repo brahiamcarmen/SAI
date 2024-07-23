@@ -1649,111 +1649,112 @@ class DescargarFactura(LoginRequiredMixin, View):
                 wb = openpyxl.load_workbook('static/ModeloFactura/002-0-230723.xlsx')
                 ws = wb.active
                 img = openpyxl.drawing.image.Image('static/ModeloFactura/output.png')
-                ws.add_image(img, 'B16')
+                #ws.add_image(img, 'B16')
                 if int(saldoanterior) >= 1:
                     imagen = openpyxl.drawing.image.Image('static/ModeloFactura/corte1.png')
-                    ws.add_image(imagen, 'AV26')
+                    ws.add_image(imagen, 'AJ16')
                 else:
                     pass
                 # factura matricula estado
-                ws['A11'] = noaporte
-                ws['O12'] = idmatricula
-                ws['A14'] = estado
+                ws['AZ1'] = noaporte
+                ws['A15'] = idmatricula
+                ws['AZ3'] = estado
                 # suscriptor
-                ws['Y12'] = nombrecompleto
-                ws['O6'] = direccion
-                ws['AN9'] = diametro
-                ws['AG6'] = estrato
-                ws['AK6'] = tipoinstalacion
-                ws['AG9'] = tipodepredio
-                ws['AH4'] = estadoservicio
+                ws['K15'] = nombrecompleto
+                ws['A13'] = direccion
+                ws['A11'] = direccion
+                ws['U13'] = diametro
+                ws['U11'] = estrato
+                ws['Y13'] = tipoinstalacion
+                ws['Y11'] = tipodepredio
+                ws['Y9'] = estadoservicio
                 # Periodo facturado
-                ws['A26'] = periodofacturado
+                ws['A19'] = periodofacturado
 
                 # ultimo pago
                 consultarpago = Pagos.objects.filter(IdVivienda=matricula).exists()
                 if consultarpago is True:
                     filtropagos = Pagos.objects.filter(IdVivienda=matricula).order_by("-IdPago")[:1]
                     consultarp = Pagos.objects.get(IdPago=filtropagos)
-                    ws['Z17'] = consultarp.IdPago
-                    ws['AE17'] = consultarp.FechaPago
-                    ws['AL17'] = int(consultarp.ValorPago)
+                    ws['M20'] = consultarp.IdPago
+                    ws['R20'] = consultarp.FechaPago
+                    ws['AD20'] = int(consultarp.ValorPago)
                 else:
                     mensaje = "No Registra"
-                    ws['Z17'] = mensaje
-                    ws['AE17'] = mensaje
-                    ws['AL17'] = mensaje
+                    ws['M20'] = mensaje
+                    ws['R20'] = mensaje
+                    ws['AD20'] = mensaje
 
                 # conceptos facturados
                 if int(saldoanterior) > 0:
-                    ws['BM19'] = int(saldoanterior)
+                    ws['BB7'] = int(saldoanterior)
 
                 if int(aporte) > 0:
-                    ws['BM20'] = int(aporte)
+                    ws['BB8'] = int(aporte)
 
                 if int(complementario) > 0:
                     consumo = Consumos.objects.get(IdVivienda=matricula,mes=mes)
-                    ws['BC21'] = consumo.Consumo - 20
-                    ws['BM21'] = int(complementario)
+                    ws['AQ9'] = consumo.Consumo - 20
+                    ws['BB9'] = int(complementario)
 
                 if int(suspencion) > 0:
-                    ws['BM22'] = int(suspencion)
+                    ws['BB10'] = int(suspencion)
 
                 if int(reconexion) > 0:
-                    ws['BM23'] = int(reconexion)
+                    ws['BB11'] = int(reconexion)
 
                 if int(recargo) > 0:
-                    ws['BM24'] = int(recargo)
+                    ws['BB12'] = int(recargo)
 
                 if int(cuotaMatricula) > 0:
                     cobromatri = CobroMatricula.objects.get(IdVivienda=matricula)
                     saldo = cobromatri.ValorPendiente
                     cuotasp = cobromatri.CuotasPendientes
-                    ws['BF25'] = int(saldo)
-                    ws['BJ25'] = cuotasp
-                    ws['BM25'] = int(cuotaMatricula)
+                    ws['AT13'] = int(saldo)
+                    ws['AY13'] = cuotasp
+                    ws['BB13'] = int(cuotaMatricula)
 
                 if int(acuerdopago) > 0:
                     acuerdo = AcuerdosPago.objects.get(IdVivienda=matricula, Estado='Pendiente')
-                    ws['BF26'] = int(acuerdo.ValorPendiente)
-                    ws['BJ26'] = acuerdo.CuotasPendientes
-                    ws['BM26'] = int(acuerdopago)
+                    ws['AT14'] = int(acuerdo.ValorPendiente)
+                    ws['AY14'] = acuerdo.CuotasPendientes
+                    ws['BB14'] = int(acuerdopago)
 
                 if int(subsidio) > 0:
-                    ws['BM28'] = int(subsidio)
+                    ws['BB15'] = int(subsidio)
 
                 # total concepto de acueducto
-                ws['BM30'] = int(Total)
+                ws['BB16'] = int(Total)
 
                 # facturas vencidas
-                ws['O16'] = vencidas
+                ws['AY27'] = vencidas
 
                 # fechas de procedimiento
-                ws['A31'] = FechaExpe
-                ws['A33'] = FechaLimite
+                ws['S7'] = FechaExpe
+                ws['AB29'] = FechaLimite
 
                 if int(vencidas) >= 1:
-                    fechalimite = FechaLimite + timedelta(days=8)
-                    ws['A33'] = 'Inmediato'
-                    ws['A35'] = fechalimite
+                    fechalimite = FechaLimite + timedelta(days=2)
+                    ws['AB29'] = 'Inmediato'
+                    ws['AB31'] = fechalimite
                 else:
-                    ws['A33'] = FechaLimite
+                    ws['AB29'] = FechaLimite
 
                 # total a pagar condional 0
                 if int(Total) <= 0:
-                    ws['A39'] = 0
+                    ws['AS32'] = 0
                 else:
-                    ws['A39'] = int(Total)
+                    ws['AS32'] = int(Total)
 
                 medidor = Asignacion.objects.filter(IdVivienda=matricula).exists()
                 if medidor is True:
                     consumo = Consumos.objects.get(IdVivienda=matricula,mes=mes)
-                    ws['AR6'] = str(consumo.IdMedidor)
-                    ws['AR9'] = consumo.Lecturaactual
-                    ws['AR11'] = consumo.Lecturaanterior
-                    ws['AR13'] = consumo.Consumo
-                    ws['AR15'] = consumo.promedio
-                    ws['BH6'] = consumo.mes
+                    ws['A24'] = str(consumo.IdMedidor)
+                    ws['A26'] = consumo.Lecturaactual
+                    ws['A28'] = consumo.Lecturaanterior
+                    ws['A30'] = consumo.Consumo
+                    ws['A32'] = consumo.promedio
+                    ws['O24'] = consumo.mes
 
                 ws.title = IdFactura
                 archivo_predios = str(IdFactura) + ".xlsx"
@@ -2188,6 +2189,8 @@ class CambioTitular(LoginRequiredMixin, View):
             else:
                 if propietario is True:
                     usuario = Usuario.objects.get(usuid=request.user.pk)
+                    idacueducto = usuario.IdAcueducto
+                    datosacueducto = Acueducto.objects.get(IdAcueducto=idacueducto)
                     vivienda = Vivienda.objects.get(IdVivienda=IdVivienda)
                     propie = Propietario.objects.get(IdPropietario=idpropietario)
                     propie2 = Propietario.objects.get(IdPropietario=idpropi)
@@ -2197,7 +2200,7 @@ class CambioTitular(LoginRequiredMixin, View):
                     descripcion = 'se cambia titular de la matricula ' + str(IdVivienda) + ' de ' + str(
                         propie2) + ' por ' + str(propie) + ' por solicitud del interesado '
                     novedad = Novedades(Descripcion=descripcion, TipoNovedad=tiponovedad, usuario=usuario,
-                                                 matricula=vivienda)
+                                                 matricula=vivienda, IdAcueducto=datosacueducto)
                     novedad.save()
                     ver = self.predio()
                     messages.add_message(request, messages.INFO, 'Se modifica el titular correctamente')
@@ -2896,20 +2899,22 @@ class PanelAdmin(LoginRequiredMixin, View):
                 # Convertir el tamaño total a megabytes
                 total_size_in_megabytes = total_size_in_bytes / (1024 * 1024)
 
+            nombre_base_datos = settings.DATABASES['default']['NAME']
             usuario = Usuario.objects.get(usuid=request.user.pk)
             nit = usuario.IdAcueducto
             ye = datetime.now()
             ano = ye.year
-            cantusu = Usuario.objects.all().count()
-            usuarios = Usuario.objects.all()
+            cantusu = Usuario.objects.filter(IdAcueducto=nit).count()
+            usuarios = Usuario.objects.filter(IdAcueducto=nit)
             tarifas = Tarifa.objects.all().order_by('-IdTarifa')
             tarifa = Tarifa.objects.filter(Ano=ano)
             poblaciones = Poblacion.objects.all()
-            matriculas = ValorMatricula.objects.all()
+            matriculas = ValorMatricula.objects.filter(IdAcueducto=nit)
             acueducto = Acueducto.objects.get(IdAcueducto=nit)
             usuario = Usuario.objects.get(usuid=request.user.pk)
+            tipou = usuario.TipoUsuario
 
-            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AccessPanel').exists()
+            tipousuario = True
             if tipousuario is True:
                 return render(request, self.template_name, {
                     'ano': str(ano),
@@ -2930,6 +2935,7 @@ class PanelAdmin(LoginRequiredMixin, View):
                     'activa': tarifa,
                     'matriculas': matriculas,
                     'poblacion': poblaciones,
+                    'bsdatos': nombre_base_datos,
                     'mb': int(total_size_in_megabytes)
 
                 }

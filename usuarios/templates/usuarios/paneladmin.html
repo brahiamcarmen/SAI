@@ -10,7 +10,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-2">
-        <h3 class="subheader">Empresa</h3>
+        <h3 class="subheader">Usuario</h3>
           <div class="col-auto">
                                 <div class="card">
                   <div class="card-body text-center">
@@ -47,6 +47,23 @@
                   </div>
                 </div>
               </div>
+              <div class="col-auto" style="margin-top: 0.5rem">
+                    <div class="card">
+                      <div class="card-body">
+                        <p class="mb-3">Almacenamiento usado <strong>{{mb}} MB </strong>of 8 GB</p>
+                        <div class="progress progress-separated mb-3">
+                          <div class="progress-bar bg-primary" role="progressbar" style="width: {{mb}}%"></div>
+                        </div>
+                        <div class="row">
+                          <div class="col-auto d-flex align-items-center pe-2">
+                            <span class="legend me-2 bg-primary"></span>
+                            <span>Base de datos</span>
+                            <span class="d-none d-md-inline d-lg-none d-xxl-inline ms-2 text-muted">{{bsdatos}}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
       </div>
       <div class="col-md-8">
         <div class="row">
@@ -137,23 +154,7 @@
                                     {%endfor%}
             </div>
             <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                      <div class="card-body">
-                        <p class="mb-3">Almacenamiento usado <strong>{{mb}} MB </strong>of 8 GB</p>
-                        <div class="progress progress-separated mb-3">
-                          <div class="progress-bar bg-primary" role="progressbar" style="width: {{mb}}%"></div>
-                        </div>
-                        <div class="row">
-                          <div class="col-auto d-flex align-items-center pe-2">
-                            <span class="legend me-2 bg-primary"></span>
-                            <span>Base de datos</span>
-                            <span class="d-none d-md-inline d-lg-none d-xxl-inline ms-2 text-muted">{{mb}}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                </div>
+
             </div>
         
       </div>

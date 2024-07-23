@@ -35,16 +35,6 @@ class Tarifa(models.Model):
         verbose_name_plural = "Listado de Tarifas"
         verbose_name = "Tarifa"
 
-class Sectores(models.Model):
-    IdSector= models.AutoField(primary_key=True)
-    Nombre = models.CharField(max_length=10)
-    objects = models.Manager()
-    def __str__(self):
-        return "%s" % self.Nombre
-
-    class Meta:
-        verbose_name_plural = "Lista de sectores"
-        verbose_name = "Listado de sectores"
 
 class Acueducto(models.Model):
     IdAcueducto = models.CharField(primary_key=True, max_length=9, null=False)
@@ -65,6 +55,17 @@ class Acueducto(models.Model):
         verbose_name_plural = "Lista de Acueductos"
         verbose_name = "Lista de Acueductos"
 
+class Sectores(models.Model):
+    IdSector= models.AutoField(primary_key=True)
+    Nombre = models.CharField(max_length=10)
+    Acueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
+    objects = models.Manager()
+    def __str__(self):
+        return "%s" % self.Nombre
+
+    class Meta:
+        verbose_name_plural = "Lista de sectores"
+        verbose_name = "Listado de sectores"
 
 DOC_CHOICES2 = (
     ('Presidente', _(u"Presidente")),
