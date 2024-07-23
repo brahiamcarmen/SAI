@@ -53,8 +53,6 @@
                 </div>
               </a>
               <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <a href="{% url 'usuarios:perfil' %}" class="dropdown-item">Perfil</a>
-                <a href="{% url 'usuarios:paneladmin' %}" class="dropdown-item">Panel de administración</a>
                 <a href="{% url 'usuarios:mapa' %}" class="dropdown-item">Mapa de red</a>
                 <div class="dropdown-divider"></div>
                 <a href="{% url 'logout' %}" class="dropdown-item">Cerrar sesión</a>
@@ -92,9 +90,6 @@
                       <a class="dropdown-item" href="{% url 'usuarios:listaviviendas' %}" >
                         Predios
                       </a>
-                      <a class="dropdown-item" href="{% url 'usuarios:busquedas' %}" >
-                        Buscador
-                      </a>
                       <a class="dropdown-item" href="{% url 'usuarios:listapqrs' %}" >
                         Pqrs
                       </a>
@@ -129,13 +124,7 @@
                         Estados de cuenta
                       </a>
                       <a class="dropdown-item" href="{% url 'usuarios:consumos' %}" >
-                        Consumos
-                      </a>
-                      <a class="dropdown-item" href="{% url 'usuarios:anularfactura' %}" >
-                        Anular factura
-                      </a>
-                      <a class="dropdown-item" href="{% url 'usuarios:anularpago' %}" >
-                        Anular pago
+                        Medición
                       </a>
                     </div>
                   </div>

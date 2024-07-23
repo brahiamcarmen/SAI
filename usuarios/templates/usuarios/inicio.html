@@ -8,6 +8,7 @@
 {% load humanize %}
 {% include 'usuarios/alerts.html' %}
 <div class="page-body">
+  <div class="spinner"></div>
   <div class="container-fluid">
     <div class="row">
        <div class="col-md-2">
@@ -29,11 +30,29 @@
           </div>
         </div>
           <br>
-          <div class="row">
+          <div class="row text-center" style="text-align: center;">
             <div class="col-6 col-sm-4 col-md-2 col-xl-auto mb-3">
-              <a data-bs-toggle="offcanvas" href="#offcanvasStart" role="button" aria-controls="offcanvasStart" class="btn btn-facebook w-100 btn-icon">
+              <a data-bs-toggle="offcanvas" href="#offcanvasStart" role="button" aria-controls="offcanvasStart" class="btn  btn-dark w-100 btn-icon">
                           <!-- Download SVG icon from http://tabler-icons.io/i/search -->
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="10" cy="10" r="7" /><line x1="21" y1="21" x2="15" y2="15" /></svg>
+              </a>
+            </div>
+            <div class="col-6 col-sm-4 col-md-2 col-xl-auto mb-3">
+              <a data-bs-toggle="offcanvas" href="#offcanvasStart2" role="button" aria-controls="offcanvasStart" class="btn  btn-dark w-100 btn-icon">
+                          <!-- Download SVG icon from http://tabler-icons.io/i/history -->
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="12 8 12 12 14 14" /><path d="M3.05 11a9 9 0 1 1 .5 4m-.5 5v-5h5" /></svg>
+              </a>
+            </div>
+            <div class="col-6 col-sm-4 col-md-2 col-xl-auto mb-3">
+              <a data-bs-toggle="offcanvas" href="#offcanvasStart3" role="button" aria-controls="offcanvasStart" class="btn  btn-dark w-100 btn-icon">
+                          <!-- Download SVG icon from http://tabler-icons.io/i/user-exclamation -->
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="9" cy="7" r="4" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><line x1="19" y1="7" x2="19" y2="10" /><line x1="19" y1="14" x2="19" y2="14.01" /></svg>
+              </a>
+            </div>
+            <div class="col-6 col-sm-4 col-md-2 col-xl-auto mb-3">
+              <a data-bs-toggle="offcanvas" href="#offcanvasStart4" role="button" aria-controls="offcanvasStart" class="btn  btn-dark w-100 btn-icon">
+                         <!-- Download SVG icon from http://tabler-icons.io/i/container -->
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M20 4v.01" /><path d="M20 20v.01" /><path d="M20 16v.01" /><path d="M20 12v.01" /><path d="M20 8v.01" /><rect x="8" y="4" width="8" height="16" rx="1" /><path d="M4 4v.01" /><path d="M4 20v.01" /><path d="M4 16v.01" /><path d="M4 12v.01" /><path d="M4 8v.01" /></svg>
               </a>
             </div>
           </div>
@@ -235,23 +254,7 @@
               </div>
             </div>
             <div class="col-md-6">
-              <h3 class="subheader">Ultimos registros</h3>
-                  <table class="table card-table table-vcenter">
-                    <thead>
-                      <tr>
-                        <th>Descripcion</th>
-                        <th colspan="2">Fecha</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {% for novedad in novedades %}
-                      <tr>
-                        <td>{{novedad.Descripcion}}</td>
-                        <td>{{novedad.Fecha}}</td>
-                      </tr>
-                      {%endfor%}
-                    </tbody>
-                  </table>
+
             </div>
         </div>
         
@@ -288,7 +291,7 @@
               </div>
               <div class="offcanvas-body">
                 <div>
-                  <form method="post" enctype="multipart/form-data">
+                  <form action="{% url 'usuarios:busquedas' %}" method="get">
                     {% csrf_token %}
                     <div class="form-label">
                         <label class="form-label">Tipo de busqueda</label>
@@ -310,6 +313,124 @@
                     </div>
                 </form>
                 </div>
+              </div>
+            </div>
+            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasStart2" aria-labelledby="offcanvasStartLabel">
+              <div class="offcanvas-header">
+                <h2 class="offcanvas-title" id="offcanvasStartLabel">Historial</h2>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+              </div>
+              <div class="offcanvas-body">
+                            <div class="col-md-12">
+                  <table class="table card-table table-vcenter">
+                    <thead>
+                      <tr>
+                        <th>Descripcion</th>
+                        <th colspan="2">Fecha</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for novedad in novedades %}
+                      <tr>
+                        <td>{{novedad.Descripcion}}</td>
+                        <td>{{novedad.Fecha}}</td>
+                      </tr>
+                      {%endfor%}
+                    </tbody>
+                  </table>
+            </div>
+                <div>
+
+                </div>
+              </div>
+            </div>
+            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasStart3" aria-labelledby="offcanvasStartLabel">
+              <div class="offcanvas-header">
+                <h2 class="offcanvas-title" id="offcanvasStartLabel">Informacion del usuario</h2>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+              </div>
+              <div class="offcanvas-body">
+                            <div class="col-md-12">
+                               <div class="card">
+                  <div class="card-body p-4 text-center">
+                    <span class="avatar avatar-xl mb-1" style="background-image: url({{ foto.url }})"></span>
+                    <h3 class="m-0 mb-1">{{ user.first_name }}&nbsp;{{ user.last_name }}</h3>
+                    <div class="text-muted">{{ user.email }}</div>
+                  </div>
+                  <div class="d-flex">
+                                        
+                  </div>
+            </div>
+            <br>
+                  <dl class="row">
+                                <h3 class="subheader">Informacion adicional</h3>
+                                  <dt class="col-5">Area:</dt>
+                                  <dd class="col-7">{{departamento}}</dd>
+                                  <dt class="col-5">Telefono:</dt>
+                                  <dd class="col-7">{{ celular }}<dd>
+                                  <dt class="col-5">Cargo:</dt>
+                                  <dd class="col-7">{{ cargo }}</dd>
+                                  <dt class="col-5">Fecha de registro:</dt>
+                                  <dd class="col-7">{{ fechac }}</dd>
+                                  <dt class="col-5">Ultimo ingreso:</dt>
+                                  <dd class="col-7"> {{ ultimo }}</dd>
+                              </dl>
+            </div>
+                <div>
+
+                </div>
+              </div>
+            </div>
+                        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasStart4" aria-labelledby="offcanvasStartLabel">
+              <div class="offcanvas-header">
+                <h2 class="offcanvas-title" id="offcanvasStartLabel">Informacion del usuario</h2>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+              </div>
+              <div class="offcanvas-body">
+                <h3 class="subheader">Opciones disponibles</h3>
+                <div class="row">
+                  <div class="col-md-12" style="margin-top: 0.5rem">
+                     <a href="{% url 'usuarios:registrotarifa' %}" class="btn btn-sm btn-dark  btn-pill w-100">Registrar tarifa</a>
+                  </div>
+                  <div class="col-md-12" style="margin-top: 0.5rem">
+                     <a href="{% url 'usuarios:modificarempresa' %}" class="btn btn-sm btn-dark  btn-pill w-100">Actualizar datos empresa</a>
+                  </div>
+                  <div class="col-md-12" style="margin-top: 0.5rem">
+                     <a href="" class="btn btn-sm btn-dark  btn-pill w-100" data-bs-toggle="modal" data-bs-target="#modal-simple3">Cargos por conexion</a>
+                  </div>
+                  <div class="col-md-12" style="margin-top: 0.5rem">
+                     <a href="" class="btn btn-sm btn-dark  btn-pill w-100" data-bs-toggle="modal" data-bs-target="#modal-simple4">Tarifas</a>
+                  </div>
+                </div>
+                <br>
+                 <div class="row">
+                  <h3 class="subheader">Usuarios registrados</h3>
+                  {% for usuario in usuarios %}
+                  <div class="col-md-12">
+                    <a class="card card-link" href="">
+                    <div class="card-body">
+                            <div class="row">
+                              <div class="col-auto">
+                                <span class="avatar rounded" style="background-image: url({{ usuario.fotoUsuario.url }})"></span>
+                              </div>
+                              <div class="col">
+                                <div class="font-weight-medium">{{ usuario.usuid.first_name }}&nbsp;{{ usuario.usuid.last_name }}&nbsp;
+                                    {% if usuario.usuid.is_active is True %}
+                                    <span class="badge bg-purple-lt">Activo</span>
+                                    {% else %}
+                                    <span class="badge bg-red-lt">Inactivo</span>
+                                    {% endif %}
+                                </div>
+                                <div class="text-muted">{{usuario.TipoUsuario}}</div>
+                              </div>
+                            </div>
+                          </div>
+                    </a>
+                    <br>
+                  </div>
+                  {%endfor%}
+                </div>
+                            
               </div>
             </div>
   </div>
@@ -358,4 +479,27 @@
       }
     }
   </script>
+      <style>
+        .spinner {
+            border: 16px solid #f3f3f3;
+            border-top: 16px solid #3498db;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+            margin: auto;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+        <script>
+        window.addEventListener('load', function() {
+            document.querySelector('.spinner').style.display = 'none';
+        });
+    </script>
 {% endblock %}

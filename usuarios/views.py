@@ -132,13 +132,15 @@ class Inicio(LoginRequiredMixin, View):
             nombreproyecto = version2.read()
             version3 = open('static/serial/NombreProyectoL.txt', 'r')
             nombreproyectol = version3.read()
+            hoy = datetime.now()
             usuario = Usuario.objects.get(usuid=request.user.pk)
             idacueducto = usuario.IdAcueducto
             tipousuario = usuario.TipoUsuario
             acueducto = Acueducto.objects.get(IdAcueducto=idacueducto)
             nombreacueducto = acueducto.Sigla
             logo = acueducto.logo
-            novedades = Novedades.objects.filter(IdAcueducto=idacueducto).order_by("-IdNovedad")[:3]
+            usuarios = Usuario.objects.filter(IdAcueducto=idacueducto)
+            novedades = Novedades.objects.filter(IdAcueducto=idacueducto).order_by("-IdNovedad")[:6]
             # mensualidades:
             fechaexp = (datetime.today())
             ciclo = fechaexp.month
@@ -199,7 +201,14 @@ class Inicio(LoginRequiredMixin, View):
                                                'novedades': novedades, 'pagos': pago0,'suscriptores':suscriptores,
                                                'porcentaje': int(porcentaje), 'contador': int(contador),
                                                'facturaspagas': pagos3, 'promedio': int(promedio),'logo':logo,
-                                               'promtarifa': int(promtarifa),'contarasig': contarasig, 'suma8': suma8})
+                                               'promtarifa': int(promtarifa),'contarasig': contarasig, 'suma8': suma8,
+                                               'foto': usuario.fotoUsuario,'usuarios': usuarios,
+                                               'celular': usuario.celular,
+                                               'departamento': usuario.Departamento,
+                                               'cargo': usuario.Cargo,
+                                               'fechac': usuario.FechaCreacion,
+                                               'ultimo': hoy,
+                                               })
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
 
@@ -762,21 +771,12 @@ class Busquedas(LoginRequiredMixin, View):
 
     def get(self, request):
         try:
-
-            return render(request, self.template_name)
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
-
-    def post(self, request):
-        try:
             usuario = Usuario.objects.get(usuid=request.user.pk)
             idacueducto = usuario.IdAcueducto
-            acueducto = Acueducto.objects.get(IdAcueducto=idacueducto)
-            tipo = request.POST.get("tipo")
-            identificacion = request.POST.get("identificacion")
+            tipo = request.GET.get("tipo")
+            identificacion = request.GET.get("identificacion")
 
-            if tipo == "Cedula de ciudadania" and identificacion is not None:
+            if tipo == "Cedula de ciudadania":
                 titular = Propietario.objects.filter(IdPropietario=identificacion, IdAcueducto=idacueducto).exists()
                 if titular is True:
                     idpropietario = identificacion
@@ -798,11 +798,11 @@ class Busquedas(LoginRequiredMixin, View):
 
                 else:
                     messages.add_message(request, messages.ERROR, 'Informacion del predio no encontrada')
-                    return HttpResponseRedirect(reverse('usuarios:busquedas'))
+                    return HttpResponseRedirect(reverse('usuarios:inicio'))
 
             else:
                 messages.add_message(request, messages.WARNING, 'Informacion incompleta')
-                return HttpResponseRedirect(reverse('usuarios:busquedas'))
+                return HttpResponseRedirect(reverse('usuarios:inicio'))
 
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
@@ -1086,81 +1086,6 @@ class AsignarMedidor(LoginRequiredMixin, View):
             else:
                 messages.add_message(request, messages.ERROR, 'El predio ya tiene un medidor asignado y operativo')
                 return HttpResponseRedirect(reverse('usuarios:consumos'))
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
-
-class Perfil(LoginRequiredMixin, View):
-    login_url = '/'
-    template_name = 'usuarios/perfil.html'
-
-    def get(self, request):
-        try:
-            usuario = Usuario.objects.get(usuid=request.user.pk)
-            nit = usuario.IdAcueducto
-            permiso = 1
-            mispermisos = Permisos.objects.filter(usuid=usuario)
-            acueducto = Acueducto.objects.filter(IdAcueducto=nit)
-
-            hoy = datetime.now()
-            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AccessPanel').exists()
-            if permiso == 1:
-                return render(request, self.template_name,
-                              {'mispermisos': mispermisos,
-                               'foto': usuario.fotoUsuario,
-                               'celular': usuario.celular,
-                               'departamento': usuario.Departamento,
-                               'cargo': usuario.TipoUsuario,
-                               'fechac': usuario.FechaCreacion,
-                               'ultimo': hoy,
-                               'acueducto': acueducto,
-                               'tipousuario': tipousuario
-                               })
-            else:
-                messages.add_message(request, messages.ERROR, 'Su usuario no tiene permisos de acceso')
-                return HttpResponseRedirect(reverse('usuarios:inicio'))
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
-
-
-class RegistroPoblacion(LoginRequiredMixin, View):
-    login_url = '/'
-    template_name = 'usuarios/registropoblacion.html'
-    form_class = PoblacionForm
-
-    def get(self, request):
-        try:
-            form = self.form_class()
-            usuario = Usuario.objects.get(usuid=request.user.pk)
-            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AccessPanel').exists()
-            if tipousuario is True:
-                return render(request, self.template_name, {
-                    'form': form})
-
-            else:
-                messages.add_message(request, messages.ERROR,
-                                     'Su usuario no tiene los permiso de acceso a esta seccion')
-                return HttpResponseRedirect(reverse('usuarios:paneladmin'))
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
-
-    def post(self, request):
-        try:
-            idpoblacion = request.POST.get("IdPoblacion")
-            descripcion = request.POST.get("Descripcion")
-            verificacion = Poblacion.objects.filter(IdPoblacion=idpoblacion).exists()
-
-            if verificacion is False:
-                poblacion = Poblacion(IdPoblacion=idpoblacion, Descripcion=descripcion)
-                poblacion.save()
-                messages.add_message(request, messages.INFO, 'El tipo de poblacion se creo correctamente')
-                return HttpResponseRedirect(reverse('usuarios:paneladmin'))
-
-            else:
-                messages.add_message(request, messages.ERROR, 'Ese tipo de poblacion ya existe')
-                return HttpResponseRedirect(reverse('usuarios:paneladmin'))
 
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
@@ -2258,17 +2183,12 @@ class ModificarAcueducto(LoginRequiredMixin, View):
             idacueducto = usuario.IdAcueducto
             datosacueducto = Acueducto.objects.get(IdAcueducto=idacueducto)
             form = self.form_class(instance=datosacueducto)
-            listapqrs = Pqrs.objects.filter(Estado='Pendiente')
-            contqrs = Pqrs.objects.filter(Estado='Pendiente').count()
-            contsoli = SolicitudGastos.objects.filter(Estado=ESTADO1).count()
-            totalnoti = contqrs + contsoli
-            contadorpen = SolicitudGastos.objects.filter(Estado=ESTADO1)
+
 
             tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AccessPanel').exists()
             if tipousuario is True:
                 return render(request, self.template_name,
-                              {'form': form, 'notificaciones': contadorpen, 'listapqrs': listapqrs,
-                               'totalnoti': totalnoti})
+                              {'form': form})
 
             else:
                 messages.add_message(request, messages.ERROR,
@@ -2296,164 +2216,6 @@ class ModificarAcueducto(LoginRequiredMixin, View):
 
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
-
-
-class AsignarPermisos(LoginRequiredMixin, View):
-    login_url = '/'
-    form_class = PermisosForm
-    template_name = 'usuarios/asignacionpermisos.html'
-
-    def get(self, request, usuid):
-        try:
-            usuario = Usuario.objects.get(usuid=request.user.pk)
-            usuario2 = Usuario.objects.filter(usuid=usuid)
-            consultar = Usuario.objects.get(usuid=usuid)
-            permisos = Permisos.objects.filter(usuid=consultar)
-            form = self.form_class(instance=usuario)
-
-            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AccessPanel').exists()
-            if tipousuario is True:
-                return render(request, self.template_name, {'form': form, 'usuario': usuario2, 'permisos': permisos})
-
-            else:
-                messages.add_message(request, messages.ERROR,
-                                     'Su usuario no tiene los permiso de acceso a esta seccion')
-                return HttpResponseRedirect(reverse('usuarios:paneladmin'))
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
-
-    def post(self, request):
-        try:
-            tipopermiso = request.POST.get("TipoPermiso")
-            usuid = request.POST.get("usuid")
-            usuario = Usuario.objects.get(usuid=usuid)
-            nu = 1
-            if nu == 1:
-                permisos = Permisos(TipoPermiso=tipopermiso, usuid=usuario)
-                permisos.save()
-                messages.add_message(request, messages.INFO, 'la informacion se modifico correctamente')
-                return HttpResponseRedirect(reverse('usuarios:paneladmin'))
-
-            else:
-                messages.add_message(request, messages.ERROR, 'No se puedo modificar la informacion')
-                return HttpResponseRedirect(reverse('usuarios:paneladmin'))
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
-
-
-class EliminarPermisos(LoginRequiredMixin, View):
-    login_url = '/'
-    form_class = PermisosForm
-    template_name = 'usuarios/eliminarpermisos.html'
-
-    def get(self, request, usuid):
-        try:
-            usuario1 = Usuario.objects.get(usuid=request.user.pk)
-            usuario = Usuario.objects.get(usuid=usuid)
-            form = self.form_class(instance=usuario)
-            permisos = Permisos.objects.filter(usuid=usuid)
-            tipousuario = Permisos.objects.filter(usuid=usuario1, TipoPermiso='SUPERADMIN').exists()
-            if tipousuario is False:
-                return render(request, self.template_name, {'form': form, 'permisos': permisos})
-
-            else:
-                messages.add_message(request, messages.ERROR,
-                                     'Su usuario no tiene los permiso de acceso a esta seccion')
-                return HttpResponseRedirect(reverse('usuarios:inicio'))
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
-
-    def post(self, request):
-        try:
-            tipopermiso = request.POST.get("TipoPermiso")
-            usuid = request.POST.get("usuid")
-            permisos = Permisos.objects.filter(usuid=usuid)
-            verificacion = Permisos.objects.filter(usuid=usuid, TipoPermiso=tipopermiso).exists()
-            if verificacion is True:
-                for i in permisos:
-                    permiso = i.TipoPermiso
-                    if permiso == tipopermiso:
-                        idborar = i.IdPermiso
-                        borrar = Permisos.objects.get(IdPermiso=idborar)
-                        borrar.delete()
-                messages.add_message(request, messages.INFO, 'la informacion se modifico correctamente')
-                return HttpResponseRedirect(reverse('usuarios:perfil'))
-
-            else:
-                messages.add_message(request, messages.ERROR,
-                                     'El codigo de permiso seleccionado no esta asignado al usuario')
-                return HttpResponseRedirect(reverse('usuarios:perfil'))
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
-
-
-class AgregarUsuarios(LoginRequiredMixin, View):
-    login_url = '/'
-    form_class = RegistroUsuario
-    form_class2 = RegistroUsuario2
-    template_name = 'usuarios/agregarusuarios.html'
-
-    def get(self, request):
-        try:
-            usuario = Usuario.objects.get(usuid=request.user.pk)
-            form = self.form_class()
-            form2 = self.form_class2()
-            listapqrs = Pqrs.objects.filter(Estado='Pendiente')
-            contqrs = Pqrs.objects.filter(Estado='Pendiente').count()
-            contsoli = SolicitudGastos.objects.filter(Estado=ESTADO1).count()
-            totalnoti = contqrs + contsoli
-            contadorpen = SolicitudGastos.objects.filter(Estado=ESTADO1)
-
-            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AccessPanel').exists()
-            if tipousuario is True:
-                return render(request, self.template_name,
-                              {'form': form, 'form2': form2, 'notificaciones': contadorpen, 'listapqrs': listapqrs,
-                               'totalnoti': totalnoti
-                               })
-
-            else:
-                messages.add_message(request, messages.ERROR,
-                                     'Su usuario no tiene los permiso de acceso a esta seccion')
-                return HttpResponseRedirect(reverse('usuarios:inicio'))
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
-
-    def post(self, request):
-        try:
-            usernames = request.POST.get("username")
-            password = request.POST.get("password")
-            email = request.POST.get("email")
-            nombres = request.POST.get("first_name")
-            apellidos = request.POST.get("last_name")
-
-            foto = request.FILES.get("fotoUsuario")
-            tipousuario = request.POST.get("TipoUsuario")
-            telefono = request.POST.get("celular")
-            usuario = Usuario.objects.get(usuid=request.user.pk)
-            idacueducto = usuario.IdAcueducto
-            validarusu = User.objects.filter(username=usernames).exists()
-            if validarusu is True:
-                messages.add_message(request, messages.ERROR, 'El usuario ya existe')
-                return HttpResponseRedirect(reverse('usuarios:perfil'))
-
-            else:
-                user = User.objects.create_user(username=usernames, password=password, email=email, first_name=nombres,
-                                                last_name=apellidos)
-                usuario = Usuario(fotoUsuario=foto, TipoUsuario=tipousuario, celular=telefono, usuid=user,
-                                  IdAcueducto=idacueducto)
-                user.save()
-                usuario.save()
-                messages.add_message(request, messages.INFO, 'El usuario se creo correctamente')
-                return HttpResponseRedirect(reverse('usuarios:perfil'))
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
-
 
 class DesactivarUsuarios(LoginRequiredMixin, View):
     login_url = '/'
@@ -2874,115 +2636,6 @@ class ReporteGastos(LoginRequiredMixin, View):
             response['Content-Disposition'] = content
             wb.save(response)
             return response
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
-
-
-
-class PanelAdmin(LoginRequiredMixin, View):
-    login_url = '/'
-    template_name = 'usuarios/paneladmin.html'
-
-    def get(self, request):
-        try:
-            with connection.cursor() as cursor:
-                # Consulta SQL para obtener el tamaño total de la base de datos en bytes
-                cursor.execute(
-                    "SELECT SUM(data_length + index_length) AS total_size FROM information_schema.tables "
-                    "WHERE table_schema = DATABASE();")
-
-                # Obtener el tamaño total de la base de datos en bytes
-                result = cursor.fetchone()
-                total_size_in_bytes = result[0] if result else 0
-
-                # Convertir el tamaño total a megabytes
-                total_size_in_megabytes = total_size_in_bytes / (1024 * 1024)
-
-            nombre_base_datos = settings.DATABASES['default']['NAME']
-            usuario = Usuario.objects.get(usuid=request.user.pk)
-            nit = usuario.IdAcueducto
-            ye = datetime.now()
-            ano = ye.year
-            cantusu = Usuario.objects.filter(IdAcueducto=nit).count()
-            usuarios = Usuario.objects.filter(IdAcueducto=nit)
-            tarifas = Tarifa.objects.all().order_by('-IdTarifa')
-            tarifa = Tarifa.objects.filter(Ano=ano)
-            poblaciones = Poblacion.objects.all()
-            matriculas = ValorMatricula.objects.filter(IdAcueducto=nit)
-            acueducto = Acueducto.objects.get(IdAcueducto=nit)
-            usuario = Usuario.objects.get(usuid=request.user.pk)
-            tipou = usuario.TipoUsuario
-
-            tipousuario = True
-            if tipousuario is True:
-                return render(request, self.template_name, {
-                    'ano': str(ano),
-                    'logo': acueducto.logo,
-                    'razonsocial': acueducto.Nombre,
-                     'rlegal': acueducto.Relegal,
-                    'sigla': acueducto.Sigla,
-                    'nit': acueducto.IdAcueducto,
-                    'direccion': acueducto.DirOficina,
-                    'email': acueducto.Email,
-                    'legal': acueducto.Relegal,
-                    'telefono': acueducto.Telefono,
-                    'estado': acueducto.Estado,
-                    'tarifa': acueducto.IdTarifa.Valor,
-                    'cantusu': cantusu,
-                    'usuarios': usuarios,
-                    'tarifas': tarifas,
-                    'activa': tarifa,
-                    'matriculas': matriculas,
-                    'poblacion': poblaciones,
-                    'bsdatos': nombre_base_datos,
-                    'mb': int(total_size_in_megabytes)
-
-                }
-                              )
-            else:
-                messages.add_message(request, messages.ERROR, 'Su usuario no tiene acceso a este modulo')
-                return HttpResponseRedirect(reverse('usuarios:inicio'))
-
-        except ObjectDoesNotExist:
-            return render(request, "pages-404.html")
-
-
-class PerfilUsuario(LoginRequiredMixin, View):
-    login_url = '/'
-    template_name = 'usuarios/perfilusuario.html'
-
-    def get(self, request, IdUsuario):
-        try:
-            idusuario = IdUsuario
-            usuario = Usuario.objects.get(usuid=request.user.pk)
-            # inicio consultas
-            infousuario = Usuario.objects.get(IdUsuario=idusuario)
-            user = User.objects.get(username=infousuario.usuid)
-
-            consultaradmin = Permisos.objects.filter(usuid=infousuario, TipoPermiso='AccessPanel').exists()
-            tipousuario = Permisos.objects.filter(usuid=usuario, TipoPermiso='AccessPanel').exists()
-            if tipousuario is True:
-
-                return render(request, self.template_name, {
-                    'cedula': infousuario.usuid_id,
-                    'foto': infousuario.fotoUsuario,
-                    'usuario': user.username,
-                    'nombres': user.first_name,
-                    'apellidos': user.last_name,
-                    'celular': infousuario.celular,
-                    'email': user.email,
-                    'cargo': infousuario.TipoUsuario,
-                    'fechac': infousuario.FechaCreacion,
-                    'ultimo': user.last_login,
-                    'departamento': infousuario.Departamento,
-                    'tipousuario':consultaradmin
-
-                }
-                              )
-            else:
-                messages.add_message(request, messages.ERROR, 'Su usuario no tiene acceso a este modulo')
-                return HttpResponseRedirect(reverse('usuarios:inicio'))
 
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")

@@ -4,20 +4,20 @@ from usuarios.views import ImprimirSoporteP, AnularPago, AsignarCargo, Bloque, V
 from usuarios.views import ListaViviendas, ListaPropietarios, ReportePdfPagos, Creditos, RegistroCredito
 from usuarios.views import RegistroProveedor, Consumo,AsignarMedidor, RegistrarConsumo
 from usuarios.views import PazSalvo, Matriculas
-from usuarios.views import AgregarVivienda, AgregarPropietario, PerfilUsuario, ReporteCompleto
+from usuarios.views import AgregarVivienda, AgregarPropietario, ReporteCompleto
 from usuarios.views import ReporteSuspenciones, ReporteReconexion, ModificarPropietario, ModificarVivienda
-from usuarios.views import EliminarPermisos, Mapa, EliminarPoblacion
-from usuarios.views import VisualizarPropietario, CambioEstado, Estadoscuenta, AgregarUsuarios, RegistroCostoM
+from usuarios.views import Mapa, EliminarPoblacion
+from usuarios.views import VisualizarPropietario, CambioEstado, Estadoscuenta, RegistroCostoM
 from usuarios.views import RegistroTarifa,ReporteGastos, ListasGastos
 from usuarios.views import Suspenciones, VerOrdenSuspencion, VerOrdenReconexion, CambioTitular
 from usuarios.views import CierreFinanciero, VerConsumo, GeneradorConceptos, Varias
 from usuarios.views import GenerarGasto
 from usuarios.views import GeneradorFacturas, DesactivarUsuarios, AnularFactura
 from usuarios.views import DescargarFactura, DescargaMasivaFacturas, VisualizarVivienda, BuscarSolicitud
-from usuarios.views import Reconexiones, Perfil, ModificarAcueducto, ListaPqrs, RegistroPqr, VerPqr
-from usuarios.views import RespuestaPqrs, PanelAdmin, ReporteCierre
-from usuarios.views import RegistroMedidor, AsignarPermisos
-from usuarios.views import RegistroPoblacion, CambiarContraUsuario, GeneradorFacturasIndividual,ReporteRetiro
+from usuarios.views import Reconexiones, ModificarAcueducto, ListaPqrs, RegistroPqr, VerPqr
+from usuarios.views import RespuestaPqrs, ReporteCierre
+from usuarios.views import RegistroMedidor
+from usuarios.views import CambiarContraUsuario, GeneradorFacturasIndividual,ReporteRetiro
 
 urlpatterns = [
     url(r'^inicio/', Inicio.as_view(), name='inicio'),
@@ -38,8 +38,6 @@ urlpatterns = [
     url(r'^cambio/(?P<IdSoGa>\w+)', BuscarSolicitud.as_view(), name='cambio'),
     url(r'^listadogastos/', ListasGastos.as_view(), name='listadogastos'),
     url(r'^registromedidor/', RegistroMedidor.as_view(), name='registromedidor'),
-    url(r'^perfil/', Perfil.as_view(), name='perfil'),
-    url(r'^registropoblacion/', RegistroPoblacion.as_view(), name='registropoblacion'),
     url(r'^registrocostomatricula/', RegistroCostoM.as_view(), name='registrocostomatricula'),
     url(r'^registrotarifa/', RegistroTarifa.as_view(), name='registrotarifa'),
     url(r'^verfactura/', VerFactura.as_view(), name='verfactura'),
@@ -60,9 +58,6 @@ urlpatterns = [
     url(r'^cambiotitular/(?P<IdVivienda>\w+)', CambioTitular.as_view(), name='cambiotitular'),
     url(r'^mapa', Mapa.as_view(), name='mapa'),
     url(r'^modificarempresa', ModificarAcueducto.as_view(), name='modificarempresa'),
-    url(r'^asignarpermisos/(?P<usuid>\w+)', AsignarPermisos.as_view(), name='asignarpermisos'),
-    url(r'^eliminarpermisos/(?P<usuid>\w+)', EliminarPermisos.as_view(), name='eliminarpermisos'),
-    url(r'^agregarusuarios', AgregarUsuarios.as_view(), name='agregarusuarios'),
     url(r'^desacusuario/(?P<usuid>\w+)', DesactivarUsuarios.as_view(), name='desacusuario'),
     url(r'^elipoblacion', EliminarPoblacion.as_view(), name='elipoblacion'),
     url(r'^cambiarcontrasena/(?P<usuid>\w+)', CambiarContraUsuario.as_view(), name='cambiarcontrasena'),
@@ -71,8 +66,6 @@ urlpatterns = [
     url(r'^reportecierre', ReporteCierre.as_view(), name='reportecierre'),
     url(r'^reportegastos', ReporteGastos.as_view(), name='reportegastos'),
     url(r'^reconexiones', Reconexiones.as_view(), name='reconexiones'),
-    url(r'^paneladmin', PanelAdmin.as_view(), name='paneladmin'),
-    url(r'^perfilusuario/(?P<IdUsuario>\w+)', PerfilUsuario.as_view(), name='perfilusuario'),
     url(r'^imprimirpago/(?P<IdPago>\w+)', ImprimirSoporteP.as_view(), name='imprimirpago'),
     url(r'^pazysalvo/(?P<matricula>\w+)', PazSalvo.as_view(), name='pazysalvo'),
     url(r'^cobrorecargo', CobroRecargo.as_view(), name='cobrorecargo'),
