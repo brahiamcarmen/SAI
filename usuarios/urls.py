@@ -3,7 +3,7 @@ from usuarios.views import Inicio, Busquedas, CobroRecargo, ControlPresupuestal,
 from usuarios.views import ImprimirSoporteP, AnularPago, AsignarCargo, Bloque, VerCredito
 from usuarios.views import ListaViviendas, ListaPropietarios, ReportePdfPagos, Creditos, RegistroCredito
 from usuarios.views import RegistroProveedor, Consumo,AsignarMedidor, RegistrarConsumo
-from usuarios.views import PazSalvo, Matriculas
+from usuarios.views import PazSalvo, Matriculas,ReporteConceptos
 from usuarios.views import AgregarVivienda, AgregarPropietario, ReporteCompleto
 from usuarios.views import ReporteSuspenciones, ReporteReconexion, ModificarPropietario, ModificarVivienda
 from usuarios.views import Mapa, EliminarPoblacion
@@ -84,4 +84,5 @@ urlpatterns = [
     url(r'^verconsumo/(?P<matricula>\w+)', VerConsumo.as_view(), name='verconsumo'),
     url(r'^crearconceptos', GeneradorConceptos.as_view(), name='crearconceptos'),
     url(r'^varias/', Varias.as_view(), name='varias'),
+    url(r'^reporteconceptos', ReporteConceptos.as_view(), name='reporteconceptos'),
 ]

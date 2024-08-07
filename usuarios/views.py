@@ -25,6 +25,9 @@ from django.http import HttpResponse
 from openpyxl import Workbook
 import openpyxl
 import qrcode
+import matplotlib.pyplot as plt
+import pandas as pd
+import io
 from openpyxl.drawing.image import Image
 from django.template.loader import get_template
 from django.core.mail import EmailMultiAlternatives
@@ -184,7 +187,7 @@ class Inicio(LoginRequiredMixin, View):
                 valor = int(i.CantHabitantes)
                 personas += valor
 
-            suscriptoresactivos = Vivienda.objects.filter(EstadoServicio='Operativo',IdAcueducto=idacueducto) | Vivienda.objects.filter(EstadoServicio='Mantenimiento',IdAcueducto=idacueducto)| Vivienda.objects.filter(EstadoServicio='Suspendido',IdAcueducto=idacueducto)
+            suscriptoresactivos = Vivienda.objects.filter(EstadoServicio='Operativo',IdAcueducto=idacueducto) | Vivienda.objects.filter(EstadoServicio='Suspendido',IdAcueducto=idacueducto)
             suscriptores = 0
             for i in suscriptoresactivos:
                 valor = 1
@@ -194,6 +197,9 @@ class Inicio(LoginRequiredMixin, View):
             vapo = Consumos.objects.filter(IdAcueducto=idacueducto).aggregate(Consumo=Sum('Consumo'))
             suma8 = vapo['Consumo']
 
+            operativos = Vivienda.objects.filter(EstadoServicio='Operativo', IdAcueducto=idacueducto).count()
+            suspendidos = Vivienda.objects.filter(EstadoServicio='Suspendido', IdAcueducto=idacueducto).count()
+            retirados = Vivienda.objects.filter(EstadoServicio='Retirado', IdAcueducto=idacueducto).count()
             return render(request,
                           self.template_name, {'tipousuario': tipousuario, 'nombreproyecto': nombreproyecto,
                                                'nombreproyectol': nombreproyectol, 'acueducto': nombreacueducto,
@@ -207,7 +213,7 @@ class Inicio(LoginRequiredMixin, View):
                                                'departamento': usuario.Departamento,
                                                'cargo': usuario.Cargo,
                                                'fechac': usuario.FechaCreacion,
-                                               'ultimo': hoy,
+                                               'ultimo': hoy, 'retirados': retirados,'suspendidos': suspendidos,'operativos':operativos
                                                })
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
@@ -1863,6 +1869,60 @@ class ReportePdfPagos(LoginRequiredMixin, View):
             cont += 1
 
         archivo_propi = "ReportePagos" + str(sfecha) + ".xlsx"
+        response = HttpResponse(content_type="application/ms-excel")
+        content = "attachment; filename = {0}".format(archivo_propi)
+        response['Content-Disposition'] = content
+        wb.save(response)
+        return response
+
+class ReporteConceptos(LoginRequiredMixin, View):
+    login_url = '/'
+
+    def get(self, request):
+        usuario = Usuario.objects.get(usuid=request.user.pk)
+        idacueducto = usuario.IdAcueducto
+        pagos = ConceptosFacturados.objects.filter(IdAcueducto=idacueducto)
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "Reporte de pagos"
+        ws['A1'] = 'No registro'
+        ws['B1'] = 'Aporte fijo'
+        ws['C1'] = 'Cuota matricula'
+        ws['D1'] = 'Suspension'
+        ws['E1'] = 'Reconexion'
+        ws['F1'] = 'Acuerdo Pago'
+        ws['G1'] = 'Subsidio'
+        ws['H1'] = 'Fecha'
+        ws['I1'] = 'Total'
+        ws['J1'] = 'Estado'
+        ws['K1'] = 'Periodo'
+        ws['L1'] = 'Matricula'
+        ws['M1'] = 'Complementario'
+        ws['N1'] = 'Recargo'
+        ws['O1'] = 'Saldo anterior'
+
+        sfecha = (datetime.today())
+        cont = 2
+
+        for pago in pagos:
+            ws.cell(row=cont, column=1).value = pago.IdRegistro
+            ws.cell(row=cont, column=2).value = str(pago.AporteFijo)
+            ws.cell(row=cont, column=3).value = str(pago.CuotaMatricula)
+            ws.cell(row=cont, column=4).value = str(pago.Suspencion)
+            ws.cell(row=cont, column=5).value = str(pago.Reconexion)
+            ws.cell(row=cont, column=6).value = str(pago.AcuerdoPago)
+            ws.cell(row=cont, column=7).value = str(pago.Subsidio)
+            ws.cell(row=cont, column=8).value = str(pago.Fecha)
+            ws.cell(row=cont, column=9).value = str(pago.Total)
+            ws.cell(row=cont, column=10).value = str(pago.Estado)
+            ws.cell(row=cont, column=11).value = str(pago.Periodo)
+            ws.cell(row=cont, column=12).value = str(pago.IdVivienda)
+            ws.cell(row=cont, column=13).value = str(pago.Complementario)
+            ws.cell(row=cont, column=14).value = str(pago.Recargo)
+            ws.cell(row=cont, column=15).value = str(pago.SaldoAnterior)
+            cont += 1
+
+        archivo_propi = "ReporteConceptos" + str(sfecha) + ".xlsx"
         response = HttpResponse(content_type="application/ms-excel")
         content = "attachment; filename = {0}".format(archivo_propi)
         response['Content-Disposition'] = content
@@ -3671,6 +3731,7 @@ class GeneradorFacturas(LoginRequiredMixin, View):
             ciclos = Ciclo.objects.get(IdCiclo=mes1)
             mes = ciclos.Nombre
             ano = fechaexp.year
+            fechalimite = fechaexp + timedelta(days=8)
             facemi = Facturas.objects.filter(Estado=FE,IdAcueducto=idacueducto).count()
 
             viviendas = Vivienda.objects.filter(EstadoServicio='Operativo',IdAcueducto=idacueducto)|Vivienda.objects.filter(EstadoServicio='Suspendido',IdAcueducto=idacueducto)
@@ -3684,7 +3745,7 @@ class GeneradorFacturas(LoginRequiredMixin, View):
                             valor = conceptos2.Total
                             vivienda = Vivienda.objects.get(IdVivienda=i.IdVivienda)
                             factura = Facturas(Estado='Emitida',IdVivienda=vivienda,periodofacturado=mes,FechaExpe=fechaexp,
-                                               FechaLimite=fechaexp,facturasvencidas=1,IdCiclo=ciclos, Total=valor, IdAcueducto=acueducto)
+                                               FechaLimite=fechalimite,facturasvencidas=1,IdCiclo=ciclos, Total=valor, IdAcueducto=acueducto)
                             factura.save()
                             relacion = FacturasConceptos(IdConcepto=conceptos2,IdFactura=factura)
                             relacion.save()
@@ -3693,7 +3754,7 @@ class GeneradorFacturas(LoginRequiredMixin, View):
                             valor = conceptos2.Total
                             vivienda = Vivienda.objects.get(IdVivienda=i.IdVivienda)
                             factura = Facturas(Estado='Emitida', IdVivienda=vivienda, periodofacturado=mes,
-                                               FechaExpe=fechaexp, FechaLimite=fechaexp, facturasvencidas=0, IdCiclo=ciclos, Total=valor,
+                                               FechaExpe=fechaexp, FechaLimite=fechalimite, facturasvencidas=0, IdCiclo=ciclos, Total=valor,
                                                IdAcueducto=acueducto)
                             factura.save()
                             relacion = FacturasConceptos(IdConcepto=conceptos2, IdFactura=factura)
@@ -3719,18 +3780,17 @@ class Varias(LoginRequiredMixin, View):
             idacueducto = usuario.IdAcueducto
             acueducto = Acueducto.objects.get(IdAcueducto=idacueducto)
             fechaexp = (datetime.today())
-            fechalimite = fechaexp + timedelta(days=DIASPARASUSPENCION)
+            fechalimite = fechaexp + timedelta(days=10)
             tipousuario = True
             if tipousuario is True:
-                conceptosfacpen = ConceptosFacturados.objects.filter(Estado='Pendiente')
-                print(conceptosfacpen)
-                for i in conceptosfacpen:
-                    saldoanterior = i.SaldoAnterior
-                    suma = i.Total
+                viviendas = Vivienda.objects.filter(EstadoServicio='Operativo')
+                for i in viviendas:
+                    vivienda = Vivienda.objects.get(IdVivienda=i.IdVivienda)
+                    conceptosfacpen = ConceptosFacturados.objects.get(IdVivienda=vivienda.pk,Estado='Pendiente')
+                    saldoanterior = conceptosfacpen.SaldoAnterior
+                    suma = conceptosfacpen.Total
                     if saldoanterior >= 50:
-                        orden = OrdenesTrabajo(Deuda=suma, TipoNovedad='Suspension', Estado='Pendiente',
-                                               usuario=usuario, IdVivienda=i.IdVivienda, FechaEjecucion=fechalimite,
-                                               IdAcueducto=acueducto)
+                        orden = OrdenesTrabajo(Deuda=suma, TipoNovedad='Suspension', Estado='Pendiente', usuario=usuario, IdVivienda=vivienda, FechaEjecucion=fechalimite, IdAcueducto=acueducto)
                         orden.save()
 
                 messages.add_message(request, messages.INFO, 'La operacion se realizo correctamente')
