@@ -11,7 +11,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-2">
-        <h3 class="subheader">Estadisticas</h3>
+        <h3 class="subheader">Estadisticas de consumo</h3>
               <div class="col-auto" style="margin-top: 0.5rem">
                 <div class="card card-sm">
                   <div class="card-body">
@@ -49,57 +49,104 @@
                           {{suma|intcomma}} m3
                         </div>
                         <div class="text-muted">
-                          Consumo
+                          Consumo total
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+              <div class="col-auto" style="margin-top: 0.5rem">
+                <div class="card card-sm">
+                  <div class="card-body">
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <span class="bg-indigo text-white avatar">
+                              <!-- Download SVG icon from http://tabler-icons.io/i/chart-bar -->
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><rect x="3" y="12" width="6" height="8" rx="1" /><rect x="9" y="8" width="6" height="12" rx="1" /><rect x="15" y="4" width="6" height="16" rx="1" /><line x1="4" y1="20" x2="18" y2="20" /></svg>
+                        </span>
+                      </div>
+                      <div class="col">
+                        <div class="font-weight-medium">
+                          {{suma2|intcomma}} m3
+                        </div>
+                        <div class="text-muted">
+                          Año actual
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+                            <div class="col-auto" style="margin-top: 0.5rem">
+                <div class="card card-sm">
+                  <div class="card-body">
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <span class="bg-purple text-white avatar">
+                              <!-- Download SVG icon from http://tabler-icons.io/i/chart-bar -->
+  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><rect x="3" y="12" width="6" height="8" rx="1" /><rect x="9" y="8" width="6" height="12" rx="1" /><rect x="15" y="4" width="6" height="16" rx="1" /><line x1="4" y1="20" x2="18" y2="20" /></svg>
+                        </span>
+                      </div>
+                      <div class="col">
+                        <div class="font-weight-medium">
+                          {% for consumo in ultimo %}
+                           {{consumo.Consumo}} m3 - {{consumo.mes}}
+                          {%endfor%}
+                        </div>
+                        <div class="text-muted">
+                          Ultimo mes
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
           <br>
           <div class="row">
             <h3 class="subheader">Opciones disponibles</h3>
             <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:registromedidor' %}" class="btn btn-sm btn-indigo btn-pill w-100">Registrar medidor</a>
+               <a href="{% url 'usuarios:registromedidor' %}" class="btn btn-sm btn-dark btn-pill w-100">Registrar medidor</a>
             </div>
             <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="" data-bs-toggle="modal" data-bs-target="#modal-full-width" class="btn btn-sm btn-indigo btn-pill w-100">Medidores sin asignar</a>
+               <a href="" data-bs-toggle="modal" data-bs-target="#modal-full-width" class="btn btn-sm btn-dark btn-pill w-100">Medidores sin asignar</a>
             </div>
             <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="" data-bs-toggle="modal" data-bs-target="#registroconsumo" class="btn btn-sm btn-indigo btn-pill w-100">Registrar consumo</a>
+               <a href="" data-bs-toggle="modal" data-bs-target="#registroconsumo" class="btn btn-sm btn-dark btn-pill w-100">Registrar consumo</a>
+            </div>
+            <div class="col-md-12" style="margin-top: 0.5rem">
+               <a href="{% url 'usuarios:pmedicion' %}"class="btn btn-sm btn-indigo btn-pill w-100">Plantilla medicion</a>
+            </div>
+            <div class="col-md-12" style="margin-top: 0.5rem">
+               <a href="{% url 'usuarios:pmedicion' %}"class="btn btn-sm btn-dark btn-pill w-100">Registrar consumo mensual</a>
             </div>
           </div>
       </div>
-      <div class="col-md-10">
+      <div class="col-md-8">
         <div class="row">
             <h3 class="subheader">Medidores activos</h3>
-                            <div class="text-center table-responsive" style="height:15rem">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        <thead>
-                                    <tr>
-                                        <th>No medidor</th>
-                                        <th>Estado</th>
-                                        <th>Predio</th>
-                                        <th>Fecha de asignacion</th>
-                                        <th>Opciones</th>
-                                    </tr>
-                        </thead>
-                        <tbody>
-                            {% for cierre in asignado %}
-                                <tr class="odd gradeX">
-                                            <td>{{ cierre.IdMedidor }}</td>
-                                            <td>{{ cierre.Estado }}</td>
-                                            <td>{{ cierre.IdVivienda }}</td>
-                                            <td>{{ cierre.Fecha }}</td>
-                                          
-                                            <td><a href="{% url 'usuarios:verconsumo' cierre.IdVivienda %}" class="btn btn-sm btn-indigo btn-pill w-100">+</a></td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+             {% for cierre in asignado %}
+                <div class="col-md-6 col-xl-4" style="margin-top: 0.5rem">
+                <a class="card card-link" href="{% url 'usuarios:verconsumo' cierre.IdVivienda %}" title="{{ cierre.Fecha }}">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col">
+                        <div class="font-weight-medium">{{ cierre.IdMedidor }}</div>
+                        <div class="text-muted">{{ cierre.IdVivienda }}</div>
+                        <div class="small mt-1">
+                          <span class="badge bg-green"></span> {{ cierre.Estado }} - {{cierre.Fecha}}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              {% endfor %}
         </div>
- 
+      </div>
+      <div class="col-md-2">
+          <h3 class="subheader">Alertas</h3>
       </div>
 
     </div>
@@ -117,7 +164,7 @@
           </div>
           <div class="modal-body">
                    <div class="row">
-                <div class="text-center table-responsive" style="height:15rem">
+                <div class="text-center table-responsive" style="height: 90%">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                                     <tr>

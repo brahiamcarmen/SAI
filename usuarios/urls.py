@@ -15,7 +15,7 @@ from usuarios.views import GenerarGasto
 from usuarios.views import GeneradorFacturas, DesactivarUsuarios, AnularFactura
 from usuarios.views import DescargarFactura, DescargaMasivaFacturas, VisualizarVivienda, BuscarSolicitud
 from usuarios.views import Reconexiones, ModificarAcueducto, ListaPqrs, RegistroPqr, VerPqr
-from usuarios.views import RespuestaPqrs, ReporteCierre
+from usuarios.views import RespuestaPqrs, ReporteCierre, ReporteConsumos, PlantillaMedicion
 from usuarios.views import RegistroMedidor
 from usuarios.views import CambiarContraUsuario, GeneradorFacturasIndividual,ReporteRetiro
 
@@ -84,5 +84,7 @@ urlpatterns = [
     url(r'^verconsumo/(?P<matricula>\w+)', VerConsumo.as_view(), name='verconsumo'),
     url(r'^crearconceptos', GeneradorConceptos.as_view(), name='crearconceptos'),
     url(r'^varias/', Varias.as_view(), name='varias'),
+    url(r'^rconsumos/', ReporteConsumos.as_view(), name='rconsumos'),
     url(r'^reporteconceptos', ReporteConceptos.as_view(), name='reporteconceptos'),
+    url(r'^pmedicion/', PlantillaMedicion.as_view(), name='pmedicion'),
 ]

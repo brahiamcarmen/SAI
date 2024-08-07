@@ -197,6 +197,7 @@ class MedidoresForm(forms.ModelForm):
             'Diametronominal': _(u'Diametro nominal'),
             'AnoFabricacion': _(u'Año de fabricacion'),
             'Certificado': _(u'Esta certificado?'),
+            'NoCertificado': _(u'Numero de certificado'),
         }
 
     def __init__(self, *args, **kwargs):

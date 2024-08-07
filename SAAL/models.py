@@ -6,9 +6,6 @@ from django.contrib.auth.models import User
 
 DOC_CHOICES = (
     ('En Servicio', _(u"En Servicio (ES)")),
-    ('Baja Presion', _(u"Baja Presion (BP)")),
-    ('Suspendido', _(u"Suspendido (SP)")),
-    ('Daño Critico', _(u"Daño Critico (DC)"))
 )
 
 
@@ -272,6 +269,7 @@ class Medidores(models.Model):
     AnoFabricacion = models.CharField(max_length=4, null=False)
     Estado = models.CharField(max_length=35, null=False, default='Sin asignar')
     Certificado = models.CharField(max_length=100, null=False, choices=DOC_CHOICES11)
+    NoCertificado = models.CharField(max_length=50, null=True)
     Fecha = models.DateTimeField(auto_now_add=True, null=True)
     IdAcueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
     objects = models.Manager()
@@ -582,6 +580,23 @@ class Consumos(models.Model):
         verbose_name_plural = "Consumos"
         verbose_name = "Consumo"
 
+class ConsumosMensual(models.Model):
+    IdRegistro = models.AutoField(primary_key=True)
+    Consumo = models.IntegerField(null=False)
+    promedio = models.CharField(max_length=20, null=False)
+    observaciones = models.CharField(max_length=350, null=True)
+    ano = models.CharField(max_length=4, null=False)
+    mes = models.CharField(max_length=20, null=False)
+    CantMedidores = models.CharField(max_length=4, null=False)
+    Fecha = models.DateTimeField(auto_now_add=True)
+    IdAcueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
+    objects = models.Manager()
+    def __str__(self):
+        return "%s" % self.IdRegistro
+
+    class Meta:
+        verbose_name_plural = "Consumos"
+        verbose_name = "Consumo"
 class Conceptos(models.Model):
     IdRegistro = models.AutoField(primary_key=True)
     Tipo = models.CharField(max_length=350, null=True)

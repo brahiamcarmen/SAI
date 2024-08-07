@@ -74,32 +74,39 @@
                     <li class="nav-item">
                       <a href="#tabs-profile-11" class="nav-link" data-bs-toggle="tab"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="5 12 3 12 12 3 21 12 19 12" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
-                        Consumos</a>
+                        Novedades</a>
                     </li>
                     <li class="nav-item">
                       <a href="#tabs-profile-9" class="nav-link" data-bs-toggle="tab"><!-- Download SVG icon from http://tabler-icons.io/i/user -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="7" r="4" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /></svg>
+<!-- Download SVG icon from http://tabler-icons.io/i/file-diff -->
+  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><line x1="12" y1="10" x2="12" y2="14" /><line x1="10" y1="12" x2="14" y2="12" /><line x1="10" y1="17" x2="14" y2="17" /></svg>
                         Conceptos</a>
                     </li>
                     <li class="nav-item">
                       <a href="#tabs-profile-10" class="nav-link" data-bs-toggle="tab"><!-- Download SVG icon from http://tabler-icons.io/i/user -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="7" r="4" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /></svg>
+                        <!-- Download SVG icon from http://tabler-icons.io/i/file-invoice -->
+  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><line x1="9" y1="7" x2="10" y2="7" /><line x1="9" y1="13" x2="15" y2="13" /><line x1="13" y1="17" x2="15" y2="17" /></svg>
                         Conceptos facturados</a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#tabs-profile-14" class="nav-link" data-bs-toggle="tab"><!-- Download SVG icon from http://tabler-icons.io/i/user -->
+                       <!-- Download SVG icon from http://tabler-icons.io/i/file-report -->
+  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="17" cy="17" r="4" /><path d="M17 13v4h4" /><path d="M12 3v4a1 1 0 0 0 1 1h4" /><path d="M11.5 21h-6.5a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v2m0 3v4" /></svg>
+                        Acuerdos de pago</a>
                     </li>
                   </ul>
                   <div class="card-body">
                     <div class="tab-content">
                       <div class="tab-pane active show" id="tabs-home-9">
-                        <div>
                           <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                               <div class="row">
                               <h3 class="subheader">Informacion adicional</h3>
                               <div class="card">
                                 <div class="card-body">
                                   {% for vivienda in viviendainfo %}
                                   <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                       <dl class="row">
                                             <dt class="col-5">Sector:</dt>
                                             <dd class="col-7">{{ vivienda.Direccion}}</dd>
@@ -113,51 +120,50 @@
                                             <dd class="col-7">{{vivienda.Ciclo}}</dd>
                                             <dt class="col-5">Estrato:</dt>
                                             <dd class="col-7">{{vivienda.Estrato}}</dd>
+                                            <dl class="row">
+                                            <dt class="col-5">Acometida:</dt>
+                                            <dd class="col-7">{{ vivienda.ProfAcometida }}</dd>
+                                            <dt class="col-5">Habitantes:</dt>
+                                            <dd class="col-7">{{ vivienda.CantHabitantes}}</dd>
+                                            <dt class="col-5">Ficha catastral:</dt>
+                                            <dd class="col-7">{{ vivienda.FichaCastral}}</dd>
+                                            <dt class="col-5">Diametro:</dt>
+                                            <dd class="col-7">{{ vivienda.Diametro}}</dd>
+                                            <dt class="col-5">ID anterior:</dt>
+                                            <dd class="col-7">{{vivienda.MatriculaAnt}}</dd>
+                                            <dt class="col-5">Fecha de registro:</dt>
+                                            <dd class="col-7">{{vivienda.FechaIngreso}}</dd>
+                                            <dt class="col-5">Fecha de actualizacion:</dt>
+                                            <dd class="col-7">{{vivienda.FechaActualizacion}}</dd>
                                       </dl>
-                                  </div>
-                                  <div class="col-md-6">
-                                    <dl class="row">
-                                        <dt class="col-5">Acometida:</dt>
-                                        <dd class="col-7">{{ vivienda.ProfAcometida }}</dd>
-                                        <dt class="col-5">Habitantes:</dt>
-                                        <dd class="col-7">{{ vivienda.CantHabitantes}}</dd>
-                                        <dt class="col-5">Ficha catastral:</dt>
-                                        <dd class="col-7">{{ vivienda.FichaCastral}}</dd>
-                                        <dt class="col-5">Diametro:</dt>
-                                        <dd class="col-7">{{ vivienda.Diametro}}</dd>
-                                        <dt class="col-5">ID anterior:</dt>
-                                        <dd class="col-7">{{vivienda.MatriculaAnt}}</dd>
-                                    </dl>
                                   </div>
                                 </div>
                                 {% endfor %}
                               </div>
                             </div>
                               </div>
-                              <br>
-                              <div class="row">
-                                <div class="col-md-6">
-                                            <h3 class="subheader">Estado de cuenta</h3>
-                                  <div class="row">
-                                                        {% if filtro is True %}
-                                                       <div class="card card-sm">
-                                                          <div class="card-body">
-                                                            <div class="row align-items-center">
-                                                              <div class="col-auto">
-                                                                <span class="bg-red text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/shopping-cart -->
+                            </div>
+                            <div class="col-md-3">
+                                <h3 class="subheader">Estado de cuenta</h3>
+                                    {% if filtro is True %}
+                                    <div class="card card-sm">
+                                      <div class="card-body">
+                                        <div class="row align-items-center">
+                                          <div class="col-auto">
+                                            <span class="bg-red text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/shopping-cart -->
                                                                   <!-- Download SVG icon from http://tabler-icons.io/i/scissors -->
-                                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="6" cy="7" r="3" /><circle cx="6" cy="17" r="3" /><line x1="8.6" y1="8.6" x2="19" y2="19" /><line x1="8.6" y1="15.4" x2="19" y2="5" /></svg>
-                                                                </span>
-                                                              </div>
-                                                              <div class="col">
-                                                                <div class="font-weight-medium">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="6" cy="7" r="3" /><circle cx="6" cy="17" r="3" /><line x1="8.6" y1="8.6" x2="19" y2="19" /><line x1="8.6" y1="15.4" x2="19" y2="5" /></svg>
+                                            </span>
+                                          </div>
+                                          <div class="col">
+                                            <div class="font-weight-medium">
                                                                   Con orden de suspención
-                                                                </div>
-                                                              </div>
-                                                            </div>
-                                                          </div>
-                                                        </div>
-                                                        {% else %}
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    {% else %}
                                                             {% if total <= 0 %}
                                                             <div class="card card-sm">
                                                               <div class="card-body">
@@ -176,27 +182,59 @@
                                                               </div>
                                                             </div>
                                                             {% else %}
-                          <div class="card card-sm">
-                            <div class="card-body">
-                              <div class="row align-items-center">
-                                <div class="col-auto">
-                                  <span class="bg-orange text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/alert-octagon -->
-                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8.7 3h6.6c.3 0 .5 .1 .7 .3l4.7 4.7c.2 .2 .3 .4 .3 .7v6.6c0 .3 -.1 .5 -.3 .7l-4.7 4.7c-.2 .2 -.4 .3 -.7 .3h-6.6c-.3 0 -.5 -.1 -.7 -.3l-4.7 -4.7c-.2 -.2 -.3 -.4 -.3 -.7v-6.6c0 -.3 .1 -.5 .3 -.7l4.7 -4.7c.2 -.2 .4 -.3 .7 -.3z" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
-                                  </span>
-                                </div>
-                                <div class="col">
-                                  <div class="font-weight-medium">
-                                    Con pagos pendientes
+                                            <div class="card card-sm">
+                                              <div class="card-body">
+                                                <div class="row align-items-center">
+                                                  <div class="col-auto">
+                                                    <span class="bg-orange text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/alert-octagon -->
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8.7 3h6.6c.3 0 .5 .1 .7 .3l4.7 4.7c.2 .2 .3 .4 .3 .7v6.6c0 .3 -.1 .5 -.3 .7l-4.7 4.7c-.2 .2 -.4 .3 -.7 .3h-6.6c-.3 0 -.5 -.1 -.7 -.3l-4.7 -4.7c-.2 -.2 -.3 -.4 -.3 -.7v-6.6c0 -.3 .1 -.5 .3 -.7l4.7 -4.7c.2 -.2 .4 -.3 .7 -.3z" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
+                                                    </span>
+                                                  </div>
+                                                  <div class="col">
+                                                    <div class="font-weight-medium">
+                                                      Con pagos pendientes
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                               </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+                                <br>
+                                <h3 class="subheader">Ultima factura</h3>
+                                {% for factura in facturasemi %}
+                                <div class="card card-link" href="">
+                                  <div class="card-body">
+                                    <div class="row">
+                                      <div class="col-auto">
+                                        <span class="avatar rounded">F</span>
+                                      </div>
+                                      <div class="col">
+                                        <div class="font-weight-medium">{{ factura.IdFactura }}</div>
+                                        <div class="text-muted">{{ factura.IdCiclo }}</div>
+                                      </div>
+                                      <div class="col">
+                                        
+                                          {% if factura.Estado == "Vencida" %}
+                                            <span class="badge bg-warging-lt">Vencida</span>&nbsp;
+                                            {% elif factura.Estado == "Paga" %}
+                                             <span class="badge bg-success-lt">Paga</span>&nbsp;
+                                             {% elif factura.Estado == "Anulada" %}
+                                            <span class="badge bg-purple-lt">Anulada</span>&nbsp;
+                                            {% else %}
+                                            <span class="badge bg-info-lt">Emitida</span>
+                                            {% endif %}
+                                      </div>
+                                      <div class="col">
+                                        <a href="{% url 'usuarios:descargarfactura' factura.IdFactura %}"> <span class="badge bg-warging-lt">Descargar</span></a>
+
+                                      </div>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                             </div>
-                          </div>
-                      {% endif %}
-                  {% endif %}
-              </div>
-              <div class="row" style="margin-top: 0.5rem">
-                  <div class="card card-sm">
+                                {% endfor %}
+                                <br>
+                                                  <div class="card card-sm">
                     <div class="card-body">
                 <table class="table table-transparent table-responsive">
                                               <thead>
@@ -227,38 +265,8 @@
                                             </table>
                                         </div>
                                       </div>
+                                      <br>
 
-                                  </div>
-                            </div>
-                            <div class="col-md-6">
-                              <h3 class="subheader">Ultima factura</h3>
-                                {% for factura in facturasemi %}
-                                <a class="card card-link" href="{% url 'usuarios:descargarfactura' factura.IdFactura %}">
-                                  <div class="card-body">
-                                    <div class="row">
-                                      <div class="col-auto">
-                                        <span class="avatar rounded">F</span>
-                                      </div>
-                                      <div class="col">
-                                        <div class="font-weight-medium">{{ factura.IdFactura }}</div>
-                                        <div class="text-muted">{{ factura.IdCiclo }}</div>
-                                      </div>
-                                      <div class="col">
-                                        {% if factura.Estado == "Vencida" %}
-                                            <span class="badge bg-warging-lt">Vencida</span>&nbsp;
-                                            {% elif factura.Estado == "Paga" %}
-                                             <span class="badge bg-success-lt">Paga</span>&nbsp;
-                                             {% elif factura.Estado == "Anulada" %}
-                                            <span class="badge bg-purple-lt">Anulada</span>&nbsp;
-                                            {% else %}
-                                            <span class="badge bg-info-lt">Emitida</span>
-                                            {% endif %}
-                                      </div>
-                                    </div>
-                                  </div>
-                                </a>
-                                {% endfor %}
-                                <br>
                                 <h3 class="subheader">Ultimo pago</h3>
                                 {%for filtropago in ultimopago %}
                                   <a class="card card-link" href="{% url 'usuarios:imprimirpago' filtropago.IdPago %}">
@@ -281,8 +289,6 @@
                                   </div>
                                 </a>
                                 {% endfor %}
-                            </div>
-                              </div>
 
                             </div>
                             <div class="col-md-6">
@@ -290,13 +296,15 @@
                                 {% if asignado is True %}
                                  <h3 class="subheader">Comportamiento del consumo - ULTIMOS 6 MESES</h3>
                                 <div class="col-md-12">
-                                                <div class="card">
-                                    <div class="card-body">
-                                      <div id="chart-tasks-overview"></div>
-                                    </div>
+                                                  <div class="card">
+                    <div class="card-body">
+                      <div id="chart-temperature"></div>
+                    </div>
+                  </div>
                                   </div>
-                                  </div>
-                                  {%endif%}
+                                {%else%}
+                                <img src="{% static 'images/mantenimiento.png' %}" alt="Descripción de la imagen">
+                                {%endif%}
                               </div>
                               <br>
                             <div class="row">
@@ -369,8 +377,6 @@
                             </div>
                           </div>
                           <br>
-
-                        </div>
                       </div>
                       <div class="tab-pane" id="facturas">
                         <div>
@@ -476,37 +482,23 @@
                       </div>
                       <div class="tab-pane" id="tabs-profile-11">
                         <div>
-                            <div class="text-center table-responsive" style="height:15rem">
+                            <div class="text-center table-responsive" style="height:80%">
                                               <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                                   <thead>
                                                               <tr>
                                                                   <th>No registro</th>
-                                                                  <th>Medidor</th>
-                                                                  <th>Lectura actual</th>
-                                                                  <th>Lectura anterior</th>
-                                                                  <th>Consumo</th>
-                                                                  <th>Promedio</th>
-                                                                  <th>Observaciones</th>
-                                                                  <th>Dias consumo</th>
-                                                                  <th>Año</th>
-                                                                  <th>Mes</th>
+                                                                  <th>Tipo novedad</th>
                                                                   <th>Fecha registro</th>
+                                                                  <th>Descripcion</th>
                                                               </tr>
                                                   </thead>
                                                   <tbody>
-                                                      {% for i in consumos %}
+                                                      {% for i in novedades %}
                                                           <tr class="odd gradeX">
-                                                                      <td>{{ i.IdRegistro }}</td>
-                                                                      <td>{{ i.IdMedidor }}</td>
-                                                                      <td>{{ i.Lecturaactual }}</td>
-                                                                      <td>{{ i.Lecturaanterior }}</td>
-                                                                      <td>{{ i.Consumo }}</td>
-                                                                      <td>{{ i.promedio}}</td>
-                                                                      <td>{{ i.observaciones}}</td>
-                                                                      <td>{{ i.diasconsumo}}</td>
-                                                                      <td>{{ i.ano}}</td>
-                                                                      <td>{{ i.mes}}</td>
-                                                                      <td>{{ i.Fecha}}</td>
+                                                                      <td>{{ i.IdNovedad }}</td>
+                                                                      <td>{{ i.TipoNovedad }}</td>
+                                                                      <td>{{ i.Fecha }}</td>
+                                                                      <td>{{ i.Descripcion}}</td>
                                                           </tr>
                                                       {% endfor %}
                                                   </tbody>
@@ -516,7 +508,7 @@
                       </div>
                       <div class="tab-pane" id="tabs-profile-9">
 
-                            <div class="text-center table-responsive" style="height:15rem">
+                            <div class="text-center table-responsive" style="height:80%">
                                               <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                                   <thead>
                                                               <tr>
@@ -544,7 +536,7 @@
                                           </div> 
                       </div>
                       <div class="tab-pane" id="tabs-profile-10">
-                        <div class="text-center table-responsive" style="height:35rem">
+                        <div class="text-center table-responsive" style="height:80%">
                                               <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                                   <thead>
                                                               <tr>
@@ -619,6 +611,48 @@
 
                                                                       </td>
                                                                       <td>{{ i.Periodo }}</td>
+                                                          </tr>
+                                                      {% endfor %}
+                                                  </tbody>
+                                              </table>
+                                          </div> 
+                      </div>
+                      <div class="tab-pane" id="tabs-profile-14">
+                        <div class="text-center table-responsive" style="height:80%">
+                                              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                  <thead>
+                                                              <tr>
+                                                                  <th>No registro</th>
+                                                                  <th>Tipo</th>
+                                                                  <th>Estado</th>
+                                                                  <th>Valor financiado</th>
+                                                                  <th>Cantidad cuotas</th>
+                                                                  <th>Valor pendiente</th>
+                                                                  <th>Cuotas Pendientes</th>
+                                                                  <th>Valor Cuotas</th>
+                                                                  <th>Fecha</th>
+                                                                  <th>Descripcion</th>
+                                                              </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                      {% for i in acuerdos %}
+                                                          <tr class="odd gradeX">
+                                                                      <td>{{ i.IdAcuerdo }}</td>
+                                                                      <td style="background-color: rgb(150, 211, 241);">{{ i.Tipo }}</td>
+                                                                      <td>
+                                                                        {% if i.Estado == "Pendiente" %}
+                                                                            <span class="badge bg-warging-lt">Pendiente</span>&nbsp;
+                                                                            {% elif i.Estado == "Pago" %}
+                                                                             <span class="badge bg-success-lt">Pago</span>&nbsp;
+                                                                            {% endif %}
+                                                                      </td>
+                                                                      <td>${{ i.Valor|intcomma }}</td>
+                                                                      <td>{{ i.CantCuotas }}</td>
+                                                                      <td>${{ i.ValorPendiente|intcomma }}</td>
+                                                                      <td>{{ i.CuotasPendientes }}</td>
+                                                                      <td>${{ i.Cuota|intcomma }}</td>
+                                                                      <td>{{ i.FechaExpe }}</td>
+                                                                      <td>{{ i.Descripcion }}</td>
                                                           </tr>
                                                       {% endfor %}
                                                   </tbody>
@@ -705,13 +739,15 @@
 {% endblock %}
 {% block scripts %}
     <script>
+      const etiquetas = {{ labels|safe }};  // Datos de etiquetas
+      const valores = {{data|safe }};      // Datos de valores
       // @formatter:off
       document.addEventListener("DOMContentLoaded", function () {
-        window.ApexCharts && (new ApexCharts(document.getElementById('chart-tasks-overview'), {
+        window.ApexCharts && (new ApexCharts(document.getElementById('chart-temperature'), {
           chart: {
-            type: "bar",
+            type: "line",
             fontFamily: 'inherit',
-            height: 320,
+            height: 240,
             parentHeightOffset: 0,
             toolbar: {
               show: false,
@@ -720,20 +756,20 @@
               enabled: false
             },
           },
-          plotOptions: {
-            bar: {
-              columnWidth: '50%',
-            }
-          },
-          dataLabels: {
-            enabled: false,
-          },
           fill: {
             opacity: 1,
           },
+          stroke: {
+            width: 2,
+            lineCap: "round",
+            curve: "smooth",
+          },
           series: [{
-            name: "A",
-            data: [{{uno}},{{dos}},{{tres}},{{cuatro}},{{cinco}},{{seis}}]
+            name: "Tope",
+            data: [20, 20, 20, 20, 20, 20]
+          },{
+            name: "Consumo",
+            data: valores,
           }],
           grid: {
             padding: {
@@ -744,6 +780,9 @@
             },
             strokeDashArray: 4,
           },
+          dataLabels: {
+            enabled: true,
+          },
           xaxis: {
             labels: {
               padding: 0,
@@ -751,19 +790,19 @@
             tooltip: {
               enabled: false
             },
-            axisBorder: {
-              show: false,
-            },
-            categories: ['{{uuno}}','{{udos}}','{{utres}}','{{ucuatro}}','{{ucinco}}','{{useis}}'],
+            categories: etiquetas,
           },
           yaxis: {
             labels: {
               padding: 4
             },
           },
-          colors: ["#1EB1A8"],
+          colors: ["#ba0300", "#5eba00"],
           legend: {
             show: false,
+          },
+          markers: {
+            size: 2
           },
         })).render();
       });
