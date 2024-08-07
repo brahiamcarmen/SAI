@@ -134,11 +134,15 @@ class Propietario(models.Model):
 
 
 DOC_CHOICES3 = (
-    ('1', _(u"Bajo-bajo (1)")),
-    ('2', _(u"Bajo (2)")),
-    ('3', _(u"Medio-bajo  (3)")),
-    ('Co', _(u"Comercial (Co)")),
-    ('Ins', _(u"Industrial (Ins)"))
+    ('1', _(u"1")),
+    ('2', _(u"2")),
+    ('3', _(u"3")),
+    ('4', _(u"4")),
+    ('5', _(u"5")),
+    ('Oficial', _(u"Oficial")),
+    ('Comercial', _(u"Comercial")),
+    ('Especial', _(u"Especial")),
+    ('Industrial', _(u"Industrial")),
 )
 
 DOC_CHOICES5 = (
@@ -182,7 +186,9 @@ DOC_CHOICES30 = (
     ('4', _(u"4 - predios")),
     ('5', _(u"5 - predios"))
 )
-
+DOC_CHOICES36 = (
+    ('Operativo', _(u"Operativo")),
+)
 
 class Vivienda(models.Model):
     IdVivienda = models.CharField(primary_key=True, max_length=15, null=False)
@@ -193,7 +199,7 @@ class Vivienda(models.Model):
     Ciclo = models.CharField(null=False, max_length=40, choices=DOC_CHOICES6)
     TipoInstalacion = models.CharField(max_length=60, null=False, choices=DOC_CHOICES5, default='Res')
     Estrato = models.CharField(max_length=60, null=False, choices=DOC_CHOICES3, default='1')
-    EstadoServicio = models.CharField(max_length=60, null=False, default='Operativo')
+    EstadoServicio = models.CharField(max_length=60, null=False, choices=DOC_CHOICES36)
     IdPropietario = models.ForeignKey(Propietario, on_delete=models.CASCADE)
     IdAcueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
     usuid = models.ForeignKey(User, on_delete=models.CASCADE)

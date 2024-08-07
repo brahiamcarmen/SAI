@@ -200,6 +200,17 @@ class Inicio(LoginRequiredMixin, View):
             operativos = Vivienda.objects.filter(EstadoServicio='Operativo', IdAcueducto=idacueducto).count()
             suspendidos = Vivienda.objects.filter(EstadoServicio='Suspendido', IdAcueducto=idacueducto).count()
             retirados = Vivienda.objects.filter(EstadoServicio='Retirado', IdAcueducto=idacueducto).count()
+
+            #estratos
+            estr1 = Vivienda.objects.filter(Estrato='1', IdAcueducto=idacueducto).count()
+            estr2 = Vivienda.objects.filter(Estrato='2', IdAcueducto=idacueducto).count()
+            estr3 = Vivienda.objects.filter(Estrato='3', IdAcueducto=idacueducto).count()
+            estr4 = Vivienda.objects.filter(Estrato='4', IdAcueducto=idacueducto).count()
+            estr5 = Vivienda.objects.filter(Estrato='5', IdAcueducto=idacueducto).count()
+            comercial = Vivienda.objects.filter(Estrato='Comercial', IdAcueducto=idacueducto).count()
+            industrial = Vivienda.objects.filter(Estrato='Industrial', IdAcueducto=idacueducto).count()
+            especial = Vivienda.objects.filter(Estrato='Especial', IdAcueducto=idacueducto).count()
+            oficial = Vivienda.objects.filter(Estrato='Oficial', IdAcueducto=idacueducto).count()
             return render(request,
                           self.template_name, {'tipousuario': tipousuario, 'nombreproyecto': nombreproyecto,
                                                'nombreproyectol': nombreproyectol, 'acueducto': nombreacueducto,
@@ -208,13 +219,11 @@ class Inicio(LoginRequiredMixin, View):
                                                'porcentaje': int(porcentaje), 'contador': int(contador),
                                                'facturaspagas': pagos3, 'promedio': int(promedio),'logo':logo,
                                                'promtarifa': int(promtarifa),'contarasig': contarasig, 'suma8': suma8,
-                                               'foto': usuario.fotoUsuario,'usuarios': usuarios,
-                                               'celular': usuario.celular,
-                                               'departamento': usuario.Departamento,
-                                               'cargo': usuario.Cargo,
-                                               'fechac': usuario.FechaCreacion,
-                                               'ultimo': hoy, 'retirados': retirados,'suspendidos': suspendidos,'operativos':operativos
-                                               })
+                                               'foto': usuario.fotoUsuario,'usuarios': usuarios,'celular': usuario.celular,
+                                               'departamento': usuario.Departamento,'cargo': usuario.Cargo, 'fechac': usuario.FechaCreacion,
+                                               'ultimo': hoy, 'retirados': retirados,'suspendidos': suspendidos,'operativos':operativos,
+                                               'uno': estr1,'dos':estr2,'tres':estr3,'cuatro':estr4,'cinco':estr5,'especial':especial,'industrial':industrial,
+                                               'oficial':oficial,'comercial':comercial})
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
 
