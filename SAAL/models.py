@@ -6,9 +6,6 @@ from django.contrib.auth.models import User
 
 DOC_CHOICES = (
     ('En Servicio', _(u"En Servicio (ES)")),
-    ('Baja Presion', _(u"Baja Presion (BP)")),
-    ('Suspendido', _(u"Suspendido (SP)")),
-    ('Daño Critico', _(u"Daño Critico (DC)"))
 )
 
 

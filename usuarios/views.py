@@ -25,9 +25,6 @@ from django.http import HttpResponse
 from openpyxl import Workbook
 import openpyxl
 import qrcode
-import matplotlib.pyplot as plt
-import pandas as pd
-import io
 from openpyxl.drawing.image import Image
 from django.template.loader import get_template
 from django.core.mail import EmailMultiAlternatives
@@ -108,9 +105,6 @@ C2 = 'Ciclo 2'
 C3 = 'Ciclo 3'
 C4 = 'Ciclo 4'
 
-T1 = 'Residencial'
-T2 = 'Comercial'
-T3 = 'Inductrial'
 DESCOBRO = 'Concepto matricula'
 COBROCONSUMO = 'Cobro por consumo'
 ESTCOBRO = 'Pendiente'
@@ -118,9 +112,6 @@ ESTCOBRO2 = 'Pago'
 ESTADO1 = "Pendiente"
 ESTADO2 = "Aprobada"
 ESTADO3 = "Anulada"
-ESTADOCERTI = "En proceso"
-ESTADOPQR1 = "Pendiente"
-
 
 class Inicio(LoginRequiredMixin, View):
     login_url = '/'
@@ -1231,7 +1222,7 @@ class RegistroPqr(LoginRequiredMixin, View):
             descripcion = request.POST.get("Descripcion")
             usuario = Usuario.objects.get(usuid=request.user.pk)
             pqr = Pqrs(Nombre=nombre, Telefono=celular, Descripcion=descripcion, Correo=correo, Direccion=direccion,
-                       TipoSolicitud=tiposolicitud, Clasificacion=clasificacion, Estado=ESTADOPQR1, usuid=usuario, IdAcueducto=acueducto)
+                       TipoSolicitud=tiposolicitud, Clasificacion=clasificacion, Estado='Pendiente', usuid=usuario, IdAcueducto=acueducto)
             pqr.save()
             idpqr = pqr.IdPqrs
             messages.add_message(request, messages.INFO,'La pqrs se ' + str(tiposolicitud) + ' registro correctamente, RADICADO No: ' + str(
