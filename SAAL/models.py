@@ -58,7 +58,7 @@ class Acueducto(models.Model):
 class Sectores(models.Model):
     IdSector= models.AutoField(primary_key=True)
     Nombre = models.CharField(max_length=10)
-    Acueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
+    idacueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
     objects = models.Manager()
     def __str__(self):
         return "%s" % self.Nombre
@@ -203,6 +203,8 @@ class Vivienda(models.Model):
     CantHabitantes = models.CharField(max_length=2, null=False)
     FichaCastral = models.CharField(max_length=26, null=True)
     Diametro = models.CharField(max_length=5, null=True)
+    FechaIngreso = models.DateTimeField(auto_now_add=True, null=True)
+    FechaActualizacion = models.DateTimeField(auto_now=True, null=True)
     # You should have the default 'objects' manager by default
     objects = models.Manager()
 
