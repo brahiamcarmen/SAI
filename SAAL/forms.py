@@ -80,6 +80,7 @@ class ModificaVivienda(forms.ModelForm):
             'CantHabitantes': _(u'Cantidad de habitantes'),
             'FichaCastral': _(u'Ficha catastral'),
             'Diametro': _(u'Seleccione el diametro de tuberia'),
+            'TipoRecaudo': _(u'Seleccione tipo de recaudo'),
         }
 
     def __init__(self, vivienda=None, *args, **kwargs):

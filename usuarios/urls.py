@@ -3,14 +3,14 @@ from usuarios.views import Inicio, Busquedas, CobroRecargo, ControlPresupuestal,
 from usuarios.views import ImprimirSoporteP, AnularPago, AsignarCargo, Bloque, VerCredito
 from usuarios.views import ListaViviendas, ListaPropietarios, ReportePdfPagos, Creditos, RegistroCredito
 from usuarios.views import RegistroProveedor, Consumo,AsignarMedidor, RegistrarConsumo
-from usuarios.views import PazSalvo, Matriculas,ReporteConceptos
+from usuarios.views import PazSalvo, Matriculas,ReporteConceptos, MapaMedidores
 from usuarios.views import AgregarVivienda, AgregarPropietario, ReporteCompleto
 from usuarios.views import ReporteSuspenciones, ReporteReconexion, ModificarPropietario, ModificarVivienda
 from usuarios.views import Mapa, EliminarPoblacion
 from usuarios.views import VisualizarPropietario, CambioEstado, Estadoscuenta, RegistroCostoM
 from usuarios.views import RegistroTarifa,ReporteGastos, ListasGastos
 from usuarios.views import Suspenciones, VerOrdenSuspencion, VerOrdenReconexion, CambioTitular
-from usuarios.views import CierreFinanciero, VerConsumo, GeneradorConceptos, Varias
+from usuarios.views import CierreFinanciero, VerConsumo, GeneradorConceptos,FacturadorConceptos, Varias
 from usuarios.views import GenerarGasto
 from usuarios.views import GeneradorFacturas, DesactivarUsuarios, AnularFactura
 from usuarios.views import DescargarFactura, DescargaMasivaFacturas, VisualizarVivienda, BuscarSolicitud
@@ -56,7 +56,6 @@ urlpatterns = [
     url(r'^reportesuspenciones', ReporteSuspenciones.as_view(), name='reportesuspenciones'),
     url(r'^reportereconexiones', ReporteReconexion.as_view(), name='reportereconexiones'),
     url(r'^cambiotitular/(?P<IdVivienda>\w+)', CambioTitular.as_view(), name='cambiotitular'),
-    url(r'^mapa', Mapa.as_view(), name='mapa'),
     url(r'^modificarempresa', ModificarAcueducto.as_view(), name='modificarempresa'),
     url(r'^desacusuario/(?P<usuid>\w+)', DesactivarUsuarios.as_view(), name='desacusuario'),
     url(r'^elipoblacion', EliminarPoblacion.as_view(), name='elipoblacion'),
@@ -87,4 +86,5 @@ urlpatterns = [
     url(r'^rconsumos/', ReporteConsumos.as_view(), name='rconsumos'),
     url(r'^reporteconceptos', ReporteConceptos.as_view(), name='reporteconceptos'),
     url(r'^pmedicion/', PlantillaMedicion.as_view(), name='pmedicion'),
+    url(r'^mapamedidores/', MapaMedidores.as_view(), name='mapamedidores'),
 ]

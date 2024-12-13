@@ -53,7 +53,6 @@
                 </div>
               </a>
               <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <a href="{% url 'usuarios:mapa' %}" class="dropdown-item">Mapa de red</a>
                 <div class="dropdown-divider"></div>
                 <a href="{% url 'logout' %}" class="dropdown-item">Cerrar sesión</a>
               </div>
@@ -92,6 +91,9 @@
                       </a>
                       <a class="dropdown-item" href="{% url 'usuarios:listapqrs' %}" >
                         Pqrs
+                      </a>
+                      <a class="dropdown-item" href="{% url 'usuarios:mapamedidores' %}" >
+                        Mapa de medidores
                       </a>
                     </div>
                     <div class="dropdown-menu-column">
@@ -164,9 +166,6 @@
                       <div class="dropdown-menu-column">
                         <a class="dropdown-item" href="{% url 'usuarios:controlpresupuestal' %}" >
                           Ingresos y egresos
-                        </a>
-                        <a class="dropdown-item" href="{% url 'usuarios:cierrefinanciero' %}" >
-                          Cierres mensuales
                         </a>
                       </div>
                     </div>

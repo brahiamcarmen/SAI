@@ -1,0 +1,63 @@
+{% extends 'usuarios/base_usuario3.html' %}
+{% load static %}
+{% block styles %}
+ <style>
+    
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(20, 1fr); /* Define una cuadrícula de 20 columnas */
+      gap: 2px;
+      margin: 20px auto;
+      max-width: 100%;
+    }
+    .cell {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    /* Colores personalizados */
+    .blue { background-color: #a7d8f0; }
+    .green { background-color: #b6e8b4; }
+    .yellow { background-color: #fff3b3; }
+    .pink { background-color: #f8d2d8; }
+    .white { background-color: #ffffff; }
+    /* Estilos para celdas que ocupan más columnas */
+    .wide-2 { grid-column: span 1; } /* Ocupa 2 columnas */
+    .wide-3 { grid-column: span 2; } /* Ocupa 3 columnas */
+    .wide-4 { grid-column: span 3; } /* Ocupa 4 columnas */
+    .wide-5 { grid-column: span 24; }
+  </style>
+{% endblock %}
+{% block title %} 
+<title>Predios</title> 
+{% endblock %}
+{% block content %}
+{% include 'usuarios/alerts.html' %}
+
+<div class="page-wrapper">
+  <div class="container-fluid">
+    <br>
+    <div class="row">
+  <div class="col-12 cell">
+    <p>Sector pasonivel viejo - {{cantidad1}}</p>
+  </div>
+</div>
+<div class="row">
+    {% for i in viviendas %}
+    <div class="cell col-1">
+      {{i.IdPropietario.Nombres}} {{i.IdPropietario.Apellidos}}
+    </div>
+    {% endfor %}
+</div>
+
+
+
+  </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+
+{% endblock %}

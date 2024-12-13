@@ -11,77 +11,66 @@
   <div class="spinner"></div>
   <div class="container-fluid">
     <div class="row">
-       <div class="col-md-2">
-        <div class="row">
-          <div class="col-md-12">
-            <h3 class="subheader">Empresa</h3>
-              <div class="col-auto" style="margin-top: 0.5rem">
-                <div class="card">
-                  <div class="card-body p-4 text-center">
-                    <span class="avatar avatar-xl mb-1" style="background-image: url({{ logo.url }})"></span>
-                    <h3 class="m-0 mb-1">{{ acueducto }}</h3>
-                    <div class="text-muted">{{ nit }}</div>
-                  </div>
-                  <div class="d-flex">
-                                        
-                  </div>
-            </div>
-          </div>
-          </div>
-        </div>
-          <br>
-          <div class="row text-center" style="text-align: center;">
-            <div class="col-6 col-sm-4 col-md-2 col-xl-auto mb-3">
-              <a data-bs-toggle="offcanvas" href="#offcanvasStart" role="button" aria-controls="offcanvasStart" class="btn   btn-indigo  w-100 btn-icon">
-                          <!-- Download SVG icon from http://tabler-icons.io/i/search -->
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="10" cy="10" r="7" /><line x1="21" y1="21" x2="15" y2="15" /></svg>
-              </a>
-            </div>
-            <div class="col-6 col-sm-4 col-md-2 col-xl-auto mb-3">
-              <a data-bs-toggle="offcanvas" href="#offcanvasStart2" role="button" aria-controls="offcanvasStart" class="btn   btn-indigo  w-100 btn-icon">
-                          <!-- Download SVG icon from http://tabler-icons.io/i/history -->
-                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="12 8 12 12 14 14" /><path d="M3.05 11a9 9 0 1 1 .5 4m-.5 5v-5h5" /></svg>
-              </a>
-            </div>
-            <div class="col-6 col-sm-4 col-md-2 col-xl-auto mb-3">
-              <a data-bs-toggle="offcanvas" href="#offcanvasStart3" role="button" aria-controls="offcanvasStart" class="btn  btn-indigo w-100 btn-icon">
-                          <!-- Download SVG icon from http://tabler-icons.io/i/user-exclamation -->
-                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="9" cy="7" r="4" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><line x1="19" y1="7" x2="19" y2="10" /><line x1="19" y1="14" x2="19" y2="14.01" /></svg>
-              </a>
-            </div>
-            <div class="col-6 col-sm-4 col-md-2 col-xl-auto mb-3">
-              <a data-bs-toggle="offcanvas" href="#offcanvasStart4" role="button" aria-controls="offcanvasStart" class="btn   btn-indigo  w-100 btn-icon">
-                         <!-- Download SVG icon from http://tabler-icons.io/i/container -->
-                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M20 4v.01" /><path d="M20 20v.01" /><path d="M20 16v.01" /><path d="M20 12v.01" /><path d="M20 8v.01" /><rect x="8" y="4" width="8" height="16" rx="1" /><path d="M4 4v.01" /><path d="M4 20v.01" /><path d="M4 16v.01" /><path d="M4 12v.01" /><path d="M4 8v.01" /></svg>
-              </a>
-            </div>
-          </div>
-          <br>
-        <div class="row">
-          <h3 class="subheader">Reportes disponibles</h3>
-          <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:reportecompleto' %}" class="btn btn-sm btn-indigo  btn-pill w-100">Informe completo</a>
-            </div>
-            <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:reportepagos' %}" class="btn btn-sm btn-indigo  btn-pill w-100">Ingresos</a>
-            </div>
-            <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:reportegastos' %}" class="btn btn-sm btn-indigo  btn-pill w-100">Egresos</a>
-            </div>
-            <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:reportecierre' %}" class="btn btn-sm btn-indigo  btn-pill w-100">Cierres mensuales</a>
-            </div>
-            <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:reporteconceptos' %}" class="btn btn-sm btn-indigo btn-pill w-100">Conceptos</a>
-            </div>
-            <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="" class="btn btn-sm btn-indigo  btn-pill w-100">Creditos</a>
-            </div>
-            <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:rconsumos' %}" class="btn btn-sm btn-indigo  btn-pill w-100">Consumos</a>
-            </div>
-        </div>
+<div class="col-md-2">
+  <!-- Empresa Card -->
+  <div class="empresa-card mb-3">
+    <h3 class="subheader">Empresa</h3>
+    <div class="card">
+      <div class="card-body text-center p-4">
+        <span class="avatar avatar-xl mb-2" style="background-image: url({{ logo.url }})"></span>
+        <h3 class="m-0 mb-1">{{ acueducto }}</h3>
+        <div class="text-muted">{{ nit }}</div>
       </div>
+    </div>
+  </div>
+
+  <!-- Accesos Rápidos -->
+  <div class="accesos-rapidos mb-4 text-center">
+    <div class="row">
+      <div class="col mb-2">
+        <a data-bs-toggle="offcanvas" href="#offcanvasStart" class="btn btn-indigo btn-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="10" cy="10" r="7" /><line x1="21" y1="21" x2="15" y2="15" />
+          </svg>
+        </a>
+      </div>
+      <div class="col mb-2">
+        <a data-bs-toggle="offcanvas" href="#offcanvasStart2" class="btn btn-indigo btn-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="12 8 12 12 14 14" /><path d="M3.05 11a9 9 0 1 1 .5 4m-.5 5v-5h5" />
+          </svg>
+        </a>
+      </div>
+      <div class="col mb-2">
+        <a data-bs-toggle="offcanvas" href="#offcanvasStart3" class="btn btn-indigo btn-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="7" r="4" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><line x1="19" y1="7" x2="19" y2="10" /><line x1="19" y1="14" x2="19" y2="14.01" />
+          </svg>
+        </a>
+      </div>
+      <div class="col mb-2">
+        <a data-bs-toggle="offcanvas" href="#offcanvasStart4" class="btn btn-indigo btn-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 4v.01" /><path d="M20 20v.01" /><path d="M20 16v.01" /><path d="M20 12v.01" /><path d="M20 8v.01" /><rect x="8" y="4" width="8" height="16" rx="1" /><path d="M4 4v.01" /><path d="M4 20v.01" /><path d="M4 16v.01" /><path d="M4 12v.01" /><path d="M4 8v.01" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reportes Disponibles -->
+  <div class="reportes-disponibles">
+    <h3 class="subheader">Reportes disponibles</h3>
+    <a href="{% url 'usuarios:reportecompleto' %}" class="btn btn-sm btn-indigo btn-pill w-100 mb-2">Informe completo</a>
+    <a href="{% url 'usuarios:reportepagos' %}" class="btn btn-sm btn-indigo btn-pill w-100 mb-2">Ingresos</a>
+    <a href="{% url 'usuarios:reportegastos' %}" class="btn btn-sm btn-indigo btn-pill w-100 mb-2">Egresos</a>
+    <a href="{% url 'usuarios:reportecierre' %}" class="btn btn-sm btn-indigo btn-pill w-100 mb-2">Cierres mensuales</a>
+    <a href="{% url 'usuarios:reporteconceptos' %}" class="btn btn-sm btn-indigo btn-pill w-100 mb-2">Conceptos</a>
+    <a href="#" class="btn btn-sm btn-indigo btn-pill w-100 mb-2">Créditos</a>
+    <a href="{% url 'usuarios:rconsumos' %}" class="btn btn-sm btn-indigo btn-pill w-100">Consumos</a>
+  </div>
+</div>
+
       <div class="col-md-8">
         <div class="row">
             <div class="col-md-3">
@@ -345,7 +334,8 @@
                                   {% csrf_token %}
                                   <div class="row">
                                       <div class="col-sm-12">
-                                          <video style="width: 100%;" src="" id="video" autoplay="true"></video>
+                                         
+                                          <div id="reader" style="width: 300px;"></div>
                                       </div>
                                       <div class="col-sm-12">
                                           <input style="width: 100%" type="text" name="factura" class="form-control" placeholder="Numero de factura" id="miInput" oninput="verificarTexto()">
@@ -577,6 +567,7 @@
             document.querySelector('.spinner').style.display = 'none';
         });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/html5-qrcode/minified/html5-qrcode.min.js"></script>
     <script>
       // @formatter:off
 
@@ -646,5 +637,25 @@
         })).render();
       });
       // @formatter:on
+    </script>
+    <script>
+document.addEventListener("DOMContentLoaded", () => {
+    const qrReader = new Html5Qrcode("reader");
+
+    qrReader.start(
+        { facingMode: "environment" }, // Usa la cámara trasera
+        { fps: 10, qrbox: 250 },      // Opciones de lectura
+        (decodedText) => {
+            console.log(`Código QR leído: ${decodedText}`);
+            // URL base para la vista VerFactura
+            const baseUrl = "http://127.0.0.1:8000/usuarios/verfactura/"; // Cambia esta ruta si es necesario
+            // Redirigir al usuario a la vista con el número de factura
+            window.location.href = `${baseUrl}?factura=${encodeURIComponent(decodedText)}`;
+        },
+        (errorMessage) => {
+            console.log(`Error al leer: ${errorMessage}`);
+        }
+    ).catch((err) => console.error('Error al iniciar el lector QR:', err));
+});
     </script>
 {% endblock %}
