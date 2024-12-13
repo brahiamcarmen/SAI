@@ -25,62 +25,54 @@
 <div class="page-body">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-3">
-                <div class="row">
-                    <div class="col-sm-12">
+                    <div class="col-sm-6">
                         <div class="card">
                             <div class="card-header">
                                 <h3 class=" md-0 card-title">Informacion del predio</h3>
                             </div>
                             <div class="card-body">
                                 <div class="row text-center">
-                                    <div class="col-6">
+                                    <div class="col-3">
                                         <b class="text-primary">Matricula</b><br>
                                         <p style="color:rgba(38, 35, 197 ); font-size: 1rem;n"><b><a href="{% url 'usuarios:vervivienda' matricula %}"> {{matricula}}</a></b></p>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-3">
                                         <b>Sector</b><br>
                                         <p>{{ sector }}</p>
                                     </div>
-                                </div>
-                                <div class="row text-center">
-                                    <div class="col-6">
+                                    <div class="col-3">
                                         <b>Casa</b><br>
                                         <p>{{casa}}</p>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-3">
                                         <b>Piso</b><br>
                                         <p><b>{{piso}}</b></p>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-sm-12">
+                    <div class="col-sm-6">
                         <div class="card">
                             <div class="card-header">
                                 <h3 class=" md-0 card-title">Informacion factura</h3>
                             </div>
                             <div class="card-body">
                                 <div class="row text-center">
-                                    <div class="col-4 col-sm-4">
+                                    <div class="col-3">
                                         <b>Numero de factura</b><br>
                                         <p style="color:rgba(65,160,39); font-size: 1rem;n"><b> {{factura}}</b></p>
                                     </div>
-                                    <div class="col-4 col-sm-4">
+                                    <div class="col-3">
                                         <b>Ciclo facturado</b><br>
                                         <p style="color:rgba(65,160,39); font-size: 1.0rem;n"><b>{{ciclo}}</b></p>
                                     </div>
-                                    <div class="col-4 col-sm-4">
+                                    <div class="col-3">
                                         <b>Estado</b><br>
                                         <p>{{estadofactura}}</p>
                                     </div>
-                                </div>
-                                <div class="row text-center">
-                                    <div class="col-12 col-sm-12">
+                                    <div class="col-3">
                                         <b>Fecha de expedición</b><br>
                                         <p>{{fe}}</p>
                                     </div>
@@ -88,22 +80,25 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-sm-9">
+            
+ 
+        </div>
+        <br>
+        <div class="row">
+                        <div class="col-sm-12">
                 <div class="card">
                     <div class="card-header">
                         <h3 class=" md-0 card-title">Conceptos facturados</h3>
                     </div>
                     <div class="card-body">
                         <div class="row text-center">
-<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                                   <thead>
                                                               <tr>
                                                                   <th>No registro</th>
                                                                   <th>Aporte Fijo</th>
+                                                                  <th>Basico</th>
                                                                   <th>Complementario</th>
-                                                                  <th>Cuota matricula</th>
                                                                   <th>Suspencion</th>
                                                                   <th>Reconexion</th>
                                                                   <th>Recargo</th>
@@ -129,18 +124,18 @@
                                                                           <td>${{ j.AporteFijo|intcomma }}</td>
                                                                           {%endif%}
 
+                                                                          {% if j.Basico > 0 %}
+                                                                          <td style="background-color: rgb(150, 191, 241);">
+                                                                          ${{ j.Basico|intcomma|intcomma }}</td>
+                                                                          {%else%}
+                                                                          <td>${{ j.Basico|intcomma }}</td>
+                                                                          {%endif%}
+
                                                                           {% if j.Complementario > 0 %}
                                                                           <td style="background-color: rgb(150, 241, 230);">
                                                                           ${{ j.Complementario|intcomma|intcomma }}</td>
                                                                           {%else%}
                                                                           <td>${{ j.Complementario|intcomma }}</td>
-                                                                          {%endif%}
-
-                                                                          {% if j.CuotaMatricula > 0 %}
-                                                                          <td style="background-color: rgb(150, 191, 241);">
-                                                                          ${{ j.CuotaMatricula|intcomma|intcomma }}</td>
-                                                                          {%else%}
-                                                                          <td>${{ j.CuotaMatricula|intcomma }}</td>
                                                                           {%endif%}
 
                                                                           {% if j.Suspencion > 0 %}
@@ -225,6 +220,7 @@
                 </div>
             </div>
         </div>
+        <br>
         <div class="row">
             <div class="col-sm-6">
                      <a href="{% url 'usuarios:inicio' %}" style="width:100%; margin-top: 0.2rem;" class="btn btn-primary">Cancelar

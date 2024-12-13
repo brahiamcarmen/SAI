@@ -1,9 +1,14 @@
 {% extends 'usuarios/base_usuario3.html' %}
 {% load static %}
 {% block styles %}
-<link href="{% static 'stylesheets/diseno.css' %}" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<style>
+  .table-responsive {
+    overflow-y: auto;
+  }
+</style>
 {% endblock %}
-{%block title %} <title>Consumos</title> {%endblock%}
+{%block title %} <title>Medicion</title> {%endblock%}
 {% block content %}
 {% load humanize %}
 {% include 'usuarios/alerts.html' %}
@@ -107,53 +112,95 @@
           <div class="row">
             <h3 class="subheader">Opciones disponibles</h3>
             <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:registromedidor' %}" class="btn btn-sm btn-dark btn-pill w-100">Registrar medidor</a>
+               <a href="{% url 'usuarios:pmedicion' %}"class="btn btn-sm btn-teal btn-pill  w-100">Plantilla medicion</a>
             </div>
             <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="" data-bs-toggle="modal" data-bs-target="#modal-full-width" class="btn btn-sm btn-dark btn-pill w-100">Medidores sin asignar</a>
+               <a href="" data-bs-toggle="modal" data-bs-target="#modal-full-width" class="btn btn-sm btn-teal btn-pill w-100">Medidores sin asignar</a>
             </div>
             <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="" data-bs-toggle="modal" data-bs-target="#registroconsumo" class="btn btn-sm btn-dark btn-pill w-100">Registrar consumo</a>
+               <a href="{% url 'usuarios:registromedidor' %}" class="btn btn-sm btn-indigo btn-pill w-100">Registrar medidor</a>
             </div>
+            
             <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:pmedicion' %}"class="btn btn-sm btn-indigo btn-pill w-100">Plantilla medicion</a>
+               <a href="" data-bs-toggle="modal" data-bs-target="#registroconsumo" class="btn btn-sm btn-indigo btn-pill w-100">Registrar consumo</a>
             </div>
+            
             <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:pmedicion' %}"class="btn btn-sm btn-dark btn-pill w-100">Registrar consumo mensual</a>
+               <a href="{% url 'usuarios:regmencon' %}"class="btn btn-sm btn-indigo btn-pill w-100">Registrar consumo mensual</a>
             </div>
           </div>
       </div>
-      <div class="col-md-8">
+      <div class="col-md-10">
         <div class="row">
-            <h3 class="subheader">Medidores activos</h3>
-             {% for cierre in asignado %}
-                <div class="col-md-6 col-xl-4" style="margin-top: 0.5rem">
-                <a class="card card-link" href="{% url 'usuarios:verconsumo' cierre.IdVivienda %}" title="{{ cierre.Fecha }}">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col">
-                        <div class="font-weight-medium">{{ cierre.IdMedidor }}</div>
-                        <div class="text-muted">{{ cierre.IdVivienda }}</div>
-                        <div class="small mt-1">
-                          <span class="badge bg-green"></span> {{ cierre.Estado }} - {{cierre.Fecha}}
+          <h3 class="subheader">Medidores activos</h3>
+          <div class="card">
+            <br>
+
+                  <div class="table-responsive">
+                    <table class="table card-table table-vcenter text-nowrap datatable" id="datatable">
+                      <thead>
+                        <tr>
+                          <th class="w-1">No. <!-- Download SVG icon from http://tabler-icons.io/i/chevron-up -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-sm text-dark icon-thick" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="6 15 12 9 18 15" /></svg>
+                          </th>
+                          <th>Predio</th>
+                          <th>Titular</th>
+                          <th>Estado</th>
+                          <th>Fecha instalacion</th>
+                          <th>Opciones</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for cierre in asignado %}
+                          <td><span class="text-muted">{{ cierre.IdMedidor }}</span></td>
+                          <td>{{ cierre.IdVivienda }}</td>
+                          <td>{{ cierre.IdVivienda.IdPropietario }}</td>
+                          <td>
+                            <span class="badge bg-success me-1"></span>{{ cierre.Estado }}
+                          </td>
+                          <td>
+                            {{cierre.Fecha|date:"d/m/Y"}}
+                          </td>
+                          <td class="text-end">
+                            <a class="btn btn-sm btn-dark" href="{% url 'usuarios:verconsumo' cierre.IdVivienda %}">
+                                  +
+                                </a>
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+        </div>
+      </div>
+       <div class="row" style="margin-top:2rem;">
+                <h3 class="subheader">Comparacion de consumo - ULTIMOS 12 MESES</h3>
+                <div class="col-md-12">
+                  <div class="card">
+                    <div class="card-header">
+                       <div class="row">
+                        <div class="col-md-4">
+                          <p><b style="color:#5eba00;">Limite: </b> Consumo aproximado calculando la cantidad de micromedidores instalados con el consumo promedio nacional</p>
+                        </div>
+                        <div class="col-md-4">
+                          <p><b style="color:#f10e0e;">Consumo:</b> Consumo mensual en m3</p>
+                        </div>
+                        <div class="col-md-4">
+                           <p><b style="color:#ff922b;">Medidores:</b> Numero de medidores instalados</p>
                         </div>
                       </div>
                     </div>
+                    <div class="card-body">
+                      <div id="chart-line-stroke"></div>
                   </div>
-                </a>
-              </div>
-              {% endfor %}
-        </div>
+                </div>
+                </div>
       </div>
-      <div class="col-md-2">
-          <h3 class="subheader">Alertas</h3>
+                   
       </div>
-
-    </div>
-    <br>
-  </div>
-</div>
-      </div>
+      <br>
     </div>
     <div class="modal modal-blur fade" id="modal-full-width" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-full-width modal-dialog-centered" role="document">
@@ -164,8 +211,8 @@
           </div>
           <div class="modal-body">
                    <div class="row">
-                <div class="text-center table-responsive" style="height: 90%">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <div class="table-responsive">
+                    <table class="table card-table table-vcenter text-nowrap">
                         <thead>
                                     <tr>
                                         <th>No medidor</th>
@@ -232,4 +279,98 @@
     </div>
 {% endblock %}
 {% block scripts %}
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $('#datatable').DataTable({
+      responsive: true,
+      paging: true,
+      searching: true,
+      language: {
+        search: "Buscar:",
+        lengthMenu: "Mostrar _MENU_ entradas",
+        info: "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+        paginate: {
+          first: "Primero",
+          last: "Último",
+          next: "Siguiente",
+          previous: "Anterior"
+        }
+      }
+    });
+  });
+</script>
+    <script>
+      // @formatter:off
+
+      const etiquetas = {{ labels|safe }};  // Datos de etiquetas
+      const valores = {{data|safe }};      // Datos de valores
+      const canti = {{cantmedidores|safe }};      // Datos de valores
+      const promedio = {{promedio|safe }};      // Datos de valores
+
+      document.addEventListener("DOMContentLoaded", function () {
+        window.ApexCharts && (new ApexCharts(document.getElementById('chart-line-stroke'), {
+          chart: {
+            type: "line",
+            fontFamily: 'inherit',
+            height: 240,
+            parentHeightOffset: 0,
+            toolbar: {
+              show: false,
+            },
+            animations: {
+              enabled: false
+            },
+          },
+          fill: {
+            opacity: 1,
+          },
+          stroke: {
+            width: 2,
+            lineCap: "round",
+            curve: "straight",
+          },
+          series: [{
+            name: "Numero de medidores",
+            data: canti,
+          },
+          {
+            name: "Tope 1",
+            data: promedio,
+          },{
+            name: "Consumo - M3",
+            data: valores,
+          }],
+          grid: {
+            padding: {
+              top: -20,
+              right: 0,
+              left: -4,
+              bottom: -4
+            },
+            strokeDashArray: 4,
+          },
+          xaxis: {
+            labels: {
+              padding: 0,
+            },
+            tooltip: {
+              enabled: false
+            },
+            categories: etiquetas,
+          },
+          yaxis: {
+            labels: {
+              padding: 4
+            },
+          },
+          colors: ["#ff922b", "#5eba00","#f10e0e"],
+          legend: {
+            show: false,
+          },
+        })).render();
+      });
+      // @formatter:on
+    </script>
 {% endblock %}

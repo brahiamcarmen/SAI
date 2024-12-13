@@ -206,7 +206,9 @@
                                 <div class="card card-link" href="">
                                   <div class="card-body">
                                     <div class="row">
-                                      <div class="col-auto">
+                                      <div class="col-md-12">
+                                        <div class="row">                                    
+                                          <div class="col-auto">
                                         <span class="avatar rounded">F</span>
                                       </div>
                                       <div class="col">
@@ -214,7 +216,6 @@
                                         <div class="text-muted">{{ factura.IdCiclo }}</div>
                                       </div>
                                       <div class="col">
-                                        
                                           {% if factura.Estado == "Vencida" %}
                                             <span class="badge bg-warging-lt">Vencida</span>&nbsp;
                                             {% elif factura.Estado == "Paga" %}
@@ -225,10 +226,24 @@
                                             <span class="badge bg-info-lt">Emitida</span>
                                             {% endif %}
                                       </div>
-                                      <div class="col">
-                                        <a href="{% url 'usuarios:descargarfactura' factura.IdFactura %}"> <span class="badge bg-warging-lt">Descargar</span></a>
+                                        </div>
 
                                       </div>
+                                      
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                      <div class="col-md-6">
+                                        <a class="btn btn-primary btn-sm btn-block" style="width:100%" href="{% url 'usuarios:descargarfactura' factura.IdFactura %}"> <span>Descargar</span></a>
+                                      </div>
+                                      <div class="col-md-6">
+                                        {% if factura.Estado == "Paga" %}
+                                          <div></div>
+                                          {% else %}
+                                          <a class="btn btn-primary btn-sm btn-block" style="width:100%" href="{% url 'usuarios:verfactura' %}?factura={{ factura.IdFactura }}">Pagar</a>
+                                          {% endif %}
+                                        
+                                        </div>
                                     </div>
                                   </div>
                                 </div>
@@ -542,8 +557,8 @@
                                                               <tr>
                                                                   <th>No registro</th>
                                                                   <th>Aporte Fijo</th>
+                                                                  <th>Basico</th>
                                                                   <th>Complementario</th>
-                                                                  <th>Cuota matricula</th>
                                                                   <th>Suspencion</th>
                                                                   <th>Reconexion</th>
                                                                   <th>Recargo</th>
@@ -568,8 +583,8 @@
                                                                       <td>${{ i.AporteFijo|intcomma }}</td>
                                                                       {%endif%}
 
+                                                                      <td>${{ i.Basico|intcomma }}</td>
                                                                       <td>${{ i.Complementario|intcomma }}</td>
-                                                                      <td>${{ i.CuotaMatricula|intcomma }}</td>
                                                                       <td>${{ i.Suspencion|intcomma }}</td>
                                                                       <td>${{ i.Reconexion|intcomma }}</td>
                                                                       

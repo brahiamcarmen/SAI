@@ -1,20 +1,20 @@
 from django.conf.urls import url
 from usuarios.views import Inicio, Busquedas, CobroRecargo, ControlPresupuestal, VerFactura
-from usuarios.views import ImprimirSoporteP, AnularPago, AsignarCargo, Bloque, VerCredito
+from usuarios.views import ImprimirSoporteP, AnularPago, AsignarCargo, VerCredito
 from usuarios.views import ListaViviendas, ListaPropietarios, ReportePdfPagos, Creditos, RegistroCredito
 from usuarios.views import RegistroProveedor, Consumo,AsignarMedidor, RegistrarConsumo
-from usuarios.views import PazSalvo, Matriculas,ReporteConceptos
+from usuarios.views import PazSalvo, ReporteConceptos, MapaMedidores
 from usuarios.views import AgregarVivienda, AgregarPropietario, ReporteCompleto
-from usuarios.views import ReporteSuspenciones, ReporteReconexion, ModificarPropietario, ModificarVivienda
-from usuarios.views import Mapa, EliminarPoblacion
+from usuarios.views import ReporteOrdenesT, ModificarPropietario, ModificarVivienda
+from usuarios.views import RegMenCon, EliminarPoblacion, AcuerdoPago
 from usuarios.views import VisualizarPropietario, CambioEstado, Estadoscuenta, RegistroCostoM
 from usuarios.views import RegistroTarifa,ReporteGastos, ListasGastos
-from usuarios.views import Suspenciones, VerOrdenSuspencion, VerOrdenReconexion, CambioTitular
+from usuarios.views import OrdenesdeTrabajo, VerOrdenSuspencion, CambioTitular
 from usuarios.views import CierreFinanciero, VerConsumo, GeneradorConceptos, Varias
 from usuarios.views import GenerarGasto
 from usuarios.views import GeneradorFacturas, DesactivarUsuarios, AnularFactura
 from usuarios.views import DescargarFactura, DescargaMasivaFacturas, VisualizarVivienda, BuscarSolicitud
-from usuarios.views import Reconexiones, ModificarAcueducto, ListaPqrs, RegistroPqr, VerPqr
+from usuarios.views import ModificarAcueducto, ListaPqrs, RegistroPqr, VerPqr
 from usuarios.views import RespuestaPqrs, ReporteCierre, ReporteConsumos, PlantillaMedicion
 from usuarios.views import RegistroMedidor
 from usuarios.views import CambiarContraUsuario, GeneradorFacturasIndividual,ReporteRetiro
@@ -23,7 +23,7 @@ urlpatterns = [
     url(r'^inicio/', Inicio.as_view(), name='inicio'),
     url(r'^listaviviendas/', ListaViviendas.as_view(), name='listaviviendas'),
     url(r'^listapropietarios/', ListaPropietarios.as_view(), name='listapropietarios'),
-    url(r'^agregarvivienda/(?P<idbloque>\w+)', AgregarVivienda.as_view(), name='agregarvivienda'),
+    url(r'^agregarvivienda', AgregarVivienda.as_view(), name='agregarvivienda'),
     url(r'^agregarpropietario/', AgregarPropietario.as_view(), name='agregarpropietario'),
     url(r'^modificarpropietario/(?P<IdPropietario>\w+)', ModificarPropietario.as_view(), name='modificarpropietario'),
     url(r'^modificarvivienda/(?P<idvivienda>\w+)', ModificarVivienda.as_view(), name='modificarvivienda'),
@@ -45,18 +45,15 @@ urlpatterns = [
     url(r'^listapqrs/', ListaPqrs.as_view(), name='listapqrs'),
     url(r'^verpqr/(?P<idpqr>\w+)', VerPqr.as_view(), name='verpqr'),
     url(r'^generadorfacturas/', GeneradorFacturas.as_view(), name='generadorfacturas'),
-    url(r'^suspenciones/', Suspenciones.as_view(), name='suspenciones'),
+    url(r'^ordenestrabajo/', OrdenesdeTrabajo.as_view(), name='ordenestrabajo'),
     url(r'^anularfactura/', AnularFactura.as_view(), name='anularfactura'),
     url(r'^respuestapqr/(?P<idsolicitud>\w+)', RespuestaPqrs.as_view(), name='respuestapqr'),
     url(r'^verordensus/(?P<IdOrden>\w+)', VerOrdenSuspencion.as_view(), name='verordensus'),
-    url(r'^verordenre/(?P<IdOrden>\w+)', VerOrdenReconexion.as_view(), name='verordenre'),
     url(r'^descargarfactura/(?P<IdFactura>\w+)', DescargarFactura.as_view(), name='descargarfactura'),
     url(r'^facturaindividual/(?P<IdVivienda>\w+)', GeneradorFacturasIndividual.as_view(), name='facturaindividual'),
     url(r'^facturamasiva/', DescargaMasivaFacturas.as_view(), name='facturamasiva'),
-    url(r'^reportesuspenciones', ReporteSuspenciones.as_view(), name='reportesuspenciones'),
-    url(r'^reportereconexiones', ReporteReconexion.as_view(), name='reportereconexiones'),
+    url(r'^reporteordenes', ReporteOrdenesT.as_view(), name='reporteordenes'),
     url(r'^cambiotitular/(?P<IdVivienda>\w+)', CambioTitular.as_view(), name='cambiotitular'),
-    url(r'^mapa', Mapa.as_view(), name='mapa'),
     url(r'^modificarempresa', ModificarAcueducto.as_view(), name='modificarempresa'),
     url(r'^desacusuario/(?P<usuid>\w+)', DesactivarUsuarios.as_view(), name='desacusuario'),
     url(r'^elipoblacion', EliminarPoblacion.as_view(), name='elipoblacion'),
@@ -65,14 +62,11 @@ urlpatterns = [
     url(r'^cierrefinanciero', CierreFinanciero.as_view(), name='cierrefinanciero'),
     url(r'^reportecierre', ReporteCierre.as_view(), name='reportecierre'),
     url(r'^reportegastos', ReporteGastos.as_view(), name='reportegastos'),
-    url(r'^reconexiones', Reconexiones.as_view(), name='reconexiones'),
     url(r'^imprimirpago/(?P<IdPago>\w+)', ImprimirSoporteP.as_view(), name='imprimirpago'),
     url(r'^pazysalvo/(?P<matricula>\w+)', PazSalvo.as_view(), name='pazysalvo'),
     url(r'^cobrorecargo', CobroRecargo.as_view(), name='cobrorecargo'),
     url(r'^anularpago', AnularPago.as_view(), name='anularpago'),
     url(r'^asignarcargo/(?P<matricula>\w+)', AsignarCargo.as_view(), name='asignarcargo'),
-    url(r'^matriculas', Matriculas.as_view(), name='matriculas'),
-    url(r'^Bloque', Bloque.as_view(), name='bloque'),
     url(r'^credito', Creditos.as_view(), name='credito'),
     url(r'^registrocredito', RegistroCredito.as_view(), name='registrocredito'),
     url(r'^registroproveedor', RegistroProveedor.as_view(), name='registroproveedor'),
@@ -87,4 +81,7 @@ urlpatterns = [
     url(r'^rconsumos/', ReporteConsumos.as_view(), name='rconsumos'),
     url(r'^reporteconceptos', ReporteConceptos.as_view(), name='reporteconceptos'),
     url(r'^pmedicion/', PlantillaMedicion.as_view(), name='pmedicion'),
+    url(r'^regmencon/', RegMenCon.as_view(), name='regmencon'),
+    url(r'^mapamedidores/', MapaMedidores.as_view(), name='mapamedidores'),
+    url(r'^acuerdosdepago/', AcuerdoPago.as_view(), name='acuerdosdepago'),
 ]

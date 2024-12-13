@@ -23,7 +23,7 @@
               <div class="col-auto ms-auto d-print-none">
                 <div class="btn-list">
                     <div class="col-auto">
-                        <a href="{% url 'usuarios:suspenciones' %}" class="btn btn-primary btn-sm w-100">
+                        <a href="{% url 'usuarios:ordenestrabajo' %}" class="btn btn-primary btn-sm w-100">
                                       Volver</a>
                     </div>
                     </div>
@@ -47,18 +47,14 @@
                                   <dd class="col-7">{{ estados.IdOrden }}</dd>
                                   <dt class="col-5">Deuda:</dt>
                                   <dd class="col-7">${{ estados.Deuda|intcomma}}</dd>
-                                  <dt class="col-5">Generado:</dt>
-                                  <dd class="col-7">{{ estados.Generado }}</dd>
                                   <dt class="col-5">Estado:</dt>
                                   <dd class="col-7">{{ estados.Estado }}<dd>
-                                  <dt class="col-5">Usuario:</dt>
-                                  <dd class="col-7">{{ estados.UsuarioEjecuta }}</dd>
                                   <dt class="col-5">Fecha de registro:</dt>
                                   <dd class="col-7">{{ estados.FechaExpe }}</dd>
                                   <dt class="col-5">Fecha de ejecuacion:</dt>
                                   <dd class="col-7">{{ estados.FechaEjecucion }}</dd>
                                   <dt class="col-5">Direccion:</dt>
-                                  <dd class="col-7">{{ estados.IdEstadoCuenta }}</dd>
+                                  <dd class="col-7">{{ estados.IdVivienda }}</dd>
                               </dl>
               				{%endfor%}  
                             </div>

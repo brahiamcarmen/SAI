@@ -53,7 +53,6 @@
                 </div>
               </a>
               <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <a href="{% url 'usuarios:mapa' %}" class="dropdown-item">Mapa de red</a>
                 <div class="dropdown-divider"></div>
                 <a href="{% url 'logout' %}" class="dropdown-item">Cerrar sesión</a>
               </div>
@@ -90,18 +89,12 @@
                       <a class="dropdown-item" href="{% url 'usuarios:listaviviendas' %}" >
                         Predios
                       </a>
-                      <a class="dropdown-item" href="{% url 'usuarios:listapqrs' %}" >
-                        Pqrs
-                      </a>
                     </div>
                     <div class="dropdown-menu-column">
                       <a class="dropdown-item" href="{% url 'usuarios:agregarpropietario' %}" >
                         Registrar titular
                       </a>
-                      <a class="dropdown-item" href="{% url 'usuarios:registropqrs' %}" >
-                        Registrar PQRS
-                      </a>
-                      <a class="dropdown-item" href="{% url 'usuarios:matriculas' %}" >
+                      <a class="dropdown-item" href="{% url 'usuarios:agregarvivienda' %}" >
                         Asignacion de matricula
                       </a>
                     </div>
@@ -119,36 +112,34 @@
                   </a>
                 </li>
                 <li class="nav-item">
+                  <a class="nav-link" href="{% url 'usuarios:listapqrs' %}">
+                    <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/ad-2 -->
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11.933 5h-6.933v16h13v-8" /><path d="M14 17h-5" /><path d="M9 13h5v-4h-5z" /><path d="M15 5v-2" /><path d="M18 6l2 -2" /><path d="M19 9h2" /></svg>
+                    </span>
+                    <span class="nav-link-title">
+                     PQRS
+                    </span>
+                  </a>
+                </li>
+                <li class="nav-item">
                   <a class="nav-link" href="{% url 'usuarios:consumos' %}">
                     <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/clock -->
-  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="12" r="9" /><polyline points="12 7 12 12 15 15" /></svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="12" r="9" /><polyline points="12 7 12 12 15 15" /></svg>
                     </span>
                     <span class="nav-link-title">
                      Medición
                     </span>
                   </a>
                 </li>
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false" >
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'usuarios:ordenestrabajo' %}">
                     <span class="nav-link-icon d-md-none d-lg-inline-block">
                           <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 10h3v-3l-3.5 -3.5a6 6 0 0 1 8 8l6 6a2 2 0 0 1 -3 3l-6 -6a6 6 0 0 1 -8 -8l3.5 3.5" /></svg>
                     </span>
                     <span class="nav-link-title">
-                      Ordenes de trabajo
+                    Ordenes de trabajo
                     </span>
                   </a>
-                <div class="dropdown-menu">
-                  <div class="dropdown-menu-columns">
-                    <div class="dropdown-menu-column">
-                      <a class="dropdown-item" href="{% url 'usuarios:suspenciones' %}" >
-                        Suspenciones
-                      </a>
-                      <a class="dropdown-item" href="{% url 'usuarios:reconexiones' %}" >
-                        Reconexiones
-                      </a>
-                    </div>
-                  </div>
-                </div>
                 </li>
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false" >
@@ -164,9 +155,6 @@
                       <div class="dropdown-menu-column">
                         <a class="dropdown-item" href="{% url 'usuarios:controlpresupuestal' %}" >
                           Ingresos y egresos
-                        </a>
-                        <a class="dropdown-item" href="{% url 'usuarios:cierrefinanciero' %}" >
-                          Cierres mensuales
                         </a>
                       </div>
                     </div>

@@ -2,257 +2,68 @@
 {% load static %}
 {% block styles %}
 {% endblock %}
-{%block title %} <title>Estados de cuenta</title> {%endblock%}
+{%block title %} <title>Facturacion</title> {%endblock%}
 {% block content %}
 {% load humanize %}
 {% include 'usuarios/alerts.html' %}
 <div class="page-body">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-md-10">
-        <div class="row">
-          <h3 class="subheader">Informacion financiera</h3>
-              <div class="col-md-3" style="margin-top: 0.5rem">
-                <div class="card card-sm">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="bg-indigo-lt avatar">
-                          <!-- Download SVG icon from http://tabler-icons.io/i/separator -->
-  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="3" y1="12" x2="3" y2="12.01" /><line x1="7" y1="12" x2="17" y2="12" /><line x1="21" y1="12" x2="21" y2="12.01" /></svg>
-                        </span>
-                      </div>
-                      <div class="col">
-                        <div class="font-weight-medium">
-                          ${{vapo|intcomma}}
-                        </div>
-                        <div class="text-muted">
-                          Cuentas por cobrar
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-3" style="margin-top: 0.5rem">
-                <div class="card card-sm">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="bg-indigo-lt avatar">
-                           <!-- Download SVG icon from http://tabler-icons.io/i/settings -->
-  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 15l2 2l4 -4" /></svg>
-                        </span>
-                      </div>
-                      <div class="col">
-                        <div class="font-weight-medium">
-                          ${{total|intcomma}}
-                        </div>
-                        <div class="text-muted">
-                          Valores facturados
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-3" style="margin-top: 0.5rem">
-                <div class="card card-sm">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="bg-orange-lt avatar">
-                           <!-- Download SVG icon from http://tabler-icons.io/i/scissors -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="6" cy="7" r="3" /><circle cx="6" cy="17" r="3" /><line x1="8.6" y1="8.6" x2="19" y2="19" /><line x1="8.6" y1="15.4" x2="19" y2="5" /></svg>
-                        </span>
-                      </div>
-                      <div class="col">
-                        <div class="font-weight-medium">
-                          {{totalfac|intcomma}}
-                        </div>
-                        <div class="text-muted">
-                          Facturas generadas
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-             <div class="col-md-3" style="margin-top: 0.5rem">
-                <div class="card card-sm">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="bg-orange-lt avatar">
-  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="3" y1="3" x2="21" y2="21" /><path d="M17.669 17.669a12 12 0 0 1 -5.669 3.331a12 12 0 0 1 -8.5 -15c.797 .036 1.589 0 2.366 -.126m3.092 -.912a12 12 0 0 0 3.042 -1.962a12 12 0 0 0 8.5 3a12 12 0 0 1 -1.117 9.379" /></svg>
-                        </span>
-                      </div>
-                      <div class="col">
-                        <div class="font-weight-medium">
-                          {{acuerdos}}
-                        </div>
-                        <div class="text-muted">
-                          Acuerdos de pago
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>             
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-md-2">
-                <h3 class="subheader">Informacion de facturacion</h3>
-                <div class="row">
-                    <div class="col-md-12">
-                                        <div class="card card-sm">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="bg-indigo text-white avatar">
-                          <!-- Download SVG icon from http://tabler-icons.io/i/file-report -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="17" cy="17" r="4" /><path d="M17 13v4h4" /><path d="M12 3v4a1 1 0 0 0 1 1h4" /><path d="M11.5 21h-6.5a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v2m0 3v4" /></svg>
-                        </span>
-                      </div>
-                      <div class="col">
-                        <div class="font-weight-medium">
-                          {{facven|intcomma}}
-                        </div>
-                        <div class="text-muted">
-                          Vencidas
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-md-12">
-                                        <div class="card card-sm">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="bg-orange text-white avatar">
-                          <!-- Download SVG icon from http://tabler-icons.io/i/file-info -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M11 14h1v4h1" /><path d="M12 11h.01" /></svg>
-                        </span>
-                      </div>
-                      <div class="col">
-                        <div class="font-weight-medium">
-                          {{facanu|intcomma}}
-                        </div>
-                        <div class="text-muted">
-                          Anuladas
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-md-12">
-                       <div class="card card-sm">
-                          <div class="card-body">
-                            <div class="row align-items-center">
-                              <div class="col-auto">
-                                <span class="bg-cyan text-white avatar">
-                                 <!-- Download SVG icon from http://tabler-icons.io/i/file-check -->
-                                <!-- Download SVG icon from http://tabler-icons.io/i/file -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /></svg>
-                                </span>
-                              </div>
-                              <div class="col">
-                                <div class="font-weight-medium">
-                                 {{facemi|intcomma}}
-                                </div>
-                                <div class="text-muted">
-                                 Vigentes
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                  <div class="col-md-12">
-                  <div class="card card-sm">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="bg-cyan text-white avatar">
-                         <!-- Download SVG icon from http://tabler-icons.io/i/file-check -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 15l2 2l4 -4" /></svg>
-                        </span>
-                      </div>
-                      <div class="col">
-                        <div class="font-weight-medium">
-                          {{facpg|intcomma}}
-                        </div>
-                        <div class="text-muted">
-                         Pagas
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-10">
-                <h3 class="subheader">Acuerdos de pago</h3>
-                    <div class="text-center table-responsive" style="height:30rem">
-                                              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                                  <thead>
-                                                              <tr>
-                                                                  <th>No registro</th>
-                                                                  <th>Tipo</th>
-                                                                  <th>Estado</th>
-                                                                  <th>Valor</th>
-                                                                  <th>T Cuotas</th>
-                                                                  <th>Cuotas P</th>
-                                                                  <th>Saldo pendiente</th>
-                                                                  <th>Cuota</th>
-                                                                  <th>Fecha</th>
-                                                                  <th>Descripcion</th>
-                                                              </tr>
-                                                  </thead>
-                                                  <tbody>
-                                                      {% for i in acuerdospagos %}
-                                                          <tr class="odd gradeX">
-                                                                      <td>{{ i.IdAcuerdo }}</td>
-                                                                      <td>{{ i.Tipo}}</td>
-                                                                      <td>{% if i.Estado == "Pendiente" %}
-                                                                            <span class="badge bg-danger-lt">Pendiente</span>
-                                                                            {% elif i.Estado == "Pago" %}
-                                                                            <span class="badge bg-success-lt">Pago</span>
-                                                                            {% else %}
-                                                                            <span class="badge bg-info-lt">Anulado</span>
-                                                                            {% endif %}</td>
-                                                                      <td>${{ i.Valor|intcomma }}</td>
-                                                                      <td>{{ i.CantCuotas }}</td>
-                                                                      <td>{{ i.CuotasPendientes}}</td>
-                                                                      <td>${{ i.ValorPendiente|intcomma}}</td>
-                                                                      <td>${{ i.Cuota|intcomma}}</td>
-                                                                      <td>{{ i.FechaExpe}}</td>
-                                                                      <td>{{ i.Descripcion}}</td>
-                                                          </tr>
-                                                      {% endfor %}
-                                                  </tbody>
-                                              </table>
-                                          </div>                  
-            </div>
-        </div>
- 
+      <div class="col-md-3">
         
       </div>
-      <div class="col-md-2">
+      <div class="col-md-3">
+        <div class="row">
+          <div class="col-md-12">
+              <h3 class="subheader">Estados de facturacion</h3>
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="mb-2">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /></svg>
+                          Vigentes: <strong>{{facemi|intcomma}}</strong>
+                        </div>
+                        <div class="mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 15l2 2l4 -4" /></svg>
+                          Pagas: <strong>{{facpg|intcomma}}</strong>
+                        </div>
+                        <div class="mb-2">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="17" cy="17" r="4" /><path d="M17 13v4h4" /><path d="M12 3v4a1 1 0 0 0 1 1h4" /><path d="M11.5 21h-6.5a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v2m0 3v4" /></svg>
+                          Vencidas: <strong>{{facven|intcomma}}</strong>
+                        </div>
+                        <div class="mb-2">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M11 14h1v4h1" /><path d="M12 11h.01" /></svg>
+                          Anuladas: <strong>
+                            {{facanu|intcomma}}</strong>
+                        </div>
+                        <div class="mb-2">
+                          Total: <strong>
+                            {{totalfac|intcomma}}</strong>
+                        </div>
+                      </div>
+                    </div>
+          </div>
+           <div class="col-md-12" style="margin-top:0.5rem">
+              <h3 class="subheader">Acuerdos de pago</h3>
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="mb-2">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /></svg>
+                          Pagos: <strong>{{acuerpa|intcomma}}</strong>
+                        </div>
+                        <div class="mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 15l2 2l4 -4" /></svg>
+                          Pendientes: <strong>{{acuerpen|intcomma}}</strong>
+                        </div>
+
+                        <div class="mb-2">
+                          Total: <strong>
+                            {{acuerdos|intcomma}}</strong>
+                        </div>
+                      </div>
+                    </div>
+          </div>
+          <br>
+           <div class="col-md-12" style="margin-top:0.5rem">
           <h3 class="subheader">Opciones disponibles</h3>
           <div class="row">
             <div class="col-md-12" style="margin-top: 0.5rem">
@@ -261,30 +72,83 @@
                   </a>
             </div>
             <div class="col-md-12" style="margin-top: 0.5rem">
-                <a href="{% url 'usuarios:varias' %}" class="btn btn-sm btn-dark btn-pill w-100">
+                <a href="#" class="btn btn-sm btn-red btn-pill w-100" data-bs-toggle="modal" data-bs-target="#modal-danger2">
                     Generar suspenciones
                   </a>
             </div>
             <div class="col-md-12" style="margin-top: 0.5rem">
-                <a href="#" class="btn btn-sm btn-dark btn-pill w-100" data-bs-toggle="modal" data-bs-target="#acuerdo">
-                    Registrar acuerdo/financiación
-                  </a>
+               <a href="#" class="btn btn-sm btn-red btn-pill w-100"data-bs-toggle="modal" data-bs-target="#modal-danger3">Generar facturacion</a>
             </div>
             <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:generadorfacturas' %}" class="btn btn-sm btn-dark btn-pill w-100">Generar facturacion</a>
+               <a href="{% url 'usuarios:facturamasiva' %}" class="btn btn-sm btn-teal btn-pill w-100">Descargar facturas</a>
             </div>
             <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:facturamasiva' %}" class="btn btn-sm btn-green btn-pill w-100">Descargar facturas</a>
-            </div>          
-          </div>
-            <div class="col-md-12">
-            <br>
-              <h3 class="subheader">Comparacion grafica</h3>
-
-              <div id="chart-demo-pie"></div>
+               <a href="{% url 'usuarios:acuerdosdepago' %}" class="btn btn-sm btn-teal btn-pill w-100">Acuerdos de pago</a>
+            </div>           
           </div>
       </div>
+        </div>
 
+      </div>
+      <div class="col-md-3">
+        <h3 class="subheader">Cuentas por cobrar</h3>
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="mb-2">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /></svg>
+                          Aporte fijo: <strong>${{apf|intcomma}}</strong>
+                        </div>
+                        <div class="mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 15l2 2l4 -4" /></svg>
+                          Consumo basico: <strong>${{bss|intcomma}}</strong>
+                        </div>
+                        <div class="mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 15l2 2l4 -4" /></svg>
+                          Complementarios: <strong>${{comp|intcomma}}</strong>
+                        </div>
+                        <div class="mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 15l2 2l4 -4" /></svg>
+                          Suspenciones: <strong>${{sus|intcomma}}</strong>
+                        </div>
+                        <div class="mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 15l2 2l4 -4" /></svg>
+                          Reconexiones: <strong>${{re|intcomma}}</strong>
+                        </div>
+                        <div class="mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 15l2 2l4 -4" /></svg>
+                          Recargos: <strong>${{recar|intcomma}}</strong>
+                        </div>
+                        <hr>
+                        <div class="mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 15l2 2l4 -4" /></svg>
+                          Subsidios: <strong>-{{sub|intcomma}}</strong>
+                        </div>
+                        <hr>
+                        <div class="mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 15l2 2l4 -4" /></svg>
+                          Acuerdos de pago: <strong>${{acuer|intcomma}}</strong>
+                        </div>
+                        <div class="mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 15l2 2l4 -4" /></svg>
+                          Saldos anteriores: <strong>${{anter|intcomma}}</strong>
+                        </div>
+                        <hr>
+                        <div class="mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 15l2 2l4 -4" /></svg>
+                          Sin facturar: <strong>${{sinfac|intcomma}}</strong>
+                        </div>
+                        <hr>
+
+                        <div class="mb-2">
+                          Total: <strong>
+                            ${{totales|intcomma}}</strong>
+                        </div>
+                      </div>
+                    </div>
+      </div>
+      <div class="col-md-3">
+ 
+      </div>
     </div>
     <br>
 
@@ -324,59 +188,59 @@
         </div>
       </div>
     </div>
-
-    <div class="modal modal-blur fade" id="acuerdo" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal modal-blur fade" id="modal-danger2" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
         <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Agregar financiacion</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="modal-status bg-danger"></div>
+          <div class="modal-body text-center py-4">
+            <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 9v2m0 4v.01" /><path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75" /></svg>
+            <h3>Estas seguro?</h3>
+            <div class="text-muted">¿Realmente quieres generar las ordenes de suspencion? Lo que hagas no se puede deshacer.</div>
           </div>
-          <form method="post" enctype="multipart/form-data" class="card">
-            {% csrf_token %}
-          <div class="modal-body">
-            <div class="row mb-3 align-items-end">
-              <div class="col">
-                <label class="form-label">Matricula</label>
-                <input type="text" name="Matricula" class="form-control" />
-              </div>
-            </div>
-            <div class="row mb-3 align-items-end">
-              <div class="col">
-                <label class="form-label">Valor a financiar</label>
-                <input type="number" name="Valor" class="form-control" />
-              </div>
-            </div>
-            <div class="row mb-3 align-items-end">
-              <div class="col">
-                <label class="form-label">Cuotas</label>
-                <select name="Cuotas" class="form-control" >
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                  <option value="6">6</option>
-                  <option value="12">12</option>
-                  <option value="24">24</option>
-                  <option value="36">36</option>
-                </select>
-              </div>
-            </div>
-            <div>
-              <label class="form-label">Descripcion</label>
-              <textarea class="form-control" name="Descripcion"></textarea>
-            </div>
-          </div>
-
           <div class="modal-footer">
-            <button type="button" class="btn me-auto" data-bs-dismiss="modal">Cerrar</button>
-            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Registrar</button>
+            <div class="w-100">
+              <div class="row">
+                <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
+                    Cancelar
+                  </a></div>
+                <div class="col"><a href="{% url 'usuarios:varias' %}" class="btn btn-danger w-100">
+                  Generar
+                  </a></div>
+              </div>
+            </div>
           </div>
-        </form>
         </div>
       </div>
     </div>
+    <div class="modal modal-blur fade" id="modal-danger3" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="modal-status bg-danger"></div>
+          <div class="modal-body text-center py-4">
+            <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 9v2m0 4v.01" /><path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75" /></svg>
+            <h3>Estas seguro?</h3>
+            <div class="text-muted">¿Realmente quieres generar la facturacion? Lo que hagas no se puede deshacer.</div>
+          </div>
+          <div class="modal-footer">
+            <div class="w-100">
+              <div class="row">
+                <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
+                    Cancelar
+                  </a></div>
+                <div class="col"><a href="{% url 'usuarios:generadorfacturas' %}" class="btn btn-danger w-100">
+                  Generar
+                  </a></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
 {% endblock %}
 {% block scripts %}
       <script>

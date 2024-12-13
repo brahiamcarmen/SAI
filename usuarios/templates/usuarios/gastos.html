@@ -1,7 +1,14 @@
 {% extends 'usuarios/base_usuario3.html' %}
 {% load static %}
 {% block styles %}
-
+ <style>
+        .negativo {
+            color: red;
+        }
+        .positivo {
+            color: green;
+        }
+    </style>
 {% endblock %}
 {%block title %} <title>Control presupuestal</title> {%endblock%}
 {% block content %}
@@ -10,10 +17,38 @@
 <div class="page-body">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-md-10">
-          <div class="row">
+      <div class="col-md-6">
+      <h3 class="subheader">Resultados - {{anio}}</h3>
+        <table style="width: 100%;" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Mes</th>
+                <th>Total Ingresos</th>
+                <th>Total Egresos</th>
+                <th>Diferencia (Ing - Egr)</th>
+                </tr>
+            </thead>
+            <tbody>
+                 {% for mes, datos in datos_por_mes.items %}
+            <tr>
+                <td>{{ mes }}</td>
+                <td>${{ datos.total_ingresos|intcomma }}</td>
+                <td>${{ datos.total_egresos|intcomma }}</td>
+                 <td class="{% if datos.diferencia < 0 %}negativo{% else %}positivo{% endif %}">
+                 ${{ datos.diferencia|intcomma }}
+               </td>
+
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+      </div>
+      <div class="col-md-4">
+        <div class="row">
+                <div class="col-md-6">
+               <div class="row">
           <h3 class="subheader">Informacion financiera - mes actual</h3>
-              <div class="col-md-3" style="margin-top: 0.5rem">
+              <div class="col-md-12" style="margin-top: 0.5rem">
                 <div class="card card-sm">
                   <div class="card-body">
                     <div class="row align-items-center">
@@ -34,7 +69,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-3" style="margin-top: 0.5rem">
+              <div class="col-md-12" style="margin-top: 0.5rem">
                 <div class="card card-sm">
                   <div class="card-body">
                     <div class="row align-items-center">
@@ -55,7 +90,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-3" style="margin-top: 0.5rem">
+              <div class="col-md-12" style="margin-top: 0.5rem">
                 <div class="card card-sm">
                   <div class="card-body">
                     <div class="row align-items-center">
@@ -77,22 +112,68 @@
                   </div>
                 </div>
               </div>
-                            <div class="col-md-3" style="margin-top: 0.5rem">
+        </div>
+      </div>
+      <div class="col-md-6">
+          <div class="row">
+          <h3 class="subheader">Informacion financiera - año actual</h3>
+              <div class="col-md-12" style="margin-top: 0.3rem">
                 <div class="card card-sm">
                   <div class="card-body">
                     <div class="row align-items-center">
                       <div class="col-auto">
-                        <span class="bg-green-lt avatar">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12l-6.5 5.5" /><path d="M12 3v9h9" /><circle cx="12" cy="12" r="9" /></svg>
+                       <span class="bg-green-lt avatar">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 20v-8h-3.586a1 1 0 0 1 -.707 -1.707l6.586 -6.586a1 1 0 0 1 1.414 0l6.586 6.586a1 1 0 0 1 -.707 1.707h-3.586v8a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /></svg>
                         </span>
                       </div>
                       <div class="col">
-                        <div class="font-weight-medium">
-                          ${{credito|intcomma}}
-                          <span class="float-right font-weight-medium text-green">+{{promtarifa}}%</span>
+                        <div class="font-weight-medium">${{total_ingresos_anual|intcomma}}
+                          <span class="float-right font-weight-medium text-green">+%</span>
                         </div>
                         <div class="text-muted">
-                          Deuda
+                          Ingresos
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12" style="margin-top: 0.3rem">
+                <div class="card card-sm">
+                  <div class="card-body">
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <span class="bg-red-lt avatar">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 4v8h3.586a1 1 0 0 1 .707 1.707l-6.586 6.586a1 1 0 0 1 -1.414 0l-6.586 -6.586a1 1 0 0 1 .707 -1.707h3.586v-8a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1z" /></svg>
+                        </span>
+                      </div>
+                      <div class="col">
+                        <div class="font-weight-medium">${{total_egresos_anual|intcomma}}
+                          <span class="float-right font-weight-medium text-green">+%</span>
+                        </div>
+                        <div class="text-muted">
+                          Egresos
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12" style="margin-top: 0.3rem">
+                <div class="card card-sm">
+                  <div class="card-body">
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <span class="bg-cyan-lt avatar">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16.7 8a3 3 0 0 0 -2.7 -2h-4a3 3 0 0 0 0 6h4a3 3 0 0 1 0 6h-4a3 3 0 0 1 -2.7 -2" /><path d="M12 3v3m0 12v3" /></svg>
+                        </span>
+                      </div>
+                      <div class="col">
+                        <div class="font-weight-medium">${{credito|intcomma}}
+                          <span class="float-right font-weight-medium text-green">+%</span>
+                        </div>
+                        <div class="text-muted">
+                          Endeudamiento
                         </div>
                       </div>
                     </div>
@@ -100,12 +181,59 @@
                 </div>
               </div>
         </div>
-        <br>
-        <div class="row">
-            <div class="col-md-3">
 
-          <h3 class="subheader">Estadisticas</h3>
-          <div class="row" style="margin-top: 0.5rem">
+      </div>
+
+        </div>
+        <br>
+<div class="row">
+                <div class="col-md-12">
+      <h3 class="subheader">Resultados ultimos años</h3>
+        <table style="width: 100%;" class="table table-bordered">
+            <thead>
+                <tr>
+                  <th>Año</th>
+                  <th>Total Ingresos</th>
+                  <th>Total Egresos</th>
+                  <th>Diferencia</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for ano, datos in datos_por_ano.items %}
+                  <tr>
+                      <td>{{ ano }}</td>
+                      <td>${{ datos.total_ingresos_anio|intcomma }}</td>
+                      <td>${{ datos.total_egresos_anio|intcomma }}</td>
+                      <td class="{% if datos.diferencia_anio < 0 %}negativo{% else %}positivo{% endif %}">
+                          ${{ datos.diferencia_anio|intcomma }}
+                      </td>
+                  </tr>
+                  {% endfor %}
+            </tbody>
+        </table>
+      </div>
+        </div>
+        
+      </div>
+             <div class="col-md-2">
+          <h3 class="subheader">Opciones disponibles</h3>
+          <div class="row">
+            <div class="col-md-12" style="margin-top: 0.3rem">
+               <a href="{% url 'usuarios:listadogastos' %}" class="btn btn-sm btn-teal btn-pill w-100">Listado de ordenes</a>
+            </div>
+            <div class="col-md-12" style="margin-top: 0.3rem">
+               <a href="{% url 'usuarios:cierrefinanciero' %}" class="btn btn-sm btn-teal btn-pill w-100">Cierres mensuales</a>
+            </div>    
+            <div class="col-md-12" style="margin-top: 0.3rem">
+               <a href="{% url 'usuarios:generargasto' %}" class="btn btn-sm btn-indigo btn-pill w-100">Registrar solicitud</a>
+            </div>
+            <div class="col-md-12" style="margin-top: 0.3rem">
+               <a href="{% url 'usuarios:registroproveedor' %}" class="btn btn-sm btn-indigo btn-pill w-100">Registrar proveedor</a>
+            </div> 
+                 
+          </div>
+          <div class="row" style="margin-top: 0.3rem">
+            <h3 class="subheader">Estadisticas</h3>
                     <div class="col-md-12">
                         <div class="card card-sm">
                           <div class="card-body">
@@ -129,7 +257,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row" style="margin-top: 0.5rem">
+                <div class="row" style="margin-top: 0.3rem">
                     <div class="col-md-12">
                         <div class="card card-sm">
                           <div class="card-body">
@@ -153,7 +281,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row" style="margin-top: 0.5rem">
+                <div class="row" style="margin-top: 0.3rem">
                     <div class="col-md-12">
                         <div class="card card-sm">
                           <div class="card-body">
@@ -161,7 +289,7 @@
                               <div class="col-auto">
                                 <span class="bg-red text-white avatar">
                                     <!-- Download SVG icon from http://tabler-icons.io/i/square-x -->
-  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><rect x="4" y="4" width="16" height="16" rx="2" /><path d="M10 10l4 4m0 -4l-4 4" /></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><rect x="4" y="4" width="16" height="16" rx="2" /><path d="M10 10l4 4m0 -4l-4 4" /></svg>
                                 </span>
                               </div>
                               <div class="col">
@@ -177,8 +305,12 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-9">
+        
+      </div>
+    </div>
+
+    <div class="row">
+            <div class="col-md-12">
                  <h3 class="subheader">Listado de ordenes pendientes</h3>
                 <div class="row">
                     <div class="col-md-12">
@@ -211,38 +343,10 @@
                     </div>
                 </div>
             </div>
-        </div>
  
-        
-      </div>
-      <div class="col-md-2">
-          <h3 class="subheader">Opciones disponibles</h3>
-          <div class="row">
-            <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:listadogastos' %}" class="btn btn-sm btn-indigo btn-pill w-100">Listado de ordenes</a>
-            </div>
-            <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:generargasto' %}" class="btn btn-sm btn-indigo btn-pill w-100">Registrar solicitud</a>
-            </div>
-            <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:registroproveedor' %}" class="btn btn-sm btn-indigo btn-pill w-100">Registrar proveedor</a>
-            </div>         
-          </div>
-            <div class="col-md-12">
-            <br>
-              <h3 class="subheader">Comparacion grafica</h3>
-              <div id="chart-demo-pie"></div>
-          </div>
-      </div>
+ 
 
     </div>
-    <br>
-
-
-
-
-
-
   </div>
 </div>
 

@@ -8,96 +8,78 @@
   }
 </style>
 {% endblock %}
-{%block title %} <title>Predios</title> {%endblock%}
+{% block title %} 
+<title>Predios</title> 
+{% endblock %}
 {% block content %}
 {% include 'usuarios/alerts.html' %}
-<!-- Titulo -->
-      <div class="page-wrapper">
-        <div class="container-fluid">
-          <div class="row">
-                      <div class="page-header d-print-none">
-            <div class="row align-items-center">
-              <div class="col">
-                <!-- Page pre-title -->
-                <div class="page-pretitle">
-                  Modulo
+
+<div class="page-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="page-header d-print-none">
+        <div class="row align-items-center">
+          <div class="col">
+            <div class="page-pretitle"> Módulo </div>
+            <h2 class="page-title"> Predios registrados </h2>
+          </div>
+          <div class="col-auto ms-auto d-print-none">
+            <div class="btn-list">
+              <form class="table-search-form row gx-1 align-items-center" onsubmit="return false;">
+                <div class="col-auto">
+                  <input type="text" id="search-input" name="searchorders" class="form-control search-orders" placeholder="Buscar" aria-label="Buscar viviendas">
                 </div>
-                <h2 class="page-title">
-                  Predios registrados
-                </h2>
-              </div>
-              <div class="col-auto ms-auto d-print-none">
-                <div class="btn-list">
-                    <span class="d-none d-sm-inline">
-                        <form class="table-search-form row gx-1 align-items-center">
-                            <div class="col-auto">
-                                <input type="text" id="search-input" name="searchorders" class="form-control search-orders" placeholder="Buscar">
-                            </div>
-                        </form>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row">
+      {% for vivienda in viviendas %}
+        <div class="col-md-6 col-xl-3 item" style="margin-top: 0.5rem">
+          <a class="card card-link" href="{% url 'usuarios:vervivienda' vivienda.IdVivienda %}" title="{{ vivienda.Direccion }}">
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <div class="font-weight-medium item">{{ vivienda.IdVivienda }}</div>
+                  <div class="text-muted item">{{ vivienda.Direccion }}&nbsp;CS&nbsp;{{ vivienda.NumeroCasa }}</div>
+                  <div class="text-muted">{{ vivienda.IdPropietario }}</div>
+                  <div class="small mt-1">
+                    <span class="badge {% if vivienda.EstadoServicio == 'Operativo' %}bg-success-lt{% elif vivienda.EstadoServicio == 'Suspendido' %}bg-warning-lt{% elif vivienda.EstadoServicio == 'Mantenimiento' %}bg-info-lt{% else %}bg-danger-lt{% endif %}">
+                      {{ vivienda.EstadoServicio }}
                     </span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          </div>
-          <div class="row">
-            {% for viviendas in viviendas %}
-              <div class="col-md-6 col-xl-3 item" style="margin-top: 0.5rem">
-                <a class="card card-link" href="{% url 'usuarios:vervivienda' viviendas.IdVivienda %}" title="{{ cierre.Fecha }}">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col">
-                        <div class="font-weight-medium item">{{ viviendas.IdVivienda }}</div>
-                        <div class="text-muted item">{{ viviendas.Direccion}}&nbsp;CS&nbsp;{{viviendas.NumeroCasa}}</div>
-                        <div class="text-muted">{{ viviendas.IdPropietario }}</div>
-                        <div class="small mt-1">
-                          {% if viviendas.EstadoServicio == 'Operativo' %}
-                            <span class="badge bg-success-lt">{{ viviendas.EstadoServicio }}</span>
-                            {% elif viviendas.EstadoServicio == 'Suspendido' %}
-                            <span class="badge bg-warning-lt">{{ viviendas.EstadoServicio }}</span>
-                            {% elif viviendas.EstadoServicio == 'Mantenimiento' %}
-                            <span class="badge bg-info-lt">{{ viviendas.EstadoServicio }}</span>
-
-                            {%else%}
-                            <span class="badge bg-danger-lt">Retirado</span>
-                            {%endif%}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            {% endfor %}
-          </div>
-          <!-- Page title -->
+          </a>
         </div>
-      </div>
-<br>       
+      {% empty %}
+        <div class="col-12">
+          <p class="text-muted">No se encontraron predios registrados.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
 {% endblock %}
 {% block scripts %}
 <script>
   // Función para realizar la búsqueda
   function search() {
-    var searchTerm = document.getElementById("search-input").value.toLowerCase();
-    var items = document.getElementsByClassName("item");
+    const searchTerm = document.getElementById("search-input").value.toLowerCase();
+    const items = document.getElementsByClassName("item");
 
-    // Iterar sobre todos los elementos dentro del div #content
-    for (var i = 0; i < items.length; i++) {
-      var itemText = items[i].innerText.toLowerCase();
-      
-      // Comprobar si el texto del elemento coincide con el término de búsqueda
-      if (itemText.includes(searchTerm)) {
-        // Mostrar el elemento si coincide
-        items[i].classList.remove("hidden");
-      } else {
-        // Ocultar el elemento si no coincide
-        items[i].classList.add("hidden");
-      }
-    }
+    Array.from(items).forEach(item => {
+      const itemText = item.innerText.toLowerCase();
+      item.classList.toggle("hidden", !itemText.includes(searchTerm));
+    });
   }
 
-  // También podemos agregar un evento de búsqueda en tiempo real mientras el usuario escribe
+  // Agregar evento de búsqueda en tiempo real
   document.getElementById("search-input").addEventListener("input", search);
 </script>
-
 {% endblock %}

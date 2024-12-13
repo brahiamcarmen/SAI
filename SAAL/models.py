@@ -54,7 +54,7 @@ class Acueducto(models.Model):
 
 class Sectores(models.Model):
     IdSector= models.AutoField(primary_key=True)
-    Nombre = models.CharField(max_length=10)
+    Nombre = models.CharField(max_length=25)
     idacueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
     objects = models.Manager()
     def __str__(self):
@@ -186,6 +186,10 @@ DOC_CHOICES30 = (
 DOC_CHOICES36 = (
     ('Operativo', _(u"Operativo")),
 )
+DOC_CHOICES37 = (
+    ('Aporte fijo', _(u"Aporte fijo")),
+    ('Medicion', _(u"Medicion")),
+)
 
 class Vivienda(models.Model):
     IdVivienda = models.CharField(primary_key=True, max_length=15, null=False)
@@ -208,6 +212,7 @@ class Vivienda(models.Model):
     Diametro = models.CharField(max_length=5, null=True)
     FechaIngreso = models.DateTimeField(auto_now_add=True, null=True)
     FechaActualizacion = models.DateTimeField(auto_now=True, null=True)
+    TipoRecaudo = models.CharField(max_length=20, null=True, choices=DOC_CHOICES37)
     # You should have the default 'objects' manager by default
     objects = models.Manager()
 
@@ -583,7 +588,7 @@ class Consumos(models.Model):
 class ConsumosMensual(models.Model):
     IdRegistro = models.AutoField(primary_key=True)
     Consumo = models.IntegerField(null=False)
-    promedio = models.CharField(max_length=20, null=False)
+    promedio = models.IntegerField(null=False)
     observaciones = models.CharField(max_length=350, null=True)
     ano = models.CharField(max_length=4, null=False)
     mes = models.CharField(max_length=20, null=False)
@@ -617,6 +622,7 @@ class Conceptos(models.Model):
 class ConceptosFacturados(models.Model):
     IdRegistro = models.AutoField(primary_key=True)
     AporteFijo = models.IntegerField(null=True)
+    Basico = models.IntegerField(null=True)
     Complementario = models.IntegerField(null=True)
     CuotaMatricula = models.IntegerField(null=True)
     Suspencion = models.IntegerField(null=True)
