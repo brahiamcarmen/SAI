@@ -1,0 +1,78 @@
+{% extends 'usuarios/base_usuario3.html' %}
+{% load static %}
+{% block styles %}
+
+{% endblock %}
+{%block title %} <title>Registro consumo mensual</title> {%endblock%}
+{% block content %}
+{% include 'usuarios/alerts.html' %}
+
+<div class="card-body">
+<div class="row">
+    <div class="col-sm-3">
+        
+    </div>
+    <div class="col-sm-6">
+    	<div class="row">
+        <form method="post" enctype="multipart/form-data" class="card">
+        {% csrf_token %}
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label class="form-label">Periodo</label>
+                           <input type="text" class="form-control" name="periodo" value="{{mes}}" aria-label="Search in website" disabled>
+                        </div>
+                         <div class="col-md-2">
+                            <label class="form-label">Año</label>
+                           <input type="input" class="form-control" name="anio" value="{{anio}}" aria-label="Search in website" disabled>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Consumo (R)</label>
+                           <input type="number" class="form-control" name="consumor" id="consumor" value="{{consumo}}" aria-label="Search in website" disabled>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Consumo (P)</label>
+                           <input type="text" class="form-control" name="consumop" value="{{promedio}}" aria-label="Search in website" disabled>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Micromedidores</label>
+                           <input type="text" class="form-control" name="micromedidores" value="{{contar}}" aria-label="Search in website" disabled>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                              <label class="form-label">Observaciones</label>
+                              <textarea class="form-control" name="observaciones" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12" style="margin-top: 1rem;">
+                    <button style="width: 100%;" type="submit" class="btn btn-primary ">Registrar</button>
+                </div>
+
+            </div>
+        </div>
+    </form>
+    	</div>
+    	<div class="row">
+    		 <div class="col-sm-12" style="margin-top: 1rem;">
+                    <button style="width: 100%;" onclick="window.location='{% url 'usuarios:consumos' %}'" class="btn btn-primary ">Cancelar</button>
+                </div>
+    	</div>
+
+    </div>
+                   
+    </div>
+    </div>                 
+
+{% endblock %}
+{% block scripts %}
+
+{% endblock %}
