@@ -24,24 +24,28 @@ class RegistroVivienda(forms.ModelForm):
             'CantHabitantes',
             'FichaCastral',
             'Diametro',
+            'CantPredios',
             'IdAcueducto',
             'usuid',
+            'TipoRecaudo',
         ]
         labels = {
             'Direccion': _(u'Direccion Completa'),
-            'NumeroCasa': _(u'Numero de la casa'),
+            'NumeroCasa': _(u'Casa'),
             'Piso': _(u'Piso'),
             'Ciclo': _('Seleccione ciclo'),
-            'TipoInstalacion': _('Seleccione tipo de instalacion'),
-            'EstadoServicio': _(u'Seleccione estado del servicio'),
-            'Estrato': _(u'Seleccione el estrato'),
-            'IdPropietario': _(u'Seleccione el propietario'),
+            'TipoInstalacion': _('Tipo de instalacion'),
+            'EstadoServicio': _(u'Estado del servicio'),
+            'Estrato': _(u'Estrato'),
+            'IdPropietario': _(u'Propietario o titular del servicio'),
             'MatriculaAnt': _(u'Digite la matricula anterior'),
-            'InfoInstalacion': _(u'Seleccione tipo de predio'),
+            'InfoInstalacion': _(u'Tipo de predio'),
             'ProfAcometida': _(u'Profundidad acometida'),
-            'CantHabitantes': _(u'Cantidad de habitantes'),
+            'CantHabitantes': _(u'Numero de habitantes'),
             'FichaCastral': _(u'Ficha catastral'),
-            'Diametro': _(u'Seleccione el diametro de tuberia'),
+            'CantPredios': _(u'Predios'),
+            'Diametro': _(u'Diametro tuberia (")'),
+            'TipoRecaudo': _(u'Tipo contribucion'),
             'IdAcueducto': _(u''),
             'usuid': _(u''),
         }
@@ -60,6 +64,22 @@ class RegistroVivienda(forms.ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
 
+class Subsidio(forms.ModelForm):
+    class Meta:
+        model = Vivienda
+        fields = [
+            'TipoRecaudo',
+            'Subsidio'
+        ]
+        labels = {
+            'TipoRecaudo': _(u'Tipo contribucion'),
+            'Subsidio': _(u'Subsidio'),
+        }
+
+    def __init__(self, vivienda=None, *args, **kwargs):
+        super(Subsidio, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
 
 class ModificaVivienda(forms.ModelForm):
     class Meta:

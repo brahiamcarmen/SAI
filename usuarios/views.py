@@ -10,13 +10,13 @@ from SAAL.models import Poblacion, Facturas, Ciclo, EstadoCuenta, AcuerdosPago, 
 from SAAL.models import Vivienda, SolicitudGastos, Propietario, Medidores, Pqrs, RespuestasPqrs
 from SAAL.models import CobroMatricula, Permisos, Pagos, Cierres, Acueducto, ValorMatricula, ConsumosMensual
 from SAAL.models import Proveedor,Asignacion, Consumos, Conceptos, ConceptosFacturados, OrdenesTrabajo
-from SAAL.forms import FormAgregarGasto, FormRegistroPqrs, RegistroVivienda
+from SAAL.forms import FormAgregarGasto, FormRegistroPqrs, RegistroVivienda, Subsidio
 from SAAL.forms import AcueductoAForm, CobroMatriculaForm, CostoMForm, FormRespuestaPqrs, FormAsignarMedidor
 from SAAL.forms import RegistroPropietario, TarifasForm, ModificaPropietario, FormRegistroCredito, FormRegistroProveedor
 from SAAL.forms import CambioFormEstado, AcueductoForm, GastosForm, MedidoresForm, ModificaVivienda
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect,JsonResponse
 from django.urls import reverse
 from django.contrib import auth
 from datetime import datetime, timedelta
@@ -157,12 +157,12 @@ class Inicio(LoginRequiredMixin, View):
             else:
                 porcentaje = pago0 / recaudot * 100
             # mensualidades:
-            ciclo2 = fechaexp.month - 1
+            ciclo2 = 12 #fechaexp.month - 1
             ano2 = fechaexp.year
             # Los argumentos serán: Año, Mes, Día, Hora, Minutos, Segundos, Milisegundos.
             new_date3 = datetime(ano2, ciclo2, 1, 1, 00, 00, 00000)
             new_date4 = datetime(ano2, ciclo2, 28, 23, 59, 59, 00000)
-            factuasemi = Facturas.objects.filter(FechaExpe__gte=new_date3, FechaExpe__lte=new_date4, IdAcueducto=idacueducto).count()
+            factuasemi = 1#Facturas.objects.filter(FechaExpe__gte=new_date3, FechaExpe__lte=new_date4, IdAcueducto=idacueducto).count()
             pagos3 = Pagos.objects.filter(FechaPago__gte=new_date, FechaPago__lte=new_date2, IdAcueducto=idacueducto).count()
 
             if pagos3 ==0:
@@ -437,6 +437,7 @@ class VisualizarVivienda(LoginRequiredMixin, View):
             viviendainfo = Vivienda.objects.filter(IdVivienda=idvivienda)
             estados = EstadoCuenta.objects.filter(IdVivienda=idvivienda)
             cobromatricula = CobroMatricula.objects.filter(IdVivienda=idvivienda, Estado=ESTCOBRO)
+            vsubsidio = Vivienda.objects.filter(IdVivienda=idvivienda, Subsidio="Si").exists()
             pagos = Pagos.objects.filter(IdVivienda=idvivienda)
             facturas = Facturas.objects.filter(IdVivienda=idvivienda).order_by("-IdFactura")
             nofacturas = facturas.count()
@@ -490,12 +491,17 @@ class VisualizarVivienda(LoginRequiredMixin, View):
                 'ultimopago': pagos.order_by("-IdPago")[:1], 'vafacemi': vafacemi, 'viviendainfo': viviendainfo,
                 'cobromatricula1': matri, 'novedades': novedades, 'repaciones': reparaciones, 'conceptos': conceptos, 'conceptosfacturados': conceptosfacturados,
                 'consumos': consumos, 'filtro': filtrosuspenciones, 'contpagos': pagos.count(), 'vmatri': matriculas2,
-                'novedadr': validarretiro,'novretiro': novretiro,
+                'novedadr': validarretiro,'novretiro': novretiro,'vsubsidio':vsubsidio
             })
 
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
 
+class ValidarIdentificacionView(View):
+    def get(self, request, *args, **kwargs):
+        identificacion = request.GET.get('IdPropietario', None)
+        existe = Propietario.objects.filter(IdPropietario=identificacion).exists()
+        return JsonResponse({'existe': existe})
 
 class AgregarVivienda(LoginRequiredMixin, View):
     login_url = '/'
@@ -1390,7 +1396,7 @@ class VerOrdenSuspencion(LoginRequiredMixin, View):
                                      Valor=valorsuspencion, IdVivienda=idvivienda)
                 concepto.save()
                 messages.add_message(request, messages.INFO, 'La orden se cerro correctamente')
-                return HttpResponseRedirect(reverse('usuarios:suspenciones'))
+                return HttpResponseRedirect(reverse('usuarios:ordenestrabajo'))
 
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
@@ -1488,6 +1494,7 @@ class DescargarFactura(LoginRequiredMixin, View):
             tipodepredio = vivienda.InfoInstalacion
             estadoservicio = vivienda.EstadoServicio
             diametro = vivienda.Diametro
+            verificacion = vivienda.Subsidio
 
             # identificador de propietario
             titular = Propietario.objects.get(IdPropietario=idtitular.pk)
@@ -1501,17 +1508,17 @@ class DescargarFactura(LoginRequiredMixin, View):
                 qr = qrcode.QRCode(
                     version=6,
                     error_correction=qrcode.constants.ERROR_CORRECT_L,
-                    box_size=3,
+                    box_size=4,
                     border=0,
                 )
                 qr.add_data(noaporte)
                 qr.make(fit=True)
                 imga = qr.make_image(fill_color="black", back_color="white")
                 imga.save('static/ModeloFactura/output.png')
-                wb = openpyxl.load_workbook('static/ModeloFactura/003-0-240824v11.xlsx')
+                wb = openpyxl.load_workbook('static/ModeloFactura/003-0-240824v12.xlsx')
                 ws = wb.active
                 img = openpyxl.drawing.image.Image('static/ModeloFactura/output.png')
-                ws.add_image(img, 'AA9')
+                ws.add_image(img, 'R20')
                 if int(saldoanterior) >= 1:
                     imagen = openpyxl.drawing.image.Image('static/ModeloFactura/corte1.png')
                     ws.add_image(imagen, 'AJ16')
@@ -1577,32 +1584,34 @@ class DescargarFactura(LoginRequiredMixin, View):
                     acuerdo1 = AcuerdosPago.objects.filter(IdVivienda=matricula, Estado='Pendiente').exists()
                     if acuerdo1 is True:
                         acuerdo = AcuerdosPago.objects.get(IdVivienda=matricula, Estado='Pendiente')
-                        ws['AQ19'] = int(acuerdo.ValorPendiente)
-                        ws['AW19'] = acuerdo.CuotasPendientes
-                        ws['BA19'] = int(acuerdopago)
-                        ws['BB20'] = int(acuerdopago)
+                        ws['AQ20'] = int(acuerdo.ValorPendiente)
+                        ws['AW20'] = acuerdo.CuotasPendientes
+                        ws['BA20'] = int(acuerdopago)
+                        ws['BB21'] = int(acuerdopago)
                     else:
-                        ws['AQ19'] = 0
-                        ws['AW19'] = 1
-                        ws['BA19'] = int(acuerdopago)
-                        ws['BB20'] = int(acuerdopago)
+                        ws['AQ20'] = 0
+                        ws['AW20'] = 1
+                        ws['BA20'] = int(acuerdopago)
+                        ws['BB21'] = int(acuerdopago)
 
                 if int(subsidio) > 0:
                     ws['BB14'] = int(subsidio)
+                    img = openpyxl.drawing.image.Image('static/ModeloFactura/comuni.jpeg')
+                    ws.add_image(img, 'N29')
 
                 # total concepto de acueducto
-                ws['BB15'] = int(sumaacueducto) + int(saldoanterior)
+                ws['BB16'] = int(sumaacueducto) + int(saldoanterior)
 
                 # facturas vencidas
-                ws['AB24'] = vencidas
+                ws['AA11'] = vencidas
 
                 # fechas de procedimiento
-                ws['AK30'] = FechaExpe
-                ws['AK31'] = FechaLimite
+                ws['AK31'] = FechaExpe
+                ws['AK32'] = FechaLimite
 
                 if int(vencidas) >= 1:
                     ws['AK31'] = 'Inmediato'
-                    ws['AK32'] = FechaLimite
+                    ws['AK33'] = FechaLimite
 
                 # total a pagar condional 0
                 if int(Total) <= 0:
@@ -1619,19 +1628,7 @@ class DescargarFactura(LoginRequiredMixin, View):
                     ws['H24'] = consumo.Consumo
                     ws['H25'] = consumo.promedio
                     ws['H26'] = consumo.diasconsumo
-                    ws['S21'] = consumo.mes
-                    cantidad = consumo.Consumo
-                    if cantidad == 0:
-                        imagen2 = openpyxl.drawing.image.Image('static/images/emoji4.png')
-                        ws.add_image(imagen2, 'P22')
-
-                    elif cantidad >=11 and cantidad <=20:
-                        imagen2 = openpyxl.drawing.image.Image('static/images/emoji4.png')
-                        ws.add_image(imagen2, 'P22')
-
-                    elif cantidad >=21:
-                        imagen2 = openpyxl.drawing.image.Image('static/images/emoji.png')
-                        ws.add_image(imagen2, 'P22')
+                    ws['H27'] = consumo.mes
 
                 ws.title = IdFactura
                 archivo_predios = str(IdFactura) + ".xlsx"
@@ -3330,6 +3327,8 @@ class GeneradorConceptos(LoginRequiredMixin, View):
             idtarifa = acueducto.IdTarifa
             tarifa = Tarifa.objects.get(IdTarifa=idtarifa.pk)
             aportefijo = tarifa.Valor
+            especial = tarifa.especial
+            mantenimiento = tarifa.Mantenimiento
             recargo = tarifa.Recargo
             m3 = tarifa.m3
             valormetro = tarifa.valormetro
@@ -3372,6 +3371,7 @@ class GeneradorConceptos(LoginRequiredMixin, View):
                         conceptofac.Estado = 'Vencido'
                         conceptofac.save()
 
+                #aporte fijo
                 for i in viviendas:
                     if i.EstadoServicio == 'Operativo' and i.TipoRecaudo =='Aporte fijo':
                         vivienda = Vivienda.objects.get(IdVivienda=i.IdVivienda)
@@ -3382,7 +3382,21 @@ class GeneradorConceptos(LoginRequiredMixin, View):
                     if i.EstadoServicio == 'Operativo' and i.TipoRecaudo == 'Medicion':
                         vivienda = Vivienda.objects.get(IdVivienda=i.IdVivienda)
                         concepto = Conceptos(Tipo='Aporte fijo', Observacion=mes, Estado='Sin facturar',
-                                             Valor=3000, IdVivienda=vivienda)
+                                             Valor=mantenimiento, IdVivienda=vivienda)
+                        concepto.save()
+
+                    if i.EstadoServicio == 'Operativo' and i.TipoRecaudo == 'Especial':
+                        vivienda = Vivienda.objects.get(IdVivienda=i.IdVivienda)
+                        concepto = Conceptos(Tipo='Aporte fijo', Observacion=mes, Estado='Sin facturar',
+                                             Valor=especial, IdVivienda=vivienda)
+                        concepto.save()
+
+                #subsidio
+                for i in viviendas:
+                    if i.EstadoServicio == 'Operativo' and i.Subsidio =='Si':
+                        vivienda = Vivienda.objects.get(IdVivienda=i.IdVivienda)
+                        concepto = Conceptos(Tipo='Subsidio', Observacion=mes, Estado='Sin facturar',
+                                             Valor=12800, IdVivienda=vivienda)
                         concepto.save()
 
                 for i in consumos:
@@ -3396,7 +3410,7 @@ class GeneradorConceptos(LoginRequiredMixin, View):
                     elif int(i.Consumo) >= 21:
                         resultado = int(valormetro) * 20
                         consumo1 = 20
-                        t2 = 350
+                        t2 = 300
                         concepto = Conceptos(Tipo='Basico',
                                              Observacion=mes + ' - Consumo m3: ' + str(consumo1),
                                              Estado='Sin facturar', Valor=resultado, IdVivienda=i.IdVivienda)
@@ -3727,15 +3741,36 @@ class Varias(LoginRequiredMixin, View):
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")
 
-class MapaMedidores(LoginRequiredMixin, View):
+class AsignarSubsidio(LoginRequiredMixin, View):
     login_url = '/'
-    template_name = 'usuarios/mapamedidores.html'
+    template_name = 'usuarios/asignarsubsidio.html'
+    form_class = Subsidio
 
-    def get(self, request):
+    def get(self, request, matricula):
         try:
-            pasonivel = Vivienda.objects.filter(Direccion='Pasonivel Destapada')|Vivienda.objects.filter(Direccion='Pasonivel Viejo')
+            usuario = 0
 
-            return render(request, self.template_name,{'viviendas': pasonivel})
+            vivienda = Vivienda.objects.get(IdVivienda=matricula)
+            form = self.form_class(instance=vivienda)
+            matricula1 = vivienda.IdVivienda
+            if usuario == 0:
+                return render(request, self.template_name, {'idvivienda': matricula1, 'form':form})
+
+        except ObjectDoesNotExist:
+            return render(request, "pages-404.html")
+    def post(self, request, matricula):
+        try:
+            vivienda = Vivienda.objects.get(IdVivienda=matricula)
+            form = self.form_class(request.user, request.POST, instance=vivienda)
+
+            if form.is_valid():
+                form.save()
+                messages.add_message(request, messages.INFO, 'La operacion se realizo correctamente')
+                return HttpResponseRedirect(reverse('usuarios:inicio'))
+
+            else:
+                messages.add_message(request, messages.ERROR, 'No se puedo modificar la informacion')
+                return HttpResponseRedirect(reverse('usuarios:inicio'))
 
         except ObjectDoesNotExist:
             return render(request, "pages-404.html")

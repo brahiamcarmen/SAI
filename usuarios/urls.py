@@ -3,7 +3,7 @@ from usuarios.views import Inicio, Busquedas, CobroRecargo, ControlPresupuestal,
 from usuarios.views import ImprimirSoporteP, AnularPago, AsignarCargo, VerCredito
 from usuarios.views import ListaViviendas, ListaPropietarios, ReportePdfPagos, Creditos, RegistroCredito
 from usuarios.views import RegistroProveedor, Consumo,AsignarMedidor, RegistrarConsumo
-from usuarios.views import PazSalvo, ReporteConceptos, MapaMedidores
+from usuarios.views import PazSalvo, ReporteConceptos
 from usuarios.views import AgregarVivienda, AgregarPropietario, ReporteCompleto
 from usuarios.views import ReporteOrdenesT, ModificarPropietario, ModificarVivienda
 from usuarios.views import RegMenCon, EliminarPoblacion, AcuerdoPago
@@ -11,12 +11,12 @@ from usuarios.views import VisualizarPropietario, CambioEstado, Estadoscuenta, R
 from usuarios.views import RegistroTarifa,ReporteGastos, ListasGastos
 from usuarios.views import OrdenesdeTrabajo, VerOrdenSuspencion, CambioTitular
 from usuarios.views import CierreFinanciero, VerConsumo, GeneradorConceptos, Varias
-from usuarios.views import GenerarGasto
+from usuarios.views import GenerarGasto, AsignarSubsidio
 from usuarios.views import GeneradorFacturas, DesactivarUsuarios, AnularFactura
 from usuarios.views import DescargarFactura, DescargaMasivaFacturas, VisualizarVivienda, BuscarSolicitud
 from usuarios.views import ModificarAcueducto, ListaPqrs, RegistroPqr, VerPqr
 from usuarios.views import RespuestaPqrs, ReporteCierre, ReporteConsumos, PlantillaMedicion
-from usuarios.views import RegistroMedidor
+from usuarios.views import RegistroMedidor, ValidarIdentificacionView
 from usuarios.views import CambiarContraUsuario, GeneradorFacturasIndividual,ReporteRetiro
 
 urlpatterns = [
@@ -82,6 +82,7 @@ urlpatterns = [
     url(r'^reporteconceptos', ReporteConceptos.as_view(), name='reporteconceptos'),
     url(r'^pmedicion/', PlantillaMedicion.as_view(), name='pmedicion'),
     url(r'^regmencon/', RegMenCon.as_view(), name='regmencon'),
-    url(r'^mapamedidores/', MapaMedidores.as_view(), name='mapamedidores'),
     url(r'^acuerdosdepago/', AcuerdoPago.as_view(), name='acuerdosdepago'),
+    url(r'^validaciones/', ValidarIdentificacionView.as_view(), name='validaciones'),
+    url(r'^asignarsubsidio/(?P<matricula>\w+)', AsignarSubsidio.as_view(), name='asignarsubsidio'),
 ]

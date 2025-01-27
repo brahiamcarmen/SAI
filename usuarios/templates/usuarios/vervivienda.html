@@ -38,11 +38,15 @@
                <a href="{% url 'usuarios:cambiotitular' matricula %}" class="btn btn-sm btn-indigo btn-pill w-100">Cambiar propietario</a>
             </div>
             <div class="col-md-12" style="margin-top: 0.5rem">
+               <a href="{% url 'usuarios:asignarsubsidio' matricula %}" class="btn btn-sm btn-indigo btn-pill w-100">Asignar subsidio</a>
+            </div>
+            <div class="col-md-12" style="margin-top: 0.5rem">
                <a href="{% url 'usuarios:novedadretiro' matricula %}" class="btn btn-sm btn-indigo btn-pill w-100">Generar retiro</a>
             </div>
             <div class="col-md-12" style="margin-top: 0.5rem">
                <a href="" data-bs-toggle="modal" data-bs-target="#cargos" class="btn btn-sm btn-indigo btn-pill w-100">Cargo por conexión</a>
             </div>
+
             {% if asignado is True %}
             <div class="col-md-12" style="margin-top: 0.5rem">
                <a href="{% url 'usuarios:verconsumo' matricula %} " class="btn btn-sm btn-indigo btn-pill w-100">Consumos</a>
@@ -141,6 +145,15 @@
                                 {% endfor %}
                               </div>
                             </div>
+                              </div>
+                              <br>
+                              <div class="row">
+                                 {% if vsubsidio is True %}
+                                 <img src="{% static 'images/comuni.jpeg' %}" alt="Descripción de la imagen">
+                                
+                                {%else%}
+                                <div></div>
+                                {%endif%}
                               </div>
                             </div>
                             <div class="col-md-3">

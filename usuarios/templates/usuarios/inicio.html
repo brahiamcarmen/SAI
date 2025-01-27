@@ -8,77 +8,60 @@
 {% load humanize %}
 {% include 'usuarios/alerts.html' %}
 <div class="page-body">
-  <div class="spinner"></div>
   <div class="container-fluid">
     <div class="row">
-<div class="col-md-2">
-  <!-- Empresa Card -->
-  <div class="empresa-card mb-3">
-    <h3 class="subheader">Empresa</h3>
-    <div class="card">
-      <div class="card-body text-center p-4">
-        <span class="avatar avatar-xl mb-2" style="background-image: url({{ logo.url }})"></span>
-        <h3 class="m-0 mb-1">{{ acueducto }}</h3>
-        <div class="text-muted">{{ nit }}</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Accesos Rápidos -->
-  <div class="accesos-rapidos mb-4 text-center">
-    <div class="row">
-      <div class="col mb-2">
-        <a data-bs-toggle="offcanvas" href="#offcanvasStart" class="btn btn-indigo btn-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="10" cy="10" r="7" /><line x1="21" y1="21" x2="15" y2="15" />
-          </svg>
-        </a>
-      </div>
-      <div class="col mb-2">
-        <a data-bs-toggle="offcanvas" href="#offcanvasStart2" class="btn btn-indigo btn-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="12 8 12 12 14 14" /><path d="M3.05 11a9 9 0 1 1 .5 4m-.5 5v-5h5" />
-          </svg>
-        </a>
-      </div>
-      <div class="col mb-2">
-        <a data-bs-toggle="offcanvas" href="#offcanvasStart3" class="btn btn-indigo btn-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="9" cy="7" r="4" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><line x1="19" y1="7" x2="19" y2="10" /><line x1="19" y1="14" x2="19" y2="14.01" />
-          </svg>
-        </a>
-      </div>
-      <div class="col mb-2">
-        <a data-bs-toggle="offcanvas" href="#offcanvasStart4" class="btn btn-indigo btn-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 4v.01" /><path d="M20 20v.01" /><path d="M20 16v.01" /><path d="M20 12v.01" /><path d="M20 8v.01" /><rect x="8" y="4" width="8" height="16" rx="1" /><path d="M4 4v.01" /><path d="M4 20v.01" /><path d="M4 16v.01" /><path d="M4 12v.01" /><path d="M4 8v.01" />
-          </svg>
-        </a>
-      </div>
-    </div>
-  </div>
-
-  <!-- Reportes Disponibles -->
-  <div class="reportes-disponibles">
-    <h3 class="subheader">Reportes disponibles</h3>
-    <a href="{% url 'usuarios:reportecompleto' %}" class="btn btn-sm btn-indigo btn-pill w-100 mb-2">Informe completo</a>
-    <a href="{% url 'usuarios:reportepagos' %}" class="btn btn-sm btn-indigo btn-pill w-100 mb-2">Ingresos</a>
-    <a href="{% url 'usuarios:reportegastos' %}" class="btn btn-sm btn-indigo btn-pill w-100 mb-2">Egresos</a>
-    <a href="{% url 'usuarios:reportecierre' %}" class="btn btn-sm btn-indigo btn-pill w-100 mb-2">Cierres mensuales</a>
-    <a href="{% url 'usuarios:reporteconceptos' %}" class="btn btn-sm btn-indigo btn-pill w-100 mb-2">Conceptos</a>
-    <a href="#" class="btn btn-sm btn-indigo btn-pill w-100 mb-2">Créditos</a>
-    <a href="{% url 'usuarios:rconsumos' %}" class="btn btn-sm btn-indigo btn-pill w-100">Consumos</a>
-  </div>
-</div>
-
-      <div class="col-md-8">
-        <div class="row">
-            <div class="col-md-3">
+      <h3 class="subheader">Empresa</h3>
+      <div class="col-md-6">
+          <!-- Empresa Card -->
+          <div class="empresa-card mb-1">
+            
+            <div class="card">
               <div class="row">
-                           <h3 class="subheader">Estado de servicio</h3>
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="mb-2">
+                 <div class="col-md-4">
+                   <div class="card-body text-center p-1">
+                <span class="avatar avatar-xl mb-2" style="background-image: url({{ logo.url }})"></span>
+                <h3 class="m-0 mb-1">{{ acueducto }}</h3>
+                <div class="text-muted">{{ nit }}</div>
+              </div>
+              <div class="card-body">
+                  <div class="row">
+                                    <div class="col-md-12">
+                          <div class="card-body p-1 text-center">
+                            <span class="avatar avatar-xl mb-1" style="background-image: url({{ foto.url }})"></span>
+                            <h3 class="m-0 mb-1" style="font-size: 12px;">{{ user.first_name }}&nbsp;{{ user.last_name }}</h3>
+                            <div class="text-muted" style="font-size: 10px;">{{ user.email }}</div>
+                            <br>
+                            <dl class="row">
+                                          <dt class="col-12">Ultimo ingreso:</dt>
+                                          <dd class="col-12" style="font-size: 10px;"> {{ ultimo }}</dd>
+                              </dl>  
+                          </div>
+                          
+                    </div>
+                  </div>
+                  <br>
+                      <div class="row text-center">
+                    <div class="col mb-2">
+                      <a data-bs-toggle="offcanvas" href="#offcanvasStart2" class="btn btn-indigo btn-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="12 8 12 12 14 14" /><path d="M3.05 11a9 9 0 1 1 .5 4m-.5 5v-5h5" />
+                        </svg>
+                      </a>
+                    </div>
+                    <div class="col mb-2">
+                      <a data-bs-toggle="offcanvas" href="#offcanvasStart4" class="btn btn-indigo btn-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M20 4v.01" /><path d="M20 20v.01" /><path d="M20 16v.01" /><path d="M20 12v.01" /><path d="M20 8v.01" /><rect x="8" y="4" width="8" height="16" rx="1" /><path d="M4 4v.01" /><path d="M4 20v.01" /><path d="M4 16v.01" /><path d="M4 12v.01" /><path d="M4 8v.01" />
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                 </div>
+                 <div class="col-md-4">
+                    <div class="card-body">
+                         <h3 class="subheader">Estado de servicio</h3>
+                         <div class="mb-2">
                           <!-- Download SVG icon from http://tabler-icons.io/i/book -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="12" r="4" /><path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" /></svg>
                           Operativos: <strong>{{operativos}}</strong>
@@ -103,33 +86,27 @@
                           Total activos: <strong>
                             {{suscriptores}}</strong>
                         </div>
-                      </div>
-                    </div>
-              </div>
-              <br>
-              <div class="row">
-                              <h3 class="subheader">Estratificacion</h3>
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="mb-2">
+                        <br>
+                        <h3 class="subheader">Estratificacion</h3>
+                          <div class="mb-2">
                           <!-- Download SVG icon from http://tabler-icons.io/i/home-2 -->
-  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="5 12 3 12 12 3 21 12 19 12" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><rect x="10" y="12" width="4" height="4" /></svg>
-                          1: <strong>{{uno}}</strong>
-                        </div>
-                        <div class="mb-2">
-                          <!-- Download SVG icon from http://tabler-icons.io/i/home -->
-  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="5 12 3 12 12 3 21 12 19 12" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
-                          2: <strong>{{dos}}</strong>
-                        </div>
-                        <div class="mb-2">
-                          <!-- Download SVG icon from http://tabler-icons.io/i/home-2 -->
-  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="5 12 3 12 12 3 21 12 19 12" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><rect x="10" y="12" width="4" height="4" /></svg>
-                          3: <strong>{{tres}}</strong>
-                        </div>
-                        <div class="mb-2">
-                          <!-- Download SVG icon from http://tabler-icons.io/i/home -->
-  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="5 12 3 12 12 3 21 12 19 12" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
-                          4: <strong>
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="5 12 3 12 12 3 21 12 19 12" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><rect x="10" y="12" width="4" height="4" /></svg>
+                                                      1: <strong>{{uno}}</strong>
+                                                    </div>
+                                                    <div class="mb-2">
+                                                      <!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="5 12 3 12 12 3 21 12 19 12" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
+                                                      2: <strong>{{dos}}</strong>
+                                                    </div>
+                                                    <div class="mb-2">
+                                                      <!-- Download SVG icon from http://tabler-icons.io/i/home-2 -->
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="5 12 3 12 12 3 21 12 19 12" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><rect x="10" y="12" width="4" height="4" /></svg>
+                                                      3: <strong>{{tres}}</strong>
+                                                    </div>
+                                                    <div class="mb-2">
+                                                      <!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="5 12 3 12 12 3 21 12 19 12" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
+                                                      4: <strong>
                             {{cuatro}}</strong>
                         </div>
                         <div class="mb-2">
@@ -161,45 +138,104 @@
                           Especial: <strong>
                             {{especial}}</strong>
                         </div>
-                      </div>
                     </div>
+                 </div>
+                 <div class="col-md-4">
+                   <div class="row">
+                      <div class="card-body">
+                        <h3 class="subheader">Tipo de aportes</h3>
+                        <div class="mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16.7 8a3 3 0 0 0 -2.7 -2h-4a3 3 0 0 0 0 6h4a3 3 0 0 1 0 6h-4a3 3 0 0 1 -2.7 -2" /><path d="M12 3v3m0 12v3" /></svg>
+                          Aporte fijo: <strong>
+                            {{oficial}}</strong>
+                        </div>
+                        <div class="mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16.7 8a3 3 0 0 0 -2.7 -2h-4a3 3 0 0 0 0 6h4a3 3 0 0 1 0 6h-4a3 3 0 0 1 -2.7 -2" /><path d="M12 3v3m0 12v3" /></svg>
+                          Especial: <strong>
+                            {{especial}}</strong>
+                        </div>
+                        <br>
+                        <h3 class="subheader">Subsidios</h3>
+                        <div class="mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7.038 4.5a9 9 0 0 0 -2.495 2.47" /><path d="M3.186 10.209a9 9 0 0 0 0 3.508" /><path d="M4.5 16.962a9 9 0 0 0 2.47 2.495" /><path d="M10.209 20.814a9 9 0 0 0 3.5 0" /><path d="M16.962 19.5a9 9 0 0 0 2.495 -2.47" /><path d="M20.814 13.791a9 9 0 0 0 0 -3.508" /><path d="M19.5 7.038a9 9 0 0 0 -2.47 -2.495" /><path d="M13.791 3.186a9 9 0 0 0 -3.508 -.02" /><path d="M12 8l-2 4h4l-2 4" /><path d="M12 21a9 9 0 0 0 0 -18" /></svg>
+                          Aplicados: <strong>
+                            {{especial}}</strong>
+                        </div>
+                    </div>
+                   </div>
+                   <div class="row">
+                      <div class="card-body">
+                        <h3 class="subheader">Buscador</h3>
+                         <form action="{% url 'usuarios:busquedas' %}" method="get">
+                          {% csrf_token %}
+                          <div class="form-label">
+                              <label class="form-label">Tipo de busqueda</label>
+                              <select name="tipo" class="form-select">
+                                  <option>Cedula de ciudadania</option>
+                                  <option>Numero de matricula</option>
+                              </select>
+                          </div>
+                          <div class="form-label">
+                              <div class="input-group">
+                                  <input name="identificacion" type="text" class="form-control">
+                              </div>
+                          </div>
+                          <div class="row text-center" >
+                              <div class="col-sm-12" style="margin-top: 1rem;">
+                                  <button style="width: 100%;" type="submit" class="btn btn-sm btn-indigo btn-pill w-100">Buscar</button>
+                              </div>
+                          </div>
+                      </form>
+                      </div>
+                   </div>
+                 </div>
               </div>
-   
-            </div>
-             <div class="col-md-9">
-
-              
 
             </div>
+          </div>
         </div>
-        
-      </div>
-      <div class="col-md-2">
-        <div class="row">
-          <h3 class="subheader">Informacion financiera - mes actual</h3>
-              <div class="col-md-12" style="margin-top: 0.5rem">
-                <div class="card card-sm">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="bg-green-lt avatar">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><line x1="9" y1="7" x2="10" y2="7" /><line x1="9" y1="13" x2="15" y2="13" /><line x1="13" y1="17" x2="15" y2="17" /></svg>
-                        </span>
-                      </div>
-                      <div class="col">
-                        <div class="font-weight-medium">
-                          {{facturaspagas}}
-                          <span class="float-right font-weight-medium text-green">+{{contador}}%</span>
-                        </div>
-                        <div class="text-muted">
-                          Facturas pagas
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+              <div class="col-md-6">
+              <div class="reportes-disponibles">
+                <h3 class="subheader">Reportes disponibles</h3>
+                <a href="{% url 'usuarios:reportecompleto' %}" class="btn btn-sm btn-indigo btn-pill w-100 mb-2">Informe completo</a>
+                <a href="{% url 'usuarios:reportepagos' %}" class="btn btn-sm btn-indigo btn-pill w-100 mb-2">Ingresos</a>
+                <a href="{% url 'usuarios:reportegastos' %}" class="btn btn-sm btn-indigo btn-pill w-100 mb-2">Egresos</a>
+                <a href="{% url 'usuarios:reportecierre' %}" class="btn btn-sm btn-indigo btn-pill w-100 mb-2">Cierres mensuales</a>
+                <a href="{% url 'usuarios:reporteconceptos' %}" class="btn btn-sm btn-indigo btn-pill w-100 mb-2">Conceptos</a>
+                <a href="#" class="btn btn-sm btn-indigo btn-pill w-100 mb-2">Créditos</a>
+                <a href="{% url 'usuarios:rconsumos' %}" class="btn btn-sm btn-indigo btn-pill w-100">Consumos</a>
+              </div>
+              </div>
+              <div class="col-md-6">
+                <div class="row">
+                  <h3 class="subheader">Modulo de recaudo</h3>
+                  <div class="col-md-12">
+                    <div class="card card-sm">
+                      <div class="card-body">
+                        <div class="row align-items-center">
+                          <div class="col-auto">
+                            <span class="bg-green-lt avatar">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><line x1="9" y1="7" x2="10" y2="7" /><line x1="9" y1="13" x2="15" y2="13" /><line x1="13" y1="17" x2="15" y2="17" /></svg>
+                            </span>
+                          </div>
+                          <div class="col">
+                            <div class="font-weight-medium">
+                              {{facturaspagas}}
+                              <span class="float-right font-weight-medium text-green">+{{contador}}%</span>
+                            </div>
+                            <div class="text-muted">
+                              Facturas pagas
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-12" style="margin-top: 0.5rem">
+                      </div>
+                 <div class="col-md-12" style="margin-top: 0.5rem">
                 <div class="card card-sm">
                   <div class="card-body">
                     <div class="row align-items-center">
@@ -221,85 +257,56 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-12" style="margin-top: 0.5rem">
-                <div class="card card-sm">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="bg-green-lt avatar">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12l-6.5 5.5" /><path d="M12 3v9h9" /><circle cx="12" cy="12" r="9" /></svg>
-                        </span>
-                      </div>
-                      <div class="col">
-                        <div class="font-weight-medium">
-                          $ {{promedio|intcomma}}
-                          <span class="float-right font-weight-medium text-green">+{{promtarifa}}%</span>
-                        </div>
-                        <div class="text-muted">
-                          Promedio
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>            
-        </div>
-          <div class="row">
-            <div class="col-md-12" style="margin-top: 0.5rem">
-              <h3 class="subheader">Modulo de recaudo</h3>
-                <div class="card-body">
-                                <form action="{% url 'usuarios:verfactura' %}" method="get" class="form-inline">
+              <br>
+              <div>
+                 <form action="{% url 'usuarios:verfactura' %}" method="get" class="form-inline">
                                   {% csrf_token %}
                                   <div class="row">
                                       <div class="col-sm-12">
-                                         
-                                          <div id="reader" style="width: 300px;"></div>
+                                          <div id="reader" style="width: 260px;"></div>
                                       </div>
                                       <div class="col-sm-12">
                                           <input style="width: 100%" type="text" name="factura" class="form-control" placeholder="Numero de factura" id="miInput" oninput="verificarTexto()">
                                       </div>
                                           <button id="miBoton" style="margin-top: 1rem; width: 100%;" type="submit" class="btn btn-dark" disabled>Validar</button>
                                   </div>
-                                </form>
-                              </div>
-            </div>
-            
-          </div>
-      </div>
-
-    </div>
-    <br>
-            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasStart" aria-labelledby="offcanvasStartLabel">
-              <div class="offcanvas-header">
-                <h2 class="offcanvas-title" id="offcanvasStartLabel">Buscador</h2>
-                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-              </div>
-              <div class="offcanvas-body">
-                <div>
-                  <form action="{% url 'usuarios:busquedas' %}" method="get">
-                    {% csrf_token %}
-                    <div class="form-label">
-                        <label class="form-label">Tipo de busqueda</label>
-                        <select name="tipo" class="form-select">
-                            <option>Cedula de ciudadania</option>
-                            <option>Numero de matricula</option>
-                        </select>
-                    </div>
-                    <div class="form-label">
-                        <label class="form-label">ID</label>
-                        <div class="input-group">
-                            <input name="identificacion" type="text" class="form-control">
-                        </div>
-                    </div>
-                    <div class="row text-center" >
-                        <div class="col-sm-12" style="margin-top: 1rem;">
-                            <button style="width: 100%;" type="submit" class="btn btn-sm btn-indigo btn-pill w-100">Buscar</button>
-                        </div>
-                    </div>
                 </form>
+              </div>                                      
                 </div>
               </div>
             </div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+<footer class="footer footer-transparent d-print-none">
+          <div class="container-fluid">
+            <div class="row text-center align-items-center flex-row-reverse">
+              <div class="col-lg-auto ms-lg-auto">
+                <ul class="list-inline list-inline-dots mb-0">
+                  <li class="list-inline-item"><a href="./license.html" class="link-secondary">Licencia</a></li>
+                </ul>
+              </div>
+              <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                <ul class="list-inline list-inline-dots mb-0">
+                  <li class="list-inline-item">
+                   {{nombreproyectol}} &copy; 2025
+                    <a href="." class="link-secondary">{{nombreproyecto}}</a>.
+                     Todos los derechos reservados
+                  </li>
+                  <li class="list-inline-item">
+                    <a href="./changelog.html" class="link-secondary" rel="noopener">
+                      {{versionp}}
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </footer>
+
             <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasStart2" aria-labelledby="offcanvasStartLabel">
               <div class="offcanvas-header">
                 <h2 class="offcanvas-title" id="offcanvasStartLabel">Historial</h2>
@@ -329,122 +336,6 @@
                 </div>
               </div>
             </div>
-            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasStart3" aria-labelledby="offcanvasStartLabel">
-              <div class="offcanvas-header">
-                <h2 class="offcanvas-title" id="offcanvasStartLabel">Informacion del usuario</h2>
-                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-              </div>
-              <div class="offcanvas-body">
-                            <div class="col-md-12">
-                               <div class="card">
-                  <div class="card-body p-4 text-center">
-                    <span class="avatar avatar-xl mb-1" style="background-image: url({{ foto.url }})"></span>
-                    <h3 class="m-0 mb-1">{{ user.first_name }}&nbsp;{{ user.last_name }}</h3>
-                    <div class="text-muted">{{ user.email }}</div>
-                  </div>
-                  <div class="d-flex">
-                                        
-                  </div>
-            </div>
-            <br>
-                  <dl class="row">
-                                <h3 class="subheader">Informacion adicional</h3>
-                                  <dt class="col-5">Area:</dt>
-                                  <dd class="col-7">{{departamento}}</dd>
-                                  <dt class="col-5">Telefono:</dt>
-                                  <dd class="col-7">{{ celular }}<dd>
-                                  <dt class="col-5">Cargo:</dt>
-                                  <dd class="col-7">{{ cargo }}</dd>
-                                  <dt class="col-5">Fecha de registro:</dt>
-                                  <dd class="col-7">{{ fechac }}</dd>
-                                  <dt class="col-5">Ultimo ingreso:</dt>
-                                  <dd class="col-7"> {{ ultimo }}</dd>
-                              </dl>
-            </div>
-                <div>
-
-                </div>
-              </div>
-            </div>
-                        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasStart4" aria-labelledby="offcanvasStartLabel">
-              <div class="offcanvas-header">
-                <h2 class="offcanvas-title" id="offcanvasStartLabel">Informacion del usuario</h2>
-                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-              </div>
-              <div class="offcanvas-body">
-                <h3 class="subheader">Opciones disponibles</h3>
-                <div class="row">
-                  <div class="col-md-12" style="margin-top: 0.5rem">
-                     <a href="{% url 'usuarios:registrotarifa' %}" class="btn btn-sm btn-dark  btn-pill w-100">Registrar tarifa</a>
-                  </div>
-                  <div class="col-md-12" style="margin-top: 0.5rem">
-                     <a href="{% url 'usuarios:modificarempresa' %}" class="btn btn-sm btn-dark  btn-pill w-100">Actualizar datos empresa</a>
-                  </div>
-                  <div class="col-md-12" style="margin-top: 0.5rem">
-                     <a href="" class="btn btn-sm btn-dark  btn-pill w-100" data-bs-toggle="modal" data-bs-target="#modal-simple3">Cargos por conexion</a>
-                  </div>
-                  <div class="col-md-12" style="margin-top: 0.5rem">
-                     <a href="" class="btn btn-sm btn-dark  btn-pill w-100" data-bs-toggle="modal" data-bs-target="#modal-simple4">Tarifas</a>
-                  </div>
-                </div>
-                <br>
-                 <div class="row">
-                  <h3 class="subheader">Usuarios registrados</h3>
-                  {% for usuario in usuarios %}
-                  <div class="col-md-12">
-                    <a class="card card-link" href="">
-                    <div class="card-body">
-                            <div class="row">
-                              <div class="col-auto">
-                                <span class="avatar rounded" style="background-image: url({{ usuario.fotoUsuario.url }})"></span>
-                              </div>
-                              <div class="col">
-                                <div class="font-weight-medium">{{ usuario.usuid.first_name }}&nbsp;{{ usuario.usuid.last_name }}&nbsp;
-                                    {% if usuario.usuid.is_active is True %}
-                                    <span class="badge bg-purple-lt">Activo</span>
-                                    {% else %}
-                                    <span class="badge bg-red-lt">Inactivo</span>
-                                    {% endif %}
-                                </div>
-                                <div class="text-muted">{{usuario.TipoUsuario}}</div>
-                              </div>
-                            </div>
-                          </div>
-                    </a>
-                    <br>
-                  </div>
-                  {%endfor%}
-                </div>
-                            
-              </div>
-            </div>
-</div>
-        <footer class="footer footer-transparent d-print-none">
-          <div class="container-fluid">
-            <div class="row text-center align-items-center flex-row-reverse">
-              <div class="col-lg-auto ms-lg-auto">
-                <ul class="list-inline list-inline-dots mb-0">
-                  <li class="list-inline-item"><a href="./license.html" class="link-secondary">Licencia</a></li>
-                </ul>
-              </div>
-              <div class="col-12 col-lg-auto mt-3 mt-lg-0">
-                <ul class="list-inline list-inline-dots mb-0">
-                  <li class="list-inline-item">
-                   {{nombreproyectol}} &copy; 2023
-                    <a href="." class="link-secondary">{{nombreproyecto}}</a>.
-                     Todos los derechos reservados
-                  </li>
-                  <li class="list-inline-item">
-                    <a href="./changelog.html" class="link-secondary" rel="noopener">
-                      {{versionp}}
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </footer>
-      </div>
 
 {% endblock %}
 {% block scripts %}

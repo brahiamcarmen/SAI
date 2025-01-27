@@ -143,16 +143,20 @@ DOC_CHOICES3 = (
 )
 
 DOC_CHOICES5 = (
-    ('Residencial', _(u"Instalacion Residencial (Res)")),
-    ('Comercial', _(u"Instalacion Comercial (Com)")),
-    ('Industrial', _(u"Instalacion Industrial (Ind)"))
+    ('Residencial', _(u"Residencial (Res)")),
+    ('Comercial', _(u"Comercial (Com)")),
+    ('Industrial', _(u"Industrial (Ind)")),
+    ('Oficial', _(u"Oficial (Ofi)"))
 )
 
 DOC_CHOICES6 = (
-    ('2', _(u"Ciclo pasonivel viejo")),
-    ('3', _(u"Ciclo Barrio nuevo")),
-    ('4', _(u"Ciclo caimalito via principal")),
-    ('5', _(u"Ciclo 20 julio")),
+    ('1', _(u"Conduccion")),
+    ('2', _(u"Pasonivel viejo")),
+    ('3', _(u"Barrio nuevo")),
+    ('4', _(u"Caimalito via principal 1")),
+    ('5', _(u"20 julio")),
+    ('6', _(u"Carbonera")),
+    ('7', _(u"Caimalito via principal 2")),
 )
 
 DOC_CHOICES7 = (
@@ -184,35 +188,50 @@ DOC_CHOICES30 = (
     ('5', _(u"5 - predios"))
 )
 DOC_CHOICES36 = (
-    ('Operativo', _(u"Operativo")),
+    ('Instalacion', _(u"Instalacion")),
 )
 DOC_CHOICES37 = (
     ('Aporte fijo', _(u"Aporte fijo")),
-    ('Medicion', _(u"Medicion")),
+    ('Especial', _(u"Especial")),
+    ('Mantenimiento', _(u"Mantenimiento")),
+    ('Industrial', _(u"Industrial")),
+    ('Oficial', _(u"Oficial")),
+    ('Comercial', _(u"Comercial")),
 )
 
+DOC_CHOICES38 = (
+    ('1/2', _(u"1/2")),
+    ('3/4', _(u"3/4")),
+    ('1', _(u"1")),
+    ('1-1/2', _(u"1-1/2")),
+)
+DOC_CHOICES39 = (
+    ('No', _(u"No")),
+    ('Si', _(u"Si")),
+)
 class Vivienda(models.Model):
     IdVivienda = models.CharField(primary_key=True, max_length=15, null=False)
     Direccion = models.CharField(max_length=20, null=False, choices=DOC_CHOICES8)
     NumeroCasa = models.CharField(max_length=8, null=False)
     Piso = models.CharField(max_length=2, null=True, blank=True)
-    CantPredios = models.CharField(null=False, max_length=40, choices=DOC_CHOICES30)
+    CantPredios = models.CharField(null=False, max_length=40, choices=DOC_CHOICES30,default='1')
     Ciclo = models.CharField(null=False, max_length=40, choices=DOC_CHOICES6)
     TipoInstalacion = models.CharField(max_length=60, null=False, choices=DOC_CHOICES5, default='Res')
     Estrato = models.CharField(max_length=60, null=False, choices=DOC_CHOICES3, default='1')
-    EstadoServicio = models.CharField(max_length=60, null=False, choices=DOC_CHOICES36)
+    EstadoServicio = models.CharField(max_length=60, null=False, choices=DOC_CHOICES36, default='Instalacion')
     IdPropietario = models.ForeignKey(Propietario, on_delete=models.CASCADE)
     IdAcueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
     usuid = models.ForeignKey(User, on_delete=models.CASCADE)
-    MatriculaAnt = models.CharField(max_length=4, null=False)
+    MatriculaAnt = models.CharField(max_length=4, null=True)
     InfoInstalacion = models.CharField(max_length=30, choices=DOC_CHOICES7)
     ProfAcometida = models.CharField(max_length=4, null=False)
     CantHabitantes = models.CharField(max_length=2, null=False)
     FichaCastral = models.CharField(max_length=26, null=True)
-    Diametro = models.CharField(max_length=5, null=True)
+    Diametro = models.CharField(max_length=5, null=True,choices=DOC_CHOICES38)
     FechaIngreso = models.DateTimeField(auto_now_add=True, null=True)
     FechaActualizacion = models.DateTimeField(auto_now=True, null=True)
-    TipoRecaudo = models.CharField(max_length=20, null=True, choices=DOC_CHOICES37)
+    TipoRecaudo = models.CharField(max_length=20, null=True, choices=DOC_CHOICES37,default='Aporte fijo')
+    Subsidio = models.CharField(max_length=20, null=True, choices=DOC_CHOICES39, default='No')
     # You should have the default 'objects' manager by default
     objects = models.Manager()
 

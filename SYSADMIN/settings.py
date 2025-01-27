@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'SYSADMIN.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'datacloud',
+        'NAME': 'enterprise',
         'USER': 'root',
         'PASSWORD': '12345',
         'HOST': 'localhost',

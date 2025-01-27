@@ -42,31 +42,89 @@
               <div class="col-lg-8">
                 <div class="card card-lg">
                   <div class="card-body">
-                        <form method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
+                        <form method="post" enctype="multipart/form-data">{% csrf_token %}
                         {{ form.non_field_errors }}
-                        <div class="card-body">
-                            {% for field in form %}
-                            <div class="row">
-                                <div class="col-xl-12">
-                                    <div class="row">
-                                        <div class="col-md-6 col-xl-12">
-                                            <div class="mb-3">
-                                            {{ field.errors }}
-                                              <label class="form-label">{{ field.label }}</label>
-                                              {{ field }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endfor %}
                         <div class="row">
-                            <div class="col-sm-12" style="margin-top: 1rem;">
-                                <button style="width: 100%;" type="submit" class="btn btn-primary ">Continuar</button>
-                            </div>
+                          <div class="col-md-12">
+                              <div class="row">
+                                  <div class="col-md-4">
+                                      <label class="form-label">{{form.Direccion.label}}</label>
+                                     {{form.Direccion}}
+                                  </div>
+                                   <div class="col-md-2">
+                                      <label class="form-label">{{form.NumeroCasa.label}}</label>
+                                     {{form.NumeroCasa}}
+                                  </div>
+                                  <div class="col-md-2">
+                                      <label class="form-label">{{form.Piso.label}}</label>
+                                     {{form.Piso}}
+                                  </div>
+                                  <div class="col-md-2">
+                                      <label class="form-label">{{form.Estrato.label}}</label>
+                                     {{form.Estrato}}
+                                  </div>
+                                  <div class="col-md-2">
+                                    <label class="form-label">{{form.InfoInstalacion.label}}</label>
+                                    {{form.InfoInstalacion}}
+                                  </div>
+                              </div>
+                          </div>
                         </div>
+                        <br>
+                        <div class="row">
+                          <div class="col-md-4">
+                           <label class="form-label">{{form.Ciclo.label}}</label>
+                            {{form.Ciclo}}
+                          </div>
+                          <div class="col-md-3">
+                           <label class="form-label">{{form.TipoInstalacion.label}}</label>
+                            {{form.TipoInstalacion}}
+                          </div>
+                          <div class="col-md-3">
+                           <label class="form-label">{{form.FichaCastral.label}}</label>
+                            {{form.FichaCastral}}
+                          </div>
+                          <div class="col-md-2">
+                           <label class="form-label">{{form.CantPredios.label}}</label>
+                            {{form.CantPredios}}
+                          </div>
                         </div>
+                        <br>
+                        <div class="row">
+                          <div class="col-md-6">
+                           <label class="form-label">{{form.IdPropietario.label}}</label>
+                            <input class="form-control" type="number" name="IdPropietario" id="IdPropietario">
+                              <small id="id-feedback" class="form-text"></small>
+                          </div>
+                          <div class="col-md-3">
+                           <label class="form-label">{{form.EstadoServicio.label}}</label>
+                            {{form.EstadoServicio}}
+                          </div>
+                          <div class="col-md-3">
+                           <label class="form-label">{{form.Diametro.label}}</label>
+                            {{form.Diametro}}
+                          </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                          <div class="col-md-4">
+                           <label class="form-label">{{form.MatriculaAnt.label}}</label>
+                            {{form.MatriculaAnt}}
+                          </div>
+                          <div class="col-md-3">
+                           <label class="form-label">{{form.ProfAcometida.label}}</label>
+                            {{form.ProfAcometida}}
+                          </div>
+                          <div class="col-md-3">
+                           <label class="form-label">{{form.CantHabitantes.label}}</label>
+                            {{form.CantHabitantes}}
+                          </div>
+                          <div class="col-md-2">
+                           <label class="form-label">{{form.TipoRecaudo.label}}</label>
+                            {{form.TipoRecaudo}}
+                          </div>
+                        </div>
+
                     </form>
                   </div>
                 </div>
@@ -117,5 +175,38 @@
 </div>
 {% endblock %}
 {% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const inputField = document.getElementById("IdPropietario");
+    const feedback = document.getElementById("id-feedback");
 
+    if (inputField) {
+        inputField.addEventListener("input", function() {
+            const identificacion = this.value;
+
+            if (identificacion.length > 0) {
+                fetch(`/usuarios/validaciones/?IdPropietario=${identificacion}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.existe) {
+                            feedback.textContent = "El propietario está registrado.";
+                            feedback.style.color = "green";
+                        } else {
+                            feedback.textContent = "El propietario no está registrado.";
+                            feedback.style.color = "red";
+                        }
+                    })
+                    .catch(error => {
+                        feedback.textContent = "Error al validar el propietario.";
+                        feedback.style.color = "orange";
+                        console.error("Error en la validación:", error);
+                    });
+            } else {
+                feedback.textContent = "";
+            }
+        });
+    }
+});
+
+</script>
 {% endblock %}
