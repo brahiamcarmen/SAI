@@ -6,47 +6,27 @@
 {% load humanize %}
 {% block content %}
 	{% include 'usuarios/alerts.html' %}
-      <div class="page-wrapper">
-        <div class="container-fluid">
-          <!-- Page title -->
-          <div class="page-header d-print-none">
-            <div class="row align-items-center">
-              <div class="col">
-                <!-- Page pre-title -->
-                <div class="page-pretitle">
-                  Modulo
-                </div>
-                <h2 class="page-title">
-                  Informacion orden de suspencion
-                </h2>
-              </div>
-              <div class="col-auto ms-auto d-print-none">
-                <div class="btn-list">
-                    <div class="col-auto">
-                        <a href="{% url 'usuarios:ordenestrabajo' %}" class="btn btn-primary btn-sm w-100">
-                                      Volver</a>
-                    </div>
-                    </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+
         <div class="row">
         	<div class="page-body">
             <div class="container-xl">
               <div class="row row-cards">
-              
-                      <div class="col-md-6 col-lg-7">
+                <div class="col-4">
+                  
+                </div>
+                      <div class="col-md-4">
                         <div class="card">
                           <div class="card-body">
-                          	{% for estados in ots %}
+                            <div class="row">
+                              {% for estados in ots %}
                               <dl class="row">
                                 <h3 class="subheader">Informacion de la orden de trabajo</h3>
                                   <dt class="col-5">No orden:</dt>
                                   <dd class="col-7">{{ estados.IdOrden }}</dd>
                                   <dt class="col-5">Deuda:</dt>
                                   <dd class="col-7">${{ estados.Deuda|intcomma}}</dd>
+                                  <dt class="col-5">Tipo orden:</dt>
+                                  <dd class="col-7">{{ estados.TipoNovedad}}</dd>
                                   <dt class="col-5">Estado:</dt>
                                   <dd class="col-7">{{ estados.Estado }}<dd>
                                   <dt class="col-5">Fecha de registro:</dt>
@@ -56,36 +36,28 @@
                                   <dt class="col-5">Direccion:</dt>
                                   <dd class="col-7">{{ estados.IdVivienda }}</dd>
                               </dl>
-              				{%endfor%}  
+                              {%endfor%} 
+                            </div> 
+                            <div class="row">
+                              <div class="col-md-6">
+                                <form method="post" role="form" enctype="multipart/form-data">
+                                      {% csrf_token %}
+                                        <button type="submit" class="btn btn-primary w-100">Cerrar orden</button>
+                              </form>
+                              </div>
+                              <div class="col-md-6">
+                                
+                              <a href="{% url 'usuarios:ordenestrabajo' %}" class="btn btn-primary w-100">
+                                      Volver</a>
+                              </div>
+                            </div>
                             </div>
                           </div>
-
                         </div>
-                        <div class="col-md-6 col-lg-5">
-                        	<div class="row">
-                        	</div>
-                          	<div class="card">
-	                            <div class="card-body">
-	                               <h3 class="subheader">Opciones disponibles</h3>
-	                               <div class="row">
-	                               		<div class="col-4">
-	                               			
-	                               		</div>
-	                               		<div class="col-4">
-	                               			<form method="post" role="form" enctype="multipart/form-data">
-												{% csrf_token %}
-												<button type="submit" class="btn btn-primary">Cerrar orden</button>
-											</form>  
-	                          
-	                               		</div>
-	                               		<div class="col-4">
-	                               			
-	                               		</div>
-	                               </div>
-	                               
-								</div>
-							</div>
-	                    </div>                                   
+                        <div class="col-4">
+                  
+                </div>
+                                  
             </div>
             </div>
           </div>

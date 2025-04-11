@@ -1,38 +1,34 @@
 {% extends 'usuarios/base_usuario3.html' %}
 {% load static %}
 {% block styles %}
-
 {% endblock %}
-{%block title %} <title>Modulo - RT</title> {%endblock%}
+{%block title %} <title>Modulo - VOS</title> {%endblock%}
+{% load humanize %}
 {% block content %}
-{% include 'usuarios/alerts.html' %}
-<!-- Titulo -->
-      <div class="page-wrapper">
-        <div class="container-fluid">
-          <!-- Page title -->
-          <div class="page-header d-print-none">
-            <div class="row align-items-center">
-              <div class="col">
-                <!-- Page pre-title -->
-                <div class="page-pretitle">
-                  Modulo
+  {% include 'usuarios/alerts.html' %}
+
+        <div class="row">
+          <div class="page-body">
+            <div class="container-xl">
+              <div class="row row-cards">
+                <div class="col-4">
+                  
                 </div>
-                <h2 class="page-title">
-                  Registro de informacion del titular
-                </h2>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-<br>
-<div class="card-body">
-<div class="row">
-    <div class="col-sm-3">
-        
-    </div>
-    <div class="col-sm-6">
-        <form method="post" enctype="multipart/form-data" class="card">
+                      <div class="col-md-4">
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="row">
+                              <div class="d-flex align-items-center mb-3">
+                      <div class="me-3">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/user-plus -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="9" cy="7" r="4" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M16 11h6m-3 -3v6" /></svg>
+                      </div>
+                      <div>
+                        <small class="text-muted">Registro titular</small>
+                        <h3 class="lh-1">Registrar informacion verificada</h3>
+                      </div>
+                    </div>
+                                      <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.non_field_errors }}
         <div class="card-body">
@@ -56,16 +52,35 @@
                     <button style="width: 100%;" type="submit" class="btn btn-primary ">Registrar</button>
                 </div>
                 <div class="col-sm-6" style="margin-top: 1rem;">
-                    <button style="width: 100%;" onclick="window.location='{% url 'usuarios:listapropietarios' %}'" class="btn btn-primary ">Cancelar</button>
+                    <a href="{% url 'usuarios:inicio'%}" class="btn btn-primary w-100">
+                                      Cancelar</a>
                 </div>
             </div>
         </div>
     </form>
-    </div>
-    </div>
-    </div>                 
-
+                           
+                            </div> 
+                            <div class="row">
+                              <div class="col-md-6">
+                                
+                              </div>
+                              <div class="col-md-6">
+                                
+                              
+                              </div>
+                            </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-4">
+                  
+                </div>
+                                  
+            </div>
+            </div>
+          </div>
+          
+        </div>
 {% endblock %}
 {% block scripts %}
-
 {% endblock %}

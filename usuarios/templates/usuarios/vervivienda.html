@@ -43,9 +43,6 @@
             <div class="col-md-12" style="margin-top: 0.5rem">
                <a href="{% url 'usuarios:novedadretiro' matricula %}" class="btn btn-sm btn-indigo btn-pill w-100">Generar retiro</a>
             </div>
-            <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="" data-bs-toggle="modal" data-bs-target="#cargos" class="btn btn-sm btn-indigo btn-pill w-100">Cargo por conexión</a>
-            </div>
 
             {% if asignado is True %}
             <div class="col-md-12" style="margin-top: 0.5rem">
@@ -699,71 +696,6 @@
 </div>
 </div>
 
-
-
-<div class="modal modal-blur fade" id="cargos" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-body">
-            <div class="row">
-                         <div class="col-md-12">
-            <div class="row">
-             <h3 class="subheader">Cargo por conexion</h3>
-             <div class="card">
-                                <div class="card-body">
-                                  {% if vmatri is True %}
-                                   {% for matricula in matriculas %}
-                                  <dl class="row">
-                                            <dt class="col-5">No cuenta:</dt>
-                                            <dd class="col-7">{{ matricula.IdCobroM }}</dd>
-                                            <dt class="col-5">Descripción:</dt>
-                                            <dd class="col-7">{{ matricula.Descripcion }}</dd>
-                                            <dt class="col-5">Estado:</dt>
-                                            <dd class="col-7">
-                                                    {% if matricula.Estado == "Pago" %}
-                                                    <span class="badge bg-success-lt">Pago</span>
-                                                    {% else %}
-                                                    <span class="badge bg-info-lt">Pendiente</span>
-                                                    {% endif %}
-                                            </dd>
-                                            <dt class="col-5">Valor:</dt>
-                                            <dd class="col-7">${{ matricula.IdValor|intcomma }}</dd>
-                                            <h3 class="subheader">Financiacíón</h3>
-                                            <dt class="col-5">Cuotas:</dt>
-                                            <dd class="col-7">{{ matricula.CantCuotas }}</dd>
-                                            <dt class="col-5">Cuotas pendientes:</dt>
-                                            <dd class="col-7">{{ matricula.CuotasPendientes }}</dd>
-                                            <dt class="col-5">Valor pendiente:</dt>
-                                            <dd class="col-7">{{ matricula.ValorPendiente }}</dd>
-                                            <dt class="col-5">Valor cuota:</dt>
-                                            <dd class="col-7"> ${{ matricula.Cuota|intcomma }}</dd>
-
-
-                                  </dl>
-                                  {% endfor %}
-                                  {% else %}
-                                  <div class="row">
-                                    <div class="col-sm-12" style="margin-top: 1rem;">
-                                      <a href="{% url 'usuarios:asignarcargo' matricula %}" class="btn btn-primary btn-sm w-100"  style="width: 100%;">
-                            Asignar
-                        </a>
-                                       
-                                    </div>
-                                  </div>
-                                  {% endif %}
-                                </div>
-              </div>
-            </div>
-
-           </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn me-auto" data-bs-dismiss="modal">Cerrar</button>
-          </div>
-        </div>
-      </div>
-    </div>
 {% endblock %}
 {% block scripts %}
     <script>

@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from usuarios.views import Inicio, Busquedas, CobroRecargo, ControlPresupuestal, VerFactura
-from usuarios.views import ImprimirSoporteP, AnularPago, AsignarCargo, VerCredito
+from usuarios.views import ImprimirSoporteP, AnularPago, VerCredito
 from usuarios.views import ListaViviendas, ListaPropietarios, ReportePdfPagos, Creditos, RegistroCredito
 from usuarios.views import RegistroProveedor, Consumo,AsignarMedidor, RegistrarConsumo
 from usuarios.views import PazSalvo, ReporteConceptos
@@ -10,17 +10,18 @@ from usuarios.views import RegMenCon, EliminarPoblacion, AcuerdoPago
 from usuarios.views import VisualizarPropietario, CambioEstado, Estadoscuenta, RegistroCostoM
 from usuarios.views import RegistroTarifa,ReporteGastos, ListasGastos
 from usuarios.views import OrdenesdeTrabajo, VerOrdenSuspencion, CambioTitular
-from usuarios.views import CierreFinanciero, VerConsumo, GeneradorConceptos, Varias
+from usuarios.views import CierreFinanciero, VerConsumo, GeneradorConceptos, GeneradorSuspenciones
 from usuarios.views import GenerarGasto, AsignarSubsidio
 from usuarios.views import GeneradorFacturas, DesactivarUsuarios, AnularFactura
 from usuarios.views import DescargarFactura, DescargaMasivaFacturas, VisualizarVivienda, BuscarSolicitud
 from usuarios.views import ModificarAcueducto, ListaPqrs, RegistroPqr, VerPqr
 from usuarios.views import RespuestaPqrs, ReporteCierre, ReporteConsumos, PlantillaMedicion
-from usuarios.views import RegistroMedidor, ValidarIdentificacionView
-from usuarios.views import CambiarContraUsuario, GeneradorFacturasIndividual,ReporteRetiro
+from usuarios.views import RegistroMedidor, ValidarIdentificacionView, Pruebas
+from usuarios.views import CambiarContraUsuario, GeneradorFacturasIndividual,ReporteRetiro, DescargarFacturasMasivas
 
 urlpatterns = [
     url(r'^inicio/', Inicio.as_view(), name='inicio'),
+    url(r'^pruebas/', Pruebas.as_view(), name='pruebas'),
     url(r'^listaviviendas/', ListaViviendas.as_view(), name='listaviviendas'),
     url(r'^listapropietarios/', ListaPropietarios.as_view(), name='listapropietarios'),
     url(r'^agregarvivienda', AgregarVivienda.as_view(), name='agregarvivienda'),
@@ -66,7 +67,6 @@ urlpatterns = [
     url(r'^pazysalvo/(?P<matricula>\w+)', PazSalvo.as_view(), name='pazysalvo'),
     url(r'^cobrorecargo', CobroRecargo.as_view(), name='cobrorecargo'),
     url(r'^anularpago', AnularPago.as_view(), name='anularpago'),
-    url(r'^asignarcargo/(?P<matricula>\w+)', AsignarCargo.as_view(), name='asignarcargo'),
     url(r'^credito', Creditos.as_view(), name='credito'),
     url(r'^registrocredito', RegistroCredito.as_view(), name='registrocredito'),
     url(r'^registroproveedor', RegistroProveedor.as_view(), name='registroproveedor'),
@@ -77,7 +77,7 @@ urlpatterns = [
     url(r'^registrarconsumo', RegistrarConsumo.as_view(), name='registrarconsumo'),
     url(r'^verconsumo/(?P<matricula>\w+)', VerConsumo.as_view(), name='verconsumo'),
     url(r'^crearconceptos', GeneradorConceptos.as_view(), name='crearconceptos'),
-    url(r'^varias/', Varias.as_view(), name='varias'),
+    url(r'^varias/', GeneradorSuspenciones.as_view(), name='varias'),
     url(r'^rconsumos/', ReporteConsumos.as_view(), name='rconsumos'),
     url(r'^reporteconceptos', ReporteConceptos.as_view(), name='reporteconceptos'),
     url(r'^pmedicion/', PlantillaMedicion.as_view(), name='pmedicion'),
@@ -85,4 +85,5 @@ urlpatterns = [
     url(r'^acuerdosdepago/', AcuerdoPago.as_view(), name='acuerdosdepago'),
     url(r'^validaciones/', ValidarIdentificacionView.as_view(), name='validaciones'),
     url(r'^asignarsubsidio/(?P<matricula>\w+)', AsignarSubsidio.as_view(), name='asignarsubsidio'),
+    url(r'^masivo/', DescargarFacturasMasivas.as_view(), name='masivo'),
 ]

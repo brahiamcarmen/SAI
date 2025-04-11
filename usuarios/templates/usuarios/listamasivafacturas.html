@@ -25,9 +25,12 @@
               </div>
               <div class="col-auto ms-auto d-print-none">
                 <div class="btn-list">
+                  <div class="col-auto">
+                    <a href="{% url 'usuarios:masivo' %}" class="btn btn-indigo btn-pill w-100">Descargar todas</a>
+                  </div>
                     <div class="col-auto">
-                        <a href="{% url 'usuarios:estadoscuenta' %}" class="btn btn-sm btn-indigo btn-pill w-100">
-                                      Volver</a>
+                        <a href="{% url 'usuarios:estadoscuenta' %}" class="btn btn-indigo btn-pill w-100">
+                        Volver</a>
                     </div>
                     </div>
                 </div>

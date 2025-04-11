@@ -2,7 +2,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from SAAL.models import Vivienda, SolicitudGastos, Poblacion, RespuestasPqrs
-from SAAL.models import Propietario, CobroMatricula, ValorMatricula, Usuario, Medidores
+from SAAL.models import Propietario, ValorMatricula, Usuario, Medidores
 from SAAL.models import Acueducto, Tarifa, Permisos, Pqrs, Credito, Proveedor, Asignacion
 
 
@@ -27,7 +27,6 @@ class RegistroVivienda(forms.ModelForm):
             'CantPredios',
             'IdAcueducto',
             'usuid',
-            'TipoRecaudo',
         ]
         labels = {
             'Direccion': _(u'Direccion Completa'),
@@ -45,7 +44,6 @@ class RegistroVivienda(forms.ModelForm):
             'FichaCastral': _(u'Ficha catastral'),
             'CantPredios': _(u'Predios'),
             'Diametro': _(u'Diametro tuberia (")'),
-            'TipoRecaudo': _(u'Tipo contribucion'),
             'IdAcueducto': _(u''),
             'usuid': _(u''),
         }
@@ -228,25 +226,6 @@ class MedidoresForm(forms.ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
 
-
-class CobroMatriculaForm(forms.ModelForm):
-    class Meta:
-        model = CobroMatricula
-        fields = [
-            'IdValor',
-            'CantCuotas',
-        ]
-        labels = {
-            'IdValor': _(u'Valor de la matricula'),
-            'CantCuotas': _(u'Cantidad de cuotas')
-        }
-
-    def __init__(self, *args, **kwargs):
-        super(CobroMatriculaForm, self).__init__(*args, **kwargs)
-        self.fields['IdValor'].required = True
-
-        for field in self.fields:
-            self.fields[field].widget.attrs.update({'class': 'form-control'})
 
 
 class PoblacionForm(forms.ModelForm):

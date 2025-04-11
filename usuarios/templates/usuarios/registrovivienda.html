@@ -21,15 +21,7 @@
                   Registro de información del predio
                 </h2>
               </div>
-              <div class="col-auto ms-auto d-print-none">
-                <div class="btn-list">
-                    <span class="d-none d-sm-inline">
-                        <a href="{% url 'usuarios:inicio' %}" class="btn btn-primary btn-sm w-100">
-                            Volver
-                        </a>
-                    </span>
-                </div>
-              </div>
+
             </div>
           </div>
         </div>
@@ -39,7 +31,7 @@
             <div class="page-body">
           <div class="container-xl">
             <div class="row row-cards">
-              <div class="col-lg-8">
+              <div class="col-lg-9">
                 <div class="card card-lg">
                   <div class="card-body">
                         <form method="post" enctype="multipart/form-data">{% csrf_token %}
@@ -124,12 +116,21 @@
                             {{form.TipoRecaudo}}
                           </div>
                         </div>
-
+                        <div class="row">
+                <div class="col-md-6" style="margin-top: 1rem;">
+                    <button style="width: 100%;" type="submit" class="btn btn-primary ">Registrar</button>
+                </div>
+                <div class="col-md-6" style="margin-top: 1rem;">
+                  <a href="{% url 'usuarios:inicio' %}" class="btn btn-primary w-100">
+                            Cancelar
+                        </a>
+                </div>
+            </div>
                     </form>
                   </div>
                 </div>
               </div>
-              <div class="col-lg-4">
+              <div class="col-lg-3">
                 <div class="card">
                   <div class="card-body">
                     <div class="d-flex align-items-center mb-3">
@@ -138,8 +139,8 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-md" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="7" y1="20" x2="17" y2="20" /><path d="M6 6l6 -1l6 1" /><line x1="12" y1="3" x2="12" y2="20" /><path d="M9 12l-3 -6l-3 6a3 3 0 0 0 6 0" /><path d="M21 12l-3 -6l-3 6a3 3 0 0 0 6 0" /></svg>
                       </div>
                       <div>
-                        <small class="text-muted">Matricula asignada previamente</small>
-                        <h3 class="lh-1">{{asignada}}</h3>
+                        <small class="text-muted">La matricula sera asignada previamente</small>
+                        <h3 class="lh-1">teniendo en cuenta el año de registro y la cantidad de predios registrados</h3>
                       </div>
                     </div>
                     <div class="text-muted mb-3">

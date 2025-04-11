@@ -64,6 +64,21 @@ class Sectores(models.Model):
         verbose_name_plural = "Lista de sectores"
         verbose_name = "Listado de sectores"
 
+
+class Ciclos(models.Model):
+    IdCiclo = models.AutoField(primary_key=True)
+    Nombre = models.CharField(max_length=25)
+    Diametro = models.CharField(max_length=4)
+    Tipo = models.CharField(max_length=25)
+    idacueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
+    objects = models.Manager()
+    def __str__(self):
+        return "%s" % self.Nombre
+
+    class Meta:
+        verbose_name_plural = "Lista de sectores"
+        verbose_name = "Listado de sectores"
+
 DOC_CHOICES2 = (
     ('Presidente', _(u"Presidente")),
     ('Operario', _(u"Operario)")),
@@ -232,6 +247,8 @@ class Vivienda(models.Model):
     FechaActualizacion = models.DateTimeField(auto_now=True, null=True)
     TipoRecaudo = models.CharField(max_length=20, null=True, choices=DOC_CHOICES37,default='Aporte fijo')
     Subsidio = models.CharField(max_length=20, null=True, choices=DOC_CHOICES39, default='No')
+    sectores = models.ForeignKey(Sectores, on_delete=models.CASCADE, null=True)
+    ciclos = models.ForeignKey(Ciclos, on_delete=models.CASCADE, null=True)
     # You should have the default 'objects' manager by default
     objects = models.Manager()
 
@@ -348,25 +365,6 @@ DOC_CHOICES12 = (
     ('6', _(u"6")),
 )
 
-
-class CobroMatricula(models.Model):
-    IdCobroM = models.AutoField(primary_key=True)
-    Descripcion = models.CharField(max_length=20, null=False)
-    IdVivienda = models.ForeignKey(Vivienda, on_delete=models.CASCADE)
-    Estado = models.CharField(max_length=15, null=False)
-    IdValor = models.ForeignKey(ValorMatricula, on_delete=models.CASCADE)
-    CantCuotas = models.CharField(max_length=10, null=False, choices=DOC_CHOICES12)
-    CuotasPendientes = models.CharField(max_length=10, null=False)
-    ValorPendiente = models.CharField(max_length=50, null=False)
-    Cuota = models.CharField(max_length=50, null=False)
-    IdAcueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
-    objects = models.Manager()
-    def __str__(self):
-        return "%s %s" % (self.IdCobroM, self.Descripcion)
-
-    class Meta:
-        verbose_name_plural = "Cobro matriculas"
-        verbose_name = "Cobro matricula"
 
 
 DOC_CHOICES20 = (
@@ -510,7 +508,7 @@ class RespuestasPqrs(models.Model):
     IdRespuesta = models.AutoField(primary_key=True)
     IdPqrs = models.ForeignKey(Pqrs, on_delete=models.CASCADE)
     Fecha = models.DateTimeField(auto_now_add=True)
-    Descripcion = models.CharField(max_length=5000, null=False)
+    Descripcion = models.CharField(max_length=10000, null=False)
     Soporte = models.FileField(upload_to='respuestaspqr/', null=True)
     IdAcueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
     objects = models.Manager()
@@ -539,22 +537,6 @@ class Cierres(models.Model):
     class Meta:
         verbose_name_plural = "Lista de cierres mensuales"
         verbose_name = "Cierre mensual"
-
-class AsignacionBloque(models.Model):
-    IdBloque = models.AutoField(primary_key=True)
-    Bloque = models.CharField(max_length=50, null=False)
-    Matricula = models.CharField(max_length=150, null=False)
-    Estado = models.CharField(max_length=150, null=False)
-    Estadocuenta = models.CharField(max_length=150, null=True)
-    Fecha = models.DateTimeField(auto_now=True)
-    objects = models.Manager()
-    def __str__(self):
-        return "%s" % self.IdBloque
-
-    class Meta:
-        verbose_name_plural = "Bloques"
-        verbose_name = "Bloque"
-
 
 
 DOC_CHOICES17 = (

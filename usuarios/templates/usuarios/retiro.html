@@ -2,60 +2,72 @@
 {% load static %}
 {% block styles %}
 {% endblock %}
-{%block title %} <title>Modulo - RT</title> {%endblock%}
+{%block title %} <title>Modulo - VOS</title> {%endblock%}
+{% load humanize %}
 {% block content %}
-{% include 'usuarios/alerts.html' %}
-<!-- Titulo -->
-      <div class="page-wrapper">
-        <div class="container-fluid">
-          <!-- Page title -->
-          <div class="page-header d-print-none">
-            <div class="row align-items-center">
-              <div class="col">
-                <!-- Page pre-title -->
-                <div class="page-pretitle">
-                  Modulo
+  {% include 'usuarios/alerts.html' %}
+
+        <div class="row">
+          <div class="page-body">
+            <div class="container-xl">
+              <div class="row row-cards">
+                <div class="col-4">
+                  
                 </div>
-                <h2 class="page-title">
-                  Registro novedad para retiro
-                </h2>
-              </div>
-              <div class="col">
-                    <button style="width: 100%;" onclick="window.location='{% url 'usuarios:vervivienda' idvivienda %}'" class="btn btn-primary ">Cancelar</button>
-              </div>
+                      <div class="col-md-4">
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="row">
+                              <div class="d-flex align-items-center mb-3">
+                      <div class="me-3">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/scale -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-md" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="7" y1="20" x2="17" y2="20" /><path d="M6 6l6 -1l6 1" /><line x1="12" y1="3" x2="12" y2="20" /><path d="M9 12l-3 -6l-3 6a3 3 0 0 0 6 0" /><path d="M21 12l-3 -6l-3 6a3 3 0 0 0 6 0" /></svg>
+                      </div>
+                      <div>
+                        <small class="text-muted">Novedad de retiro</small>
+                        <h3 class="lh-1">Informar los detalles de la solicitud del retiro</h3>
+                      </div>
+                    </div>
+                              <form method="post" enctype="multipart/form-data">
+                                  {% csrf_token %}
+                                  {{ form.non_field_errors }}
+                                      <div class="mb-3">
+                                        <textarea class="form-control" name="descripcion" rows="6" placeholder="Escribir.."></textarea>
+                                      </div>
+                                      <div class="row">
+                                          <div class="col-md-6">
+                                              <button style="width: 100%;" type="submit" class="btn btn-primary ">Registrar</button>
+                                          </div>
+                                          <div class="col-md-6">
+                                          <a href="{% url 'usuarios:vervivienda' idvivienda %}" class="btn btn-primary w-100">
+                                      Cancelar</a>
+                                          </div>
+
+                                      </div>
+                              </form>
+                           
+                            </div> 
+                            <div class="row">
+                              <div class="col-md-6">
+                                
+                              </div>
+                              <div class="col-md-6">
+                                
+                              
+                              </div>
+                            </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-4">
+                  
+                </div>
+                                  
+            </div>
             </div>
           </div>
+          
         </div>
-      </div>                
-<br>
-<div class="card-body">
-<div class="row">
-    <div class="col-sm-3">
-        
-    </div>
-    <div class="col-sm-6">
-        <form method="post" enctype="multipart/form-data" class="card">
-        {% csrf_token %}
-        {{ form.non_field_errors }}
-        <div class="card-body">
-           
-						<div class="mb-3">
-                              <label class="form-label">Por favor ingresar el motivo del retiro <span class="form-label-description">1/1000</span></label>
-                              <textarea class="form-control" name="descripcion" rows="6" placeholder="Escribir.."></textarea>
-                            </div>
-            <div class="row">
-                <div class="col-sm-6" style="margin-top: 1rem;">
-                    <button style="width: 100%;" type="submit" class="btn btn-primary ">Registrar</button>
-                </div>
-
-            </div>
-        </div>
-    </form>
-    </div>
-    </div>
-    </div>                 
-
 {% endblock %}
 {% block scripts %}
-
 {% endblock %}

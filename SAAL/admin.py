@@ -6,7 +6,7 @@ from SAAL.models import Vivienda
 from SAAL.models import Ciclo
 from SAAL.models import EstadoCuenta, Pagos
 from SAAL.models import Tarifa, Pqrs
-from SAAL.models import Medidores, CobroMatricula
+from SAAL.models import Medidores
 from SAAL.models import Poblacion, SolicitudGastos, Permisos, RespuestasPqrs
 
 admin.site.register(Acueducto)
@@ -23,5 +23,4 @@ admin.site.register(Permisos)
 admin.site.register(Pqrs)
 admin.site.register(RespuestasPqrs)
 admin.site.register(Pagos)
-admin.site.register(CobroMatricula)
 admin.site.register(Usuario)
