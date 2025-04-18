@@ -13,40 +13,87 @@
       <div class="col-md-2">
         <h3 class="subheader">Informacion del predio</h3>
               <div class="col-auto" style="margin-top: 0.5rem">
-                <div class="card">
-                  <div class="card-body p-4 text-center">
-                    <span class="avatar avatar-xl mb-3 avatar-rounded" style="background-image: url({% static 'images/logo4.png' %})"></span>
-                    <h3 class="m-0 mb-1">{{ matricula }}</h3>
-                    <div class="text-muted"><a href="{% url 'usuarios:verpropietario' propietario.IdPropietario %}">{{ propietario }}</a></div>
-                    <div class="mt-3">
-                        <span class="badge bg-success-lt">{{ estado }}</span>&nbsp; 
-                        <span class="badge bg-purple-lt">{{ tipo }}</span>&nbsp; 
-                        <span class="badge bg-orange-lt">{{ tipop }}</span>
+                <div class="card" href="#">
+                  {% if estado == "Operativo" %}
+                  <div class="ribbon ribbon-top ribbon-bookmark bg-green" title="{{estado}}">
+                    <!-- Download SVG icon from http://tabler-icons.io/i/checks -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 12l5 5l10 -10" /><path d="M2 12l5 5m5 -5l5 -5" /></svg>
+                  </div>
+                  {% elif estado == "Instalacion" %}
+                  <div class="ribbon ribbon-top ribbon-bookmark bg-grey" title="{{estado}}">
+                    <!-- Download SVG icon from http://tabler-icons.io/i/check -->
+                   <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>
+                  </div>
+                   {% elif estado == "Retirado" %}
+                   <div class="ribbon ribbon-top ribbon-bookmark bg-red" title="{{estado}}">
+                   <!-- Download SVG icon from http://tabler-icons.io/i/letter-r -->
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 20v-16h5.5a4 4 0 0 1 0 9h-5.5" /><line x1="12" y1="13" x2="17" y2="20" /></svg>
+                  </div>
+                  {%else%}
+                  <div class="ribbon ribbon-top ribbon-bookmark bg-orange" title="{{estado}}">
+                  <!-- Download SVG icon from http://tabler-icons.io/i/letter-s -->
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 8a4 4 0 0 0 -4 -4h-2a4 4 0 0 0 0 8h2a4 4 0 0 1 0 8h-2a4 4 0 0 1 -4 -4" /></svg>
+                  </div>
+                  {%endif%}
+                  <div class="card-cover card-cover-blurred text-center" style="background-image: url({% static 'images/18.jpg' %})">
+                    <span class="avatar avatar-xl avatar-thumb avatar-rounded" style="background-image: url({% static 'images/logo4.png' %})"></span>
+                  </div>
+                  <div class="card-body text-center">
+                    <div class="card-title mb-1">{{ matricula }}</div>
+                    {% for vivienda in viviendainfo %}
+                    <div class="row">
+                          <dt class="col-4">Sector:</dt>
+                          <dd class="col-8">{{ vivienda.sectores}}</dd>
+                          <dt class="col-4">Casa:</dt>
+                          <dd class="col-8">{{ vivienda.NumeroCasa}}</dd>
+                          {% if vivienda.Piso == "0" %}
+                          <div></div>
+                          {%else%}
+                          <dt class="col-4">Piso:</dt>
+                          <dd class="col-8">{{ vivienda.Piso}}</dd>
+                          {%endif%}
+                          <dt class="col-4">Tipo:</dt>
+                          <dd class="col-8">{{ vivienda.TipoInstalacion}}</dd>
                     </div>
+                    {%endfor%}
                   </div>
-                  <div class="d-flex">
-                    <a href="{% url 'usuarios:modificarvivienda' matricula %}" class="card-btn"> 
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" /><line x1="13.5" y1="6.5" x2="17.5" y2="10.5" /></svg>Modificar informacion</a>                     
-                  </div>
+
                 </div>
               </div>
               <br>
+              <h3 class="subheader">Titular</h3>
+            <div class="row">
+                              
+                <a class="card card-link" href="{% url 'usuarios:verpropietario' propietario.IdPropietario %}">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-auto">
+                        <span class="avatar rounded" style="background-image: url({% static 'images/logo3.png' %})"></span>
+                      </div>
+                      <div class="col">
+                        <div class="font-weight-medium">{{ propietario }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+            </div>
+            <br>
           <h3 class="subheader">Opciones disponibles</h3>
 
           <div class="row">
             <div class="col-md-12">
-               <a href="{% url 'usuarios:cambiotitular' matricula %}" class="btn btn-sm btn-indigo btn-pill w-100">Cambiar propietario</a>
+               <a href="{% url 'usuarios:cambiotitular' matricula %}" class="btn btn-primary btn-sm btn-block w-100">Cambiar propietario</a>
             </div>
             <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:asignarsubsidio' matricula %}" class="btn btn-sm btn-indigo btn-pill w-100">Asignar subsidio</a>
+               <a href="{% url 'usuarios:asignarsubsidio' matricula %}" class="btn btn-primary btn-sm btn-block w-100">Asignar subsidio</a>
             </div>
             <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:novedadretiro' matricula %}" class="btn btn-sm btn-indigo btn-pill w-100">Generar retiro</a>
+               <a href="{% url 'usuarios:novedadretiro' matricula %}" class="btn btn-primary btn-sm btn-block w-100">Generar retiro</a>
             </div>
 
             {% if asignado is True %}
             <div class="col-md-12" style="margin-top: 0.5rem">
-               <a href="{% url 'usuarios:verconsumo' matricula %} " class="btn btn-sm btn-indigo btn-pill w-100">Consumos</a>
+               <a href="{% url 'usuarios:verconsumo' matricula %} " class="btn btn-primary btn-sm btn-block w-100">Consumos</a>
             </div>
             {%endif%}
 
@@ -77,12 +124,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="5 12 3 12 12 3 21 12 19 12" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
                         Novedades</a>
                     </li>
-                    <li class="nav-item">
-                      <a href="#tabs-profile-9" class="nav-link" data-bs-toggle="tab"><!-- Download SVG icon from http://tabler-icons.io/i/user -->
-<!-- Download SVG icon from http://tabler-icons.io/i/file-diff -->
-  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><line x1="12" y1="10" x2="12" y2="14" /><line x1="10" y1="12" x2="14" y2="12" /><line x1="10" y1="17" x2="14" y2="17" /></svg>
-                        Conceptos</a>
-                    </li>
+  
                     <li class="nav-item">
                       <a href="#tabs-profile-10" class="nav-link" data-bs-toggle="tab"><!-- Download SVG icon from http://tabler-icons.io/i/user -->
                         <!-- Download SVG icon from http://tabler-icons.io/i/file-invoice -->
@@ -103,35 +145,32 @@
                             <div class="col-md-3">
                               <div class="row">
                               <h3 class="subheader">Informacion adicional</h3>
-                              <div class="card">
-                                <div class="card-body">
-                                  {% for vivienda in viviendainfo %}
+                              {% for vivienda in viviendainfo %}
                                   <div class="row">
                                     <div class="col-md-12">
                                       <dl class="row">
-                                            <dt class="col-5">Sector:</dt>
-                                            <dd class="col-7">{{ vivienda.Direccion}}</dd>
-                                            <dt class="col-5">Casa:</dt>
-                                            <dd class="col-7">{{ vivienda.NumeroCasa}}</dd>
-                                            <dt class="col-5">Piso:</dt>
-                                            <dd class="col-7">{{ vivienda.Piso}}</dd>
                                             <dt class="col-5">Cant predios:</dt>
                                             <dd class="col-7">{{vivienda.CantPredios}}</dd>
                                             <dt class="col-5">Ciclo:</dt>
-                                            <dd class="col-7">{{vivienda.Ciclo}}</dd>
+                                            <dd class="col-7">{{vivienda.ciclos}}</dd>
                                             <dt class="col-5">Estrato:</dt>
                                             <dd class="col-7">{{vivienda.Estrato}}</dd>
-                                            <dl class="row">
-                                            <dt class="col-5">Acometida:</dt>
-                                            <dd class="col-7">{{ vivienda.ProfAcometida }}</dd>
                                             <dt class="col-5">Habitantes:</dt>
                                             <dd class="col-7">{{ vivienda.CantHabitantes}}</dd>
                                             <dt class="col-5">Ficha catastral:</dt>
                                             <dd class="col-7">{{ vivienda.FichaCastral}}</dd>
+                                            <dt class="col-5">Acometida:</dt>
+                                            <dd class="col-7">{{ vivienda.ProfAcometida }}</dd>
                                             <dt class="col-5">Diametro:</dt>
                                             <dd class="col-7">{{ vivienda.Diametro}}</dd>
                                             <dt class="col-5">ID anterior:</dt>
                                             <dd class="col-7">{{vivienda.MatriculaAnt}}</dd>
+                                            <dt class="col-5">Clasificacion:</dt>
+                                            <dd class="col-7">{{ vivienda.InfoInstalacion}}</dd>
+                                             <dt class="col-5">Tipo de aporte:</dt>
+                                            <dd class="col-7">{{ vivienda.TipoRecaudo}}</dd>
+                                            <dt class="col-5">Subsidio:</dt>
+                                            <dd class="col-7">{{ vivienda.Subsidio}}</dd>
                                             <dt class="col-5">Fecha de registro:</dt>
                                             <dd class="col-7">{{vivienda.FechaIngreso}}</dd>
                                             <dt class="col-5">Fecha de actualizacion:</dt>
@@ -140,8 +179,7 @@
                                   </div>
                                 </div>
                                 {% endfor %}
-                              </div>
-                            </div>
+                              
                               </div>
                               <br>
                               <div class="row">
@@ -155,8 +193,39 @@
                             </div>
                             <div class="col-md-3">
                                 <h3 class="subheader">Estado de cuenta</h3>
-                                    {% if filtro is True %}
-                                    <div class="card card-sm">
+              <div class="card card-sm">
+
+                    <div class="card-body">
+                        <table class="table table-transparent table-responsive">
+                                              <thead>
+                                                <tr>
+                                                  <th>Estado</th>
+                                                  <th class="text-end" style="width: 1%">Valor</th>
+                                                </tr>
+                                              </thead>
+                                              <tr>
+                                                <tr>
+                                                <td>
+                                                  <p class="strong mb-1">Facturado</p>
+                                                </td>
+                                                <td class="text-end"> ${{ aportes|intcomma }}</td>
+                                              </tr>
+                                              <tr>
+                                                <tr>
+                                                <td>
+                                                  <p class="strong mb-1">Sin facturar</p>
+                                                </td>
+                                                <td class="text-end"> ${{ aportes2|intcomma }}</td>
+                                              </tr>
+                                              <tr>
+                                              <tr>
+                                                <td colspan="1" class="font-weight-bold text-uppercase text-end"><b>Total</b></td>
+                                                <td class="font-weight-bold text-end">${{total|intcomma}}</td>
+                                              </tr>
+                                            </table>
+                                        </div>
+                                         {% if filtro is True %}
+                                    
                                       <div class="card-body">
                                         <div class="row align-items-center">
                                           <div class="col-auto">
@@ -172,10 +241,9 @@
                                           </div>
                                         </div>
                                       </div>
-                                    </div>
                                     {% else %}
                                                             {% if total <= 0 %}
-                                                            <div class="card card-sm">
+                                                            
                                                               <div class="card-body">
                                                                 <div class="row align-items-center">
                                                                   <div class="col-auto">
@@ -190,9 +258,9 @@
                                                                   </div>
                                                                 </div>
                                                               </div>
-                                                            </div>
+                                                            
                                                             {% else %}
-                                            <div class="card card-sm">
+                                            
                                               <div class="card-body">
                                                 <div class="row align-items-center">
                                                   <div class="col-auto">
@@ -207,9 +275,12 @@
                                                   </div>
                                                 </div>
                                                </div>
-                                            </div>
+                                            
                                         {% endif %}
                                     {% endif %}
+                                      </div>
+
+                                   
                                 <br>
                                 <h3 class="subheader">Ultima factura</h3>
                                 {% for factura in facturasemi %}
@@ -259,39 +330,6 @@
                                 </div>
                                 {% endfor %}
                                 <br>
-                                                  <div class="card card-sm">
-                    <div class="card-body">
-                <table class="table table-transparent table-responsive">
-                                              <thead>
-                                                <tr>
-                                                  <th>Estado de cuenta</th>
-                                                  <th class="text-end" style="width: 1%">Valor</th>
-                                                </tr>
-                                              </thead>
-                                              <tr>
-                                                <tr>
-                                                <td>
-                                                  <p class="strong mb-1">Facturado</p>
-                                                </td>
-                                                <td class="text-end"> ${{ aportes|intcomma }}</td>
-                                              </tr>
-                                              <tr>
-                                                <tr>
-                                                <td>
-                                                  <p class="strong mb-1">Sin facturar</p>
-                                                </td>
-                                                <td class="text-end"> ${{ aportes2|intcomma }}</td>
-                                              </tr>
-                                              <tr>
-                                              <tr>
-                                                <td colspan="1" class="font-weight-bold text-uppercase text-end">Total</td>
-                                                <td class="font-weight-bold text-end">${{total|intcomma}}</td>
-                                              </tr>
-                                            </table>
-                                        </div>
-                                      </div>
-                                      <br>
-
                                 <h3 class="subheader">Ultimo pago</h3>
                                 {%for filtropago in ultimopago %}
                                   <a class="card card-link" href="{% url 'usuarios:imprimirpago' filtropago.IdPago %}">
@@ -302,12 +340,9 @@
                                       </div>
                                       <div class="col">
                                         <div class="font-weight-medium">{{ filtropago.IdPago }}</div>
-                                        <div class="text-muted">{{filtropago.FechaPago}}</div>
+                                        <div class="text-muted">{{filtropago.FechaPago|date:"d/m/Y"}}</div>
                                       </div>
-                                    </div>
-                                    <div class="row">
                                       <div class="col">
-                                          <span class="badge bg-warging-lt">{{ filtropago.IdFactura }}</span>&nbsp;
                                           <span class="badge bg-warging-lt">${{ filtropago.ValorPago|intcomma }}</span>&nbsp;
                                       </div>
                                     </div>
@@ -328,77 +363,11 @@
                   </div>
                                   </div>
                                 {%else%}
-                                <img src="{% static 'images/mantenimiento.png' %}" alt="Descripción de la imagen">
+                                <img src="{% static 'images/mantenimiento2.jpg' %}" alt="Descripción de la imagen">
                                 {%endif%}
                               </div>
                               <br>
-                            <div class="row">
-                              <h3 class="subheader">Estadisticas</h3>
-                               <div class="col-md-4">
-                                          <div class="card card-sm">
-                                            <div class="card-body">
-                                              <div class="row align-items-center">
-                                                <div class="col-auto">
-                                                  <span class="bg-green text-white avatar">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><line x1="9" y1="7" x2="10" y2="7" /><line x1="9" y1="13" x2="15" y2="13" /><line x1="13" y1="17" x2="15" y2="17" /></svg>
-                                                  </span>
-                                                </div>
-                                                <div class="col">
-                                                  <div class="font-weight-medium">
-                                                    {{nofac}}
-                                                  </div>
-                                                  <div class="text-muted">
-                                                    Facturas
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                          <div class="card card-sm">
-                                            <div class="card-body">
-                                              <div class="row align-items-center">
-                                                <div class="col-auto">
-                                                  <span class="bg-green text-white avatar">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><line x1="9" y1="7" x2="10" y2="7" /><line x1="9" y1="13" x2="15" y2="13" /><line x1="13" y1="17" x2="15" y2="17" /></svg>
-                                                  </span>
-                                                </div>
-                                                <div class="col">
-                                                  <div class="font-weight-medium">
-                                                   {{contpagos}}
-                                                  </div>
-                                                  <div class="text-muted">
-                                                    Pagos
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                             <div class="card card-sm">
-                                            <div class="card-body">
-                                              <div class="row align-items-center">
-                                                <div class="col-auto">
-                                                  <span class="bg-green-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/currency-dollar -->
-                                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16.7 8a3 3 0 0 0 -2.7 -2h-4a3 3 0 0 0 0 6h4a3 3 0 0 1 0 6h-4a3 3 0 0 1 -2.7 -2" /><path d="M12 3v3m0 12v3" /></svg>
-                                                  </span>
-                                                </div>
-                                                <div class="col">
-                                                  <div class="font-weight-medium">
-                                                    ${{pagado|intcomma}}
-                                                    <span class="float-right font-weight-medium text-green">+0%</span>
-                                                  </div>
-                                                  <div class="text-muted">
-                                                    Total pagado
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                          </div>
-                          </div>
+
                             </div>
                           </div>
                           <br>
@@ -435,7 +404,7 @@
                                                     {% endif %}
                                             </td>
                                             <td>{{ factura.facturasvencidas }}</td>
-                                           <td>{{ factura.FechaExpe }}</td>
+                                           <td>{{ factura.FechaExpe|date:"d/m/Y" }}</td>
                                            <td>${{ factura.Total|intcomma }}</td>
                                            <td>
                                             {% for pago in pagos %}
@@ -449,7 +418,7 @@
                                                       {{ pago.IdPago }}
                                                       <div class="row text-center">
                                                       <dt class="col-12">Fecha de pago:</dt>
-                                                      <dd class="col-12">{{ pago.FechaPago }}</dd>
+                                                      <dd class="col-12">{{ pago.FechaPago|date:"d/m/Y" }}</dd>
                                                       <dt class="col-12">Valor pago:</dt>
                                                       <dd class="col-12">{{ pago.ValorPago }}</dd>
                                                       </div>
@@ -494,8 +463,8 @@
                                                                             <span class="badge bg-info-lt">Anulada</span>
                                                                             {% endif %}</td>
                                                                       <td>{{ ord.TipoNovedad }}</td>
-                                                                      <td>{{ ord.FechaExpe }}</td>
-                                                                      <td>{{ ord.FechaEjecucion }}</td>
+                                                                      <td>{{ ord.FechaExpe|date:"d/m/Y" }}</td>
+                                                                      <td>{{ ord.FechaEjecucion|date:"d/m/Y" }}</td>
                                                                       <td><a class="btn btn-sm btn-indigo btn-pill w-100" href="{% url 'usuarios:verordensus' ord.IdOrden %}">
                                                               Ver</a></td>
                                                           </tr>
@@ -522,7 +491,7 @@
                                                           <tr class="odd gradeX">
                                                                       <td>{{ i.IdNovedad }}</td>
                                                                       <td>{{ i.TipoNovedad }}</td>
-                                                                      <td>{{ i.Fecha }}</td>
+                                                                      <td>{{ i.Fecha|date:"d/m/Y" }}</td>
                                                                       <td>{{ i.Descripcion}}</td>
                                                           </tr>
                                                       {% endfor %}
@@ -531,35 +500,7 @@
                                           </div> 
                         </div>
                       </div>
-                      <div class="tab-pane" id="tabs-profile-9">
 
-                            <div class="text-center table-responsive" style="height:80%">
-                                              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                                  <thead>
-                                                              <tr>
-                                                                  <th>No registro</th>
-                                                                  <th>Tipo</th>
-                                                                  <th>Observacion</th>
-                                                                  <th>Estado</th>
-                                                                  <th>Fecha</th>
-                                                                  <th>Valor</th>
-                                                              </tr>
-                                                  </thead>
-                                                  <tbody>
-                                                      {% for i in conceptos %}
-                                                          <tr class="odd gradeX">
-                                                                      <td>{{ i.IdRegistro }}</td>
-                                                                      <td>{{ i.Tipo }}</td>
-                                                                      <td>{{ i.Observacion }}</td>
-                                                                      <td>{{ i.Estado }}</td>
-                                                                      <td>{{ i.Fecha }}</td>
-                                                                      <td>${{ i.Valor|intcomma}}</td>
-                                                          </tr>
-                                                      {% endfor %}
-                                                  </tbody>
-                                              </table>
-                                          </div> 
-                      </div>
                       <div class="tab-pane" id="tabs-profile-10">
                         <div class="text-center table-responsive" style="height:80%">
                                               <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -622,7 +563,7 @@
                                                                       <td>${{ i.Total|intcomma }}</td>
                                                                       {%endif%}
                                                                       
-                                                                      <td>{{ i.Fecha }}</td>
+                                                                      <td>{{ i.Fecha|date:"d/m/Y" }}</td>
                                                                       <td>
                                                                         {% if i.Estado == "Vencido" %}
                                                                             <span class="badge bg-warging-lt">Vencido</span>&nbsp;
@@ -676,7 +617,7 @@
                                                                       <td>${{ i.ValorPendiente|intcomma }}</td>
                                                                       <td>{{ i.CuotasPendientes }}</td>
                                                                       <td>${{ i.Cuota|intcomma }}</td>
-                                                                      <td>{{ i.FechaExpe }}</td>
+                                                                      <td>{{ i.FechaExpe|date:"d/m/Y" }}</td>
                                                                       <td>{{ i.Descripcion }}</td>
                                                           </tr>
                                                       {% endfor %}

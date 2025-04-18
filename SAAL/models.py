@@ -55,7 +55,6 @@ class Acueducto(models.Model):
 class Sectores(models.Model):
     IdSector= models.AutoField(primary_key=True)
     Nombre = models.CharField(max_length=25)
-    idacueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
     objects = models.Manager()
     def __str__(self):
         return "%s" % self.Nombre
@@ -73,7 +72,7 @@ class Ciclos(models.Model):
     idacueducto = models.ForeignKey(Acueducto, on_delete=models.CASCADE)
     objects = models.Manager()
     def __str__(self):
-        return "%s" % self.Nombre
+        return "%s %s" % (self.IdCiclo, self.Nombre)
 
     class Meta:
         verbose_name_plural = "Lista de sectores"

@@ -9,7 +9,7 @@ from SAAL.models import Usuario, Tarifa, Credito, Novedades
 from SAAL.models import Poblacion, Facturas, Ciclo, EstadoCuenta, AcuerdosPago, FacturasConceptos
 from SAAL.models import Vivienda, SolicitudGastos, Propietario, Medidores, Pqrs, RespuestasPqrs
 from SAAL.models import Permisos, Pagos, Cierres, Acueducto, ValorMatricula, ConsumosMensual
-from SAAL.models import Proveedor,Asignacion, Consumos, Conceptos, ConceptosFacturados, OrdenesTrabajo
+from SAAL.models import Proveedor,Asignacion, Consumos, Conceptos, ConceptosFacturados, OrdenesTrabajo, Ciclos, Sectores
 from SAAL.forms import FormAgregarGasto, FormRegistroPqrs, RegistroVivienda, Subsidio
 from SAAL.forms import AcueductoAForm, CostoMForm, FormRespuestaPqrs, FormAsignarMedidor
 from SAAL.forms import RegistroPropietario, TarifasForm, ModificaPropietario, FormRegistroCredito, FormRegistroProveedor
@@ -447,14 +447,13 @@ class VisualizarVivienda(LoginRequiredMixin, View):
             vsubsidio = Vivienda.objects.filter(IdVivienda=idvivienda, Subsidio="Si").exists()
             pagos = Pagos.objects.filter(IdVivienda=idvivienda)
             facturas = Facturas.objects.filter(IdVivienda=idvivienda).order_by("-IdFactura")
-            nofacturas = facturas.count()
+
             facturasemi = facturas[:1]
             vafacemi = Facturas.objects.filter(IdVivienda=idvivienda, Estado=FE).exists()
             suspenciones = OrdenesTrabajo.objects.filter(IdVivienda=idvivienda).order_by("-IdOrden")
             filtrosuspenciones = suspenciones.filter(TipoNovedad='Suspension', Estado='Pendiente').exists()
             validarretiro = Novedades.objects.filter(matricula=idvivienda, TipoNovedad='Retiro').exists()
             novretiro = Novedades.objects.filter(matricula=idvivienda, TipoNovedad='Retiro')
-            conceptos = Conceptos.objects.filter(IdVivienda=idvivienda).order_by("-IdRegistro")
             conceptosfacturados = ConceptosFacturados.objects.filter(IdVivienda=idvivienda).order_by("-IdRegistro")
             consumos = Consumos.objects.filter(IdVivienda=idvivienda).order_by("-IdRegistro")
             reparaciones = 0
@@ -467,8 +466,6 @@ class VisualizarVivienda(LoginRequiredMixin, View):
             # Facturas pagadas
             lista = [k.IdFactura for k in facturas if Pagos.objects.filter(IdFactura=k.IdFactura).exists()]
 
-            # Total pagado
-            pagado = pagos.aggregate(Sum('ValorPago'))['ValorPago__sum'] or 0
 
             # Consumos de los últimos 6 meses
             ventas = Consumos.objects.filter(IdVivienda=idvivienda).values('mes', 'Consumo').order_by("-IdRegistro")[:6]
@@ -482,7 +479,7 @@ class VisualizarVivienda(LoginRequiredMixin, View):
 
             # Renderizar la plantilla
             return render(request, self.template_name, {
-                'pagado': pagado, 'nofac': nofacturas, 'asignado': asignado, 'labels': meses, 'data': consumosm,
+                'asignado': asignado, 'labels': meses, 'data': consumosm,
                 'lista': lista, 'facturas': facturas, 'suspenciones': suspenciones,
                 'facturasemi': facturasemi, 'total': total, 'aportes': suma,
                 'aportes2': suma2, 'direccion': vivienda.Direccion, 'casa': vivienda.NumeroCasa, 'piso': vivienda.Piso,
@@ -491,8 +488,8 @@ class VisualizarVivienda(LoginRequiredMixin, View):
                 'propietario': vivienda.IdPropietario, 'fichacatastral': vivienda.FichaCastral,
                 'estados': estados, 'pagos': pagos, 'fecha': timezone.now(),
                 'ultimopago': pagos.order_by("-IdPago")[:1], 'vafacemi': vafacemi, 'viviendainfo': viviendainfo,
-                'novedades': novedades, 'repaciones': reparaciones, 'conceptos': conceptos, 'conceptosfacturados': conceptosfacturados,
-                'consumos': consumos, 'filtro': filtrosuspenciones, 'contpagos': pagos.count(),
+                'novedades': novedades, 'repaciones': reparaciones, 'conceptosfacturados': conceptosfacturados,
+                'consumos': consumos, 'filtro': filtrosuspenciones,
                 'novedadr': validarretiro,'novretiro': novretiro,'vsubsidio':vsubsidio
             })
 
@@ -3996,23 +3993,16 @@ class Pruebas(LoginRequiredMixin, View):
         try:
             usuario = Usuario.objects.get(usuid=request.user.pk)
             acueducto = Acueducto.objects.get(IdAcueducto=usuario.IdAcueducto)
-            idtarifa = acueducto.IdTarifa
-            tarifa = Tarifa.objects.get(IdTarifa=idtarifa.pk)
-            fechaexp = (datetime.today())
-            mes1 = fechaexp.month
-            ciclos = Ciclo.objects.get(IdCiclo=mes1)
 
-            vivienda = Vivienda.objects.filter(Subsidio='Si')
+            vivienda = Vivienda.objects.all()
             for i in vivienda:
-                medicion = Asignacion.objects.filter(Estado='Operativo', IdVivienda=i.IdVivienda).exists()
-                if medicion is True:
-                    pass
-
-                else:
-                    vivienda1 = Vivienda.objects.get(IdVivienda=i.IdVivienda)
-                    concepto2 = Conceptos(Tipo='Consumo complementario', Observacion='Cobro extraordinario - marzo ',
-                                          Estado='Sin facturar', Valor=4800, IdVivienda=vivienda1)
-                    concepto2.save()
+                if i.Direccion == "Hacienda":
+                    ciclo = Ciclos.objects.get(Nombre='Conduccion')
+                    sector = Sectores.objects.get(Nombre='Hacienda')
+                    vivienda = Vivienda.objects.get(IdVivienda=i.IdVivienda)
+                    vivienda.sectores = sector
+                    vivienda.ciclos = ciclo
+                    vivienda.save()
 
             messages.add_message(request, messages.INFO, 'La operacion se realizo correctamente')
             return HttpResponseRedirect(reverse('usuarios:inicio'))
